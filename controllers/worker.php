@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************//
 
-class rankings 
+class worker 
 {  
 	
 	// ===========================================================================// 
@@ -50,7 +50,7 @@ class rankings
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	
 	
-	public function rankings()
+	public function worker()
 	{   
 		// Select the keywords to update
 		$keywords = new keywords();

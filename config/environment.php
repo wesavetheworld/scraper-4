@@ -63,7 +63,7 @@
 		define("DB_SERPS_PASS", "root");
 	
 		// Database name
-		define("DB_NAME_SERPS", "serps"); 
+		define("DB_NAME_SERPS", "mongo"); 
     }  
     elseif(ENVIRONMENT == 'production')
     {
@@ -92,5 +92,19 @@
 	
 		// Database name
 		define("DB_NAME_SERPS", "serps"); 
-    }	    	  
+    } 
+    elseif(ENVIRONMENT == 'ec2-user')
+    {
+		// Database host
+		define("DB_HOST", "localhost");
+	
+		// Database username
+		define("DB_SERP_USER", "ec2-user");
+	
+		// Database password
+		define("DB_SERPS_PASS", "R2VrwMF5");
+	
+		// Database name
+		define("DB_NAME_SERPS", "serps"); 
+    }       	  
 ?>

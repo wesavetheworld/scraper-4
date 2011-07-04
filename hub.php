@@ -17,7 +17,6 @@
 
 	// ********************************** START **********************************// 
      
-die('mongo!');
 	// Get passed server arguments
 	$argv = $_SERVER['argv'];
  
