@@ -19,7 +19,6 @@
 
 class client 
 {  
-	
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
@@ -48,11 +47,7 @@ class client
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
-		
-		print_r($keywords);
-		
-		die('end');
-	  	
+
 		// Call processing time
 		utilities::benchmark('keywords selected: ');
 	   
@@ -70,9 +65,11 @@ class client
 			
 		    // Every 1000 keywords
 			if($i % KEYWORD_AMOUNT)
-			{   				
+			{    
+				
+				echo "keywords in batch: ".count($keywordBatch)."\n";   			
 				// Define a new job for current batch
-				$gmclient->addTask("rankings", encode_json($keywordBatch), null, $job++);
+				//$gmclient->addTask("rankings", encode_json($keywordBatch), null, $job++);
 				
 				// Clear batch array
 				unset($keywordBatch);			
