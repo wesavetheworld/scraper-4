@@ -175,8 +175,9 @@ class keywords
 						 	domains.user_id,
 							domains.group_id,
 							domains.domain_id,
-							keywords.keyword_id"; 
-					   
+							keywords.keyword_id 
+						LIMIT 
+							".3; 
 		}
 																														
 		// Execute query and return results			
