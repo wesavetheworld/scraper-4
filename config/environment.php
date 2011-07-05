@@ -82,7 +82,7 @@
     elseif(ENVIRONMENT == 'ec2')
     {
 		// Database host
-		define("DB_HOST", "localhost");
+		define("DB_HOST", "10.170.79.23");
 	
 		// Database username
 		define("DB_SERP_USER", "ec2-user");
