@@ -67,7 +67,10 @@ class client
 		
 			// Loop through all keywords		
 			foreach($keywords->keywords as &$keyword)
-			{ 
+			{    
+				// Create new keywords object
+				$keywordBatch = new keywords(false);
+				
 				// Add keyword to job batch
 				$keywordBatch->keywords->{$keyword->keyword_id} = $keyword;   
 			

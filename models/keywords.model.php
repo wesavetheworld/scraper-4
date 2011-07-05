@@ -28,10 +28,13 @@ class keywords
 	// Contains the count(int) of keywords in the main object
 	public $total;	
 	
-	function __construct()
-	{  	                             
-		// Select keywords
-		$this->getKeywords();   
+	function __construct($empty = false)
+	{  	
+		if(!$empty)
+		{                             
+			// Select keywords
+			$this->getKeywords();   
+		}	
 	} 
     
 	// Called when script execution has ended
