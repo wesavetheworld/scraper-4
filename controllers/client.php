@@ -47,7 +47,7 @@ class client
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
-		echo "keywords selected: ".count($keywords)."\n";   			
+		echo "keywords selected: ".count($keywords->keywords)."\n";   			
 
 		// Call processing time
 		utilities::benchmark('keywords selected: ');
@@ -56,7 +56,7 @@ class client
 		$i = 1;
 		
 		// Loop through all keywords		
-		foreach($keywords as $id => &$keyword)
+		foreach($keywords->keywords as $id => &$keyword)
 		{   
 			// Add keyword to job batch
 			$keywordBatch[$key] = $keyword;   
