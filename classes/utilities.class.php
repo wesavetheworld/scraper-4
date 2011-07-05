@@ -69,7 +69,9 @@ class utilities
 			
 			// Check if script has exceded max execution time yet
 			if(!$last && $time - $firstTime >= MAX_EXECUTION_TIME)
-			{
+			{     
+				
+				echo "its what you thought\n";
 				// Send any error notifications
 			 	//utilities::reportErrors("Scraper max execution time exceeded.");			
 
