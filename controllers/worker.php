@@ -52,7 +52,7 @@ class worker
 		# Add default server (localhost).
 		$gmworker->addServer('10.170.102.159'); 
 		
-		function rankings($keywords)
+		function rankings()
 		{     
 			return "it worked!";
 			
