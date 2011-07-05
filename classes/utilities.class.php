@@ -42,8 +42,6 @@ class utilities
 
 			$time = microtime(true); 
 			
-			echo $time;
-
 			if($lastTime == null)
 			{
 				$firstTime = $time;
@@ -73,7 +71,8 @@ class utilities
 			if(!$last && $time - $firstTime >= MAX_EXECUTION_TIME)
 			{     
 				
-				echo "its what you thought\n";
+				echo "its what you thought\n max:";
+				echo MAX_EXECUTION_TIME."\n"
 				// Send any error notifications
 			 	//utilities::reportErrors("Scraper max execution time exceeded.");			
 
