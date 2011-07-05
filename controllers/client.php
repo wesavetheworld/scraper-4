@@ -40,47 +40,36 @@ class client
 	public function client()
 	{   
 		# Create our gearman client
-		//$gmclient = new GearmanClient(); 
+		$gmclient = new GearmanClient(); 
 
 		# add the default job server
-		//$gmclient->addServer('10.170.102.159');
+		$gmclient->addServer('10.170.102.159');
 		
 		// Select all keywords from db to update
-		$keywords = new keywords(); 
-		
-		
-		print_r($keywords->keywords);
-		  
+		$keywords = new keywords();  
+	   		
 		echo "keywords selected: ".$keywords->total."\n";   			
 
 		// Call processing time
 		utilities::benchmark('keywords selected: ');
 	   
 	 	// Keep track of keyword loops
-		$i = 1;
+		$i = 0;
 		
 		// Loop through all keywords		
-		foreach($keywords->keywords as $id => &$keyword)
-		{   
+		foreach($keywords->keywords as &$keyword)
+		{ 
 			// Add keyword to job batch
-			$keywordBatch[$key] = $keyword;   
+			$keywordBatch[$keyword->keyword_id] = $keyword;   
 			
 			// Keep track of keywords in batch
 			$i++;			
-			
-			echo "math: ";         
-			echo $i % KEYWORD_AMOUNT;
-			echo "\n";
-			
+						
 		    // Every 1000 keywords
 			if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
-			{    
-				
-				echo "keywords in batch: ".count($keywordBatch)."\n";  
-				
-				print_r($keywordBatch); 			
+			{    				
 				// Define a new job for current batch
-				//$gmclient->addTask("rankings", encode_json($keywordBatch), null, $job++);
+				$gmclient->addTask("rankings", encode_json($keywordBatch), null, $job++);
 				
 				// Clear batch array
 				unset($keywordBatch);			
@@ -88,13 +77,13 @@ class client
 		}
 		
 		// Call processing time
-		utilities::benchmark('All jobs defined: ');		
+		utilities::benchmark("$job jobs defined: ");		
 		
 		// Set the function to be used when jobs are complete
-		//$gmclient->setCompleteCallback("$this->complete"); 
+		$gmclient->setCompleteCallback("$this->complete"); 
 
 		// Create the jobs
-		//$gmclient->runTasks(); 
+		$gmclient->runTasks(); 
 		
 		// Call processing time
 		utilities::benchmark('All jobs finished: ');		   	

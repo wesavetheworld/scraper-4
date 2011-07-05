@@ -57,39 +57,23 @@ class keywords
 	private function getKeywords()
 	{                                             
 		// Select keyword data
-		$keywords = $this->selectKeywords();
+		$this->keywords = $this->selectKeywords(); 
 				
 		// If keywords are selected
-		if($keywords)
+		if($this->keywords)
 		{
 			// Select past ranking data for keywords
-			$keywords = $this->selectRankings($keywords);
-		
-			// Loop through keyword list 
-			foreach($keywords as $key => &$keyword)		
-			{   
-	 			// Build the keyword into a working object
-				$this->keywords->{$key}  = new keyword($keyword);
+			$this->selectRankings(); 
 
-				// If keyword is missing required values
-				if(!$keyword)
-				{			 
-					// Remove bad keyword
-					unset($this->keywords->{$key});
-				}
-				// Keyword is formed correctly
-				else
-				{    
-					// Add keywords id to checkout list
-					$this->keywordIds[$key] = $key;
-				}	
-			}
+		 	utilities::benchmark('keywords f: ');
 			 
 			// Get the total number of keywords selected
 			$this->total = count($this->keywordIds);			
 			
 			// Update the keywords select as checked out
-			$this->setCheckOut('1'); 
+			$this->setCheckOut('1');  
+			
+			return $keywords;
 		}	
 	} 
 	
@@ -114,7 +98,15 @@ class keywords
 		{   
 			// Construct query
 			$query =   "SELECT 
-							* 						
+							keywords.keyword_id,
+							keywords.keyword,
+							keywords.user_id,
+							keywords.g_country,
+							keywords.notifications,
+							keywords.calibrate,
+							keywords.date,							
+							domains.domain_id,
+							domains.domain							
 						FROM 
 							keywords
 						JOIN 
@@ -155,7 +147,15 @@ class keywords
         {
 			// Construct query
 			$query =   "SELECT 
-							* 						
+							keywords.keyword_id,
+							keywords.keyword,
+							keywords.user_id,
+							keywords.g_country,
+							keywords.notifications,
+							keywords.calibrate,
+							keywords.date,							
+							domains.domain_id,
+							domains.domain
 						FROM 
 							keywords
 						JOIN 
@@ -175,11 +175,9 @@ class keywords
 						 	domains.user_id,
 							domains.group_id,
 							domains.domain_id,
-							keywords.keyword_id 
-						LIMIT 
-							3"; 
-		}
-																														
+							keywords.keyword_id"; 
+		}                              
+																																
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         
@@ -187,12 +185,25 @@ class keywords
 		if(mysql_num_rows($result) > 0)
 		{
 			// Loop through results
-			while($row = mysql_fetch_object($result))
-			{    
-				// Add keyword object to keyword array
-				$keywords[$row->keyword_id] = $row;
+			while($keyword = mysql_fetch_object($result, 'keyword'))
+			{   
+				// Test keyword for all required fields
+				if($keyword->keywordTest())
+				{
+					// Make the keyword save to be used in the url	
+					$keyword->urlSafeKeyword();				     				
+
+					// Determine whether to grab 10 or 100 results per search 
+					$keyword->setResultsCount();
+				 
+					// Add keyword object to keyword array
+					$keywords[$keyword->keyword_id] = $keyword;   
+
+					// Add keywords id to checkout list
+					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
+				}
 			} 
-									
+			   					
 			// Return the keyword array
 			return $keywords;
    		}	   
@@ -214,10 +225,10 @@ class keywords
 	}                                                                                                 	 
 	
 	// Select keyword's ranking positions
-	private function selectRankings($keywords)
+	private function selectRankings()
 	{
 		// Glue keyword array together
-		$ids = implode(",", array_keys($keywords));  
+		$ids = implode(",", array_keys($this->keywordIds));  
 		
 		// Db column containing the ranking
 		$position = ENGINE;
@@ -246,18 +257,18 @@ class keywords
 			if($row->date = DATE_TODAY)
 			{ 
 				// Add ranking object to rankings array
-				$keywords[$row->keyword_id]->lastRank = $row->$position;				
+				//$keywords[$row->keyword_id]->lastRank = $row->$position;				
+				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;				
 			} 
 			// If there was no rank for today and there is one for yesterday
-			elseif(!$keywords[$row->keyword_id]->lastRank && $row->date = DATE_YESTERDAY)
+			elseif(!$this->keywords->{$row->keyword_id}->lastRank && $row->date = DATE_YESTERDAY)
 			{
 			 	// Add ranking object to rankings array
-				$keywords[$row->keyword_id]->lastRank = $row->$position;   
-			}   
+				//$keywords[$row->keyword_id]->lastRank = $row->$position;   
+				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
+			} 
+			$this->keywords->{$row->keyword_id}->lastRank = 'penis'  ;
 		}
-		
-		// Return keyword array with new tracking data
-		return $keywords; 
 	}                                          
 	
 	// ===========================================================================// 
@@ -376,61 +387,36 @@ class keywords
 class keyword 
 {     
 	
-	function __construct($keywordValues)
+	function __construct()
 	{    
-        // If keyword does not have keywords required values
-		if(!$this->keywordTest($keywordValues))
-		{ 
-			// Log bad keyword for review
-			file_put_contents(KEYWORD_ERROR_FILE, var_export($keywordValues, TRUE)."\n\n", FILE_APPEND);
 
-			// Do not continue
-			return false;
-		}
-				 
-		// Create keyword object
-		$this->keywordObject($keywordValues);
-		
-		// Make the keyword save to be used in the url	
-		$this->urlSafeKeyword();				     				
-		
-		// Determine whether to grab 10 or 100 results per search 
-		$this->setResultsCount();
-		
-		// Determine which page of search results to scrape 
-		$this->setSearchOffset();
    	} 
 
 	// ===========================================================================// 
 	// ! Keyword methods                                                          //
 	// ===========================================================================// 
-   
- 	// Create the keyword object from array of values provided
-	private function keywordObject($keywordValues)
-	{
-		// Convert keyword fields into keyword object
-		foreach($keywordValues as $key => $value)
-		{
-			$this->{$key} = $value;
-		}		
-	}
 	
 	// Test a keyword array for keywords needed data
-	public function keywordTest($keywordValues)
-	{        
-		// The required keys in the keyword array
+	public function keywordTest()
+	{    
+  		// The required keys in the keyword array
 		$required = array('user_id','keyword','domain_id','domain','g_country');
 				
 		// Loop through each required key
 		foreach($required as $key)
 		{  
 			//If the required value are not found
-			if(empty($keywordValues->$key))
-			{      
+			if(empty($this->$key))
+			{   
+				// Log bad keyword for review
+				file_put_contents(KEYWORD_ERROR_FILE, var_export($this, TRUE)."\n\n", FILE_APPEND);
+
+				// Do not continue				   
 				return false;   		
-			}
-		}  
+			} 
+		}   
 		
+		// Keyword object is complete
 		return TRUE;          
 	} 
 	
