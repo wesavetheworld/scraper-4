@@ -84,7 +84,8 @@ class client
 		    
 			// Stupid gearman hack to get OOP working
 			function jobComplete($task)
-			{   
+			{    
+				echo "\ncomplete\n";
 				// Runs when all jobs are finished
 				$this->jobComplete($task);
 			}
