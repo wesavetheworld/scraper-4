@@ -11,7 +11,7 @@
 	// ** @date	 2011-06-17
 	// ** @access	private
 	// ** @param	
-	// ** @return	Main controller router
+	// ** @return	Main controller router     
 	//  	
 	// ***************************************************************************//
 
