@@ -83,7 +83,7 @@ class client
 			utilities::benchmark("$job jobs defined: ");		
 		
 			// Set the function to be used when jobs are complete
-			$gmclient->setCompleteCallback("$this->complete"); 
+			$gmclient->setCompleteCallback('$this->complete'); 
 
 			// Create the jobs
 			$gmclient->runTasks(); 

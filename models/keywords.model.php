@@ -71,7 +71,7 @@ class keywords
 			$this->total = count($this->keywordIds);			
 			
 			// Update the keywords select as checked out
-			$this->setCheckOut('1');  
+			//$this->setCheckOut('1');  
 			
 			return $keywords;
 		}	
