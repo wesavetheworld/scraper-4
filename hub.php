@@ -65,14 +65,7 @@
 	// ===========================================================================//   
      
 	// The config file name for the controller
- 	$config = "config/".$controller.".config.php"; 
-                                
-	// Check if controller's config file exists
-	if(file_exists($config))
-	{
-		// Load the controllers config file
-		include($config); 
-	}		
+ 	$config = "config/".$controller.".config.php";    
 
 	// ===========================================================================// 
 	// ! Route the request to the correct controller                              //
