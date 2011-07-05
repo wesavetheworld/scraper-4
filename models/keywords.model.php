@@ -178,7 +178,9 @@ class keywords
 							keywords.keyword_id 
 						LIMIT 
 							".KEYWORD_AMOUNT; 
-		}  
+		}
+		
+		echo $query;  
 																												
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
