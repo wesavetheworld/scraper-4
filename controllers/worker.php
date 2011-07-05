@@ -50,16 +50,15 @@ class worker
 		$gmworker= new GearmanWorker();
 
 		# Add default server (localhost).
-		$gmworker->addServer('10.170.102.159');
-
-		# Register function "reverse" with the server. Change the worker function to
-		# "reverse_fn_fast" for a faster worker with no output.
-		$gmworker->addFunction("rankings", "rankings"); 
+		$gmworker->addServer('10.170.102.159'); 
 		
 		function rankings($keywords)
 		{
 			$this->rankings($keywords);
-		}  
+		}		
+
+		# Register function "reverse" with the server. Change the worker function to
+		$gmworker->addFunction("rankings", "rankings"); 
 		
 		print "Waiting for job...\n"; 
 
