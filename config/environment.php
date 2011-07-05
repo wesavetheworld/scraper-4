@@ -28,14 +28,10 @@
 	elseif(strpos($argv[0], 'scoutftp'))
 	{
 		define('ENVIRONMENT', 'production');	
-	} 
-	elseif(strpos($argv[0], 'ec2-user'))
-	{
-		define('ENVIRONMENT', 'ec2');	
-	}	
+	}   
 	else
 	{
-		define('ENVIRONMENT', 'cloud');	
+		define('ENVIRONMENT', 'ec2');	
 	} 	
 	
 	echo ENVIRONMENT;
