@@ -68,6 +68,8 @@ class client
 			// Keep track of keywords in batch
 			$i++;			
 			
+			echo "math: ";         
+			echo $i % KEYWORD_AMOUNT;
 		    // Every 1000 keywords
 			if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
 			{    
