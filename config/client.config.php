@@ -31,7 +31,10 @@
 	define("ENGINE", 'google');
 	
 	// What search engine to scrape
-	define("ENGINE", 'hourly');  
+	define("ENGINE", 'hourly');
+	
+	// Scrape just new keywords for above engine if set to true
+	define("NEW_KEYWORDS", $argv[5]);  
 	
 	// Only update keywords for this user
 	define("ONLY_USER", $argv[6]);
