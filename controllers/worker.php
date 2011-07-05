@@ -36,7 +36,10 @@ class worker
 		include('classes/scrape.class.php');   		   	 
 
 	  	// Initiate benchmarking
-		utilities::benchmark();		
+		utilities::benchmark();	
+		
+		// Connect to database
+		utilities::databaseConnect();			
 	}
 	
 	// ===========================================================================// 

@@ -29,11 +29,7 @@ class keywords
 	public $total;	
 	
 	function __construct()
-	{  	
-		// Establish MySQL connection & select database
-		mysql_connect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS) or die ('Error connecting to mysql');
-		mysql_select_db(DB_NAME_SERPS);
-		
+	{  	                             
 		// Select keywords
 		$this->getKeywords();   
 	} 
