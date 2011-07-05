@@ -70,11 +70,15 @@ class client
 			
 			echo "math: ";         
 			echo $i % KEYWORD_AMOUNT;
+			echo "\n";
+			
 		    // Every 1000 keywords
 			if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
 			{    
 				
-				echo "keywords in batch: ".count($keywordBatch)."\n";   			
+				echo "keywords in batch: ".count($keywordBatch)."\n";  
+				
+				print_r($keywordBatch); 			
 				// Define a new job for current batch
 				//$gmclient->addTask("rankings", encode_json($keywordBatch), null, $job++);
 				
