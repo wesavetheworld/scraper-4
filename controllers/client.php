@@ -46,10 +46,12 @@ class client
 		//$gmclient->addServer('10.170.102.159');
 		
 		// Select all keywords from db to update
-		$keywords = new keywords();
+		$keywords = new keywords(); 
+		
+		
 		print_r($keywords->keywords);
 		  
-		echo "keywords selected: ".count($keywords->keywords)."\n";   			
+		echo "keywords selected: ".$keywords->total."\n";   			
 
 		// Call processing time
 		utilities::benchmark('keywords selected: ');
@@ -67,7 +69,7 @@ class client
 			$i++;			
 			
 		    // Every 1000 keywords
-			if($i % KEYWORD_AMOUNT == 0)
+			if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
 			{    
 				
 				echo "keywords in batch: ".count($keywordBatch)."\n";   			
