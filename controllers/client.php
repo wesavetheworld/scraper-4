@@ -43,7 +43,10 @@ class client
 		$gmclient = new GearmanClient(); 
 
 		# add the default job server
-		$gmclient->addServer('10.170.102.159');
+		$gmclient->addServer('10.170.102.159');   
+		
+		// Set the function to be used when jobs are complete
+   		$gmclient->setCompleteCallback("client::jobComplete");
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
@@ -63,16 +66,22 @@ class client
 			foreach($keywords->keywords as &$keyword)
 			{ 
 				// Add keyword to job batch
-				$keywordBatch[$keyword->keyword_id] = $keyword;   
+				$keywordBatch->keywords->{$keyword->keyword_id} = $keyword;   
 			
 				// Keep track of keywords in batch
 				$i++;			
 						
 			    // Every 1000 keywords
 				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
-				{    				
+				{   
+					// Set keyword count object
+					$keywordBatch->total = $i;
+					
+					// Reset count
+					$i = 0;
+					
 					// Define a new job for current batch
-				   	$gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
+				   	$gmclient->addTask("rankings", serialize($keywordBatch), null, $job++);
 				
 					// Clear batch array
 					unset($keywordBatch);			
@@ -82,22 +91,11 @@ class client
 			// Call processing time
 			utilities::benchmark("$job jobs defined: ");		
 		    
-			// Stupid gearman hack to get OOP working
-			function jobComplete($task)
-			{    
-				echo "\ncomplete\n";
-				// Runs when all jobs are finished
-				$this->jobComplete($task);
-			}
-			
-			// Set the function to be used when jobs are complete
-	   		$gmclient->setCompleteCallback("jobComplete"); 
-
 			// Create the jobs
 		    $gmclient->runTasks(); 
    
 			// Call processing time
-			utilities::benchmark('All jobs finished: '); 
+			utilities::benchmark('All jobs created: '); 
 		}	   	   	
         		        
 	  	// Finish execution
@@ -105,11 +103,11 @@ class client
 	} 
 	
 	// ===========================================================================// 
-	// ! Supporting methods                                                       //
+	// ! Gearman methods                                                           //
 	// ===========================================================================//	
     
 	// Runs when all jobs have checked back in
-  	function jobComplete($task) 
+  	public static function jobComplete($task) 
 	{ 
 	  print "COMPLETE: " . $task->unique() . ", " . $task->data() . "\n"; 
 	}

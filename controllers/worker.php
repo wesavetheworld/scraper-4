@@ -19,7 +19,6 @@
 
 class worker 
 {  
-	
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
@@ -51,33 +50,32 @@ class worker
 
 		# Add default server (localhost).
 		$gmworker->addServer('10.170.102.159'); 
-		
-		function rankings()
-		{     
-			return "it worked!";
-			
-			//$this->gather($keywords);
-		}		
 
 		# Register function "reverse" with the server. Change the worker function to
-		$gmworker->addFunction("rankings", "rankings"); 
+		$gmworker->addFunction("rankings", "worker::rankings"); 
 		
-		print "Waiting for job...\n"; 
+		print "Waiting for jobs...\n"; 
 
 		while($gmworker->work())
-		{
+		{   
+			// If job failed
 			if ($gmworker->returnCode() != GEARMAN_SUCCESS)
 			{
 				echo "return_code: " . $gmworker->returnCode() . "\n";
 				break;
 			} 
+			// If job was completed successfully 
+			else
+			{
+				echo "job completed.\n"; 				
+			} 
 		}
 	}  
 	
-	public function gather($keywords)
+	public static function rankings($job)
 	{     
-		
-		return "it worked!";
+		// Get the keywords from the job data		
+		$keywords = unserialize($job->workload());
 		
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
@@ -86,13 +84,13 @@ class worker
 		while($keywords->total > 0)
 		{    
 			// Check killswitch
-			$this->killSwitch();
+			worker::killSwitch();
 			 		
 			// Create new scraping instance
 			$scrape = new scraper; 
 			
 			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
+			$scrape->urls = worker::getKeywordUrls($keywords->keywords); 
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -104,7 +102,7 @@ class worker
 			foreach($keywords->keywords as $key => &$keyword)
 			{   								 
 				// If a valid search results page can be loaded (new scrape or saved file)
-				if($searchResults = $this->getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
+				if($searchResults = worker::getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
 				{
  	   				// Create new parsing object
 					$parse = new parse;	 
@@ -132,7 +130,7 @@ class worker
 						}  
 												
 						// Calibrate keyword ranking (10/100 results)
-						$this->calibration($keyword);   
+						worker::calibration($keyword);   
 					    
 						// Decrease keywords remaining by one
 						$keywords->total--;
@@ -156,8 +154,8 @@ class worker
 			utilities::benchmark('update keywords: ');			  		
 		}
 		
-	  	// Finish execution
-		utilities::complete();
+		// Return finished keywords array
+		return json_encode($keywords);
 	} 
 	
 	// ===========================================================================// 
@@ -165,7 +163,7 @@ class worker
 	// ===========================================================================//	
 	
 	// Checks for killswitch file and if true kills script 
-	private function killSwitch()
+	private static function killSwitch()
 	{   
 		// If above death
 		if(!ZOMBIE)
@@ -190,11 +188,12 @@ class worker
 	}
 	
 	// Loop through keywords and return array of urls to scrape
-	private function getKeywordUrls($keywords)
+	public static function getKeywordUrls($keywords)
 	{    
 		// Loop through each keyword
 		foreach($keywords as $key => &$keyword)
 		{   
+			
 			// Generate the search page url 
 			$keyword->setSearchUrl();			  		
 			 			                     			
@@ -217,7 +216,7 @@ class worker
 	}
     
 	// Load the correct source for the keyword's search results
-	private function getSearchResults($keyword, $scrapedContent = false)
+	public static function getSearchResults($keyword, $scrapedContent = false)
 	{   		
 		// If a new url was scraped for this keyword
 		if($scrapedContent)
@@ -226,7 +225,7 @@ class worker
 			if($scrapedContent['status'] == 'success')
 			{   				 				
 				// Save the new search file
-				$this->searchSave($keyword, $scrapedContent);
+				worker::searchSave($keyword, $scrapedContent);
 				
 				// Set the new search as the source
 				$search = $scrapedContent['output']; 						
@@ -246,7 +245,7 @@ class worker
 	}
 
 	// Save search results to a file
-	private function searchSave($keyword, $scrapedContent)
+	public static function searchSave($keyword, $scrapedContent)
 	{   
 		// Set header information to be saved with output
 		$content  = "code: ".$scrapedContent['httpInfo']['http_code'];
@@ -258,7 +257,7 @@ class worker
 	} 
 	
 	// If a keyword just switch result amount (10/100)
-	private function calibration($keyword)
+	public static function calibration($keyword)
 	{	
 		// If a change in ranking has occurred in which a new search with a different result count is needed
 		if($keyword->lastRank > NUM_SWITCH_THRESHHOLD && $keyword->rank < NUM_SWITCH_THRESHHOLD || $keyword->lastRank && !$keyword->rank || !$keyword->lastRank && $keyword->rank )
@@ -281,23 +280,7 @@ class worker
 			$keyword->calibrate = 0;
 		}		
 	}
-	
-	// If scraping bing delay to avoid checkout conflict with google
-	private function delay()
-	{   
-		// If scraping google
-		if(ENGINE == 'bing')
-		{
-			// Wait for 10 seconds
-			sleep(10);
-		} 
-		// If scraping google
-		elseif(SCHEDULE == 'daily')
-		{
-			// Wait for 10 seconds
-			sleep(5);
-		}		   
-	}
+
 	
 	
 	 
