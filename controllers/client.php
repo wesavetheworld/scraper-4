@@ -49,44 +49,48 @@ class client
 		$keywords = new keywords();  
 	   		
 		echo "keywords selected: ".$keywords->total."\n";   			
-
-		// Call processing time
-		utilities::benchmark('keywords selected: ');
+        
+ 		// If keywords selected
+		if($keywords->keywords)
+		{
+			// Call processing time
+			utilities::benchmark('keywords selected: ');
 	   
-	 	// Keep track of keyword loops
-		$i = 0;
+		 	// Keep track of keyword loops
+			$i = 0;
 		
-		// Loop through all keywords		
-		foreach($keywords->keywords as &$keyword)
-		{ 
-			// Add keyword to job batch
-			$keywordBatch[$keyword->keyword_id] = $keyword;   
+			// Loop through all keywords		
+			foreach($keywords->keywords as &$keyword)
+			{ 
+				// Add keyword to job batch
+				$keywordBatch[$keyword->keyword_id] = $keyword;   
 			
-			// Keep track of keywords in batch
-			$i++;			
+				// Keep track of keywords in batch
+				$i++;			
 						
-		    // Every 1000 keywords
-			if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
-			{    				
-				// Define a new job for current batch
-				$gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
+			    // Every 1000 keywords
+				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
+				{    				
+					// Define a new job for current batch
+					$gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
 				
-				// Clear batch array
-				unset($keywordBatch);			
-			} 
-		}
+					// Clear batch array
+					unset($keywordBatch);			
+				} 
+			}
 		
-		// Call processing time
-		utilities::benchmark("$job jobs defined: ");		
+			// Call processing time
+			utilities::benchmark("$job jobs defined: ");		
 		
-		// Set the function to be used when jobs are complete
-		$gmclient->setCompleteCallback("$this->complete"); 
+			// Set the function to be used when jobs are complete
+			$gmclient->setCompleteCallback("$this->complete"); 
 
-		// Create the jobs
-		$gmclient->runTasks(); 
+			// Create the jobs
+			$gmclient->runTasks(); 
 		
-		// Call processing time
-		utilities::benchmark('All jobs finished: ');		   	
+			// Call processing time
+			utilities::benchmark('All jobs finished: '); 
+		}	   	   	
         		        
 	  	// Finish execution
 		utilities::complete();
