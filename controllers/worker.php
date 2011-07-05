@@ -53,8 +53,10 @@ class worker
 		$gmworker->addServer('10.170.102.159'); 
 		
 		function rankings($keywords)
-		{
-			$this->gather($keywords);
+		{     
+			return "it worked!";
+			
+			//$this->gather($keywords);
 		}		
 
 		# Register function "reverse" with the server. Change the worker function to
