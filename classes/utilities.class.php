@@ -72,7 +72,7 @@ class utilities
 			{     
 				
 				echo "its what you thought\n max:";
-				echo MAX_EXECUTION_TIME."\n"
+				echo MAX_EXECUTION_TIME."\n";
 				// Send any error notifications
 			 	//utilities::reportErrors("Scraper max execution time exceeded.");			
 
