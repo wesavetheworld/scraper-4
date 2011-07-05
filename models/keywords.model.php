@@ -177,7 +177,7 @@ class keywords
 							domains.domain_id,
 							keywords.keyword_id 
 						LIMIT 
-							".3; 
+							3"; 
 		}
 																														
 		// Execute query and return results			
