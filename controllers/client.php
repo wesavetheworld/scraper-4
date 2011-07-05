@@ -27,8 +27,8 @@ class client
 	function __construct()
 	{           
 		// Include keywords data model
-	 	//include('models/keywords.model.php'); 
-	    include('models/keywords.mongo.php');
+	 	include('models/keywords.model.php'); 
+	    //include('models/keywords.mongo.php');
 	
 	  	// Initiate benchmarking
 		utilities::benchmark();		

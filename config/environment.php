@@ -33,9 +33,7 @@
 	{
 		define('ENVIRONMENT', 'ec2');	
 	} 	
-	
-	echo ENVIRONMENT;
-	
+		
 	// ===========================================================================// 
 	// ! General server settings                                                  //
 	// ===========================================================================//	
@@ -81,20 +79,6 @@
 		// Database name
 		define("DB_NAME_SERPS", "scoutftp_serps"); 
     }
-    elseif(ENVIRONMENT == 'cloud')
-    {
-		// Database host
-		define("DB_HOST", "localhost");
-	
-		// Database username
-		define("DB_SERP_USER", "scoutftp");
-	
-		// Database password
-		define("DB_SERPS_PASS", "890uWQ2t");
-	
-		// Database name
-		define("DB_NAME_SERPS", "serps"); 
-    } 
     elseif(ENVIRONMENT == 'ec2')
     {
 		// Database host
