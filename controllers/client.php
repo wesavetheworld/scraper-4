@@ -63,35 +63,44 @@ class client
 			utilities::benchmark('keywords selected: ');
 	   
 		 	// Keep track of keyword loops
-			$i = 0;
+			$i = 1;
 		
 			// Loop through all keywords		
 			foreach($keywords->keywords as &$keyword)
-			{    
-				// Create new keywords object
-				$keywordBatch = new keywords(false);
-				
-				// Add keyword to job batch
-				$keywordBatch->keywords->{$keyword->keyword_id} = $keyword;   
-			
-				// Keep track of keywords in batch
-				$i++;			
-						
+			{       
+				// If first keyword in new batch
+				if($i == 1) 
+				{
+				 	// Create new keywords object
+					$keywordBatch = new keywords(true); 
+
+					print_r($keywordBatch);
+					
+					
+				}
 			    // Every 1000 keywords
-				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
+				elseif($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total)
 				{   
 					// Set keyword count object
 					$keywordBatch->total = $i;
 					
 					// Reset count
-					$i = 0;
+					$i = 0; 
+					
+					print_r($keywordBatch);
 					
 					// Define a new job for current batch
-				   	$gmclient->addTask("rankings", serialize($keywordBatch), null, $job++);
+				   	$gmclient->addTask("rankings", serialize($keywordBatch), null, $job++);  		
+				} 			   
 				
-					// Clear batch array
-					unset($keywordBatch);			
-				} 
+				// Add keyword to job batch
+				$keywordBatch->keywords->{$keyword->keyword_id} = $keyword;
+				
+				// Add keywords id to checkout list                                                                                                           	
+				$keywordBatch->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;														 
+			
+				// Keep track of keywords in batch
+				$i++;			
 			}
 		
 			// Call processing time

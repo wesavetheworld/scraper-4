@@ -80,9 +80,6 @@ class worker
 		 
 		// Get the keywords from the job data		
 		$keywords = unserialize($job->workload());
-		 
-		print_r($keywords);
-		die();
 		
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
@@ -155,7 +152,7 @@ class worker
 			utilities::benchmark('Parse all content: ');
 			
 			// Update finished keywords in DB
-			//$keywords->updateKeywords(); 
+			$keywords->updateKeywords(); 
 			
 			// Call processing time
 			utilities::benchmark('update keywords: ');			  		
