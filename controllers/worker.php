@@ -54,7 +54,7 @@ class worker
 		
 		function rankings($keywords)
 		{
-			$this->rankings($keywords);
+			$this->gather($keywords);
 		}		
 
 		# Register function "reverse" with the server. Change the worker function to
@@ -72,7 +72,7 @@ class worker
 		}
 	}  
 	
-	public function rankings($keywords)
+	public function gather($keywords)
 	{     
 		
 		return "it worked!";
