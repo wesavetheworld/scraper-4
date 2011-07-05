@@ -28,11 +28,17 @@
 	elseif(strpos($argv[0], 'scoutftp'))
 	{
 		define('ENVIRONMENT', 'production');	
-	}
+	} 
+	elseif(strpos($argv[0], 'ec2-user'))
+	{
+		define('ENVIRONMENT', 'ec2');	
+	}	
 	else
 	{
 		define('ENVIRONMENT', 'cloud');	
 	} 	
+	
+	echo ENVIRONMENT;
 	
 	// ===========================================================================// 
 	// ! General server settings                                                  //
@@ -93,7 +99,7 @@
 		// Database name
 		define("DB_NAME_SERPS", "serps"); 
     } 
-    elseif(ENVIRONMENT == 'ec2-user')
+    elseif(ENVIRONMENT == 'ec2')
     {
 		// Database host
 		define("DB_HOST", "localhost");
