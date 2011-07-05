@@ -47,6 +47,7 @@ class client
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
+		echo "keywords selected: ".count($keywords)."\n";   			
 
 		// Call processing time
 		utilities::benchmark('keywords selected: ');
@@ -64,7 +65,7 @@ class client
 			$i++;			
 			
 		    // Every 1000 keywords
-			if($i % KEYWORD_AMOUNT)
+			if($i % KEYWORD_AMOUNT == 0)
 			{    
 				
 				echo "keywords in batch: ".count($keywordBatch)."\n";   			
@@ -80,10 +81,10 @@ class client
 		utilities::benchmark('All jobs defined: ');		
 		
 		// Set the function to be used when jobs are complete
-		$gmclient->setCompleteCallback("$this->complete"); 
+		//$gmclient->setCompleteCallback("$this->complete"); 
 
 		// Create the jobs
-		$gmclient->runTasks(); 
+		//$gmclient->runTasks(); 
 		
 		// Call processing time
 		utilities::benchmark('All jobs finished: ');		   	
