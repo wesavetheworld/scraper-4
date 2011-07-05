@@ -40,7 +40,9 @@ class utilities
 			static $lastTime = null;
 			static $firstTime =  null;
 
-			$time = microtime(true);
+			$time = microtime(true); 
+			
+			echo $time;
 
 			if($lastTime == null)
 			{
