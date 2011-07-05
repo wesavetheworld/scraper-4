@@ -40,10 +40,10 @@ class client
 	public function client()
 	{   
 		# Create our gearman client
-		//$gmclient = new GearmanClient(); 
+		$gmclient = new GearmanClient(); 
 
 		# add the default job server
-		//$gmclient->addServer('10.170.102.159');
+		$gmclient->addServer('10.170.102.159');
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
@@ -72,7 +72,7 @@ class client
 				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
 				{    				
 					// Define a new job for current batch
-				   // $gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
+				   	$gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
 				
 					// Clear batch array
 					unset($keywordBatch);			
