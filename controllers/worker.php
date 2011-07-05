@@ -27,20 +27,14 @@ class worker
 	function __construct()
 	{           
 		// Include keywords data model
-	 	//include('models/keywords.model.php'); 
-	    include('models/keywords.mongo.php'); 
+	 	include('models/keywords.model.php'); 
+	    //include('models/keywords.mongo.php'); 
 		
 		// Include serp parsing class
 		include('classes/parse.class.php');
 
 		// Include scraping class
 		include('classes/scrape.class.php');   		   	 
-		
-		// Check for required arguments before continuing
-		utilities::argumentCheck(json_decode(REQUIRED_ARGS, TRUE)); 
-		
-		// Avoid checkout conflict
-		$this->delay();
 
 	  	// Initiate benchmarking
 		utilities::benchmark();		
@@ -51,10 +45,39 @@ class worker
 	// ===========================================================================//	
 	
 	public function worker()
-	{   
-		// Select the keywords to update
-		$keywords = new keywords();
-	  	
+	{    
+		# Create our worker object.
+		$gmworker= new GearmanWorker();
+
+		# Add default server (localhost).
+		$gmworker->addServer('10.170.102.159');
+
+		# Register function "reverse" with the server. Change the worker function to
+		# "reverse_fn_fast" for a faster worker with no output.
+		$gmworker->addFunction("rankings", "rankings"); 
+		
+		function rankings($keywords)
+		{
+			$this->rankings($keywords);
+		}  
+		
+		print "Waiting for job...\n"; 
+
+		while($gmworker->work())
+		{
+			if ($gmworker->returnCode() != GEARMAN_SUCCESS)
+			{
+				echo "return_code: " . $gmworker->returnCode() . "\n";
+				break;
+			} 
+		}
+	}  
+	
+	public function rankings($keywords)
+	{     
+		
+		return "it worked!";
+		
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
         		        
