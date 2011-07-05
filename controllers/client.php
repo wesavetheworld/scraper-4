@@ -69,7 +69,7 @@ class client
 			if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
 			{    				
 				// Define a new job for current batch
-				$gmclient->addTask("rankings", encode_json($keywordBatch), null, $job++);
+				$gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
 				
 				// Clear batch array
 				unset($keywordBatch);			
