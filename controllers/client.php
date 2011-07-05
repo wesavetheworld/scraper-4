@@ -47,7 +47,7 @@ class client
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();
-		print_r($keywords);
+		print_r($keywords->keywords);
 		  
 		echo "keywords selected: ".count($keywords->keywords)."\n";   			
 
