@@ -41,7 +41,7 @@ class client
 	public function client()
 	{   
 		# Create our gearman client
-		$gmclient= new GearmanClient(); 
+		$gmclient = new GearmanClient(); 
 
 		# add the default job server
 		$gmclient->addServer('10.170.102.159');
