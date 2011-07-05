@@ -40,10 +40,10 @@ class client
 	public function client()
 	{   
 		# Create our gearman client
-		$gmclient = new GearmanClient(); 
+		//$gmclient = new GearmanClient(); 
 
 		# add the default job server
-		$gmclient->addServer('10.170.102.159');
+		//$gmclient->addServer('10.170.102.159');
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
@@ -72,7 +72,7 @@ class client
 				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total )
 				{    				
 					// Define a new job for current batch
-					$gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
+				   // $gmclient->addTask("rankings", json_encode($keywordBatch), null, $job++);
 				
 					// Clear batch array
 					unset($keywordBatch);			
@@ -81,13 +81,20 @@ class client
 		
 			// Call processing time
 			utilities::benchmark("$job jobs defined: ");		
-		
+		    
+			// Stupid gearman hack to get OOP working
+			function jobComplete($task)
+			{   
+				// Runs when all jobs are finished
+				$this->jobComplete($task);
+			}
+			
 			// Set the function to be used when jobs are complete
-			$gmclient->setCompleteCallback('$this->complete'); 
+	   		$gmclient->setCompleteCallback("jobComplete"); 
 
 			// Create the jobs
-			$gmclient->runTasks(); 
-		
+		    $gmclient->runTasks(); 
+   
 			// Call processing time
 			utilities::benchmark('All jobs finished: '); 
 		}	   	   	
@@ -101,7 +108,7 @@ class client
 	// ===========================================================================//	
     
 	// Runs when all jobs have checked back in
-  	function complete($task) 
+  	function jobComplete($task) 
 	{ 
 	  print "COMPLETE: " . $task->unique() . ", " . $task->data() . "\n"; 
 	}
