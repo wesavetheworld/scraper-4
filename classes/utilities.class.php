@@ -37,14 +37,15 @@ class utilities
 		// Check benchmarking is turned on in the settings
 		if(BENCHMARK)
 		{
-			static $lastTime = null;
 			static $firstTime =  null;
+			static $lastTime = null;
 			
 			// If reset param passed
 			if($reset)
 			{   
 				// Reset the first time
 				$firstTime = null;
+				$lastTime = null;
 			}
 
 			$time = microtime(true); 
