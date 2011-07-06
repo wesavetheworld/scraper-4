@@ -56,13 +56,13 @@ class keywords
 	private function getKeywords()
 	{                                             
 		// Select keyword data
-		$this->keywords = $this->selectKeywords(); 
+		$this->selectKeywords();
 				
 		// If keywords are selected
 		if($this->keywords)
 		{
 			// Select past ranking data for keywords
-			$this->selectRankings(); 
+			$this->selectRankings();   
 
 		 	utilities::benchmark('keywords f: ');
 			 
@@ -70,7 +70,7 @@ class keywords
 			$this->total = count($this->keywordIds);			
 			
 			// Update the keywords select as checked out
-			//$this->setCheckOut('1');  
+			$this->setCheckOut('1');    	
 			
 			return $keywords;
 		}	
@@ -194,9 +194,12 @@ class keywords
 
 					// Determine whether to grab 10 or 100 results per search 
 					$keyword->setResultsCount();
+					
+					// Set a unique keyword reference (fix for serializing objects)
+					$keyword->uniqueId();					
 				 
 					// Add keyword object to keyword array
-					$keywords[$keyword->keyword_id] = $keyword;   
+					$this->keywords->{$keyword->keyword_id} = $keyword;   
 
 					// Add keywords id to checkout list
 					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
@@ -266,7 +269,6 @@ class keywords
 				//$keywords[$row->keyword_id]->lastRank = $row->$position;   
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
 			} 
-			$this->keywords->{$row->keyword_id}->lastRank = 'penis'  ;
 		}
 	}                                          
 	
@@ -281,7 +283,7 @@ class keywords
 		foreach($this->keywords as $key => &$keyword)
 		{	 
 			// If this keyword has no ranking yet
-			if(!isset($keyword->rank))
+			if(!isset($keyword->rank) && $keyword->rank != '0')
 			{   
 				// Skip keyword
 				continue;
@@ -521,6 +523,11 @@ class keyword
         		
 		// Add hash to saved searches array (for final database update)
 		$this->savedSearches[$searchHash] = $searchHash;
+	}
+	
+	public function uniqueId()
+	{
+		$this->uniqueId = "id_".$this->keyword_id;
 	}		
 	
 }

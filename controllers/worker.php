@@ -77,13 +77,14 @@ class worker
 	
 	public static function rankings($job)
 	{    
-		 
-		// Get the keywords from the job data		
+		// Get the keywords from the job data				
 		$keywords = unserialize($job->workload());
-		
+				
+		echo "\nkeywords received: ".$keywords->total."\n";
+		 		   	
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
-        		        
+		        		        
 		// Loop for as long as there are keywords left
 		while($keywords->total > 0)
 		{    
@@ -101,13 +102,13 @@ class worker
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ');
-						
+
 			// Loop through each keyword
 			foreach($keywords->keywords as $key => &$keyword)
-			{   								 
+			{   
 				// If a valid search results page can be loaded (new scrape or saved file)
 				if($searchResults = worker::getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
-				{
+				{  					
  	   				// Create new parsing object
 					$parse = new parse;	 
 				
@@ -137,29 +138,31 @@ class worker
 						worker::calibration($keyword);   
 					    
 						// Decrease keywords remaining by one
-						$keywords->total--;
+						$keywords->total--; 
 					}
 					// Domain was not found ranking
 					else
 					{ 
 						// Increase search results page for next scrape
-						$keyword->searchPage++;
+						$keyword->searchPage++; 						
 					} 
-				}  
+				}
 			} 
-			
+
 			// Call processing time
-			utilities::benchmark('Parse all content: ');
-			
+			utilities::benchmark('Parse all content: ');  
+						
 			// Update finished keywords in DB
-			$keywords->updateKeywords(); 
+			$keywords->updateKeywords();                
 			
 			// Call processing time
-			utilities::benchmark('update keywords: ');			  		
+			utilities::benchmark('update keywords: '); 
+			
+			echo "\nkeywords left: ".$keywords->total."\n";
 		}
 		
 		// Return finished keywords array
-		return json_encode($keywords);
+		return "job complete";
 	} 
 	
 	// ===========================================================================// 
@@ -196,8 +199,7 @@ class worker
 	{    
 		// Loop through each keyword
 		foreach($keywords as $key => &$keyword)
-		{   
-			
+		{                                      
 			// Generate the search page url 
 			$keyword->setSearchUrl();			  		
 			 			                     			

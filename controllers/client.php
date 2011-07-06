@@ -54,8 +54,8 @@ class client
 		// Select all keywords from db to update
 		$keywords = new keywords();  
 	   		
-		echo "keywords selected: ".$keywords->total."\n";   			
-        
+		echo "keywords selected: ".$keywords->total."\n"; 
+	           
  		// If keywords selected
 		if($keywords->keywords)
 		{
@@ -63,44 +63,42 @@ class client
 			utilities::benchmark('keywords selected: ');
 	   
 		 	// Keep track of keyword loops
-			$i = 1;
+			$i = 0;
 		
 			// Loop through all keywords		
 			foreach($keywords->keywords as &$keyword)
 			{       
 				// If first keyword in new batch
-				if($i == 1) 
+				if($i == 0) 
 				{
 				 	// Create new keywords object
-					$keywordBatch = new keywords(true); 
-
-					print_r($keywordBatch);
-					
-					
-				}
-			    // Every 1000 keywords
-				elseif($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total)
+					$keywordBatch = new keywords(true); 					
+				} 
+				
+				// Add keyword to job batch
+				$keywordBatch->keywords->{$keyword->uniqueId} = $keyword;
+				
+				// Add keywords id to checkout list                                                                                                           	
+				$keywordBatch->keywordIds[$keyword->uniqueId] = $keyword->keyword_id;														 
+			
+				// Keep track of keywords in batch
+				$i++;				
+			
+				// If keyword batch amount has been reached
+				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total)
 				{   
 					// Set keyword count object
 					$keywordBatch->total = $i;
 					
 					// Reset count
-					$i = 0; 
-					
-					print_r($keywordBatch);
-					
+					$i = 0;  
+					 
+					// Serialize object for transport
+					$keywordBatch = serialize($keywordBatch);
+	
 					// Define a new job for current batch
-				   	$gmclient->addTask("rankings", serialize($keywordBatch), null, $job++);  		
-				} 			   
-				
-				// Add keyword to job batch
-				$keywordBatch->keywords->{$keyword->keyword_id} = $keyword;
-				
-				// Add keywords id to checkout list                                                                                                           	
-				$keywordBatch->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;														 
-			
-				// Keep track of keywords in batch
-				$i++;			
+				   	$gmclient->addTask("rankings", $keywordBatch, null, $job++);  		
+				} 			   		
 			}
 		
 			// Call processing time
