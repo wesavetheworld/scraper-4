@@ -32,13 +32,20 @@ class utilities
     }      
 	
 	// When called, keeps track of execution time since last call
-	public static function benchmark($description = false, $last = false)
+	public static function benchmark($description = false, $last = false, $reset = false)
 	{
 		// Check benchmarking is turned on in the settings
 		if(BENCHMARK)
 		{
 			static $lastTime = null;
 			static $firstTime =  null;
+			
+			// If reset param passed
+			if($reset)
+			{   
+				// Reset the first time
+				$firstTime = null;
+			}
 
 			$time = microtime(true); 
 			
@@ -70,11 +77,8 @@ class utilities
 			// Check if script has exceded max execution time yet
 			if(!$last && $time - $firstTime >= MAX_EXECUTION_TIME)
 			{     
-				
-				echo "its what you thought\n max:";
-				echo MAX_EXECUTION_TIME."\n";
 				// Send any error notifications
-			 	//utilities::reportErrors("Scraper max execution time exceeded.");			
+			 	utilities::reportErrors("Scraper max execution time exceeded.");			
 
 				// Stop the script 
 			  	utilities::complete();            

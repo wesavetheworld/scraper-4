@@ -34,10 +34,7 @@ class worker
 
 		// Include scraping class
 		include('classes/scrape.class.php');   		   	 
-
-	  	// Initiate benchmarking
-		utilities::benchmark();	
-		
+	
 		// Connect to database
 		utilities::databaseConnect();			
 	}
@@ -77,11 +74,12 @@ class worker
 	
 	public static function rankings($job)
 	{    
+		// Reset benchmarking
+		utilities::benchmark(false, false, true);
+		
 		// Get the keywords from the job data				
 		$keywords = unserialize($job->workload());
-				
-		echo "\nkeywords received: ".$keywords->total."\n";
-		 		   	
+						 		   	
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
 		        		        

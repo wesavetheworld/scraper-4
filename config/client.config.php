@@ -39,6 +39,5 @@
 	// Only update keywords for this user
 	define("ONLY_USER", 65);    
 	
-	
 	// Only update keywords for this user
 	define("SCHEDULE", 'hourly');
