@@ -38,10 +38,10 @@
 	define('HUB', TRUE);
 	
 	// Environment settings and DB credentials
-	include('config/environment.php');	
+	include('config/environment.config.php');	
 	
 	// All of the settings required for all controllers
-	include('config/settings.php'); 
+	include('config/settings.config.php'); 
 	
 	// Include all utility static functions
    	include('classes/utilities.class.php');	 

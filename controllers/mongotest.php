@@ -23,10 +23,10 @@ class mongotest
 	function __construct()
 	{
 		// connect
-		$m = new Mongo();
+		//$m = new Mongo();
 		
 		// select a database
-		$this->db = $m->serps;       
+		//$this->db = $m->serps;       
 	}
 	// ***************************************************************************//
 	// DB STRUCTURE - Collections
@@ -222,7 +222,7 @@ class mongotest
 		// Combine all of the arrays
 		$this->combine();
 		
-		$this->insertMongo(); 
+		//$this->insertMongo(); 
 				   	
 		$merge = $this->groups;
 		
