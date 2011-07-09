@@ -33,10 +33,7 @@ class worker
 		include('classes/parse.class.php');
 
 		// Include scraping class
-		include('classes/scrape.class.php');   		   	 
-	
-		// Connect to database
-		utilities::databaseConnect();			
+		include('classes/scrape.class.php');   		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -82,6 +79,9 @@ class worker
 						 		   	
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
+
+		// Connect to database
+		utilities::databaseConnect();		
 		        		        
 		// Loop for as long as there are keywords left
 		while($keywords->total > 0)
