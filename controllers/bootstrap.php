@@ -57,7 +57,7 @@ class bootstrap
 			$ip = $inst->instancesSet->item->privateIpAddress;
 
 			// Sync external worker server
-			echo exec("rsync -avz /home/ec2-user/blah/ ec2-user@$ip:/home/ec2-user/blah");
+			echo exec("rsync -avz /home/ec2-user/blah/ ec2-user@$ip:/home/ec2-user/blah/");
 
 			// Show syncing status 
 			echo $inst->instancesSet->item->instanceId." : synced \n";
