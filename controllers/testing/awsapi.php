@@ -88,7 +88,7 @@ class awsapi
 
 		if($response->isOK())
 		{
-			print_r($response);
+			return $response;
 		}
 		else
 		{
