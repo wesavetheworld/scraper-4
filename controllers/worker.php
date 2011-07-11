@@ -51,7 +51,7 @@ class worker
 		# Register function "reverse" with the server. Change the worker function to
 		$gmworker->addFunction("rankings", "worker::rankings"); 
 		
-		print "Waiting for jobs fuck...\n"; 
+		print "Waiting for jobs fuckd...\n"; 
 
 		while($gmworker->work())
 		{   
