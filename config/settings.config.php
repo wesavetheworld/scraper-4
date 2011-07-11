@@ -46,6 +46,9 @@
 	// ! Time and Date constants                                                  //
 	// ===========================================================================//	
 	
+	// Set default php timezone
+	date_default_timezone_set('UTC'); 
+	
 	// Todays date
 	define("DATE_TODAY", date("Y-m-d"));
 	

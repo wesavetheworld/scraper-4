@@ -73,6 +73,9 @@ class worker
 	{    
 		// Reset benchmarking
 		utilities::benchmark(false, false, true);
+
+		// Log status
+		utilities::notate("Job started");
 		
 		// Get the keywords from the job data				
 		$keywords = unserialize($job->workload());
