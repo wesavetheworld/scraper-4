@@ -22,7 +22,7 @@
 	// ===========================================================================//
 	
 	// Used to identify this instance from others
-	define("INSTANCE", date("i", time()));     
+	define("INSTANCE", 'instanceNameHere');     
 	
 	// Report errors to admin (utilities function)
 	define('REPORT_ERRORS', TRUE);
@@ -48,7 +48,7 @@
 	
 	// Set default php timezone
 	date_default_timezone_set('UTC'); 
-	
+
 	// Todays date
 	define("DATE_TODAY", date("Y-m-d"));
 	

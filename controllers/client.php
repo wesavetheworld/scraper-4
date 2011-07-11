@@ -108,7 +108,7 @@ class client
 		    $gmclient->runTasks(); 
    
 			// Call processing time
-			utilities::benchmark('All jobs created: '); 
+			utilities::benchmark('All jobs completed: '); 
 		}	   	   	
         		        
 	  	// Finish execution
