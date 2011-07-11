@@ -29,9 +29,12 @@ class awsapi
 
 	public function awsapi()
 	{
+
+		// List all instances in account
+		$this->listInstances();
 		
 		// Stop the supplied instance
-		$this->stopInstance('i-2ce3fb68');
+		//$this->stopInstance('i-2ce3fb68');
 
 		// Start the supplied instance
 		//$this->startInstance('i-2ce3fb68');
@@ -74,6 +77,9 @@ class awsapi
 	{
 		$ec2 = new AmazonEC2();
 
+		// Set the region to access instances
+		$ec2->set_region('us-west-1');		
+
 		$response = $ec2->describe_instances(array(
 		    'Filter' => array(
 				array('Name' => 'root-device-type', 'Value' => 'ebs')
@@ -82,7 +88,7 @@ class awsapi
 
 		if($response->isOK())
 		{
-			print_r($response["body"]);
+			print_r($response);
 		}
 		else
 		{
