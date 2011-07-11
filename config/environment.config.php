@@ -36,6 +36,9 @@
 
    	// Set working directory for correct file includes etc 
 	chdir(dirname($argv[0]));	
+
+	// Set default php timezone
+	date_default_timezone_set('UTC'); 
 	                                  
 	// Turn off php notices
 	error_reporting(E_ALL ^ E_NOTICE);	
