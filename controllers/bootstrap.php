@@ -13,7 +13,7 @@ class bootstrap
 	public function bootstrap()
 	{ 
 		// Instantiate a new amazon object
-		$this->getnstances();
+		$this->getInstances();
 
 		// Sync all worker instances
 		$this->syncWorkers();
