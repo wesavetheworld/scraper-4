@@ -63,10 +63,10 @@ class bootstrap
 		$config = file_get_contents(LSYNC_CONFIG);
 
 		// Isolate the host part of the file
-		$config = explode("#---", $config);
+		$config = explode("settings", $config);
 
 		// Add the new hosts to the config file
-		$config = $sync."\n#---".$config[1];
+		$config = $sync."\nsettings".$config[1];
 
 		// Create new config file with new hosts
 		file_put_contents(LSYNC_CONFIG, $config);
