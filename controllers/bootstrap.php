@@ -56,7 +56,7 @@ class bootstrap
 			$ip = $inst->instancesSet->item->privateIpAddress;
 
 			// Add instance private ip to sync data 
-			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/", rsyncOps="-avz"}';
+			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz"}';
 		}
 
 		// Load the Lsynce configuration file
