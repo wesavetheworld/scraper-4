@@ -112,12 +112,9 @@ class keywords
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
 							 keywords.user_id IN ('".ONLY_USER."')
-						AND	
-							keywords.check_out ='0'							
 						ORDER BY
 							keywords.".ENGINE."_status							
-						LIMIT 
-							".KEYWORD_AMOUNT;
+						LIMIT ";
 														  					
         } 
 		// If selecting only new keywords
@@ -131,8 +128,6 @@ class keywords
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
 							keywords.".ENGINE."_status = '0000-00-00 00:00:00'	    				
-						AND	
-							keywords.check_out ='0' 
 						ORDER BY
 						 	domains.user_id,
 							domains.group_id,
@@ -161,8 +156,6 @@ class keywords
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
 							keywords.status !='suspended'
-						AND	
-							keywords.check_out = '0'    				
 						AND
 	                    		(keywords.schedule = '".SCHEDULE."' 
 							AND
