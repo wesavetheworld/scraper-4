@@ -90,7 +90,7 @@ class client
 				$i++;				
 			
 				// If keyword batch amount has been reached
-				if($i % KEYWORD_AMOUNT == 0 || $i == $keywords->total)
+				if($i == KEYWORD_AMOUNT || $i == $keywords->total)
 				{   
 					// Set keyword count object
 					$keywordBatch->total = $i;

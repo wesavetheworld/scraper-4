@@ -70,7 +70,8 @@ class worker
 	}  
 	
 	public static function rankings($job)
-	{    
+	{   
+		return true; 
 		// Reset benchmarking
 		utilities::benchmark(false, false, true);
 

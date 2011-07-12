@@ -22,7 +22,7 @@
 	// ===========================================================================//    
 	
 	// Amount of keywords to scrape
-	define("KEYWORD_AMOUNT", 100);
+	define("KEYWORD_AMOUNT", 1000);
 		    
 	// Avoid potential runaway scripts by limiting max execution time      
 	define("MAX_EXECUTION_TIME", 300);
