@@ -78,7 +78,7 @@ class client
 				// Add keyword to job batch
 				$keywordBatch->keywords->{$keyword->uniqueId} = $keyword;
 				
-				// Add keywords id to checkout list                                                                                                           	
+				// Add keywords id to checkout list                                                                           	
 				$keywordBatch->keywordIds[$keyword->uniqueId] = $keyword->keyword_id;														 
 			
 				// Keep track of keywords in batch
@@ -122,7 +122,7 @@ class client
 	// Runs when all jobs have checked back in
   	public static function jobComplete($task) 
 	{ 
-	  print "COMPLETE: " . $task->unique() . ", " . $task->data() . "\n"; 
+		print "COMPLETE: " . $task->unique() . ", " . $task->data() . "\n"; 
 	}
 
 

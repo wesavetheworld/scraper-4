@@ -13,8 +13,7 @@ class bootstrap
 	public function bootstrap()
 	{ 
 		// Instantiate a new amazon object
-		//$ec2 = new AmazonEC2();
-		$this->listInstances();
+		$this->getnstances();
 
 		// Sync all worker instances
 		$this->syncWorkers();
@@ -24,7 +23,7 @@ class bootstrap
 	}
 
 	// Get list of EC2 instance info
-	private function listInstances()
+	private function getInstances()
 	{
 		// Create a new amazon object
 		$ec2 = new AmazonEC2();
