@@ -38,7 +38,10 @@
 	chdir(dirname($argv[0]));	
 	                         
 	// Turn off php notices
-	error_reporting(E_ALL ^ E_NOTICE);	
+	error_reporting(E_ALL ^ E_NOTICE);
+	
+	// The Lsync config file location (used to sync servers)
+	define('LSYNC_CONFIG', 'config/lsync.conf');	
 
 	// ===========================================================================// 
 	// ! Database credentials                                                     //

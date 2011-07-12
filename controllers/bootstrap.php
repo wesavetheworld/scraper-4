@@ -56,12 +56,23 @@ class bootstrap
 			// Define insance private ip
 			$ip = $inst->instancesSet->item->privateIpAddress;
 
-			// Sync external worker server
-			echo exec("rsync -avz /home/ec2-user/ ec2-user@$ip:/home/ec2-user"); 
-
-			// Show syncing status 
-			echo $inst->instancesSet->item->instanceId." : synced \n";
+			// Add instance private ip to sync data 
+			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/", rsyncOps="-avz"}';
 		}
-		
+
+		// Load the Lsynce configuration file
+		$config = file_get_contents(LSYNC_CONFIG);
+
+		// Isolate the host part of the file
+		$config = explode("#---", $config);
+
+		// Add the new hosts to the config file
+		$config = $sync."\n#---".$config[1];
+
+		// Create new config file with new hosts
+		file_put_contents(LSYNC_CONFIG, $config);
+
+		// Restart Lsync with new settings
+		exec("sudo /etc/init.d/lsyncd restart");
 	} 	
 }			
