@@ -13,7 +13,7 @@ class bootstrap
 	public function bootstrap()
 	{ 
 		// Instantiate a new amazon object
-		$this->getInstances();
+		$this->getInstances(array('Name' => 'tag-value', 'Value' => 'worker'));
 
 		// Sync all worker instances
 		$this->syncWorkers();
@@ -22,8 +22,24 @@ class bootstrap
 		echo "Bootstrapping complete. \n";
 	}
 
+	// ===========================================================================// 
+	// ! Public methods                                                          //
+	// ===========================================================================//
+	    
+    public function getJobServer()
+    {
+    	// Get EC2 job server info
+		$jobServer = $this->getInstances(array('Name' => 'tag-value', 'Value' => 'jobServer'));
+
+		return $jobServer->item->instancesSet->item->privateIpAddress;
+    }
+
+	// ===========================================================================// 
+	// ! Private methods                                                          //
+	// ===========================================================================//
+
 	// Get list of EC2 instance info
-	private function getInstances()
+	private function getInstances($filter)
 	{
 		// Create a new amazon object
 		$ec2 = new AmazonEC2();
@@ -34,7 +50,7 @@ class bootstrap
 		// Get info on all worker instances
 		$this->response = $ec2->describe_instances(array(
 		    'Filter' => array(
-				array('Name' => 'tag-value', 'Value' => 'worker')
+				$filter
 		    )
 		));		
 
@@ -44,6 +60,9 @@ class bootstrap
 			// End the script
 			exit("error \n");
 		}	
+
+		// Return instance objects
+		return $this->response->body->reservationSet;
 	}
 	
 	// Sync all worker instances

@@ -26,8 +26,10 @@ class client
 	function __construct()
 	{           
 		// Include keywords data model
-	 	include('models/keywords.model.php'); 
-	    //include('models/keywords.mongo.php');
+	 	require_once('models/keywords.model.php'); 
+
+		// Include the amazon SDK
+		require_once('controllers/bootstrap.php'); 
 	
 	  	// Initiate benchmarking
 		utilities::benchmark();		
@@ -42,11 +44,14 @@ class client
 	
 	public function client()
 	{   
-		# Create our gearman client
+    	// New bootstrap instance (for getting jobServer ip)
+    	$ec2 = new bootstrap;
+
+		// Create our gearman client
 		$gmclient = new GearmanClient(); 
 
-		# add the default job server
-		$gmclient->addServer('10.170.102.159');   
+		// add the default job server
+		$gmclient->addServer($ec2->getJobServer());   
 		
 		// Set the function to be used when jobs are complete
    		$gmclient->setCompleteCallback("client::jobComplete");
@@ -116,9 +121,9 @@ class client
 	} 
 	
 	// ===========================================================================// 
-	// ! Gearman methods                                                           //
+	// ! Gearman methods                                                          //
 	// ===========================================================================//	
-    
+
 	// Runs when all jobs have checked back in
   	public static function jobComplete($task) 
 	{ 
