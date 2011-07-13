@@ -46,6 +46,9 @@ class bootstrap
 		
 		// Execute mounting of client data directory
 		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
+
+
+		return true;
     }
 
 	// ===========================================================================// 
@@ -89,7 +92,7 @@ class bootstrap
 			$ip = $inst->instancesSet->item->privateIpAddress;
 
 			// Add instance private ip to sync data 
-			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz"}';
+			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz" exclude = { "/support/data" }}';
 
 			// Add instance to client export file for data sync exclusion
 			$export .= "/home/ec2-user/scraper/support/data/ $ip(rw,no_root_squash)\n";
