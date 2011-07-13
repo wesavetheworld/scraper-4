@@ -199,7 +199,7 @@ class bootstrap
 	// Run gearman job server
 	private function runGearman()
 	{
-		if(!exec("gearmand -d"))
+		if(!exec("sudo /usr/local/sbin/gearmand -d"))
 		{
 			// Send admin error message
 			utilities::reportErrors("Can't run gearman job server"); 
