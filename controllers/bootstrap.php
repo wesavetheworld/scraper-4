@@ -91,7 +91,7 @@ class bootstrap
 		$this->getInstances(array('InstanceId' => $this->instanceId));
 		
 		// Set the instance type from the return data
-		$this->instanceType = $this->response->body->reservationSet;
+		$this->instanceType = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item->value;
 		
 		print_r($this->instanceType);	
 	}
