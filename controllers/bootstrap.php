@@ -74,8 +74,6 @@ class bootstrap
 		// Get the instance id of the currently running instance
 		$this->instanceId = exec("sudo wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
 
-		echo "return: ".$this->instanceId;
-
 		// If no instance id
 		if(!$this->instanceId)
 		{
@@ -90,7 +88,7 @@ class bootstrap
 	private function getInstanceType()
 	{
 		// Get current instances info
-		$this->getInstances(array('InstanceId' => $this->instaceId));
+		$this->getInstances(array('InstanceId' => $this->instanceId));
 		
 		// Set the instance type from the return data
 		$this->instanceType = $this->response->body->reservationSet;	
