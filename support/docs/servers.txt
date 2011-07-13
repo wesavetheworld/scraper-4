@@ -1,0 +1,48 @@
+// ******************************* INFORMATION *******************************//
+
+// ***************************************************************************//
+//  
+// ** SERVERS - Information about the server configuration in place for SEscout
+// ** 
+// ** @author	Joshua Heiland <thezenman@gmail.com>
+// ** @date	 2011-07-12
+//  	
+// ***************************************************************************//
+
+// ********************************** START **********************************//
+
+
+// ===========================================================================// 
+// ! Name: jobServer                                                          //
+// ===========================================================================// 
+
+	purpose: receives jobs from the client server and assigns them to workers
+	
+	files: no files needed
+	
+	notes: gearman daemon (gearmand -d) must be running. 
+		   - Launches at boot from /etc/rc.local 
+
+// ===========================================================================// 
+// ! Name: client                                                             //
+// ===========================================================================// 		   
+
+	purpose: determines what SEscout jobs need to be run each hour
+	
+	files: SEscout scraper app controller->client
+	
+	notes: gearman must also be installed
+		   - gearman daemon does not need to run
+		   - gearman php driver must be installed
+
+// ===========================================================================// 
+// ! Name: worker                                                             //
+// ===========================================================================// 		   
+
+	purpose: receives jobs from jobServer and performs the actual scraping
+	
+	files: SEscout scraper app controller->worker
+	
+	notes: gearman must also be installed
+		   - gearman daemon does not need to run
+		   - gearman php driver must be installed		   
