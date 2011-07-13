@@ -29,9 +29,14 @@ class awsapi
 
 	public function awsapi()
 	{
+		// Save a file to e3
+		$this->createS3Object();
+
+		//Get a list of e3 buckets
+		//$this->getE3Buckets();
 
 		// List all instances in account
-		$this->listInstances();
+		//$this->listInstances();
 		
 		// Stop the supplied instance
 		//$this->stopInstance('i-2ce3fb68');
@@ -95,5 +100,46 @@ class awsapi
 			echo "error: ".$response->isOK()."\n";
 		}	
 	}
+
+	// Get a list of all E3 buckets
+	public function getE3Buckets()
+	{
+		$s3 = new AmazonS3();
+
+		$response = $s3->list_buckets();
+
+		if($response->isOK())
+		{
+			print_r($response);
+		}
+		else
+		{
+			echo "error: ".$response->isOK()."\n";
+		}			
+	}
+
+	// Get a list of all E3 buckets
+	public function createS3Object()
+	{
+		$s3 = new AmazonS3();
+
+		$i = 0;
+		while($i != 100)
+		{
+			$response = $s3->create_object('searches', 'search-'.$i.'.html', array(
+				'body' => 'This is my body text.'
+			));
+
+			if(!$response->isOK())
+			{
+				echo "error";
+				break;
+			}
+			
+			$i++;
+		}			
+	
+
+	}	
 	
 }
