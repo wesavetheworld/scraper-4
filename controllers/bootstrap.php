@@ -45,7 +45,7 @@ class bootstrap
 		exec("sudo umount -l /home/ec2-user/scraper/support/data");
 		
 		// Execute mounting of client data directory
-		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data")
+		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
     }
 
 	// ===========================================================================// 
