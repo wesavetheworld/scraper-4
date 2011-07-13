@@ -8,10 +8,24 @@ class bootstrap
 	{
 		// Include the amazon SDK
 		require_once 'classes/amazon/sdk.class.php';
+
+		// Load the current instances id
+		$this->getInstanceId();
+
+		// Load the current instances description (client/worker)
+		$this->getInstanceType();
+
+		echo "instance id: ". $this->instanceId."\n";
+		echo "instance type: ". $this->instanceType."\n";
+
+		die("\nend\n");
 	}
 	
 	public function bootstrap()
 	{ 
+
+		$this->getInstances(array('Name' => 'tag-value', 'Value' => 'client'));
+
 		// Instantiate a new amazon object
 		$this->getInstances(array('Name' => 'tag-value', 'Value' => 'worker'));
 
@@ -29,7 +43,7 @@ class bootstrap
     public function getJobServer()
     {
     	// Get EC2 job server info
-		$jobServer = $this->getInstances(array('Name' => 'tag-value', 'Value' => 'jobServer'));
+		$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
 
 		return $jobServer->item->instancesSet->item->privateIpAddress;
     }
@@ -38,7 +52,6 @@ class bootstrap
     {
     	// Get the client servers ip
 		$clientServer = $this->getInstances(array('Name' => 'tag-value', 'Value' => 'client'));
-
 		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
 
 		// Unmount directory incase its already mounted
@@ -54,9 +67,35 @@ class bootstrap
 	// ===========================================================================// 
 	// ! Private methods                                                          //
 	// ===========================================================================//
+	
+	// Load the current instances id
+	private function getInstanceId()
+	{
+		// Get the instance id of the currently running instance
+		$this->intanceId = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
+
+		// If no instance id
+		if(!$this->instanceId)
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't load instance id"); 
+			
+	  		// Finish execution
+			utilities::complete();				
+		}		
+	}
+
+	private function getInstanceType()
+	{
+		// Get current instances info
+		$this->getInstances(array('InstanceId' => $this->instaceId));
+		
+		// Set the instance type from the return data
+		$this->instanceType = $this->response->body->reservationSet;	
+	}
 
 	// Get list of EC2 instance info
-	private function getInstances($filter)
+	private function getInstances($opt)
 	{
 		// Create a new amazon object
 		$ec2 = new AmazonEC2();
@@ -65,26 +104,41 @@ class bootstrap
 		$ec2->set_region('us-west-1');		
 
 		// Get info on all worker instances
-		$this->response = $ec2->describe_instances(array(
-		    'Filter' => array(
-				$filter
-		    )
-		));		
+		$this->response = $ec2->describe_instances($opt);		
 
 		// If request failed
 		if(!$this->response->isOK())
 		{
-			// End the script
-			exit("error \n");
+			// Send admin error message
+			utilities::reportErrors("Can't load instance data"); 
+			
+	  		// Finish execution
+			utilities::complete();
 		}	
 
 		// Return instance objects
 		return $this->response->body->reservationSet;
 	}
+
+	// Associate an elastic ip with an instance
+	private function assignIp()
+	{
+	
+		$response = $ec2->associate_address('i-1f549375', '184.73.247.11');	
+
+	}
 	
 	// Sync all worker instances
 	private function syncWorkers()
 	{
+
+
+		// Bind ports for nfs
+		exec("sudo /etc/init.d/rpcbind start");
+		
+		// Turn on nfs folder sharing for the data folder 
+		exec("sudo /etc/init.d/nfs start");
+
 		// Loop through each instance returned
 		foreach($this->response->body->reservationSet->item as $inst)
 		{
