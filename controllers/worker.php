@@ -52,7 +52,7 @@ class worker
     	if(!$ec2->syncData())
     	{
     		// Send a notifo error if can't sync
-    		utilities::reportErrors("Can't sync worker data folder with client");	
+    		utilities::reportErrors("Can't sync worker data folder with client"); 	
     	}
 
 		# Create our worker object.
