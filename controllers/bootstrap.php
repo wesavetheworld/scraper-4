@@ -190,7 +190,7 @@ class bootstrap
 		$output = array();
 
 		// Execute mounting of client data directory
-		$mount = exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data", $output);
+		$mount = exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data", $output, true);
 
 		print_r($mount);
 
