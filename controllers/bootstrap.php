@@ -80,9 +80,19 @@ class bootstrap
 		$this->getInstances(array('InstanceId' => $this->instanceId));
 
 		print_r($this->response->body->reservationSet->item->instancesSet->item->tagSet);
-		
-		// Set the instance type from the return data
-		$this->instanceType = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item->value;		
+
+		$tags = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item;
+
+		// Loop through tags
+		foreach($tags as $tag)
+		{
+			// If current tag is the type tag
+			if($tag->key == 'type')
+			{
+				// Set current instance type
+				$this->instanceType = $tag->value;
+			}
+		}	
 	}
 
 	// Get list of EC2 instance info
