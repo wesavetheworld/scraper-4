@@ -179,28 +179,17 @@ class bootstrap
 	// Mount the client server's data folder locally for read/writes
     public function mountDataFolder()
     {
-    	// Get the client servers ip
+    	// Get client server info
 		$clientServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'client'))));
+		
+		// Extract the client server's ip
 		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
 
 		// Unmount directory incase its already mounted
 		exec("sudo umount -l /home/ec2-user/scraper/support/data");
 
 		// Execute mounting of client data directory
-		$mount = exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data", $output);
-
-		print_r($mount);
-		print_r($output);
-
-		if(!$mout)
-		{
-			echo "array empty I guess";
-			// Send admin error message
-			utilities::reportErrors("Can't mount data folder"); 
-			
-	  		// Finish execution
-			utilities::complete();	
-		}
+		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
     }
     
 	// ===========================================================================// 
