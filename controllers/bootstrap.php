@@ -193,9 +193,10 @@ class bootstrap
 		$mount = exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data", $output);
 
 		print_r($mount);
-		
+
 		if(!$mout)
 		{
+			echo "array empty I guess";
 			// Send admin error message
 			utilities::reportErrors("Can't mount data folder"); 
 			
