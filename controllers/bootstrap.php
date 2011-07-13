@@ -74,7 +74,7 @@ class bootstrap
 		// Get the instance id of the currently running instance
 		$this->instanceId = exec("sudo wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
 
-		echo "return: ".$this->intanceId;
+		echo "return: ".$this->instanceId;
 
 		// If no instance id
 		if(!$this->instanceId)
