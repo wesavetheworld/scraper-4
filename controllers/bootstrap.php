@@ -76,7 +76,13 @@ class bootstrap
 
 			// Add instance private ip to sync data 
 			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz"}';
+
+			// Add instance to client export file for data sync exclusion
+			$export .= "/home/ec2-user/scraper/support/data/ $ip(rw,no_root_squash)\n";
 		}
+
+		// Write to the lyxync exclude file
+		file_put_contents(LSYNC_EXCLUDE, $export);
 
 		// Load the Lsynce configuration file
 		$config = file_get_contents(LSYNC_CONFIG);

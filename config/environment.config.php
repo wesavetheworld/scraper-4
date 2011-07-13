@@ -43,6 +43,9 @@
 	// The Lsync config file location (used to sync servers)
 	define('LSYNC_CONFIG', 'config/lsync.conf');	
 
+	// The Lsync config file location (used to sync servers)
+	define('LSYNC_EXCLUDE', '/etc/export');
+
 	// ===========================================================================// 
 	// ! Database credentials                                                     //
 	// ===========================================================================//
