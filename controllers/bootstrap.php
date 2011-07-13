@@ -17,6 +17,8 @@ class bootstrap
 
 		// Load the current instances description (client/worker)
 		$this->getInstanceType();
+
+		echo "type: ".$this->instanceType."\n";
 	}
 	
 	// Run boot functions based on instance identity
@@ -122,17 +124,17 @@ class bootstrap
 	private function syncInstances()
 	{
 		// Get array of all ec2 instances currently running
-		$this->getInstances('');
+		$this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'scraper'))));
 
 		// Loop through each instance returned
 		foreach($this->response->body->reservationSet->item as $inst)
 		{
-			// Define insance private ip
-			$ip = $inst->instancesSet->item->privateIpAddress;
-
 			// Dont add client ip(self) to sync list (obviously)
 			if($inst->instancesSet->item->tagSet->item->value != "client")
 			{
+				// Define insance private ip
+				$ip = $inst->instancesSet->item->privateIpAddress;
+
 				// Add instance private ip to sync data 
 				$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz", exclude = {"/support/data"}}';
 
