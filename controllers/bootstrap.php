@@ -91,7 +91,9 @@ class bootstrap
 		$this->getInstances(array('InstanceId' => $this->instanceId));
 		
 		// Set the instance type from the return data
-		$this->instanceType = $this->response->body->reservationSet;	
+		$this->instanceType = $this->response->body->reservationSet;
+		
+		print_r($this->instanceType);	
 	}
 
 	// Get list of EC2 instance info
