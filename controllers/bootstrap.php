@@ -79,8 +79,7 @@ class bootstrap
 		// Get current instances info
 		$this->getInstances(array('InstanceId' => $this->instanceId));
 
-		print_r($this->response->body->reservationSet->item->instancesSet->item->tagSet);
-
+		// Select all of the tags from the server response
 		$tags = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item;
 
 		// Loop through tags
@@ -187,8 +186,15 @@ class bootstrap
 		// Unmount directory incase its already mounted
 		exec("sudo umount -l /home/ec2-user/scraper/support/data");
 		
+		// To contain the mounting response
+		$output = array();
+
 		// Execute mounting of client data directory
-		if(!exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data"))
+		$mount = exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data", $output);
+
+		print_r($mount);
+		
+		if(!$mout)
 		{
 			// Send admin error message
 			utilities::reportErrors("Can't mount data folder"); 
