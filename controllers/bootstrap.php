@@ -122,7 +122,7 @@ class bootstrap
 	private function syncInstances()
 	{
 		// Get array of all ec2 instances currently running
-		$this->getInstances();
+		$this->getInstances('');
 
 		// Loop through each instance returned
 		foreach($this->response->body->reservationSet->item as $inst)
