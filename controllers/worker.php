@@ -45,15 +45,15 @@ class worker
 	
 	public function worker()
 	{    
-    	// New bootstrap instance (for getting jobServer ip)
-    	$ec2 = new bootstrap;
+    	// // New bootstrap instance (for getting jobServer ip)
+    	// $ec2 = new bootstrap;
 
-    	// Make sure data folder is synced with client server(saved searches)
-    	if(!$ec2->syncData())
-    	{
-    		// Send a notifo error if can't sync
-    		utilities::reportErrors("Can't sync worker data folder with client"); 	
-    	}
+    	// // Make sure data folder is synced with client server(saved searches)
+    	// if(!$ec2->syncData())
+    	// {
+    	// 	// Send a notifo error if can't sync
+    	// 	utilities::reportErrors("Can't sync worker data folder with client"); 	
+    	// }
 
 		# Create our worker object.
 		$gmworker= new GearmanWorker();

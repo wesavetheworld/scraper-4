@@ -9,20 +9,37 @@ class bootstrap
 		// Include the amazon SDK
 		require_once 'classes/amazon/sdk.class.php';
 
+		// Create a new amazon object
+		$this->ec2 = new AmazonEC2();		
+
 		// Load the current instances id
 		$this->getInstanceId();
 
 		// Load the current instances description (client/worker)
 		$this->getInstanceType();
-
-		echo "instance id: ". $this->instanceId."\n";
-		echo "instance type: ". $this->instanceType."\n";
-
-		die("\nend\n");
 	}
 	
 	public function bootstrap()
 	{ 
+
+		// If this is a client instance
+		if($this->instanceType == "client")
+		{
+			// Assign the client elastic ip to this instance
+			$this->assignIp(CLIENT_IP);
+
+			// Start NFS file sharing for data folder
+			$this->startNfs();
+
+			// Sync all worker instances
+			$this->syncWorkers();			
+		}
+		// If this is a worker instance
+		elseif($this->instanceType == "worker")
+		{
+	    	// Sync data folder with client
+	    	$this->syncData();			
+		}
 
 		$this->getInstances(array('Name' => 'tag-value', 'Value' => 'client'));
 
@@ -51,7 +68,7 @@ class bootstrap
     public function syncData()
     {
     	// Get the client servers ip
-		$clientServer = $this->getInstances(array('Name' => 'tag-value', 'Value' => 'client'));
+		$clientServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'client'))));
 		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
 
 		// Unmount directory incase its already mounted
@@ -91,19 +108,14 @@ class bootstrap
 		$this->getInstances(array('InstanceId' => $this->instanceId));
 		
 		// Set the instance type from the return data
-		$this->instanceType = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item->value;
-		
-		print_r($this->instanceType);	
+		$this->instanceType = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item->value;		
 	}
 
 	// Get list of EC2 instance info
 	private function getInstances($opt)
 	{
-		// Create a new amazon object
-		$ec2 = new AmazonEC2();
-
 		// Set the region to access instances
-		$ec2->set_region('us-west-1');		
+		$this->ec2->set_region('us-west-1');		
 
 		// Get info on all worker instances
 		$this->response = $ec2->describe_instances($opt);		
@@ -123,24 +135,35 @@ class bootstrap
 	}
 
 	// Associate an elastic ip with an instance
-	private function assignIp()
+	private function assignIp($ip)
 	{
-	
-		$response = $ec2->associate_address('i-1f549375', '184.73.247.11');	
-
+		// Attach the elastic ip provided to this instance
+		$this->ec2->associate_address($this->instanceId, $ip);
+		
+		// If request failed
+		if(!$this->response->isOK())
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't attach elastic ip"); 
+			
+	  		// Finish execution
+			utilities::complete();
+		}			
 	}
 	
-	// Sync all worker instances
-	private function syncWorkers()
+	// Start NFS file sharing for data folder	
+	private function startNfs()
 	{
-
-
 		// Bind ports for nfs
 		exec("sudo /etc/init.d/rpcbind start");
 		
 		// Turn on nfs folder sharing for the data folder 
-		exec("sudo /etc/init.d/nfs start");
+		exec("sudo /etc/init.d/nfs start");	
+	}
 
+	// Sync all worker instances
+	private function syncWorkers()
+	{
 		// Loop through each instance returned
 		foreach($this->response->body->reservationSet->item as $inst)
 		{

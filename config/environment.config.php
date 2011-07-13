@@ -46,6 +46,9 @@
 	// The Lsync config file location (used to sync servers)
 	define('LSYNC_EXCLUDE', '/etc/exports');
 
+	// The AWS elastic ip for the client server
+	define('CLIENT_IP', '50.18.104.82');
+
 	// ===========================================================================// 
 	// ! Database credentials                                                     //
 	// ===========================================================================//
