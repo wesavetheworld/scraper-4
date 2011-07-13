@@ -34,6 +34,20 @@ class bootstrap
 		return $jobServer->item->instancesSet->item->privateIpAddress;
     }
 
+    public function syncData()
+    {
+    	// Get the client servers ip
+		$clientServer = $this->getInstances(array('Name' => 'tag-value', 'Value' => 'client'));
+
+		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
+
+		// Unmount directory incase its already mounted
+		exec("sudo umount -l /home/ec2-user/scraper/support/data");
+		
+		// Execute mounting of client data directory
+		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data")
+    }
+
 	// ===========================================================================// 
 	// ! Private methods                                                          //
 	// ===========================================================================//

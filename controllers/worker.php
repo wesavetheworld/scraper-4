@@ -33,7 +33,10 @@ class worker
 		include('classes/parse.class.php');
 
 		// Include scraping class
-		include('classes/scrape.class.php');   		   	 			
+		include('classes/scrape.class.php'); 
+		
+		// Include the amazon SDK
+		require_once('controllers/bootstrap.php'); 		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -42,11 +45,21 @@ class worker
 	
 	public function worker()
 	{    
+    	// New bootstrap instance (for getting jobServer ip)
+    	$ec2 = new bootstrap;
+
+    	// Make sure data folder is synced with client server(saved searches)
+    	if(!$c2->syncData())
+    	{
+    		// Send a notifo error if can't sync
+    		utilities::reportErrors("Can't sync worker data folder with client");	
+    	}
+
 		# Create our worker object.
 		$gmworker= new GearmanWorker();
 
 		# Add default server (localhost).
-		$gmworker->addServer('10.170.102.159'); 
+		$gmworker->addServer($ec2->getJobServer()); 
 
 		# Register function "reverse" with the server. Change the worker function to
 		$gmworker->addFunction("rankings", "worker::rankings"); 
