@@ -49,7 +49,7 @@ class worker
     	$ec2 = new bootstrap;
 
     	// Make sure data folder is synced with client server(saved searches)
-    	if(!$c2->syncData())
+    	if(!$ec2->syncData())
     	{
     		// Send a notifo error if can't sync
     		utilities::reportErrors("Can't sync worker data folder with client");	
