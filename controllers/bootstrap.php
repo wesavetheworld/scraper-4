@@ -19,9 +19,9 @@ class bootstrap
 		$this->getInstanceType();
 	}
 	
+	// Run boot functions based on instance identity
 	public function bootstrap()
 	{ 
-
 		// If this is a client instance
 		if($this->instanceType == "client")
 		{
@@ -32,57 +32,27 @@ class bootstrap
 			$this->startNfs();
 
 			// Sync all worker instances
-			$this->syncWorkers();			
+			$this->syncInstances();			
+		}
+		// If this is the job server
+		elseif($this->instanceType == "jobServer")
+		{
+			// Run gearman daemon
+			$this->runGearman();			
 		}
 		// If this is a worker instance
 		elseif($this->instanceType == "worker")
 		{
-	    	// Sync data folder with client
-	    	$this->syncData();			
+	    	// Mount client servers data folder locally
+	    	$this->mountDataFolder();			
 		}
-
-		$this->getInstances(array('Name' => 'tag-value', 'Value' => 'client'));
-
-		// Instantiate a new amazon object
-		$this->getInstances(array('Name' => 'tag-value', 'Value' => 'worker'));
-
-		// Sync all worker instances
-		$this->syncWorkers();
 
 		// Show completion status
 		echo "Bootstrapping complete. \n";
 	}
 
 	// ===========================================================================// 
-	// ! Public methods                                                          //
-	// ===========================================================================//
-	    
-    public function getJobServer()
-    {
-    	// Get EC2 job server info
-		$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
-
-		return $jobServer->item->instancesSet->item->privateIpAddress;
-    }
-
-    public function syncData()
-    {
-    	// Get the client servers ip
-		$clientServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'client'))));
-		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
-
-		// Unmount directory incase its already mounted
-		exec("sudo umount -l /home/ec2-user/scraper/support/data");
-		
-		// Execute mounting of client data directory
-		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
-
-
-		return true;
-    }
-
-	// ===========================================================================// 
-	// ! Private methods                                                          //
+	// ! Instance identification methods                                          //
 	// ===========================================================================//
 	
 	// Load the current instances id
@@ -118,7 +88,7 @@ class bootstrap
 		$this->ec2->set_region('us-west-1');		
 
 		// Get info on all worker instances
-		$this->response = $ec2->describe_instances($opt);		
+		$this->response = $this->ec2->describe_instances($opt);		
 
 		// If request failed
 		if(!$this->response->isOK())
@@ -134,23 +104,10 @@ class bootstrap
 		return $this->response->body->reservationSet;
 	}
 
-	// Associate an elastic ip with an instance
-	private function assignIp($ip)
-	{
-		// Attach the elastic ip provided to this instance
-		$this->ec2->associate_address($this->instanceId, $ip);
-		
-		// If request failed
-		if(!$this->response->isOK())
-		{
-			// Send admin error message
-			utilities::reportErrors("Can't attach elastic ip"); 
-			
-	  		// Finish execution
-			utilities::complete();
-		}			
-	}
-	
+	// ===========================================================================// 
+	// ! File syncing methods                                                     //
+	// ===========================================================================//
+
 	// Start NFS file sharing for data folder	
 	private function startNfs()
 	{
@@ -162,19 +119,26 @@ class bootstrap
 	}
 
 	// Sync all worker instances
-	private function syncWorkers()
+	private function syncInstances()
 	{
+		// Get array of all ec2 instances currently running
+		$this->getInstances();
+
 		// Loop through each instance returned
 		foreach($this->response->body->reservationSet->item as $inst)
 		{
 			// Define insance private ip
 			$ip = $inst->instancesSet->item->privateIpAddress;
 
-			// Add instance private ip to sync data 
-			$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz", exclude = {"/support/data"}}';
+			// Dont add client ip(self) to sync list (obviously)
+			if($inst->instancesSet->item->tagSet->item->value != "client")
+			{
+				// Add instance private ip to sync data 
+				$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz", exclude = {"/support/data"}}';
 
-			// Add instance to client export file for data sync exclusion
-			$export .= "/home/ec2-user/scraper/support/data/ $ip(rw,no_root_squash)\n";
+				// Add instance to client export file for data sync exclusion
+				$export .= "/home/ec2-user/scraper/support/data/ $ip(rw,no_root_squash)\n";
+			}	
 		}
 
 		// Write to the lyxync exclude file
@@ -198,4 +162,72 @@ class bootstrap
 		// Restart Lsync with new settings
 		exec("sudo /etc/init.d/lsyncd restart");
 	} 	
+
+	// Mount the client server's data folder locally for read/writes
+    public function mountDataFolder()
+    {
+    	// Get the client servers ip
+		$clientServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'client'))));
+		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
+
+		// Unmount directory incase its already mounted
+		exec("sudo umount -l /home/ec2-user/scraper/support/data");
+		
+		// Execute mounting of client data directory
+		if(!exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data"))
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't mount data folder"); 
+			
+	  		// Finish execution
+			utilities::complete();	
+		}
+    }
+    
+	// ===========================================================================// 
+	// ! Boot methods                                                             //
+	// ===========================================================================//    		
+	
+	// Run gearman job server
+	private function runGearman()
+	{
+		if(!exec("gearmand -d"))
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't run gearman job server"); 
+			
+	  		// Finish execution
+			utilities::complete();			
+		}
+	}
+
+	// ===========================================================================// 
+	// ! Public methods                                                           //
+	// ===========================================================================//
+	    
+   	// Get the local ip of the jobServer
+    public function getJobServer()
+    {
+    	// Get EC2 job server info
+		$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
+
+		return $jobServer->item->instancesSet->item->privateIpAddress;
+    }
+
+	// Associate an elastic ip with an instance
+	private function assignIp($ip)
+	{
+		// Attach the elastic ip provided to this instance
+		$this->ec2->associate_address($this->instanceId, $ip);
+		
+		// If request failed
+		if(!$this->response->isOK())
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't attach elastic ip"); 
+			
+	  		// Finish execution
+			utilities::complete();
+		}			
+	}	
 }			
