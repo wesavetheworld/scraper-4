@@ -84,6 +84,9 @@ class bootstrap
 		// Write to the lyxync exclude file
 		file_put_contents(LSYNC_EXCLUDE, $export);
 
+		// Re export new locations added to exports file
+		exec("sudo exportfs -ra");
+
 		// Load the Lsynce configuration file
 		$config = file_get_contents(LSYNC_CONFIG);
 
