@@ -78,6 +78,8 @@ class bootstrap
 	{
 		// Get current instances info
 		$this->getInstances(array('InstanceId' => $this->instanceId));
+
+		print_r($this->response->body->reservationSet->item->instancesSet->item->tagSet);
 		
 		// Set the instance type from the return data
 		$this->instanceType = $this->response->body->reservationSet->item->instancesSet->item->tagSet->item->value;		
