@@ -59,7 +59,7 @@ class worker
 		$gmworker= new GearmanWorker();
 
 		# Add default server (localhost).
-		$gmworker->addServer(JOB_SERVER; 
+		$gmworker->addServer(JOB_SERVER); 
 
 		# Register function "reverse" with the server. Change the worker function to
 		$gmworker->addFunction("rankings", "worker::rankings"); 
