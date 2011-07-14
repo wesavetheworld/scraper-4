@@ -83,21 +83,21 @@ class client
 	}
 
 	private function rankings($schedule)
-	{
-		// Fork client into new process
-		$pid = pcntl_fork();		
+	// {
+	// 	// Fork client into new process
+	// 	$pid = pcntl_fork();		
 	
-		// Only apply next step for child
-		if(!$pid) 
-		{
-			// Include rankings controller
-			include rankings('controllers/rankings.php');
+	// 	// Only apply next step for child
+	// 	if(!$pid) 
+	// 	{
+	// 		// Include rankings controller
+	// 		include rankings('controllers/rankings.php');
 
-			$rankings = new rankings;
+	// 		$rankings = new rankings;
 
-			$rankings->rankings;			
-		}
-	}
+	// 		$rankings->rankings;			
+	// 	}
+	// }
 	
 	public function rankings($schedule)
 	{
