@@ -79,6 +79,9 @@
 	// Load and instantiate a controller class
 	function load($controller)
 	{
+		// Make everything lowercase for files
+		$controller = strtolower($controller);
+
 		// ===========================================================================// 
 		// ! Include the config file for the controller                               //
 		// ===========================================================================//   
