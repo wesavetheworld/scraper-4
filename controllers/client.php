@@ -27,9 +27,6 @@ class client
 	{           
 		// Include keywords data model
 	 	require_once('models/keywords.model.php'); 
-
-		// Include the amazon SDK
-		require_once('controllers/bootstrap.php'); 
 	
 	  	// Initiate benchmarking
 		utilities::benchmark();		
