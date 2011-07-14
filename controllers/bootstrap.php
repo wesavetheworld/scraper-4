@@ -40,7 +40,10 @@ class bootstrap
 		elseif($this->instanceType == "jobServer")
 		{
 			// Run gearman daemon
-			$this->runGearman();			
+			$this->runGearman();
+			
+			// Unset instance type so no controller will load next
+			$this->instanceType = "";			
 		}
 		// If this is a worker instance
 		elseif($this->instanceType == "worker")
@@ -49,8 +52,8 @@ class bootstrap
 	    	$this->mountDataFolder();			
 		}
 
-		// Show completion status
-		echo "Bootstrapping complete. \n";
+		// Return the correct controller to load next
+		return $this->instanceType;
 	}
 
 	// ===========================================================================// 
@@ -199,14 +202,7 @@ class bootstrap
 	// Run gearman job server
 	private function runGearman()
 	{
-		if(!exec("sudo /usr/local/sbin/gearmand -d"))
-		{
-			// Send admin error message
-			utilities::reportErrors("Can't run gearman job server"); 
-			
-	  		// Finish execution
-			utilities::complete();			
-		}
+		exec("sudo /usr/local/sbin/gearmand -d");
 	}
 
 	// ===========================================================================// 

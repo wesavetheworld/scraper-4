@@ -16,19 +16,6 @@
 	// ***************************************************************************//
 
 	// ********************************** START **********************************// 
-     
-	// Get passed server arguments
-	$argv = $_SERVER['argv'];
- 
-	// Check for the controller argument
-	if(!isset($argv[1]))
-	{         
-		echo "No controller provided \n"; 
-		die();
-	} 
-	
-	// The requested controller
-	$controller = $argv[1]; 
 
 	// ===========================================================================// 
 	// ! Dependencies and helper classes 	                                      //
@@ -59,62 +46,100 @@
 		// Include twilio api class
 		include('classes/twilio_api.class.php');
 	} 
-	
-	// ===========================================================================// 
-	// ! Include the config file for the controller                               //
-	// ===========================================================================//   
-     
-	// The config file name for the controller
- 	$config = "config/".$controller.".config.php"; 
-
-	// Check if controller's config file exists
-	if(file_exists($config))
-	{
-		// Load the controllers config file
-		include($config); 
-	}		   
 
 	// ===========================================================================// 
-	// ! Route the request to the correct controller                              //
-	// ===========================================================================//   
-	
-	// The requested controller location
-	$controller = 'controllers/'.$controller.".php";
-	
-	// Check if controller exists
-	if(file_exists($controller))
-	{                                  
-		// Include the requested controller
-	 	include($controller);	 
-	    
-		// Define the class name (account for folders)
-		$class = array_pop(explode("/", $argv[1]));
-	    
-		// Check if assumed class exists 
-		if(class_exists($class))
+	// ! Route connection to correct controller                                   //
+	// ===========================================================================// 
+
+	// Get passed server arguments
+	$argv = $_SERVER['argv'];
+ 
+	// Check for the controller argument
+	if(!isset($argv[1]))
+	{         
+		echo "Bootstrap mode \n"; 
+
+		// Bootstrap server instance and get controller
+		$controller = load('bootstrap');
+
+		// If a controller was returned rom boostrap (client/worker)
+		if($controller)
 		{
-			// Instantiate requested class
-			$controller = new $class();
-			
-			// If a method with the same name as the class exists
-			if(method_exists($class, $class))
-			{   
-				// Run the first function
-				$controller->$class(); 	
-			}  
-		} 
-		// Class was not found
-		else
-		{
-			// Show error
-			echo "That class does not exist.\n";
-		}		
+			// Load required controller from bootstrap
+			load($controller);	
+		}	
 	}
-	// The requested controller doesn't exist   
+	// A controller was provided from the CL
 	else
-	{   
-		// Show error
-		echo "\nThat conroller does not exist\n";
-	}
+	{
+		// Load requested controller
+		load($argv[1]);		
+	} 
+
+	// ===========================================================================// 
+	// ! The controller loader                                                    //
+	// ===========================================================================// 	
+
+	// Load and instantiate a controller class
+	function load($controller)
+	{
+		// ===========================================================================// 
+		// ! Include the config file for the controller                               //
+		// ===========================================================================//   
+	     
+		// The config file name for the controller
+	 	$config = "config/".$controller.".config.php"; 
+
+		// Check if controller's config file exists
+		if(file_exists($config))
+		{
+			// Load the controllers config file
+			include($config); 
+		}		   
+
+		// ===========================================================================// 
+		// ! Route the request to the correct controller                              //
+		// ===========================================================================//   
+		
+		// The requested controller location
+		$controllerFile = 'controllers/'.$controller.".php";
+		
+		// Check if controller exists
+		if(file_exists($controllerFile))
+		{                                  
+			// Include the requested controller
+		 	include($controllerFile);	 
+		    
+			// Define the class name (account for folders)
+			$class = array_pop(explode("/", $controller));
+		    
+			// Check if assumed class exists 
+			if(class_exists($class))
+			{
+				// Instantiate requested class
+				$controller = new $class();
+				
+				// If a method with the same name as the class exists
+				if(method_exists($class, $class))
+				{   
+					// Run the first function
+					return $controller->$class(); 	
+				}  
+			} 
+			// Class was not found
+			else
+			{
+				// Show error
+				echo "That class does not exist.\n";
+				echo $controller;
+			}		
+		}
+		// The requested controller doesn't exist   
+		else
+		{   
+			// Show error
+			echo "\nThat conroller does not exist\n";
+		}
+	}	
 
 ?>
