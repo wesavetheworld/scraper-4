@@ -82,7 +82,7 @@ class client
 		}
 	}
 
-	private function rankings($schedule)
+	//private function rankings($schedule)
 	// {
 	// 	// Fork client into new process
 	// 	$pid = pcntl_fork();		
