@@ -33,6 +33,8 @@ class bootstrap
 		// If this is a client instance
 		elseif($this->instanceType == "client")
 		{
+			echo "right if\n";
+
 			// Assign the client elastic ip to this instance
 			$this->assignIp(CLIENT_IP);
 
@@ -52,6 +54,7 @@ class bootstrap
 		// Set the jobServer ip constant
 		$this->getJobServer();
 
+		echo "passed bootstrap\n";
 		// Return the correct controller to load next
 		return $this->instanceType;			
 	}
@@ -65,8 +68,6 @@ class bootstrap
 	{
 		// Get the instance id of the currently running instance
 		$this->instanceId = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
-
-		echo "response: ".$this->instanceId;
 
 		// If no instance id
 		if(!$this->instanceId)
