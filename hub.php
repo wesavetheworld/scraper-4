@@ -61,13 +61,9 @@
 
 		// Bootstrap server instance and get controller
 		$controller = load('bootstrap');
-
-		// If a controller was returned rom boostrap (client/worker)
-		if($controller)
-		{
-			// Load required controller from bootstrap
-			load($controller);	
-		}	
+		
+		// Load required controller from bootstrap
+		load($controller);	
 	}
 	// A controller was provided from the CL
 	else

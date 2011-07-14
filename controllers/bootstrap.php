@@ -29,38 +29,31 @@ class bootstrap
 		{
 			// Run gearman daemon
 			$this->runGearman();
-			
-			// Don't load a controller next
-			return false;			
 		}
-		// All other servers
-		else
+		// If this is a client instance
+		elseif($this->instanceType == "client")
 		{
-			// If this is a client instance
-			if($this->instanceType == "client")
-			{
-				// Assign the client elastic ip to this instance
-				$this->assignIp(CLIENT_IP);
+			// Assign the client elastic ip to this instance
+			$this->assignIp(CLIENT_IP);
 
-				// Start NFS file sharing for data folder
-				$this->startNfs();
+			// Start NFS file sharing for data folder
+			$this->startNfs();
 
-				// Sync all worker instances
-				$this->syncInstances();			
-			}
-			// If this is a worker instance
-			elseif($this->instanceType == "worker")
-			{
-		    	// Mount client servers data folder locally
-		    	$this->mountDataFolder();			
-			}
+			// Sync all worker instances
+			$this->syncInstances();			
+		}
+		// If this is a worker instance
+		elseif($this->instanceType == "worker")
+		{
+	    	// Mount client servers data folder locally
+	    	$this->mountDataFolder();			
+		}
 
-			// Set the jobServer ip constant
-			$this->getJobServer();
+		// Set the jobServer ip constant
+		$this->getJobServer();
 
-			// Return the correct controller to load next
-			return $this->instanceType;			
-		}	
+		// Return the correct controller to load next
+		return $this->instanceType;			
 	}
 
 	// ===========================================================================// 
