@@ -44,6 +44,18 @@ class client
 	
 	public function client()
 	{   
+		echo "client controller loaded successfully";
+
+		// Loop forever JUST FOR TESTING
+		while(true != false)
+		{
+			sleep(1);
+		}
+		
+		// Should never get here
+		die();		
+
+
 		// Loop forever
 		while(true != false)
 		{

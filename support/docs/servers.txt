@@ -31,9 +31,13 @@
 	
 	files: SEscout scraper app controller->client
 	
-	notes: gearman must also be installed
+	requirements: 
+		gearman must also be installed
 		   - gearman daemon does not need to run
 		   - gearman php driver must be installed
+		Lsync must be installed
+		NFS must be installed
+			-    
 
 // ===========================================================================// 
 // ! Name: worker                                                             //
