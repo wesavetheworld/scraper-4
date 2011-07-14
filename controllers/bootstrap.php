@@ -64,7 +64,7 @@ class bootstrap
 	private function getInstanceId()
 	{
 		// Get the instance id of the currently running instance
-		$this->instanceId = exec("sudo wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
+		$this->instanceId = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
 
 		echo "response: ".$this->instanceId;
 
@@ -130,10 +130,10 @@ class bootstrap
 	private function startNfs()
 	{
 		// Bind ports for nfs
-		exec("sudo /etc/init.d/rpcbind start");
+		exec("/etc/init.d/rpcbind start");
 		
 		// Turn on nfs folder sharing for the data folder 
-		exec("sudo /etc/init.d/nfs start");	
+		exec("/etc/init.d/nfs start");	
 	}
 
 	// Sync all worker instances
@@ -163,7 +163,7 @@ class bootstrap
 		file_put_contents(LSYNC_EXCLUDE, $export);
 
 		// Re export new locations added to exports file
-		exec("sudo exportfs -ra");
+		exec("exportfs -ra");
 
 		// Load the Lsynce configuration file
 		$config = file_get_contents(LSYNC_CONFIG);
@@ -178,7 +178,7 @@ class bootstrap
 		file_put_contents(LSYNC_CONFIG, $config);
 
 		// Restart Lsync with new settings
-		exec("sudo /etc/init.d/lsyncd restart");
+		exec("/etc/init.d/lsyncd restart");
 	} 	
 
 	// Mount the client server's data folder locally for read/writes
@@ -191,10 +191,10 @@ class bootstrap
 		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
 
 		// Unmount directory incase its already mounted
-		exec("sudo umount -l /home/ec2-user/scraper/support/data");
+		exec("umount -l /home/ec2-user/scraper/support/data");
 
 		// Execute mounting of client data directory
-		exec("sudo mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
+		exec("mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
     }
     
 	// ===========================================================================// 
@@ -204,7 +204,7 @@ class bootstrap
 	// Run gearman job server
 	private function runGearman()
 	{
-		exec("sudo /usr/local/sbin/gearmand -d");
+		exec("/usr/local/sbin/gearmand -d");
 	}
 
 	// ===========================================================================// 
