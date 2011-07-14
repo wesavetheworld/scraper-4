@@ -24,36 +24,43 @@ class bootstrap
 	// Run boot functions based on instance identity
 	public function bootstrap()
 	{ 
-		// If this is a client instance
-		if($this->instanceType == "client")
-		{
-			// Assign the client elastic ip to this instance
-			$this->assignIp(CLIENT_IP);
-
-			// Start NFS file sharing for data folder
-			$this->startNfs();
-
-			// Sync all worker instances
-			$this->syncInstances();			
-		}
 		// If this is the job server
-		elseif($this->instanceType == "jobServer")
+		if($this->instanceType == "jobServer")
 		{
 			// Run gearman daemon
 			$this->runGearman();
 			
-			// Unset instance type so no controller will load next
-			$this->instanceType = "";			
+			// Don't load a controller next
+			return false;			
 		}
-		// If this is a worker instance
-		elseif($this->instanceType == "worker")
+		// All other servers
+		else
 		{
-	    	// Mount client servers data folder locally
-	    	$this->mountDataFolder();			
-		}
+			// If this is a client instance
+			if($this->instanceType == "client")
+			{
+				// Assign the client elastic ip to this instance
+				$this->assignIp(CLIENT_IP);
 
-		// Return the correct controller to load next
-		return $this->instanceType;
+				// Start NFS file sharing for data folder
+				$this->startNfs();
+
+				// Sync all worker instances
+				$this->syncInstances();			
+			}
+			// If this is a worker instance
+			elseif($this->instanceType == "worker")
+			{
+		    	// Mount client servers data folder locally
+		    	$this->mountDataFolder();			
+			}
+
+			// Set the jobServer ip constant
+			$this->getJobServer();
+
+			// Return the correct controller to load next
+			return $this->instanceType;			
+		}	
 	}
 
 	// ===========================================================================// 
@@ -210,12 +217,13 @@ class bootstrap
 	// ===========================================================================//
 	    
    	// Get the local ip of the jobServer
-    public function getJobServer()
+    private function getJobServer()
     {
     	// Get EC2 job server info
 		$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
 
-		return $jobServer->item->instancesSet->item->privateIpAddress;
+		// Set the jobServer ip constant for use in client and worker
+		define('JOB_SERVER', $jobServer->item->instancesSet->item->privateIpAddress);
     }
 
 	// Associate an elastic ip with an instance

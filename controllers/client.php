@@ -101,14 +101,11 @@ class client
 	
 	public function rankings($schedule)
 	{
-    	// New bootstrap instance (for getting jobServer ip)
-    	$ec2 = new bootstrap;
-
 		// Create our gearman client
 		$gmclient = new GearmanClient(); 
 
 		// add the default job server
-		$gmclient->addServer($ec2->getJobServer());   
+		$gmclient->addServer(JOB_SERVER;   
 		
 		// Set the function to be used when jobs are complete
    		$gmclient->setCompleteCallback("client::jobComplete");
