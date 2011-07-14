@@ -61,6 +61,8 @@
 
 		// Bootstrap server instance and get controller
 		$controller = load('bootstrap');
+
+		echo "controller returned: $controller \n";
 		
 		// Load required controller from bootstrap
 		load($controller);	
