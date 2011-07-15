@@ -102,7 +102,7 @@ class client
 		$gmclient = new GearmanClient(); 
 
 		// add the default job server
-		$gmclient->addServer(JOB_SERVER;   
+		$gmclient->addServer(JOB_SERVER);   
 		
 		// Set the function to be used when jobs are complete
    		$gmclient->setCompleteCallback("client::jobComplete");
