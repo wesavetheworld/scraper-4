@@ -1,16 +1,35 @@
 <?php  if(!defined('HUB')) exit('No direct script access allowed\n');
 
+// ******************************* INFORMATION ******************************//
+
+// **************************************************************************//
+//  
+// ** BOOTSTRAP - Each server runs this first to identify itself and it's own 
+// ** meaningless purpose in life.
+// ** 
+// ** @author	Joshua Heiland <thezenman@gmail.com>
+// ** @date	 2011-06-17
+// ** @access	private
+// ** @param	
+// ** @return	Main controller router     
+//  	
+// ***************************************************************************//
+
+// ********************************** START **********************************// 
 
 class bootstrap 
 {    
 	
 	function __construct()
 	{
+echo svn_update(realpath('working-copy'));
+die('end');
+
 		// Include the amazon SDK
 		require_once 'classes/amazon/sdk.class.php';
 
 		// Create a new amazon object
-		$this->ec2 = new AmazonEC2();		
+		$this->ec2 = new AmazonEC2();
 
 		// Load the current instances id
 		$this->getInstanceId();
@@ -30,27 +49,31 @@ class bootstrap
 			// Run gearman daemon
 			$this->runGearman();
 		}
-		// If this is a client instance
-		elseif($this->instanceType == "client")
+		// All othere instance types
+		else
 		{
-			// Assign the client elastic ip to this instance
-			$this->assignIp(CLIENT_IP);
+			// Check for jobServer before continuing 
+			$this->getJobServer();
+					
+			// If this is a client instance
+			if($this->instanceType == "client")
+			{
+				// Assign the client elastic ip to this instance
+				$this->assignIp(CLIENT_IP);
 
-			// Start NFS file sharing for data folder
-			$this->startNfs();
+				// Start NFS file sharing for data folder
+				//$this->startNfs();
 
-			// Sync all worker instances
-			$this->syncInstances();			
-		}
-		// If this is a worker instance
-		elseif($this->instanceType == "worker")
-		{
-	    	// Mount client servers data folder locally
-	    	$this->mountDataFolder();			
-		}
-
-		// Set the jobServer ip constant
-		$this->getJobServer();
+				// Sync all worker instances
+				$this->syncInstances();			
+			}
+			// If this is a worker instance
+			elseif($this->instanceType == "worker")
+			{
+		    	// Mount client servers data folder locally
+		    	$this->mountDataFolder();			
+			}
+		}	
 
 		// Return the correct controller to load next
 		return $this->instanceType;			
@@ -212,11 +235,28 @@ class bootstrap
    	// Get the local ip of the jobServer
     private function getJobServer()
     {
-    	// Get EC2 job server info
-		$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
+    	// While job server is not running
+    	while($jobServerStatus != "running")
+    	{
+	    	// Get EC2 job server info
+			$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
+
+			// Set the status of the jobServer
+			$jobServerStatus = $jobServer->item->instancesSet->item->instanceState->name;
+
+			// If server status is offline
+			if($jobServerStatus != "running")
+			{	
+				// Send admin error message
+				utilities::reportErrors("Job server is not online.", TRUE);
+
+				// Sleep for 1 minute and try again
+				sleep(60);
+			}
+		}	
 
 		// Set the jobServer ip constant for use in client and worker
-		define('JOB_SERVER', $jobServer->item->instancesSet->item->privateIpAddress);
+		define('JOB_SERVER', $jobServer->item->instancesSet->item->privateIpAddress);		
     }
 
 	// Associate an elastic ip with an instance

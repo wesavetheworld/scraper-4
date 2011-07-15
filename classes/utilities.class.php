@@ -112,7 +112,21 @@ class utilities
 		// Declare function static variables
 		static $errorCount = 0;             
 		static $errors = "";
+
+		// If an error message was passed
+		if($error)
+		{
+			// Display errors
+			echo $error."\n";  
+			
+			// Add new error to error list
+			$errors .= $error;			  	
+
+			// Increment error count
+			$errorCount++;			
+		}
 		
+		// If the erros should be sent now
 		if($sendAllErrors)  
 		{  	  		    
 			// If notifo reporting is turned on in the settings
@@ -127,20 +141,13 @@ class utilities
 				$params['title'] = "scraper error";
 			
 				// Send notifo error
-				$notifo->sendNotification($params);			
+				$notifo->sendNotification($params);	
+				
+				// Reset errors 
+				$errors = "";
+				$errorCount = 0;		
 			} 
-		}
-		else
-		{   
-			// Display errors
-			echo $error."\n";  
-			
-			// Add new error to error list
-			$errors .= $error;			  	
-
-			// Increment error count
-			$errorCount++;
-		}	 
+		} 
 	}
 	
 	// Called to end the execution of the script and
