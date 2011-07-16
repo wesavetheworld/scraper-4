@@ -48,7 +48,7 @@ class rankings
 		$gmclient->addServer(JOB_SERVER);   
 		
 		// Set the function to be used when jobs are complete
-   		$gmclient->setCompleteCallback("client::jobComplete");
+   		$gmclient->setCompleteCallback("rankings::jobComplete");
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
