@@ -20,6 +20,8 @@
 	// ===========================================================================// 
 	// ! Passed arguments through CLI ($argv[1] used for controller)              //
 	// ===========================================================================//  
+
+	echo "IT LOADED";
 	
 	// What search engine to scrape
 	define("ENGINE", $argv[2]);

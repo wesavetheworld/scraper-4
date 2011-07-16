@@ -52,8 +52,8 @@
 	// Execute bash command that detaches from daemon
 	function run($command)
 	{
-		echo "execute: ";
 		// Execute command given
-		//echo shell_exec("php hub.php client/$command &> /dev/null &");
-		echo shell_exec("php hub.php client/$command");
+		exec("php hub.php client/$command &> /dev/null &");
+
+		echo "command executed: $command ";		
 	}
