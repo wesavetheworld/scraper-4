@@ -166,6 +166,7 @@ class bootstrap
 		{
 			echo "\nno new code\n";
 		}
+		
 
 		echo $changes;
 	}
