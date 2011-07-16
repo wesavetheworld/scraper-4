@@ -29,11 +29,10 @@
 	// ===========================================================================// 	   	
 
    	// Configure server for use 
-   	$instanceType = new bootstrap();	
+   	$server = new bootstrap();	
 
-   	//echo 	$instanceType;
+   	print_r($server)
 
-   	print_r(	$instanceType);
 
    	die('done');
    	

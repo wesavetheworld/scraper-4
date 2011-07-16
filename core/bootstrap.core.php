@@ -35,10 +35,7 @@ class bootstrap
 		$this->ec2->set_region('us-west-1');	
 		
 		// do it
-		$this->bootstrap();	
-
-		// Return the correct controller to load next
-		return $this->instanceType;			
+		$this->bootstrap();			
 	}
 
 	// ===========================================================================// 
@@ -81,7 +78,9 @@ class bootstrap
 		    	// Mount client servers data folder locally
 		    	//$this->mountDataFolder();			
 			}
-		}			
+		}
+		
+		unset($this->ec2);			
 	}
 
 	// ===========================================================================// 
