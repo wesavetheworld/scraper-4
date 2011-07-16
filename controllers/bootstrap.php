@@ -151,10 +151,11 @@ class bootstrap
 
 	private function checkoutApp()
 	{
+
 		// Update scraper app
 		$changes = shell_exec("svn update /home/ec2-user/");
 
-		echo $chages;
+		echo $changes;
 	}
 
 	// ===========================================================================// 
