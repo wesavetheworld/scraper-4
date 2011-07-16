@@ -155,6 +155,18 @@ class bootstrap
 		// Update scraper app
 		$changes = shell_exec("svn update /home/ec2-user/");
 
+		// If new revision downloaded
+		if(strpos($changes, "U"))
+		{
+			// Kill script so supervisord will restart with new code
+			//exit('new code. restarting...');
+			echo "\nfound new code\n";
+		}
+		else
+		{
+			echo "\nno new code\n";
+		}
+
 		echo $changes;
 	}
 
