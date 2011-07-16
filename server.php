@@ -31,12 +31,6 @@
    	// Configure server for use 
    	$server = new bootstrap();	
 
-
-   	echo $server->instanceType;
-
-
-   	die("\n\ndone\n");
-   	
    	//$instanceType = "client";
 
 	// ===========================================================================// 
@@ -44,4 +38,4 @@
 	// ===========================================================================// 
 
 	// Include main router
-	include('core/'.$instanceType.'.core.php');	
+	include('core/'.$server->instanceType.'.core.php');	
