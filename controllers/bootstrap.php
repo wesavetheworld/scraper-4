@@ -22,28 +22,31 @@ class bootstrap
 	
 	function __construct()
 	{
+		// Check repo for any new revisions
+		$this->updateApp();
+
 		// Include the amazon SDK
 		require_once 'classes/amazon/sdk.class.php';
 
 		// Create a new amazon object
 		$this->ec2 = new AmazonEC2();
+	}
 
+	// ===========================================================================// 
+	// ! Bootstrap routing function                                               //
+	// ===========================================================================//	
+	
+	// Run boot functions based on instance identity
+	public function bootstrap()
+	{ 
 		// Load the current instances id
 		$this->getInstanceId();
 
 		// Load the current instances description (client/worker)
 		$this->getInstanceType();
 
-		echo "type: ".$this->instanceType."\n";
-	}
-	
-	// Run boot functions based on instance identity
-	public function bootstrap()
-	{ 
-		// Get the latest code
-		$this->checkoutApp();
-
-		die('the end');
+		// Log status
+		utilities::notate("Instance type: ".$this->instanceType);		
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
@@ -61,19 +64,13 @@ class bootstrap
 			if($this->instanceType == "client")
 			{
 				// Assign the client elastic ip to this instance
-				$this->assignIp(CLIENT_IP);
-
-				// Start NFS file sharing for data folder
-				//$this->startNfs();
-
-				// Sync all worker instances
-				$this->syncInstances();			
+				$this->assignIp(CLIENT_IP);			
 			}
 			// If this is a worker instance
 			elseif($this->instanceType == "worker")
 			{
 		    	// Mount client servers data folder locally
-		    	$this->mountDataFolder();			
+		    	//$this->mountDataFolder();			
 			}
 		}	
 
@@ -102,6 +99,7 @@ class bootstrap
 		}		
 	}
 
+	// Load the current instances type tag description (worker/client/job)
 	private function getInstanceType()
 	{
 		// Get current instances info
@@ -121,6 +119,33 @@ class bootstrap
 			}
 		}	
 	}
+
+	// Get the local ip of the jobServer
+    private function getJobServer()
+    {
+    	// While job server is not running
+    	while($jobServerStatus != "running")
+    	{
+	    	// Get EC2 job server info
+			$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
+
+			// Set the status of the jobServer
+			$jobServerStatus = $jobServer->item->instancesSet->item->instanceState->name;
+
+			// If server status is offline
+			if($jobServerStatus != "running")
+			{	
+				// Send admin error message
+				utilities::reportErrors("Job server is not online.", TRUE);
+
+				// Sleep for 1 minute and try again
+				sleep(60);
+			}
+		}	
+
+		// Set the jobServer ip constant for use in client and worker
+		define('JOB_SERVER', $jobServer->item->instancesSet->item->privateIpAddress);		
+    }
 
 	// Get list of EC2 instance info
 	private function getInstances($opt)
@@ -149,102 +174,19 @@ class bootstrap
 	// ! SVN repo methods                                                         //
 	// ===========================================================================//
 
-	private function checkoutApp()
+	// Update the app to the latest code revision
+	private function updateApp()
 	{
-
-		// Update scraper app
+		// Updated code to latest revision in repo
 		$changes = shell_exec("svn update /home/ec2-user/");
 
 		// If new revision downloaded
 		if(strpos($changes, "Updated"))
 		{
-			// Kill script so supervisord will restart with new code
-			//exit('new code. restarting...');
-			echo "\nfound new code\n";
+			// Kill script so supervisord will restart using new code
+			exit('new code. restarting...');
 		}
-		else
-		{
-			echo "\nno new code\n";
-		}
-		
-
-		echo $changes;
 	}
-
-	// ===========================================================================// 
-	// ! File syncing methods                                                     //
-	// ===========================================================================//
-
-	// Start NFS file sharing for data folder	
-	private function startNfs()
-	{
-		// Bind ports for nfs
-		exec("/etc/init.d/rpcbind start");
-		
-		// Turn on nfs folder sharing for the data folder 
-		exec("/etc/init.d/nfs start");	
-	}
-
-	// Sync all worker instances
-	private function syncInstances()
-	{
-		// Get array of all ec2 instances currently running
-		$this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'scraper'))));
-
-		// Loop through each instance returned
-		foreach($this->response->body->reservationSet->item as $inst)
-		{
-			// Dont add client ip(self) to sync list (obviously)
-			if($inst->instancesSet->item->tagSet->item->value != "client")
-			{
-				// Define insance private ip
-				$ip = $inst->instancesSet->item->privateIpAddress;
-
-				// Add instance private ip to sync data 
-				$sync .= 'sync{default.rsyncssh, source="/home/ec2-user/scraper/", host="ec2-user@'.$ip.'", targetdir="/home/ec2-user/scraper/", rsyncOps="-avz", exclude = {"/support/data"}}';
-
-				// Add instance to client export file for data sync exclusion
-				$export .= "/home/ec2-user/scraper/support/data/ $ip(rw,no_root_squash)\n";
-			}	
-		}
-
-		// Write to the lyxync exclude file
-		file_put_contents(LSYNC_EXCLUDE, $export);
-
-		// Re export new locations added to exports file
-		exec("exportfs -ra");
-
-		// Load the Lsynce configuration file
-		$config = file_get_contents(LSYNC_CONFIG);
-
-		// Isolate the host part of the file
-		$config = explode("settings", $config);
-
-		// Add the new hosts to the config file
-		$config = $sync."\nsettings".$config[1];
-
-		// Create new config file with new hosts
-		file_put_contents(LSYNC_CONFIG, $config);
-
-		// Restart Lsync with new settings
-		exec("/etc/init.d/lsyncd restart");
-	} 	
-
-	// Mount the client server's data folder locally for read/writes
-    public function mountDataFolder()
-    {
-    	// Get client server info
-		$clientServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'client'))));
-		
-		// Extract the client server's ip
-		$ip = $clientServer->item->instancesSet->item->privateIpAddress;
-
-		// Unmount directory incase its already mounted
-		exec("umount -l /home/ec2-user/scraper/support/data");
-
-		// Execute mounting of client data directory
-		exec("mount -t nfs -o rw $ip:/home/ec2-user/scraper/support/data /home/ec2-user/scraper/support/data");
-    }
     
 	// ===========================================================================// 
 	// ! Boot methods                                                             //
@@ -255,37 +197,6 @@ class bootstrap
 	{
 		exec("/usr/local/sbin/gearmand -d");
 	}
-
-	// ===========================================================================// 
-	// ! Public methods                                                           //
-	// ===========================================================================//
-	    
-   	// Get the local ip of the jobServer
-    private function getJobServer()
-    {
-    	// While job server is not running
-    	while($jobServerStatus != "running")
-    	{
-	    	// Get EC2 job server info
-			$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
-
-			// Set the status of the jobServer
-			$jobServerStatus = $jobServer->item->instancesSet->item->instanceState->name;
-
-			// If server status is offline
-			if($jobServerStatus != "running")
-			{	
-				// Send admin error message
-				utilities::reportErrors("Job server is not online.", TRUE);
-
-				// Sleep for 1 minute and try again
-				sleep(60);
-			}
-		}	
-
-		// Set the jobServer ip constant for use in client and worker
-		define('JOB_SERVER', $jobServer->item->instancesSet->item->privateIpAddress);		
-    }
 
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
