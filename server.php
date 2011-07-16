@@ -30,6 +30,12 @@
 
    	// Configure server for use 
    	$instanceType = new bootstrap();	
+
+   	echo 	$instanceType;
+
+   	print_r(	$instanceType);
+
+   	die('done');
    	
    	//$instanceType = "client";
 
