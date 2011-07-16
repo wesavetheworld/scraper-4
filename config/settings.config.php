@@ -37,7 +37,7 @@
 	define('CURL_TIMEOUT', 5);  
 	
 	// Folder used for logs
-	define("LOG_DIRECTORY", "suppport/data/logs/"); 
+	define("LOG_DIRECTORY", "support/data/logs/"); 
 	
 	// Folder used for status files
 	define("STATUS_DIRECTORY", "support/data/status/");	   
