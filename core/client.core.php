@@ -45,6 +45,9 @@
 		// Update hourly keyword rankings
 		run("rankings", "google daily 1000");
 
+		
+		die("\nall done\n"); 		
+
 		// Wait 1 min then loop again
 		sleep(60);	
 	}
@@ -62,6 +65,5 @@
 		// Execute command given
 		exec($command);
 
-		echo "command executed: $command ";	
-		die("\nall done\n");	
+		echo "command executed: $command ";		
 	}
