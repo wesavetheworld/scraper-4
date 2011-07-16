@@ -156,7 +156,7 @@ class bootstrap
 		$changes = shell_exec("svn update /home/ec2-user/");
 
 		// If new revision downloaded
-		if(strpos($changes, "U"))
+		if(strpos($changes, "Updated"))
 		{
 			// Kill script so supervisord will restart with new code
 			//exit('new code. restarting...');
