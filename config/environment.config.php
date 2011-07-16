@@ -40,6 +40,9 @@
 	// The AWS elastic ip for the client server
 	define('CLIENT_IP', '50.18.104.82');
 
+	// The AWS elastic ip for the job server
+	define('JOB_SERVER_IP', '50.18.187.13');	
+
 	// ===========================================================================// 
 	// ! Database credentials                                                     //
 	// ===========================================================================//

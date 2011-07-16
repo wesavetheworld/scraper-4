@@ -22,7 +22,7 @@
 	// ===========================================================================//
 
 	// Include all required core files
-	include('core/includes.core.php');
+	require_once('core/includes.core.php');
 	
 	// ===========================================================================// 
 	// ! Configure server for use                                                 //

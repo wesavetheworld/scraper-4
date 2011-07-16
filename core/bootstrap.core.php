@@ -57,6 +57,9 @@ class bootstrap
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{
+			// Assign the jobServer elastic ip to this instance
+			$this->assignIp(JOB_SERVER_IP);	
+
 			// Run gearman daemon
 			$this->runGearman();
 		}

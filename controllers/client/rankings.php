@@ -54,8 +54,6 @@ class rankings
 		$keywords = new keywords();  
 	   		
 		echo "keywords selected: ".$keywords->total."\n"; 
-
-		die("\nSo far so good\n");
 	           
  		// If keywords selected
 		if($keywords->keywords)

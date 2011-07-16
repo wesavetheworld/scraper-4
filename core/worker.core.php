@@ -18,30 +18,45 @@
 
 	
 	// ===========================================================================// 
-	// ! Main rankings method                                                     //
+	// ! Gearman worker checkin                                                   //
 	// ===========================================================================//
-	
-	// Loop forever
-	while(true != false)
-	{
-		// If first hour of the day
-		if(date("H") == 00)
-		{
-			// Update all rankings
-			$this->rankings('all');
 
-			// Update all domain and keyword stats
-			$this->statsAll();
-		}
-		// If not the first hour of the day
-		elseif(date("H") != 00)
+	# Create our worker object.
+	$gmworker= new GearmanWorker();
+
+	# Add default server (localhost).
+	$gmworker->addServer(JOB_SERVER_IP); 
+
+	# Register function "reverse" with the server. Change the worker function to
+	$gmworker->addFunction("rankings", "rankings"); 
+	
+	print "Waiting for jobs...\n"; 
+
+	while($gmworker->work())
+	{   
+		// If job failed
+		if ($gmworker->returnCode() != GEARMAN_SUCCESS)
 		{
-			$this->rankings('hourly');
-		}
-		// No actions to run
+			echo "return_code: " . $gmworker->returnCode() . "\n";
+			break;
+		} 
+		// If job was completed successfully 
 		else
 		{
-			// Wait 1 min then loop again
-			sleep(60);	
-		}
+			echo "job completed.\n"; 				
+		} 
+	}
+
+	// ===========================================================================// 
+	// ! Register job types                                                       //
+	// ===========================================================================//	
+
+	// Collect keyword rankings
+	function rankings()
+	{
+		// Set controller argument
+		$argv[1] = 'workers/rankings';
+
+		// Include main router
+		include('hub.php')
 	}
