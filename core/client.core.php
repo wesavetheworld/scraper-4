@@ -49,12 +49,16 @@
 		sleep(60);	
 	}
 
+	// ===========================================================================// 
+	// ! Supporting functions                                                     //
+	// ===========================================================================//	
+
 	// Execute bash command that detaches from daemon
 	function run($command)
 	{
 		// Execute command given
-		//echo shell_exec("php hub.php client/$command &> /dev/null &");
-		echo shell_exec("php hub.php client/$command");
+		exec("php hub.php client/$command &> /dev/null &");
+		//echo shell_exec("php hub.php client/$command");
 
 		echo "command executed: $command ";		
 	}
