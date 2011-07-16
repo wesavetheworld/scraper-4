@@ -30,9 +30,12 @@
      
 	// Make everything lowercase for files
 	$controller = strtolower($argv[1]);
+
+	// Define the class name (account for folders)
+	$class = array_pop(explode("/", $controller))	
      
 	// The config file name for the controller
- 	$config = "config/".$controller.".config.php"; 
+ 	$config = "config/".$class.".config.php"; 
 
 echo $config;
 
@@ -56,9 +59,6 @@ echo $config;
 	{                                  
 		// Include the requested controller
 	 	include($controllerFile);	 
-	    
-		// Define the class name (account for folders)
-		$class = array_pop(explode("/", $controller));
 	    
 		// Check if assumed class exists 
 		if(class_exists($class))
