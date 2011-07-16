@@ -53,26 +53,22 @@
 
 	// Get passed server arguments
 	$argv = $_SERVER['argv'];
+
+	// Set the controller
+	$controller = $argv[1];
  
-	// Check for the controller argument
-	if(!isset($argv[1]))
+	// If no controller argument present 
+	if(!isset($controller))
 	{         
-		echo "Bootstrap mode \n"; 
+		// Log status
+		utilities::notate("Bootstrap mode");		
 
 		// Bootstrap server instance and get controller
 		$controller = load('bootstrap');
-
-		echo "controller returned: $controller \n";
-		
-		// Load required controller from bootstrap
-		load($controller);	
 	}
-	// A controller was provided from the CL
-	else
-	{
-		// Load requested controller
-		load($argv[1]);		
-	} 
+
+	// Load controller
+	load($controller);	
 
 	// ===========================================================================// 
 	// ! The controller loader                                                    //

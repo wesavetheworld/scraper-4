@@ -30,6 +30,9 @@ class bootstrap
 
 		// Create a new amazon object
 		$this->ec2 = new AmazonEC2();
+
+		// Set the region to access instances
+		$this->ec2->set_region('us-west-1');		
 	}
 
 	// ===========================================================================// 
@@ -149,10 +152,7 @@ class bootstrap
 
 	// Get list of EC2 instance info
 	private function getInstances($opt)
-	{
-		// Set the region to access instances
-		$this->ec2->set_region('us-west-1');		
-
+	{		
 		// Get info on all worker instances
 		$this->response = $this->ec2->describe_instances($opt);		
 
@@ -175,7 +175,7 @@ class bootstrap
 	// ===========================================================================//
 
 	// Update the app to the latest code revision
-	private function updateApp()
+	public function updateApp()
 	{
 		// Updated code to latest revision in repo
 		$changes = shell_exec("svn update /home/ec2-user/");
