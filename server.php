@@ -31,7 +31,7 @@
    	// Configure server for use 
    	$server = new bootstrap();	
 
-   	print_r($server->instaceType);
+   	print_r($server->instanceType);
 
 
    	die('done');
