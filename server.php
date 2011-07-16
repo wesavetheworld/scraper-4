@@ -31,7 +31,7 @@
    	// Configure server for use 
    	$instanceType = new bootstrap();	
 
-   	echo 	$instanceType;
+   	//echo 	$instanceType;
 
    	print_r(	$instanceType);
 
