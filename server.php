@@ -29,9 +29,9 @@
 	// ===========================================================================// 	   	
 
    	// Configure server for use 
-   	//$instanceType = new bootstrap();	
+   	$instanceType = new bootstrap();	
    	
-   	$instanceType = "client";
+   	//$instanceType = "client";
 
 	// ===========================================================================// 
 	// ! Route instance to correct core daemon                                    //
