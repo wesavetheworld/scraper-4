@@ -210,7 +210,7 @@ class bootstrap
 			$dataStatus = shell_exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");
 
 			// If response is not blank (failed)
-			if($dataStatus != "")
+			if($dataStatus)
 			{	
 				// Send admin error message
 				utilities::reportErrors("Can't mount data directory", TRUE);
