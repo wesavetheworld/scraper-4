@@ -36,9 +36,6 @@
      
 	// The config file name for the controller
  	$config = "config/".$class.".config.php"; 
-	
-	die($config);
-
 
 	// Check if controller's config file exists
 	if(file_exists($config))
