@@ -41,6 +41,11 @@ class rankings
 	
 	public function rankings()
 	{
+
+		echo "starting wait time...";
+		sleep(30);
+
+		die('finished');
 		// Create our gearman client
 		$gmclient = new GearmanClient(); 
 

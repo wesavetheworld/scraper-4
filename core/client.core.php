@@ -57,11 +57,11 @@
 	function run($controller, $options)
 	{
 		// Build the command to execute
-		$command = "php hub.php client/$controller $options >> ".LOG_DIRECTORY."$controller.log";
+		$command = "php hub.php client/$controller $options >> ".LOG_DIRECTORY."$controller.log &";
 
 		// Execute command given
-		echo shell_exec($command);
+		exec($command);
 
 		echo "command executed: $command ";	
-		die();	
+		die("\nall done\n");	
 	}
