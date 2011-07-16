@@ -32,19 +32,10 @@
 		
 	// ===========================================================================// 
 	// ! General server settings                                                  //
-	// ===========================================================================//	
-
-   	// Set working directory for correct file includes etc 
-	chdir(dirname($argv[0]));	
+	// ===========================================================================//		
 	                         
 	// Turn off php notices
 	error_reporting(E_ALL ^ E_NOTICE);
-	
-	// The Lsync config file location (used to sync servers)
-	define('LSYNC_CONFIG', 'config/lsync.conf');	
-
-	// The Lsync config file location (used to sync servers)
-	define('LSYNC_EXCLUDE', '/etc/exports');
 
 	// The AWS elastic ip for the client server
 	define('CLIENT_IP', '50.18.104.82');

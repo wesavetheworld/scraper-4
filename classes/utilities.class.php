@@ -29,7 +29,57 @@ class utilities
 				die();
 			}  
 		}     	   			
-    }      
+    }    
+	
+	// Checks for system status file
+	public static function checkStatus()
+	{   
+		// If system status exists
+		if(file_exists(SYSTEM_STATUS))
+		{    
+			// Get file contents
+			$status = file_get_contents(SYSTEM_STATUS);
+		
+			// If the file contains data
+			if($status)
+			{   
+				// Unserialize the data into an object
+				$status = unserialize($status);
+
+				// If system status says to kill yourself
+				if($status->kill)
+				{				
+					// Log current state
+					utilities::notate("Kill switch flicked"); 
+				
+				  	// Finish execution
+					utilities::complete();		
+				}
+			}
+		}
+	}  
+	
+	// Fork application into a new process
+	public static function fork()
+	{
+		// Fork current process
+		$pid = pcntl_fork();
+		
+		// If forking returned an error
+		if($pid == -1) 
+		{
+		     die('could not fork');
+		} 
+		// If parent
+		elseif($pid) 
+		{
+			// Return successful forking 
+			return true;
+		}	
+	}  
+    
+    
+      
 	
 	// When called, keeps track of execution time since last call
 	public static function benchmark($description = false, $last = false, $reset = false)
