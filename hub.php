@@ -32,12 +32,12 @@
 	$controller = strtolower($argv[1]);
 
 	// Define the class name (account for folders)
-	$class = array_pop(explode("/", $controller))	
+	$class = array_pop(explode("/", $controller));	
      
 	// The config file name for the controller
  	$config = "config/".$class.".config.php"; 
-
-echo $config;
+	
+	die($config);
 
 
 	// Check if controller's config file exists
