@@ -53,7 +53,7 @@
 	function run($command)
 	{
 		// Execute command given
-		exec("php hub.php client/$command &> /dev/null &");
+		echo shell_exec("php hub.php client/$command &> /dev/null &");
 
 		echo "command executed: $command ";		
 	}

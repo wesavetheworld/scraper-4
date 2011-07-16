@@ -37,6 +37,8 @@
 	// Check if controller's config file exists
 	if(file_exists($config))
 	{
+echo $config;
+
 		// Load the controllers config file
 		include($config); 
 	}		   
