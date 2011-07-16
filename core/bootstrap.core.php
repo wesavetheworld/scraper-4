@@ -221,6 +221,7 @@ class bootstrap
 			// Response was blank (success)
 			else
 			{
+				echo "passed";
 				$dataStatus = "mounted";
 			}			
 		}		
