@@ -34,6 +34,9 @@
    	print_r($server->instanceType);
 
 
+   	echo $server->instanceType;
+
+
    	die('done');
    	
    	//$instanceType = "client";
