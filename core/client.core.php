@@ -30,7 +30,7 @@
 		if(date("H:i") == "00:00")
 		{
 			// Update all keyword rankings
-			run("rankings google daily 1000");
+			run("rankings", "google daily 1000");
 
 			// Update all domain and keyword stats
 			//$this->statsAll();
@@ -54,11 +54,14 @@
 	// ===========================================================================//	
 
 	// Execute bash command that detaches from daemon
-	function run($command)
+	function run($controller, $options)
 	{
-		// Execute command given
-		exec("php hub.php client/$command &> /dev/null &");
-		//echo shell_exec("php hub.php client/$command");
+		// Build the command to execute
+		$command = "php hub.php client/$controller $options >> ".LOG_DIRECTORY."$controller.log";
 
-		echo "command executed: $command ";		
+		// Execute command given
+		//exec($command);
+
+		echo "command executed: $command ";	
+		die();	
 	}
