@@ -29,19 +29,22 @@
 	{
 		define('ENVIRONMENT', 'ec2');	
 	} 	
-		
-	// ===========================================================================// 
-	// ! General server settings                                                  //
-	// ===========================================================================//		
-	                         
+	
 	// Turn off php notices
 	error_reporting(E_ALL ^ E_NOTICE);
+			
+	// ===========================================================================// 
+	// ! Server location settings                                                 //
+	// ===========================================================================//		
 
 	// The AWS elastic ip for the client server
 	define('CLIENT_IP', '50.18.104.82');
 
 	// The AWS elastic ip for the job server
-	define('JOB_SERVER_IP', '50.18.187.13');	
+	define('JOB_SERVER_IP', '50.18.187.13');
+
+	// The gluster shared data drive location
+	define('DATA_DIRECTORY', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com');		
 
 	// ===========================================================================// 
 	// ! Database credentials                                                     //
