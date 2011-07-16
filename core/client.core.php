@@ -36,13 +36,14 @@
 			//$this->statsAll();
 		}
 		// The first minute of the hour (except the first hour)
-		elseif(date("i") == 57)
+		elseif(date("i") == 00)
 		{
 			// Update hourly keyword rankings
 			run("rankings hourly");	
 		}
 		
-		echo "sleeping...";
+		// Update hourly keyword rankings
+		run("rankings hourly");	
 
 		// Wait 1 min then loop again
 		sleep(60);	
