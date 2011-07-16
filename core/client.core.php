@@ -43,7 +43,7 @@
 		}
 		
 		// Update hourly keyword rankings
-		run("rankings google daily 1000");
+		run("rankings", "google daily 1000");
 
 		// Wait 1 min then loop again
 		sleep(60);	
