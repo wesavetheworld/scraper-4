@@ -39,11 +39,8 @@ class rankings
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	
 	
-	public function rankings($schedule)
+	public function rankings()
 	{
-
-		echo "rankings loaded correctly!\n";
-		die();
 		// Create our gearman client
 		$gmclient = new GearmanClient(); 
 
@@ -57,6 +54,8 @@ class rankings
 		$keywords = new keywords();  
 	   		
 		echo "keywords selected: ".$keywords->total."\n"; 
+
+		die("\nSo far so good\n");
 	           
  		// If keywords selected
 		if($keywords->keywords)

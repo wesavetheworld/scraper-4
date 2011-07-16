@@ -30,7 +30,7 @@
 		if(date("H:i") == "00:00")
 		{
 			// Update all keyword rankings
-			run("rankings all");
+			run("rankings google daily 1000");
 
 			// Update all domain and keyword stats
 			//$this->statsAll();
@@ -43,7 +43,7 @@
 		}
 		
 		// Update hourly keyword rankings
-		run("rankings hourly");	
+		run("rankings google daily 1000");
 
 		// Wait 1 min then loop again
 		sleep(60);	
