@@ -208,9 +208,9 @@ class bootstrap
     	{
     		// Mount the shared data drive
 			$dataStatus = shell_exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");
-			
-			// If server status is offline
-			if($dataStatus != "running")
+
+			// If response is not blank (success)
+			if($dataStatus != "")
 			{	
 				// Send admin error message
 				utilities::reportErrors("Can't mount data directory", TRUE);
