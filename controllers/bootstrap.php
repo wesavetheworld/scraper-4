@@ -22,9 +22,6 @@ class bootstrap
 	
 	function __construct()
 	{
-echo svn_update(realpath('working-copy'));
-die('end');
-
 		// Include the amazon SDK
 		require_once 'classes/amazon/sdk.class.php';
 
