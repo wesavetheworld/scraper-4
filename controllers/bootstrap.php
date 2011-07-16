@@ -43,6 +43,11 @@ die('end');
 	// Run boot functions based on instance identity
 	public function bootstrap()
 	{ 
+		// Get the latest code
+		$this->checkoutApp();
+
+		die('the end');
+
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{
@@ -141,6 +146,18 @@ die('end');
 
 		// Return instance objects
 		return $this->response->body->reservationSet;
+	}
+
+	// ===========================================================================// 
+	// ! SVN repo methods                                                         //
+	// ===========================================================================//
+
+	private function checkoutApp()
+	{
+		// Update scraper app
+		$changes = shell_exec("svn update /home/ec2-user/");
+
+		echo $chages;
 	}
 
 	// ===========================================================================// 
