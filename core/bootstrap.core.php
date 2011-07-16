@@ -209,6 +209,9 @@ class bootstrap
     		// Mount the shared data drive
 			$dataStatus = shell_exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");
 
+			echo $dataStatus;
+			die();
+
 			// If response is not blank (failed)
 			if($dataStatus)
 			{	
