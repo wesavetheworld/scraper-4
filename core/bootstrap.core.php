@@ -78,9 +78,7 @@ class bootstrap
 		    	// Mount client servers data folder locally
 		    	//$this->mountDataFolder();			
 			}
-		}
-		
-		unset($this->ec2);			
+		}		
 	}
 
 	// ===========================================================================// 
