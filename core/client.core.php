@@ -60,7 +60,7 @@
 		$command = "php hub.php client/$controller $options >> ".LOG_DIRECTORY."$controller.log";
 
 		// Execute command given
-		//exec($command);
+		exec($command);
 
 		echo "command executed: $command ";	
 		die();	
