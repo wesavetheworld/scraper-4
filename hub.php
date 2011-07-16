@@ -34,11 +34,12 @@
 	// The config file name for the controller
  	$config = "config/".$controller.".config.php"; 
 
+echo $config;
+
+
 	// Check if controller's config file exists
 	if(file_exists($config))
 	{
-echo $config;
-
 		// Load the controllers config file
 		include($config); 
 	}		   
