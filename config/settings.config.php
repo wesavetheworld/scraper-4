@@ -41,6 +41,9 @@
 	
 	// Folder used for status files
 	define("STATUS_DIRECTORY", "support/data/status/");	   
+
+	// Folder used for status files
+	define("SYSTEM_STATUS", "support/data/status/system.log");	 	
 	
 	// ===========================================================================// 
 	// ! Time and Date constants                                                  //

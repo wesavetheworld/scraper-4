@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************//
 
-class cron 
+class tasks 
 {  
  	function __construct()
 	{    
@@ -32,7 +32,7 @@ class cron
 	// ! Main routing method                                                      //
 	// ===========================================================================//	
 	
-	public function cron()
+	public function tasks()
 	{   
 		// Log current state
 		utilities::notate("Cron started at: ".TIME_CURRENT); 
@@ -293,7 +293,18 @@ class cron
 			// Log current state
 			utilities::notate("\tIt's alive!!!");			   
 		}
-		
 	}
+
+	// Set a system status message (pause,kill)
+	private function system()
+	{
+		// Set the system status
+		$status = $_SERVER['argv'][3];
+
+		// Write status file
+		file_put_contents(SYSTEM_STATUS, $status);	
+	}
+
+
 	
 }	

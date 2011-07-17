@@ -43,17 +43,25 @@ class utilities
 			// If the file contains data
 			if($status)
 			{   
-				// Unserialize the data into an object
-				$status = unserialize($status);
-
 				// If system status says to kill yourself
-				if($status->kill)
+				if($status == "kill")
 				{				
 					// Log current state
 					utilities::notate("Kill switch flicked"); 
 				
 				  	// Finish execution
 					utilities::complete();		
+				}
+				elseif($status == "pause")
+				{
+					// Log current state
+					utilities::notate("System paused..."); 
+										
+					// Wait for 60
+					sleep(60);
+
+					// Check status again
+					utilities::checkStatus();
 				}
 			}
 		}

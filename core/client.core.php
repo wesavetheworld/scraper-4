@@ -32,21 +32,18 @@
 			// Update all keyword rankings
 			//run("rankings", "google daily 1000");
 
+			echo "\nWould update daily here\n";
+
 			// Update all domain and keyword stats
 			//$this->statsAll();
 		}
-		// The first minute of the hour (except the first hour)
-		elseif(date("i") == 00)
+		// If not the first hour and its the first min
+		elseif(date("H") != 00 && date("i") == 00)
 		{
 			// Update hourly keyword rankings
-			//run("rankings hourly");	
-		}
-		
-		// Update hourly keyword rankings
-		run("rankings", "google daily 1000");
-
-		
-		die("\nall done\n"); 		
+			//run("rankings", "google hourly 1000");
+			echo "\nWould update hourly here\n";
+		}		
 
 		// Wait 1 min then loop again
 		sleep(60);	
