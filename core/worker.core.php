@@ -58,5 +58,5 @@
 		$argv[1] = 'workers/rankings';
 
 		// Include main router
-		include('hub.php')
+		include('hub.php');
 	}
