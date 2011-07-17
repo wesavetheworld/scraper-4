@@ -210,8 +210,7 @@ class bootstrap
 			$dataStatus = shell_exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");
 
 			echo "here: $dataStatus";
-			die();
-
+			
 			// If response is not blank (failed)
 			if($dataStatus)
 			{	
