@@ -204,13 +204,11 @@ class bootstrap
 		exec("umount /home/ec2-user/support/data");
 
 		// While data server is not running
-    	while($dataStatus != "mounted")
+    	while($dataStatus)
     	{
-    		// Mount the shared data drive
+    		// Mount the shared data drive (returns false if success)
 			$dataStatus = shell_exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");
 
-			echo "here: $dataStatus";
-			
 			// If response is not blank (failed)
 			if($dataStatus)
 			{	
