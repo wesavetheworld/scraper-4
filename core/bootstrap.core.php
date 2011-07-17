@@ -201,10 +201,10 @@ class bootstrap
 	private function mountDataFolder()
 	{
 		// Incase already mounted, unmount first
-		exec("umount /home/ec2-user/support/data");
+		exec("umount ".DATA_DIRECTORY);
 
    		// Mount the shared data drive 
-		exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");		
+		exec("mount -t glusterfs ".DATA_SERVER." ".DATA_DIRECTORY);		
 
 		// // While data server is not running
   //   	while($dataStatus != "mounted")
