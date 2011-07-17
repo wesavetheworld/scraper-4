@@ -44,7 +44,7 @@
 	define('JOB_SERVER_IP', '50.18.187.13');
 
 	// The gluster shared data drive location
-	define('DATA_DIRECTORY', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com');		
+	define('DATA_DIRECTORY', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com'); 		
 
 	// ===========================================================================// 
 	// ! Database credentials                                                     //
