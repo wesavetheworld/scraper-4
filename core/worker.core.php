@@ -56,12 +56,15 @@
 	{
 		// Get the job data				
 		$jobData = unserialize($job->workload());
+
+		print_r($jobData);
+		die('end');
 				
 		// Set controller argument
 		$argv[1] = 'workers/rankings';
 
 		// Set engine to use
-		$argv[2] = $jobData->engine;		
+		$argv[2] = $jobData['engine'];		
 
 		// Include main router
 		include('hub.php');

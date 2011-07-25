@@ -39,17 +39,10 @@ class rankings
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	 
 	
-	public static function rankings($job)
+	public function rankings($jobData)
 	{   
-		// Get the job data from global scope
-		global $jobData;
-
-		echo "here:";
-		print_r($job);
-
-		return "cool";
-
 		//return true; 
+		
 		// Reset benchmarking
 		utilities::benchmark(false, false, true);
 
@@ -57,7 +50,10 @@ class rankings
 		utilities::notate("Job started");
 		
 		// Get the keywords from the job data				
-		$keywords = unserialize($job->workload());
+		$keywords = unserialize($jobData->workload());
+
+		print_r($keywords);
+		die('end');
 						 		   	
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
@@ -69,13 +65,13 @@ class rankings
 		while($keywords->total > 0)
 		{    
 			// Check killswitch
-			worker::killSwitch();
+			utilities::checkStatus();
 			 		
 			// Create new scraping instance
 			$scrape = new scraper; 
 			
 			// Build an array of search engine urls to scrape
-			$scrape->urls = worker::getKeywordUrls($keywords->keywords); 
+			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -87,7 +83,7 @@ class rankings
 			foreach($keywords->keywords as $key => &$keyword)
 			{   
 				// If a valid search results page can be loaded (new scrape or saved file)
-				if($searchResults = worker::getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
+				if($searchResults = $this->getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
 				{  					
  	   				// Create new parsing object
 					$parse = new parse;	 
@@ -115,7 +111,7 @@ class rankings
 						}  
 												
 						// Calibrate keyword ranking (10/100 results)
-						worker::calibration($keyword);   
+						$this->calibration($keyword);   
 					    
 						// Decrease keywords remaining by one
 						$keywords->total--; 
@@ -149,33 +145,8 @@ class rankings
 	// ! Supporting methods                                                       //
 	// ===========================================================================//	
 	
-	// Checks for killswitch file and if true kills script 
-	private static function killSwitch()
-	{   
-		// If above death
-		if(!ZOMBIE)
-		{
-			// If killswitch file exists
-			if(file_exists(KILL_SWITCH_FILE))
-			{    
-				// Get file contents
-				$kill = file_get_contents(KILL_SWITCH_FILE);
-			
-				// If kill switch turned on
-				if($kill)
-				{   
-					// Log current state
-					utilities::notate("Kill switch flicked"); 
-				
-				  	// Finish execution
-					utilities::complete();
-				}
-			}
-		}   
-	}
-	
 	// Loop through keywords and return array of urls to scrape
-	public static function getKeywordUrls($keywords)
+	public function getKeywordUrls($keywords)
 	{    
 		// Loop through each keyword
 		foreach($keywords as $key => &$keyword)
@@ -202,7 +173,7 @@ class rankings
 	}
     
 	// Load the correct source for the keyword's search results
-	public static function getSearchResults($keyword, $scrapedContent = false)
+	public function getSearchResults($keyword, $scrapedContent = false)
 	{   		
 		// If a new url was scraped for this keyword
 		if($scrapedContent)
@@ -211,7 +182,7 @@ class rankings
 			if($scrapedContent['status'] == 'success')
 			{   				 				
 				// Save the new search file
-				worker::searchSave($keyword, $scrapedContent);
+				$this->searchSave($keyword, $scrapedContent);
 				
 				// Set the new search as the source
 				$search = $scrapedContent['output']; 						
@@ -231,7 +202,7 @@ class rankings
 	}
 
 	// Save search results to a file
-	public static function searchSave($keyword, $scrapedContent)
+	public function searchSave($keyword, $scrapedContent)
 	{   
 		// Set header information to be saved with output
 		$content  = "code: ".$scrapedContent['httpInfo']['http_code'];
@@ -243,7 +214,7 @@ class rankings
 	} 
 	
 	// If a keyword just switch result amount (10/100)
-	public static function calibration($keyword)
+	public function calibration($keyword)
 	{	
 		// If a change in ranking has occurred in which a new search with a different result count is needed
 		if($keyword->lastRank > NUM_SWITCH_THRESHHOLD && $keyword->rank < NUM_SWITCH_THRESHHOLD || $keyword->lastRank && !$keyword->rank || !$keyword->lastRank && $keyword->rank )
