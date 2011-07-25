@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************//
 
-class worker 
+class rankings 
 {  
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
@@ -33,54 +33,12 @@ class worker
 		include('classes/parse.class.php');
 
 		// Include scraping class
-		include('classes/scrape.class.php'); 
-		
-		// Include the amazon SDK
-		require_once('controllers/bootstrap.php'); 		  		   	 			
+		include('classes/scrape.class.php'); 	  		   	 			
 	}
 	
 	// ===========================================================================// 
 	// ! Main rankings method                                                     //
-	// ===========================================================================//	
-	
-	public function worker()
-	{    
-    	// // New bootstrap instance (for getting jobServer ip)
-    	// $ec2 = new bootstrap;
-
-    	// // Make sure data folder is synced with client server(saved searches)
-    	// if(!$ec2->syncData())
-    	// {
-    	// 	// Send a notifo error if can't sync
-    	// 	utilities::reportErrors("Can't sync worker data folder with client"); 	
-    	// }
-
-		# Create our worker object.
-		$gmworker= new GearmanWorker();
-
-		# Add default server (localhost).
-		$gmworker->addServer(JOB_SERVER); 
-
-		# Register function "reverse" with the server. Change the worker function to
-		$gmworker->addFunction("rankings", "worker::rankings"); 
-		
-		print "Waiting for jobs fuckd...\n"; 
-
-		while($gmworker->work())
-		{   
-			// If job failed
-			if ($gmworker->returnCode() != GEARMAN_SUCCESS)
-			{
-				echo "return_code: " . $gmworker->returnCode() . "\n";
-				break;
-			} 
-			// If job was completed successfully 
-			else
-			{
-				echo "job completed.\n"; 				
-			} 
-		}
-	}  
+	// ===========================================================================//	 
 	
 	public static function rankings($job)
 	{   
