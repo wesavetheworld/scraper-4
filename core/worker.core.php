@@ -52,7 +52,7 @@
 	// ===========================================================================//	
 
 	// Collect keyword rankings
-	function rankings()
+	function rankings($job)
 	{
 		// Set controller argument
 		$argv[1] = 'workers/rankings';

@@ -39,8 +39,11 @@ class rankings
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	 
 	
-	public static function rankings($job)
+	public static function rankings()
 	{   
+		// Get the job data from global scope
+		global $job;
+		
 		//return true; 
 		// Reset benchmarking
 		utilities::benchmark(false, false, true);
