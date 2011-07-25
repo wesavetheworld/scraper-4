@@ -57,9 +57,7 @@
 		// Set controller argument
 		$argv[1] = 'workers/rankings';
 
-		print_r($job);
-		$job = $job;
-
+		print_r($job->workload());
 
 
 		// Include main router
