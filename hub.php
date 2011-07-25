@@ -33,9 +33,7 @@
 
 	// Define the class name (account for folders)
 	$class = array_pop(explode("/", $controller));	
-
-	define("CONTROLLER", )
-     
+      
 	// The config file name for the controller
  	$config = "config/".$class.".config.php"; 
 
@@ -68,7 +66,7 @@
 				//
 				$jobData = false;
 			}
-			
+
 			// Instantiate requested class
 			$controller = new $class($jobData);
 			
