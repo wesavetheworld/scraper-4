@@ -78,13 +78,29 @@
 	define('KILL_SWITCH_FILE', STATUS_DIRECTORY."killswitch.txt"); 
 		
 	// If a keyword fails to update, write the error to this file
-	define("KEYWORD_ERROR_FILE", LOG_DIRECTORY."1bad_keywords.txt");	
+	define("KEYWORD_ERROR_FILE", LOG_DIRECTORY."bad_keywords.txt");	
 	
 	// Directory to save search result files
 	define("SAVED_SEARCH_DIR", "data/searches/success/");	
 	
 	// Directory to save search result files
 	define("ERROR_PAGE_DIR", "data/searches/error/");	
+
+	// If the engine constant is set
+	if(ENGINE)
+	{
+		// Log as a client
+		$log = "client";			
+	}
+	// No engine so must be a worker
+	else
+	{
+		// Log as a worker
+		$log = "worker";	
+	}
+
+	// The file to log status messages too
+	define("LOG_FILE", LOG_DIRECTORY."/$log.log");
 	
 	// ===========================================================================// 
 	// ! Google constants                                                         //

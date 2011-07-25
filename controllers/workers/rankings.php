@@ -27,7 +27,6 @@ class rankings
 	{           
 		// Include keywords data model
 	 	include('models/keywords.model.php'); 
-	    //include('models/keywords.mongo.php'); 
 		
 		// Include serp parsing class
 		include('classes/parse.class.php');

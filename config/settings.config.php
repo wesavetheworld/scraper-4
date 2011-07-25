@@ -37,13 +37,13 @@
 	define('CURL_TIMEOUT', 5);  
 	
 	// Folder used for logs
-	define("LOG_DIRECTORY", "support/data/logs/"); 
+	define("LOG_DIRECTORY", "data/logs/"); 
 	
 	// Folder used for status files
-	define("STATUS_DIRECTORY", "support/data/status/");	   
+	define("STATUS_DIRECTORY", "data/status/");	   
 
 	// Folder used for status files
-	define("SYSTEM_STATUS", "support/data/status/system.log");	 	
+	define("SYSTEM_STATUS", "data/status/system.log");	 	
 	
 	// ===========================================================================// 
 	// ! Time and Date constants                                                  //

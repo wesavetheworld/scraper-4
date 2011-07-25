@@ -154,6 +154,16 @@ class utilities
 			print $description."\n";
 		}			
 	}
+
+	// Log status to log file
+	public static function log($log)
+	{
+		// Open the log file for writing
+		static $file = fopen(WORKER_LOG, "w");
+
+		// Write to log file
+		fwrite($file, $log."\n");		
+	}
 	
 	// Convert large bytes into readable versions
 	public static function byteConvert($bytes)
