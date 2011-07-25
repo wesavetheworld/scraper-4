@@ -42,9 +42,9 @@ class rankings
 	public static function rankings()
 	{   
 		// Get the job data from global scope
-		global $job;
+		global $jobData;
 
-		print_r($job);
+		print_r($jobData);
 		
 		return "cool";
 
