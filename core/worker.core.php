@@ -57,7 +57,10 @@
 		// Set controller argument
 		$argv[1] = 'workers/rankings';
 
+		print_r($job);
 		$job = $job;
+
+
 
 		// Include main router
 		include('hub.php');
