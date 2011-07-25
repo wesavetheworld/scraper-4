@@ -158,11 +158,15 @@ class utilities
 	// Log status to log file
 	public static function log($log)
 	{
-		// Open the log file for writing
-		static $file = fopen(WORKER_LOG, "w");
+		// If a log file is defined in controller's config file
+		if(defined("LOG_FILE"))
+		{
+			// Open the log file for writing
+			static $file = fopen(LOG_FILE, "w");
 
-		// Write to log file
-		fwrite($file, $log."\n");		
+			// Write to log file
+			fwrite($file, $log."\n");
+		}			
 	}
 	
 	// Convert large bytes into readable versions
