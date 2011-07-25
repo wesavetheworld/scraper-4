@@ -45,7 +45,7 @@ class rankings
 		$gmclient = new GearmanClient(); 
 
 		// add the default job server
-		$gmclient->addServer(JOB_SERVER);   
+		$gmclient->addServer(JOB_SERVER_IP);   
 		
 		// Set the function to be used when jobs are complete
    		$gmclient->setCompleteCallback("rankings::jobComplete");
