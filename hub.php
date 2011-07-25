@@ -1,4 +1,4 @@
-<?php 
+ <?php 
 
 	// ******************************* INFORMATION ******************************//
 
@@ -33,6 +33,8 @@
 
 	// Define the class name (account for folders)
 	$class = array_pop(explode("/", $controller));	
+
+	define("CONTROLLER", )
      
 	// The config file name for the controller
  	$config = "config/".$class.".config.php"; 
@@ -60,8 +62,15 @@
 		// Check if assumed class exists 
 		if(class_exists($class))
 		{
+			// If there is gearman job data available
+			if(!$jobData)
+			{
+				//
+				$jobData = false;
+			}
+			
 			// Instantiate requested class
-			$controller = new $class();
+			$controller = new $class($jobData);
 			
 			// If a method with the same name as the class exists
 			if(method_exists($class, $class))

@@ -39,13 +39,14 @@ class rankings
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	 
 	
-	public static function rankings()
+	public static function rankings($job)
 	{   
 		// Get the job data from global scope
 		global $jobData;
 
-		print_r($jobData);
-		
+		echo "here:";
+		print_r($job);
+
 		return "cool";
 
 		//return true; 
