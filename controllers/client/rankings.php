@@ -91,12 +91,21 @@ class rankings
 					
 					// Reset count
 					$i = 0;  
+
+					// Create job data array
+					$data = array();
 					 
-					// Serialize object for transport
-					$keywordBatch = serialize($keywordBatch);
+					// Serialize keyword and add to job data
+					$data['keywords'] = serialize($keywordBatch);
+
+					// Add engine to job data
+					$data['engine'] = ENGINE;
+
+					// Serialize job data for transport
+					$data = serialize($data);
 	
 					// Define a new job for current batch
-				   	$gmclient->addTask("rankings", $keywordBatch, null, $job++);  		
+				   	$gmclient->addTask("rankings", $data, null, $job++);  		
 				} 			   		
 			}
 		

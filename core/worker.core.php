@@ -54,11 +54,14 @@
 	// Collect keyword rankings
 	function rankings($job)
 	{
+		// Get the job data				
+		$jobData = unserialize($job->workload());
+				
 		// Set controller argument
 		$argv[1] = 'workers/rankings';
 
-		// Get job data
-		$jobData = $job->workload();
+		// Set engine to use
+		$argv[2] = $jobData->engine;		
 
 		// Include main router
 		include('hub.php');
