@@ -151,7 +151,11 @@ class utilities
 		// If notation is turned on
 		if(NOTATION)
 		{   
+			// Print description to screen
 			print $description."\n";
+
+			// Write to log file
+			utilities::log($description);			
 		}			
 	}
 
@@ -162,10 +166,7 @@ class utilities
 		if(defined("LOG_FILE"))
 		{
 			// Open the log file for writing
-			static $file = fopen('data/logs/test.log', "a");
-
-			// Write to log file
-			fwrite($file, $log."\n");
+			file_put_contents(LOG_FILE, $log, FILE_APPEND);					
 		}			
 	}
 	
@@ -189,7 +190,10 @@ class utilities
 		if($error)
 		{
 			// Display errors
-			echo $error."\n";  
+			echo $error."\n";
+			
+			// Write to log file
+			utilities::log($error);			  
 			
 			// Add new error to error list
 			$errors .= $error;			  	
