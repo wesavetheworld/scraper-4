@@ -43,7 +43,11 @@ class rankings
 	{   
 		// Get the job data from global scope
 		global $job;
+
+		print_r($job);
 		
+		return "cool";
+
 		//return true; 
 		// Reset benchmarking
 		utilities::benchmark(false, false, true);
