@@ -58,7 +58,7 @@
 		$argv[1] = 'workers/rankings';
 
 		// Get job data
-		$jobData = $job->workload()
+		$jobData = $job->workload();
 
 		// Include main router
 		include('hub.php');
