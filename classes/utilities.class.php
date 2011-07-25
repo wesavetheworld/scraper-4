@@ -162,7 +162,7 @@ class utilities
 		if(defined("LOG_FILE"))
 		{
 			// Open the log file for writing
-			static $file = fopen(LOG_FILE, "w");
+			static $file = fopen('data/logs/test.log', "a");
 
 			// Write to log file
 			fwrite($file, $log."\n");
