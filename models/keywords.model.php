@@ -309,8 +309,8 @@ class keywords
 							keywords 
 						SET 
 					  		$setNotify 
-					  		".$this->engine."_status = NOW(),  
-					  		".$this->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
+					  		".$keyword->engine."_status = NOW(),  
+					  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
 							calibrate = '".$keyword->calibrate."',
 					 		check_out = '0',
 					  		time = NOW(), 
@@ -340,8 +340,8 @@ class keywords
 		$query = "	UPDATE 
 						tracking 
 					SET 
-				 		".$this->engine." = '".$keyword->rank."', 
-					 	".$this->engine."_match = '".$keyword->found."' , 
+				 		".$keyword->engine." = '".$keyword->rank."', 
+					 	".$keyword->engine."_match = '".$keyword->found."' , 
 					 	dupecount = '0' 
 					 WHERE 
 					 	keyword_id='".$keyword->keyword_id."' 
@@ -358,8 +358,8 @@ class keywords
 		// Build insert query
 		$query = "	INSERT INTO 
 						tracking 
-						(keyword_id,".$this->engine.",
-						".$this->engine."_match,
+						(keyword_id,".$keyword->engine.",
+						".$keyword->engine."_match,
 						dupecount,
 						date) 
 			      VALUES (
