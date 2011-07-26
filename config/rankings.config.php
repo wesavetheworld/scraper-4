@@ -101,6 +101,8 @@
 
 	// The file to log status messages too
 	define("LOG_FILE", LOG_DIRECTORY."$log.log");
+
+	echo "log file: ".LOG_FILE."\n";
 	
 	// ===========================================================================// 
 	// ! Google constants                                                         //
