@@ -47,13 +47,8 @@
 		// Check if controller's config file exists
 		if(file_exists($config))
 		{
-			echo "\nit exists\n";
 			// Load the controllers config file
 			require_once($config); 
-		}
-		else
-		{
-			echo "\nit NO exists\n";
 		}
 	}		 	
 
