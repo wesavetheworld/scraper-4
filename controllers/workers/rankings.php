@@ -53,9 +53,10 @@ class rankings
 
 
 		sleep(1);
-		
-		echo utilities::benchmark(false, false, false, true); 
-		return utilities::benchmark('', true, false, true); 
+
+		echo "time: ".utilities::benchmark('testing', false, false, true); 
+
+		return utilities::benchmark('testing', false, false, true); 
 
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);
