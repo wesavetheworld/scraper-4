@@ -50,6 +50,8 @@ class rankings
 	
 	public function rankings($jobData)
 	{   
+
+		return true;
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);
 
@@ -76,11 +78,6 @@ class rankings
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
-
-			print_r($keywords);
-			print_r($keywords->keywords);
-			print_r($scrape->urls);
-			die('done');
 									
 			// Execute the scraping
 			$scrape->curlExecute();
