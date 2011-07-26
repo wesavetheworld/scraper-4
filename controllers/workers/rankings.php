@@ -50,14 +50,6 @@ class rankings
 	
 	public function rankings($jobData)
 	{   
-
-
-		sleep(1);
-
-		echo "time: ".utilities::benchmark(' ', false, false, true); 
-
-		return utilities::benchmark(' ', false, false, true); 
-
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);
 
@@ -151,9 +143,9 @@ class rankings
 			
 			echo "\nkeywords left: ".$keywords->total."\n";
 		}
-		
-		// Return finished keywords array
-		return "job complete";
+
+		// Retrun total execution time
+		return utilities::benchmark(' ', true, false, true); 		
 	} 
 	
 	// ===========================================================================// 
