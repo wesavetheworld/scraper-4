@@ -1,7 +1,6 @@
 <?php 
 
 	// ******************************* INFORMATION ******************************//
-
 	// **************************************************************************//
 	//  
 	// ** CLIENT - Acts like cron. Fires off actions based on the current time.
@@ -13,7 +12,6 @@
 	// ** @return	Loops indefinitely and executes new processes when needed     
 	//  	
 	// ***************************************************************************//
-
 	// ********************************** START **********************************// 
 
 	
@@ -21,29 +19,33 @@
 	// ! Gearman worker checkin                                                   //
 	// ===========================================================================//
 
-	# Create our worker object.
-	$gmworker= new GearmanWorker();
+	// Create gearmn worker object.
+	$gmworker = new GearmanWorker();
 
-	# Add default server (localhost).
+	// Add jobServer's ip for checking in
 	$gmworker->addServer(JOB_SERVER_IP); 
 
-	# Register function "reverse" with the server. Change the worker function to
+	// Register rankings function with gearman server
 	$gmworker->addFunction("rankings", "rankings"); 
 	
-	print "Waiting for jobs...\n"; 
+	// Log current status
+	utilities::notate("Waiting for jobs..."); 
 
+	// Continuous loop waiting for jobs
 	while($gmworker->work())
 	{   
 		// If job failed
-		if ($gmworker->returnCode() != GEARMAN_SUCCESS)
+		if($gmworker->returnCode() != GEARMAN_SUCCESS)
 		{
-			echo "return_code: " . $gmworker->returnCode() . "\n";
+			// Log current status
+			utilities::notate("return_code: ".$gmworker->returnCode());
 			break;
 		} 
 		// If job was completed successfully 
 		else
 		{
-			echo "job completed.\n"; 				
+			// Log current status
+			utilities::notate("job completed"); 				
 		} 
 	}
 
@@ -55,5 +57,5 @@
 	function rankings($job)
 	{	
 		// Load the controller
-		load('workers/rankings', $job);	
+		load('workers/rankings', $job->workload());	
 	}

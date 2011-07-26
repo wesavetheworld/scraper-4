@@ -19,6 +19,9 @@
 
 class rankings 
 {  
+	// Search engine
+	private $engine;
+
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
@@ -70,7 +73,7 @@ class rankings
 
 			// Set search engine to scrape
 			$scrape->engine = $jobData['engine'];
-			
+
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
 									
@@ -151,7 +154,7 @@ class rankings
 	{    
 		// Loop through each keyword
 		foreach($keywords as $key => &$keyword)
-		{                                      
+		{  
 			// Generate the search page url 
 			$keyword->setSearchUrl();			  		
 			 			                     			

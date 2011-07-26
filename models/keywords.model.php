@@ -189,7 +189,10 @@ class keywords
 					$keyword->setResultsCount();
 					
 					// Set a unique keyword reference (fix for serializing objects)
-					$keyword->uniqueId();					
+					$keyword->uniqueId();	
+					
+					// Set the engine to use for scraping this keyword
+					$keyword->engine = ENGINE;				
 				 
 					// Add keyword object to keyword array
 					$this->keywords->{$keyword->keyword_id} = $keyword;   
@@ -295,7 +298,7 @@ class keywords
 			}
 			
 			// If updating google
-			if(ENGINE == "google")
+			if($this->engine == "google")
 			{
 				// Save any notifications for keyword
 				$setNotify = " notify = '".$keyword->notify."',";
@@ -306,8 +309,8 @@ class keywords
 							keywords 
 						SET 
 					  		$setNotify 
-					  		".ENGINE."_status = NOW(),  
-					  		".ENGINE."_searches = '".serialize(array_keys($keyword->savedSearches))."',
+					  		".$this->engine."_status = NOW(),  
+					  		".$this->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
 							calibrate = '".$keyword->calibrate."',
 					 		check_out = '0',
 					  		time = NOW(), 
@@ -337,8 +340,8 @@ class keywords
 		$query = "	UPDATE 
 						tracking 
 					SET 
-				 		".ENGINE." = '".$keyword->rank."', 
-					 	".ENGINE."_match = '".$keyword->found."' , 
+				 		".$this->engine." = '".$keyword->rank."', 
+					 	".$this->engine."_match = '".$keyword->found."' , 
 					 	dupecount = '0' 
 					 WHERE 
 					 	keyword_id='".$keyword->keyword_id."' 
@@ -355,8 +358,8 @@ class keywords
 		// Build insert query
 		$query = "	INSERT INTO 
 						tracking 
-						(keyword_id,".ENGINE.",
-						".ENGINE."_match,
+						(keyword_id,".$this->engine.",
+						".$this->engine."_match,
 						dupecount,
 						date) 
 			      VALUES (
@@ -425,7 +428,7 @@ class keyword
 	public function setResultsCount()
 	{    		 
 		// If last ranking was below the 10/100 switch
-		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || ENGINE == 'bing')
+		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->engine == 'bing')
 		{  
 			// Search by 10 results
 			$num = 10;
@@ -464,7 +467,7 @@ class keyword
 		// Set the location of the keyword's saved search file
 		$this->searchFile = SAVED_SEARCH_DIR.$this->searchHash.".html";
 		
-		if(ENGINE == "google")
+		if($this->engine == "google")
 		{
 			// Build the google search results page url
 			$this->url  = "http://www.google".$this->g_country;
@@ -478,7 +481,7 @@ class keyword
 				$this->url .= "&start=".$this->searchOffset;	   
 			}	
 	    }
-		elseif(ENGINE == "bing")
+		elseif($this->engine == "bing")
 		{                			
 			// Build the bing search results page url
 			$this->url  = "http://www.bing.com";
@@ -500,7 +503,7 @@ class keyword
 	{
 		// Naming convention for the file
 		$searchHash  = $this->keyword;
-		$searchHash .= ENGINE;
+		$searchHash .= $this->engine;
 		$searchHash .= $this->g_country;
 		$searchHash .= $this->resultCount;
 		$searchHash .= $this->searchPage; 
