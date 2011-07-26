@@ -51,7 +51,7 @@ class rankings
 	public function rankings($jobData)
 	{   
 
-		return utilities::benchmark(''); 
+		return utilities::benchmark('', true, false, true); 
 
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);

@@ -90,7 +90,7 @@ class utilities
       
 	
 	// When called, keeps track of execution time since last call
-	public static function benchmark($description = false, $last = false, $reset = false)
+	public static function benchmark($description = false, $last = false, $reset = false, $return = false)
 	{
 		// Check benchmarking is turned on in the settings
 		if(BENCHMARK)
@@ -130,6 +130,12 @@ class utilities
 			// If a description is provided
 			if($description)
 			{
+				// If returning data instead of printing it
+				if($return)
+				{
+					return $description.$duration."\n";
+				}
+
 				print $description.$duration."\n";
 			}  
 			
