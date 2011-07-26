@@ -166,7 +166,7 @@ class utilities
 		if(defined("LOG_FILE"))
 		{
 			// Open the log file for writing
-			file_put_contents(LOG_FILE, $log, FILE_APPEND);					
+			file_put_contents(LOG_FILE, $log."\n", FILE_APPEND);					
 		}			
 	}
 	
