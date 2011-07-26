@@ -8,11 +8,13 @@ class scraper
 	
 	// Array of urls to scrape 
 	public $urls = array(); 
+
+	// Which search engine to scrape
+	public $engine;
 	 
 	// Use proxies for scraping?
 	public $proxy_use = PROXY_USE;
 	
-	// Proxy array
 	// If proxy use is on, this will contain an array of proxies
 	public $proxies = array();
 	
@@ -142,7 +144,7 @@ class scraper
 		curl_multi_close($this->mh);
 		
 		// Update each proxyies status that was uses
-		if(ENGINE != "bing")
+		if($this->engine != "bing")
 		{
 			$this->updateProxies();
 		}	
@@ -170,7 +172,7 @@ class scraper
 				WHERE 
 					status='active'
 				AND 
-					blocked_".ENGINE." = 0 
+					blocked_".$this->engine." = 0 
 					{$excludeIpAuth} 
 			   	ORDER BY 
 					hr_use, 
@@ -493,7 +495,7 @@ class scraper
 		// Update blocked proxies
 		if(!empty($this->proxiesBlocked))
 		{
-			$query = "UPDATE proxies SET blocked_".ENGINE." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
+			$query = "UPDATE proxies SET blocked_".$this->engine." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 		}
 		

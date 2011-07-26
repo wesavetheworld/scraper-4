@@ -26,13 +26,19 @@ class rankings
 	function __construct()
 	{           
 		// Include keywords data model
-	 	include('models/keywords.model.php'); 
+	 	require_once('models/keywords.model.php'); 
 		
 		// Include serp parsing class
-		include('classes/parse.class.php');
+		require_once('classes/parse.class.php');
 
 		// Include scraping class
-		include('classes/scrape.class.php'); 	  		   	 			
+		require_once('classes/scrape.class.php'); 	
+		
+		// Reset benchmarking
+		utilities::benchmark(false, false, true);
+
+		// Log status
+		utilities::notate("Job started");		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -41,20 +47,12 @@ class rankings
 	
 	public function rankings($jobData)
 	{   
-		//return true; 
-		
-		// Reset benchmarking
-		utilities::benchmark(false, false, true);
-
-		// Log status
-		utilities::notate("Job started");
-		
 		// Get the keywords from the job data				
-		$keywords = unserialize($jobData->workload());
+		$jobData = unserialize($jobData);
 
-		print_r($keywords);
-		die('end');
-						 		   	
+		// Get the keywords from the job data				
+		$keywords = unserialize($jobData['keywords']);
+	 		   	
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
 
@@ -69,6 +67,9 @@ class rankings
 			 		
 			// Create new scraping instance
 			$scrape = new scraper; 
+
+			// Set search engine to scrape
+			$scrape->engine = $jobData['engine'];
 			
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 

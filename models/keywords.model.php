@@ -40,12 +40,12 @@ class keywords
 	// Called when script execution has ended
 	function __destruct() 
 	{	
-		// If any keywords failed to update
-		if(count($this->keywordIds))
-		{    
-			// Check any remaining keywords back in
-			$this->setCheckOut('0');
-		}  
+		// // If any keywords failed to update
+		// if(count($this->keywordIds))
+		// {    
+		// 	// Check any remaining keywords back in
+		// 	$this->setCheckOut('0');
+		// }  
 	}    
 	
 	// ===========================================================================// 
