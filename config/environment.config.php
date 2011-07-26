@@ -28,10 +28,17 @@
 	else
 	{
 		define('ENVIRONMENT', 'ec2');	
-	} 	
+	} 
+	
+	// ===========================================================================// 
+	// ! General server settings                                                  //
+	// ===========================================================================//		
 	
 	// Turn off php notices
 	error_reporting(E_ALL ^ E_NOTICE);
+
+	// Set system php memory limit to unlimited
+	ini_set('memory_limit', '-1');	
 			
 	// ===========================================================================// 
 	// ! Server location settings                                                 //
