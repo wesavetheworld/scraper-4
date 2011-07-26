@@ -51,6 +51,9 @@ class rankings
 	public function rankings($jobData)
 	{   
 		$data = serialize('hey it worked');
+
+		print $data."\n";
+		
 		return $data;
 
 		// Get the keywords from the job data				
