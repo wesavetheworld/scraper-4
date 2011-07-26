@@ -54,7 +54,7 @@ class rankings
 		$jobData = unserialize($jobData);
 
 		// Get the keywords from the job data				
-		$keywords = unserialize($jobData['keywords']);
+		$keywords = $jobData['keywords'];
 
 		// Set the search engine to use
 		$this->engine = $jobData['engine'];

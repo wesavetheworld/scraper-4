@@ -96,7 +96,7 @@ class rankings
 					$data = array();
 					 
 					// Serialize keyword and add to job data
-					$data['keywords'] = serialize($keywordBatch);
+					$data['keywords'] = $keywordBatch;
 
 					// Add engine to job data
 					$data['engine'] = ENGINE;
