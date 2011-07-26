@@ -51,6 +51,10 @@
 			// Load the controllers config file
 			require_once($config); 
 		}
+		else
+		{
+			echo "\nit NO exists\n";
+		}
 	}		 	
 
 	// The main routing function
