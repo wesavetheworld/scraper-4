@@ -48,7 +48,7 @@ class rankings
 		$gmclient->addServer(JOB_SERVER_IP);   
 		
 		// Set the function to be used when jobs are complete
-   		$gmclient->setCompleteCallback("jobComplete");
+   		$gmclient->setCompleteCallback("rankings::jobComplete");
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
@@ -127,22 +127,14 @@ class rankings
 	// ! Gearman methods                                                          //
 	// ===========================================================================//	
 
-	// // Runs as jobs are checked back in
- //  	public static function jobComplete($task) 
-	// { 
-	// 	print "COMPLETE: " . $task->unique() . ", " . unserialize($task->data()) . "\n data:"; 
-	// 	print_r($task->data());
-	// }
-
-
-	
+	// Runs as jobs are checked back in
+  	public static function jobComplete($task) 
+	{ 
+		// Show task completion message
+		print "Task ".$task->unique()." completed in ".$task->data()."\n"; 
+	}
 	 
 }	    
-  	function jobComplete($task) 
-	{ 
-		print "penis: " . $task->unique() . ", " . unserialize($task->data()) . "\n:"; 
-		print_r($task->data());
-	}
 
 
 

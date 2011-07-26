@@ -50,11 +50,8 @@ class rankings
 	
 	public function rankings($jobData)
 	{   
-		$data = serialize('hey it worked');
 
-		print $data."\n";
-		
-		return $data;
+		return utilities::benchmark(''); 
 
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);
