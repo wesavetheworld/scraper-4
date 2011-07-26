@@ -57,5 +57,5 @@
 	function rankings($job)
 	{	
 		// Load the controller
-		load('workers/rankings', $job->workload());	
+		return load('workers/rankings', $job->workload());	
 	}
