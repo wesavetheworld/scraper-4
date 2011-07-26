@@ -131,6 +131,7 @@ class rankings
   	public static function jobComplete($task) 
 	{ 
 		print "COMPLETE: " . $task->unique() . ", " . $task->data() . "\n"; 
+		print_r($task)
 	}
 
 
