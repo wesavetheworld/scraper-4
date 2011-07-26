@@ -31,7 +31,7 @@
 		loadConfig($class);
 
 		// Load requestd controller
-		loadController($controller, $class, $data);
+		return loadController($controller, $class, $data);
 	} 
     
     // ===========================================================================// 
