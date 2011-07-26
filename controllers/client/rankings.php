@@ -48,7 +48,7 @@ class rankings
 		$gmclient->addServer(JOB_SERVER_IP);   
 		
 		// Set the function to be used when jobs are complete
-   		$gmclient->setCompleteCallback("rankings::jobComplete");
+   		$gmclient->setCompleteCallback("jobComplete");
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
@@ -138,7 +138,11 @@ class rankings
 	
 	 
 }	    
-
+  	function jobComplete($task) 
+	{ 
+		print "COMPLETE: " . $task->unique() . ", " . unserialize($task->data()) . "\n data:"; 
+		print_r($task->data());
+	}
 
 
 
