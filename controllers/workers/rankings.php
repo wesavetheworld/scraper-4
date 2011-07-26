@@ -51,6 +51,10 @@ class rankings
 	public function rankings($jobData)
 	{   
 
+
+		sleep(1);
+		
+		echo utilities::benchmark(false, false, false, true); 
 		return utilities::benchmark('', true, false, true); 
 
 		// Get the keywords from the job data				
