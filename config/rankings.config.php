@@ -24,6 +24,8 @@
 	// What search engine to scrape
 	define("ENGINE", $argv[2]);
 
+	echo "engine:".ENGINE;
+
 	// The type of keyword to update ('daily' or 'hourly')
 	define("SCHEDULE", $argv[3]);	 
 	
