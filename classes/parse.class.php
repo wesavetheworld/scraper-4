@@ -5,6 +5,9 @@ class parse
 	
 	// Will contain an array of elements parsed
 	public $elements = array();
+
+	// The search engine results being parsed
+	public $engine;
    
 	// ===========================================================================// 
 	// ! Parsing methods                                                          //

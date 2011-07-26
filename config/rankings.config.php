@@ -125,21 +125,5 @@
 	// ! Database structure and update time depending on search engine            //
 	// ===========================================================================//
 	
-	// Set constants depending on current search engine
-	switch(ENGINE)
-	{
-		case "google": 
-		
-			// The regular expression for parsing google rankings
-			define("PARSE_PATTERN",PARSE_PATTERN_GOOGLE);	
-			
-			break;		
-				
-		case "bing":			
-			
-			// The regular expression for parsing bing rankings
-			define("PARSE_PATTERN",PARSE_PATTERN_BING);	   						
-			
-			break;			
-	}	
+
 	

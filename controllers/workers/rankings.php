@@ -55,6 +55,9 @@ class rankings
 
 		// Get the keywords from the job data				
 		$keywords = unserialize($jobData['keywords']);
+
+		// Set the search engine to use
+		$this->engine = $jobData['engine'];
 	 		   	
 		// Call processing time
 		utilities::benchmark('keywords selected: '); 
@@ -72,7 +75,7 @@ class rankings
 			$scrape = new scraper; 
 
 			// Set search engine to scrape
-			$scrape->engine = $jobData['engine'];
+			$scrape->engine = $this->engine;
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
@@ -93,7 +96,7 @@ class rankings
 					$parse = new parse;	 
 				
 					// Find the keyword's domain in one of the ranking urls
-					$parse->findElements(PARSE_PATTERN, $searchResults)->findInElements($keyword->domain);			 
+					$parse->findElements($this->parsePattern(), $searchResults)->findInElements($keyword->domain);			 
 								   				
 					// If domain was found or keyword on last search page
 					if($parse->found || $keyword->searchPage == SEARCH_DEPTH - 1)
@@ -240,6 +243,21 @@ class rankings
 			// No calibation needed
 			$keyword->calibrate = 0;
 		}		
+	}
+
+	// Determine the correct parsing regex pattern to use
+	public function parsePattern()
+	{
+		// Search engine is google
+		if($this->engine == "google")
+		{
+			return PARSE_PATTERN_GOOGLE;
+		}
+		// Search engine is bing
+		elseif($this->engine == "bing")
+		{
+			return PARSE_PATTERN_BING;
+		}
 	}
 
 	
