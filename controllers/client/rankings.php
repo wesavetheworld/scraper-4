@@ -130,7 +130,7 @@ class rankings
 	// Runs as jobs are checked back in
   	public static function jobComplete($task) 
 	{ 
-		print "COMPLETE: " . $task->unique() . ", " . $task->data() . "\n"; 
+		print "COMPLETE: " . $task->unique() . ", " . unserialize($task->data()) . "\n"; 
 		print_r($task);
 	}
 
