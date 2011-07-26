@@ -70,7 +70,7 @@
 	define("MAX_CALIBRATIONS", 2);	
 	
 	// Avoid potential runaway scripts by limiting max execution time      
-	define("MAX_EXECUTION_TIME", 300);
+	define("MAX_EXECUTION_TIME", 600);
 	
 	// Set to longer than max time above
 	set_time_limit(400);   	   
