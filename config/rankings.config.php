@@ -21,10 +21,9 @@
 	// ! Passed arguments through CLI ($argv[1] used for controller)              //
 	// ===========================================================================//  
 	
-
 	// Get passed server arguments
 	$argv = $_SERVER['argv'];
-	
+
 	// What search engine to scrape
 	define("ENGINE", $argv[2]);
 
