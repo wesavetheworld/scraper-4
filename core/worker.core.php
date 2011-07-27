@@ -57,7 +57,9 @@
 	function rankings($job)
 	{	
 		// Load the controller and get job results
-		$results = load('workers/rankings', $job->workload());	
+		//$results = load('workers/rankings', $job->workload());	
+
+		return false;
 
 		// If job was successful 
 		// if(!empty($results))
