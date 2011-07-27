@@ -83,7 +83,12 @@ class bootstrap
 			{
 		
 			}
-		}		
+		}	
+		
+		// Save all settings to config file
+		$this->saveConfig();	
+
+		$this->editSupervisord();
 	}
 
 	// ===========================================================================// 
@@ -251,5 +256,52 @@ class bootstrap
 	  		// Finish execution
 			utilities::complete();
 		}			
+	}	
+
+	// ===========================================================================// 
+	// ! Finalize bootstrap                                                       //
+	// ===========================================================================//  
+	
+    // Modify supervisord for this specific instance
+	private function editSupervisord()
+	{
+		// If this is a worker instance
+		if($this->instanceType == "worker")
+		{
+			// Number of proccesses to run
+			$numProcs = 2;
+		}
+		// All other instance types
+		else
+		{
+			// Number of proccesses to run
+			$numProcs = 1;			
+		}	
+
+		// Add instance specific daemon info
+		$supervisord = "
+						[program:theApp]
+						command=php /home/ec2-user/server.php run
+						numprocs=$numProcs 
+						stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log
+						autostart=true
+						autorestart=true";
+
+		// Write new supervisord config file
+		file_put_contents("core/supervisord.conf", $supervisord);
+
+		// Restart supervisord
+	}
+
+	// Save all settings to config file for use
+	private function saveConfig()
+	{
+		// Build config file
+		$config = "<?php \n\n";
+		$config.= "// This config file is auto generated on boot.\n\n";
+		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'")'."\n";
+
+		// Write config file to config folder
+		file_put_contents("config/instance.config.php", $config);
 	}	
 }			

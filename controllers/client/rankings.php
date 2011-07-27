@@ -131,7 +131,7 @@ class rankings
   	public static function jobComplete($task) 
 	{ 
 		// Show task completion message
-		print "Task ".$task->unique()." completed in ".$task->data()."\n"; 
+		print "Task ".$task->unique()." ".$task->data()."\n"; 
 	}
 	 
 }	    

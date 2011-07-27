@@ -28,14 +28,18 @@
 	// ! Configure server for use                                                 //
 	// ===========================================================================// 	   	
 
-   	// Configure server for use 
-   	$server = new bootstrap();	
-
-   	//$instanceType = "client";
+	if($argv[1] == 'bootstrap') 
+	{
+   		// Configure server for use 
+   		$server = new bootstrap();	
+   	}	
 
 	// ===========================================================================// 
 	// ! Route instance to correct core daemon                                    //
 	// ===========================================================================// 
 
-	// Include main router
-	include('core/'.$server->instanceType.'.core.php');	
+	if($argv[1] == 'run') 
+	{
+		// Include main router
+		include('core/'.INSTANCE_TYPE.'.core.php');	
+	}	

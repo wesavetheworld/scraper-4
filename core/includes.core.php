@@ -17,6 +17,9 @@
 	// ! Dependencies and helper classes 	                                      //
 	// ===========================================================================//
 
+	// Instance specific settings (created in bootstrap at boot)
+	include('config/instance.config.php');
+
 	// Environment settings and DB credentials
 	include('config/environment.config.php');	
 	
