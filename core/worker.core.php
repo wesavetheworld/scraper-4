@@ -58,7 +58,10 @@
 	{	
 		// Load the controller and get job results
 		//$results = load('workers/rankings', $job->workload());	
+		
+		global $gmworker;
 
+		$gmworker->sendFail(); 
 		return false;
 
 		// If job was successful 
