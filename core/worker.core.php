@@ -56,6 +56,13 @@
 	// Collect keyword rankings
 	function rankings($job)
 	{	
-		// Load the controller
-		return load('workers/rankings', $job->workload());	
+		// Load the controller and get job results
+		$results = load('workers/rankings', $job->workload());	
+
+		// If job was successful 
+		if($results)
+		{
+			// Return finished job to jobServer
+			return $results;
+		}
 	}
