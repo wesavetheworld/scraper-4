@@ -30,7 +30,7 @@
 		if(date("H:i") == "00:00")
 		{
 			// Update all keyword rankings
-			//run("rankings", "google daily 1000");
+			//run("client/rankings", "google daily 1000");
 
 			echo "\nWould update daily here\n";
 
@@ -41,9 +41,12 @@
 		elseif(date("H") != 00 && date("i") == 00)
 		{
 			// Update hourly keyword rankings
-			//run("rankings", "google hourly 1000");
+			//run("client/rankings", "google hourly 1000");
 			echo "\nWould update hourly here\n";
-		}		
+		}	
+		
+		// Run cron tasks
+		run("tasks");	
 
 		// Wait 1 min then loop again
 		sleep(60);	
@@ -54,10 +57,10 @@
 	// ===========================================================================//	
 
 	// Execute bash command that detaches from daemon
-	function run($controller, $options)
+	function run($controller, $options = false)
 	{
 		// Build the command to execute
-		$command = "php hub.php client/$controller $options >> ".LOG_DIRECTORY."$controller.log &";
+		$command = "php hub.php $controller $options >> ".LOG_DIRECTORY."$controller.log &";
 
 		// Execute command given
 		exec($command);

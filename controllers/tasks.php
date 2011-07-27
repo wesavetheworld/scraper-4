@@ -157,7 +157,7 @@ class tasks
 		}   
     
 		// Loop through all log files
-		foreach(glob(LOG_DIRECTORY.'*.txt') as $log)
+		foreach(glob(LOG_DIRECTORY.'*.log') as $log)
 		{   
 			// Remove log file
 			unlink($log);

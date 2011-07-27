@@ -39,6 +39,9 @@
 
 	// Set system php memory limit to unlimited
 	ini_set('memory_limit', '-1');	
+
+	// Set php time limit to unlimited
+	set_time_limit(0);	
 			
 	// ===========================================================================// 
 	// ! Server location settings                                                 //

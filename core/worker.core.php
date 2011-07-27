@@ -57,14 +57,5 @@
 	function rankings($job)
 	{	
 		// Load the controller and get job results
-		//$results = load('workers/rankings', $job->workload());	
-
-		return GEARMAN_WORK_FAIL;
-
-		// If job was successful 
-		// if(!empty($results))
-		// {
-		// 	// Return finished job to jobServer
-		// 	return $results;
-		// }
+		return load('workers/rankings', $job->workload());	
 	}
