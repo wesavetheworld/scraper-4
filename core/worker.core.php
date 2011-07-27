@@ -60,7 +60,7 @@
 		$results = load('workers/rankings', $job->workload());	
 
 		// If job was successful 
-		if($results)
+		if(!empty($results))
 		{
 			// Return finished job to jobServer
 			return $results;
