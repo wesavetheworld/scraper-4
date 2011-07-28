@@ -130,16 +130,18 @@ class rankings
 	// Runs as jobs are checked back in
   	public static function jobComplete($task) 
 	{ 
+		$time = round($task->data());
+		
 		// Show task completion message
-		print "Task ".$task->unique()." completed in ".$task->data()." seconds\n";
+		print "Task ".$task->unique()." completed in $time seconds\n";
 
 		// Get total time so far
-		$time = utilities::benchmark("time: ", true, false, true); 
+		utilities::benchmark("time so far: ", true); 
 
 		// 16 workers @ 100 keywords each at the returned time
-		$rate = (3600 / $task->data()) * 1600;
+		$rate = (3600 / $time) * 1600;
 
-		print "time so far: $time\n at a rate of: $rate keywords per hour\n";
+		print "at a rate of: $rate keywords per hour\n";
 	}
 	 
 }	    
