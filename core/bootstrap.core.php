@@ -55,7 +55,13 @@ class bootstrap
 		utilities::notate("Instance type: ".$this->instanceType);	
 		
     	// Mount client servers data folder locally
-    	$this->mountDataFolder();				
+    	$this->mountDataFolder();	
+    	
+		// Save all server settings to config files
+		$this->saveType();	
+
+		// Set up which core daemon supervisord will controll
+		$this->editSupervisord();    				
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
@@ -84,11 +90,6 @@ class bootstrap
 		
 			}
 		}	
-		
-		// Save all settings to config file
-		$this->saveConfig();	
-
-		$this->editSupervisord();
 	}
 
 	// ===========================================================================// 
@@ -260,8 +261,20 @@ class bootstrap
 
 	// ===========================================================================// 
 	// ! Finalize bootstrap                                                       //
-	// ===========================================================================//  
-	
+	// ===========================================================================// 
+
+	// Save all settings to config file for use
+	private function saveType()
+	{
+		// Build config file
+		$config = "<?php \n\n";
+		$config.= "// This config file is auto generated on boot.\n\n";
+		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'");'."\n";
+
+		// Write config file to config folder
+		file_put_contents("config/instance.config.php", $config);
+	}	
+
     // Modify supervisord for this specific instance
 	private function editSupervisord()
 	{
@@ -289,18 +302,7 @@ class bootstrap
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
-		// Restart supervisord
-	}
-
-	// Save all settings to config file for use
-	private function saveConfig()
-	{
-		// Build config file
-		$config = "<?php \n\n";
-		$config.= "// This config file is auto generated on boot.\n\n";
-		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'");'."\n";
-
-		// Write config file to config folder
-		file_put_contents("config/instance.config.php", $config);
+		// Run supervisord daemon
+		exec("/usr/bin/supervisord &");
 	}	
 }			
