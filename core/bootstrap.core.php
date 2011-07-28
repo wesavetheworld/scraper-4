@@ -288,7 +288,7 @@ class bootstrap
 						autorestart=true";
 
 		// Write new supervisord config file
-		file_put_contents("core/supervisord.conf", $supervisord);
+		file_put_contents("core/supervisord.core.conf", $supervisord);
 
 		// Restart supervisord
 	}
