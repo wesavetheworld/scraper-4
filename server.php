@@ -30,6 +30,8 @@
 
 	if($argv[1] == 'bootstrap') 
 	{
+		utilities::reportErrors('runnin bootstrap', true);
+
    		// Configure server for use 
    		$server = new bootstrap();	
    	}	
