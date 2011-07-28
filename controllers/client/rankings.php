@@ -131,7 +131,15 @@ class rankings
   	public static function jobComplete($task) 
 	{ 
 		// Show task completion message
-		print "Task ".$task->unique()." ".$task->data()."\n"; 
+		print "Task ".$task->unique()." completed in ".$task->data()." seconds\n";
+
+		// Get total time so far
+		$time = utilities::benchmark("time: ", true, false, true); 
+
+		// 16 workers @ 100 keywords each at the returned time
+		$rate = (3600 / $task->data()) * 1600;
+
+		print "time so far: $time\n at a rate of: $rate keywords per hour\n";
 	}
 	 
 }	    

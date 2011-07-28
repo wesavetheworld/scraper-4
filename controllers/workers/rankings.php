@@ -145,7 +145,7 @@ class rankings
 		}
 
 		// Retrun total execution time
-		return utilities::benchmark('completed in ', true, false, true); 		
+		return utilities::benchmark('', true, false, true); 		
 	} 
 	
 	// ===========================================================================// 
