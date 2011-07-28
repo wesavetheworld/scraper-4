@@ -279,13 +279,12 @@ class bootstrap
 		}	
 
 		// Add instance specific daemon info
-		$supervisord = "
-						[program:theApp]
-						command=php /home/ec2-user/server.php run
-						numprocs=$numProcs 
-						stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log
-						autostart=true
-						autorestart=true";
+		$supervisord = "[program:theApp]\n";
+		$supervisord.= "command=php /home/ec2-user/server.php run\n";
+		$supervisord.= "numprocs=$numProcs\n"; 
+		$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+		$supervisord.= "autostart=true\n";
+		$supervisord.= "autorestart=true\n";
 
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
