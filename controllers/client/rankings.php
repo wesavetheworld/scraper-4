@@ -145,6 +145,8 @@ class rankings
 
 		$rates[] = $rate;
 
+		print_r($rates);
+
 		$avg =  number_format(round(array_sum($rates) / count($rates)));
 
 		print "at a rate of: $rate keywords per hour\n";
