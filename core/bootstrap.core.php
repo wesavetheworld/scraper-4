@@ -288,7 +288,7 @@ class bootstrap
 			$numProcs = 2;
 
 			// Name of process
-			$name = "process_name=%(process_num)\n";
+			$name = "process_name=%(process_num)s\n";
 		}
 		// All other instance types
 		else
