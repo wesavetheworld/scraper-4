@@ -194,7 +194,10 @@ class bootstrap
 		// If new revision downloaded
 		if(strpos($changes, "Updated"))
 		{
-			// Kill script so supervisord will restart using new code
+			// Create a new bootstrap for new code
+			exec('php /home/ec2-user/server.php bootstrap &');
+
+			// Kill current bootstrap
 			exit('new code. restarting...');
 		}
 	}
