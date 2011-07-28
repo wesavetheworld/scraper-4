@@ -53,15 +53,15 @@ class bootstrap
 
 		// Log status
 		utilities::notate("Instance type: ".$this->instanceType);	
-		
-    	// Mount client servers data folder locally
-    	$this->mountDataFolder();	
-    	
+
 		// Save all server settings to config files
 		$this->saveType();	
 
 		// Set up which core daemon supervisord will controll
-		$this->editSupervisord();    				
+		$this->editSupervisord();   		
+		
+    	// Mount client servers data folder locally
+    	$this->mountDataFolder();	 				
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
