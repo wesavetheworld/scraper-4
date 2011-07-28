@@ -141,13 +141,14 @@ class rankings
 		static $rates = array();
 
 		// 16 workers @ 100 keywords each at the returned time
-		$rate = number_format(round((3600 / $time) * 1600));
+		$rate = round((3600 / $time) * 1600);
 
 		$rates[] = $rate;
-
-		print_r($rates);
-
 		$avg =  number_format(round(array_sum($rates) / count($rates)));
+		
+		// 16 workers @ 100 keywords each at the returned time
+		$rate = number_format($rate);		
+
 
 		print "at a rate of: $rate keywords per hour\n";
 		print "upate rate so far: $avg keywords per hour\n";
