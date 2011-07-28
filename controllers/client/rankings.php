@@ -138,10 +138,17 @@ class rankings
 		// Get total time so far
 		utilities::benchmark("time so far: ", true); 
 
+		static $rates = array();
+
 		// 16 workers @ 100 keywords each at the returned time
-		$rate = (3600 / $time) * 1600;
+		$rate = number_format(round((3600 / $time) * 1600));
+
+		$rates[] = $rate;
+
+		$avg =  number_format(round(array_sum($rates) / count($rates)));
 
 		print "at a rate of: $rate keywords per hour\n";
+		print "upate rate so far: $avg keywords per hour\n";
 	}
 	 
 }	    
