@@ -70,7 +70,7 @@ class bootstrap
 			$this->assignIp(JOB_SERVER_IP);	
 
 			// Run gearman daemon
-			$this->runGearman();
+			//$this->runGearman();
 		}
 		// All othere instance types
 		else
@@ -240,10 +240,10 @@ class bootstrap
 	}
 
 	// Run gearman job server
-	private function runGearman()
-	{
-		exec("/usr/local/sbin/gearmand -d");
-	}
+	// private function runGearman()
+	// {
+	// 	exec("/usr/local/sbin/gearmand -d");
+	// }
 
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
@@ -281,6 +281,9 @@ class bootstrap
     // Modify supervisord for this specific instance
 	private function editSupervisord()
 	{
+		// The command for supervisord to run
+		$command = "command=php /home/ec2-user/server.php run\n";
+
 		// If this is a worker instance
 		if($this->instanceType == "worker")
 		{
@@ -297,12 +300,18 @@ class bootstrap
 			$numProcs = 1;	
 			
 			// Name of process(blank for single)
-			$name = "";					
+			$name = "";	
+			
+			// If this is the jobServer
+			if($this->instanceType == "jobServer")				
+			{
+				$command = "command=/usr/local/sbin/gearmand -d\n";
+			}
 		}	
 
 		// Add instance specific daemon info
 		$supervisord = "[program:theApp]\n";
-		$supervisord.= "command=php /home/ec2-user/server.php run\n";
+		$supervisord.= $command;
 		$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 		$supervisord.= "autostart=true\n";
 		$supervisord.= "autorestart=true\n";
@@ -314,6 +323,5 @@ class bootstrap
 
 		// Run supervisord daemon
 		exec("/usr/bin/supervisord &");
-
 	}	
 }			
