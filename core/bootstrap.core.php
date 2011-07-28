@@ -286,27 +286,34 @@ class bootstrap
 		{
 			// Number of proccesses to run
 			$numProcs = 2;
+
+			// Name of process
+			$name = "process_name=%(process_num)\n";
 		}
 		// All other instance types
 		else
 		{
 			// Number of proccesses to run
-			$numProcs = 1;			
+			$numProcs = 1;	
+			
+			// Name of process(blank for single)
+			$name = "";					
 		}	
 
 		// Add instance specific daemon info
 		$supervisord = "[program:theApp]\n";
 		$supervisord.= "command=php /home/ec2-user/server.php run\n";
-		$supervisord.= "numprocs=$numProcs\n"; 
 		$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 		$supervisord.= "autostart=true\n";
 		$supervisord.= "autorestart=true\n";
+		$supervisord.= "numprocs=$numProcs\n"; 
+		$supervisord.= $name; 
 
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
 		// Run supervisord daemon
 		exec("/usr/bin/supervisord &");
-		
+
 	}	
 }			
