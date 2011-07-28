@@ -44,13 +44,6 @@
 	{
 		utilities::reportErrors('it worked!!!!', true);
 
-		// Loop forever
-		while(true)
-		{
-			
-			sleep(60);
-		}
-
 		// Include main router
-		//include('core/'.INSTANCE_TYPE.'.core.php');	
+		include('core/'.INSTANCE_TYPE.'.core.php');	
 	}	
