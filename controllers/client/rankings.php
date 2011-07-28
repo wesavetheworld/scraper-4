@@ -130,7 +130,7 @@ class rankings
 	// Runs as jobs are checked back in
   	public static function jobComplete($task) 
 	{ 
-		$time = intval(round($task->data()));
+		$time = intval(round(trim($task->data())));
 
 		// Show task completion message
 		print "Task ".$task->unique()." completed in $time seconds\n";
