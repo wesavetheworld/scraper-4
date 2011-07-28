@@ -40,6 +40,8 @@
 
 	if($argv[1] == 'run') 
 	{
+		utilities::reportErrors('it worked!!!!', true);
+
 		// Include main router
-		include('core/'.INSTANCE_TYPE.'.core.php');	
+		//include('core/'.INSTANCE_TYPE.'.core.php');	
 	}	

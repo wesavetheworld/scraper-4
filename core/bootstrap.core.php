@@ -299,7 +299,7 @@ class bootstrap
 		// Build config file
 		$config = "<?php \n\n";
 		$config.= "// This config file is auto generated on boot.\n\n";
-		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'")'."\n";
+		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'");'."\n";
 
 		// Write config file to config folder
 		file_put_contents("config/instance.config.php", $config);
