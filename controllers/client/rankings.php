@@ -52,6 +52,8 @@ class rankings
 		
 		// Select all keywords from db to update
 		$keywords = new keywords();  
+
+		define("TOTAL", $keywords->total);
 	   		
 		echo "keywords selected: ".$keywords->total."\n"; 
 	           
@@ -135,23 +137,29 @@ class rankings
 		// Show task completion message
 		print "Task ".$task->unique()." completed in $time seconds\n";
 
-		// Get total time so far
-		utilities::benchmark("time so far: ", true); 
-
 		static $rates = array();
+		static $jobs = 0;
+
+		$jobs++;
+		$keywords = 100 * $jobs;
+		$keywordsLeft = TOTAL - $keywords;
 
 		// 16 workers @ 100 keywords each at the returned time
 		$rate = round((3600 / $time) * 1600);
 
 		$rates[] = $rate;
 		$avg =  number_format(round(array_sum($rates) / count($rates)));
-		
+
 		// 16 workers @ 100 keywords each at the returned time
 		$rate = number_format($rate);		
+		
+		// Get total time so far
+		utilities::benchmark("\ttime so far: ", true); 		
 
-
-		print "at a rate of: $rate keywords per hour\n";
-		print "upate rate so far: $avg keywords per hour\n";
+		print "\tupdate rate: $rate keywords per hour\n";
+		print "\taverage rate: $avg keywords per hour\n";
+		print "\tkeywords updated so far: $keywords\n";
+		print "\tkeywords left: $keywordsLeft\n";
 	}
 	 
 }	    
