@@ -92,28 +92,28 @@ class worker
 	// ===========================================================================//	
 
 	// Collect keyword rankings
-	private static function rankings($job)
+	public static function rankings($job)
 	{	
 		// Load the controller and get job results
 		return  new load('workers/rankings', $job->workload());	
 	}
 
 	// Collect domain pagerank
-	private static function pageRank($job)
+	public static function pageRank($job)
 	{	
 		// Load the controller and get job results
 		return  new load('workers/rankings', $job->workload());	
 	}	
 
 	// Collect domain backlinks
-	private static function backLinks($job)
+	public static function backLinks($job)
 	{	
 		// Load the controller and get job results
 		return new load('workers/rankings', $job->workload());	
 	}	
 
 	// Collect domain alexa rank
-	private static function alexa($job)
+	public static function alexa($job)
 	{	
 		// Load the controller and get job results
 		return new load('workers/rankings', $job->workload());	
