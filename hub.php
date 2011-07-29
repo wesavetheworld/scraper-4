@@ -28,7 +28,7 @@
 	$controller = strtolower($argv[1]);
 	
 	// Load controller
-	load($controller);
+	new load($controller);
 
 	
 

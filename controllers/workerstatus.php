@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************//
 
-class jobserver 
+class workerstatus 
 {  
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
@@ -25,24 +25,30 @@ class jobserver
 	
 	function __construct()
 	{           
-
+		// Include keywords data model
+	 	require_once('classes/gearman.class.php');
 	}
 	
 	// ===========================================================================// 
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	
 	
-	public function jobserver()
+	public function workerstatus()
 	{   
-		echo "jobserver controller loaded successfully";
 
-		// Loop forever JUST FOR TESTING
-		while(true != false)
-		{
-			sleep(1);
-		}
+		echo "started:";
 		
-		// Should never get here
-		die();		
+		$jobServer = new jobServerStatus(JOB_SERVER_IP);	
+
+		$status = $jobServer->getStatus();
+
+		print_r($status['operations']);
 	}
-}	
+
+}	    
+
+
+
+
+
+

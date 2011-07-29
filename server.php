@@ -31,7 +31,7 @@
 	if($argv[1] == 'bootstrap') 
 	{
    		// Configure server for use 
-   		$server = new bootstrap();	
+   		new bootstrap();	
    	}	
 
 	// ===========================================================================// 
@@ -42,4 +42,7 @@
 	{
 		// Include main router
 		include('core/'.INSTANCE_TYPE.'.core.php');	
+
+		// Instantiate core
+		new INSTANCE_TYPE();
 	}	

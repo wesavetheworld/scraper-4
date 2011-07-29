@@ -26,8 +26,8 @@
 	// All of the settings required for all controllers
 	include('config/settings.config.php'); 
 
-	// Class for routing controllers
-   	include('core/router.core.php');
+	// Class for loading controllers
+   	include('core/load.core.php');
 
 	// Class for configuring server
    	include('core/bootstrap.core.php');

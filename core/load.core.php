@@ -1,54 +1,62 @@
-<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
+<?php
 
-// ******************************* INFORMATION ******************************//
+	// ******************************* INFORMATION ******************************//
 
-// **************************************************************************//
-//  
-// ** BOOTSTRAP - Each server runs this first to identify itself and it's own 
-// ** meaningless purpose in life.
-// ** 
-// ** @author	Joshua Heiland <thezenman@gmail.com>
-// ** @date	 2011-06-17
-// ** @access	private
-// ** @param	
-// ** @return	Main controller router     
-//  	
-// ***************************************************************************//
+	// **************************************************************************//
+	//  
+	// ** HUB - The main hub of SEscout data collection. All process requests are 
+	// ** routed through this file 	 
+	// ** 
+	// ** @author	Joshua Heiland <thezenman@gmail.com>
+	// ** @date	 2011-06-17
+	// ** @access	private
+	// ** @param	
+	// ** @return	Main controller router     
+	//  	
+	// ***************************************************************************//
 
-// ********************************** START **********************************// 
+	// ********************************** START **********************************// 
+
+    // ===========================================================================// 
+	// ! Main controller loading method                                           //
+	// ===========================================================================// 
 
 class load 
-{    
-	
-	function __construct()
+{    	
+	// Complete loading and instantiation of a class
+	function __construct($controller, $data = false)
 	{
-		
-	}	
-	
-	// Load and instantiate a controller class
-	public function load($controller)
-	{
-		// Make everything lowercase for files
-		$controller = strtolower($controller);
+		// Define the class name (account for folders)
+		$class = array_pop(explode("/", $controller));	
 
-		// ===========================================================================// 
-		// ! Include the config file for the controller                               //
-		// ===========================================================================//   
-	     
+		// Load the controller's config file
+		$this->loadConfig($class);
+
+		// Load requestd controller
+		return $this->loadController($controller, $class, $data);
+	} 
+    
+    // ===========================================================================// 
+	// ! Controller loading methods                                               //
+	// ===========================================================================//  
+
+	// Load the controllers config file
+    private function loadConfig($class)
+    {     
 		// The config file name for the controller
-	 	$config = "config/".$controller.".config.php"; 
+	 	$config = "config/".$class.".config.php"; 
 
 		// Check if controller's config file exists
 		if(file_exists($config))
 		{
 			// Load the controllers config file
-			include($config); 
-		}		   
+			require_once($config); 
+		}
+	}		 	
 
-		// ===========================================================================// 
-		// ! Route the request to the correct controller                              //
-		// ===========================================================================//   
-		
+	// The main routing function
+	private function loadController($controller, $class, $data = false)
+	{ 			
 		// The requested controller location
 		$controllerFile = 'controllers/'.$controller.".php";
 		
@@ -56,10 +64,7 @@ class load
 		if(file_exists($controllerFile))
 		{                                  
 			// Include the requested controller
-		 	include($controllerFile);	 
-		    
-			// Define the class name (account for folders)
-			$class = array_pop(explode("/", $controller));
+		 	require_once($controllerFile);	 
 		    
 			// Check if assumed class exists 
 			if(class_exists($class))
@@ -71,7 +76,7 @@ class load
 				if(method_exists($class, $class))
 				{   
 					// Run the first function
-					return $controller->$class(); 	
+					return $controller->$class($data); 	
 				}  
 			} 
 			// Class was not found
@@ -88,5 +93,5 @@ class load
 			// Show error
 			echo "\nThat conroller does not exist\n";
 		}
-	}	
-}			
+	}
+}	

@@ -43,7 +43,13 @@
 	define("STATUS_DIRECTORY", "data/status/");	   
 
 	// Folder used for status files
-	define("SYSTEM_STATUS", "data/status/system.log");	 	
+	define("SYSTEM_STATUS", "data/status/system.log");	
+	
+	// File written to when new keywords are added
+	define("NEW_KEYWORDS_FILE", "data/status/newkeywords.log");
+	
+	// File written to when new domains are added
+	define("NEW_DOMAINS_FILE", "data/status/newdomains.log");		 	
 	
 	// ===========================================================================// 
 	// ! Time and Date constants                                                  //
