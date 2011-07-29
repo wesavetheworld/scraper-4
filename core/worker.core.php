@@ -99,6 +99,8 @@ class worker
 
 		 print_r($job);
 
+		 die();
+
 		 return $job->results;
 	}
 

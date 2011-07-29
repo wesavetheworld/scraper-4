@@ -33,7 +33,7 @@ class load
 		$this->loadConfig($class);
 
 		// Load requestd controller
-		return $this->loadController($controller, $class, $data);
+		$this->results = $this->loadController($controller, $class, $data);
 	} 
     
     // ===========================================================================// 
