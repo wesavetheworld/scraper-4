@@ -55,10 +55,7 @@ class bootstrap
 		utilities::notate("Instance type: ".$this->instanceType);	
 
 		// Save all server settings to config files
-		$this->saveType();	
-
-		// Set up which core daemon supervisord will controll
-		$this->editSupervisord();   		
+		$this->saveType();	  		
 		
     	// Mount client servers data folder locally
     	$this->mountDataFolder();	 				
@@ -70,11 +67,14 @@ class bootstrap
 			$this->assignIp(JOB_SERVER_IP);	
 
 			// Run gearman daemon
-			//$this->runGearman();
+			$this->runGearman();
 		}
 		// All othere instance types
 		else
 		{
+			// Set up which core daemon supervisord will controll
+			$this->editSupervisord(); 
+						
 			// Check for jobServer before continuing 
 			$this->getJobServer();
 					
@@ -240,10 +240,10 @@ class bootstrap
 	}
 
 	// Run gearman job server
-	// private function runGearman()
-	// {
-	// 	exec("/usr/local/sbin/gearmand -d");
-	// }
+	private function runGearman()
+	{
+		exec("/usr/local/sbin/gearmand -d");
+	}
 
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
