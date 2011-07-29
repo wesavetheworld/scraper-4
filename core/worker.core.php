@@ -97,10 +97,6 @@ class worker
 		// Load the controller and get job results
 		 $job = new load('workers/rankings', $job->workload());	
 
-		 print $job->results;
-
-		 die();
-
 		 return $job->results;
 	}
 
