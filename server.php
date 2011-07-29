@@ -40,9 +40,11 @@
 
 	if($argv[1] == 'run') 
 	{
+		$core = INSTANCE_TYPE;
+		
 		// Include main router
 		include('core/'.INSTANCE_TYPE.'.core.php');	
 
 		// Instantiate core
-		new INSTANCE_TYPE();
+		new $core();
 	}	
