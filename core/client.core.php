@@ -53,14 +53,14 @@ class client
 				$this->run("client/rankings", "google hourly 100");
 			}
 			// Check for any new domains
-			elseif($this->new(NEW_DOMAINS_FILE))
+			elseif($this->checkNew(NEW_DOMAINS_FILE))
 			{
 				// Update domain stats
 				$this->domainStats();		
 			}	
 
 			// Check for any new keywords
-			if($this->new(NEW_KEYWORDS_FILE))
+			if($this->checkNew(NEW_KEYWORDS_FILE))
 			{
 				// Update hourly keyword rankings
 				$this->run("client/rankings", "google all 100 new");			
@@ -79,7 +79,7 @@ class client
 	// ===========================================================================//	
 
 	// Check for any newly added keywords/domains
-	private function new($type)
+	private function checkNew($type)
 	{
 		// Check if item status file exists
 		if(file_exists($type))
