@@ -95,7 +95,9 @@ class worker
 	public static function rankings($job)
 	{	
 		// Load the controller and get job results
-		return  new load('workers/rankings', $job->workload());	
+		 $job = new load('workers/rankings', $job->workload());	
+
+		 return $job;
 	}
 
 	// Collect domain pagerank
