@@ -29,16 +29,18 @@ class domains
 	// Contains the count(int) of domains in the main object
 	public $total;	
 	
-	
-	function __construct()
-	{  	
+	function __construct($empty = false)
+	{
 		// Establish MySQL connection & select database
 		mysql_connect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS) or die ('Error connecting to mysql');
-		mysql_select_db(DB_NAME_SERPS);
-		
-		// Select keywords
-		$this->getDomains();   
-	} 
+		mysql_select_db(DB_NAME_SERPS);	
+	  	
+		if(!$empty)
+		{                             
+			// Select domains
+			$this->getDomains();   
+		}	
+	} 	
 	
 	// Called when script execution has ended
 	function __destruct() 
@@ -108,11 +110,9 @@ class domains
 					FROM 
 						domains 
 					WHERE 
-						check_out = '0'
+						".STAT."_status != '".date("Y-m-d")."'
 
-						 {$where}  
-					LIMIT 
-						".AMOUNT; 
+						 {$where}"; 
 					   																				
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING DOMAINS: ".mysql_error());

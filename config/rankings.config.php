@@ -30,8 +30,11 @@
 	// The type of keyword to update ('daily' or 'hourly')
 	define("SCHEDULE", $argv[3]);	 
 	
-	// Amount of keywords to scrape
-	define("KEYWORD_AMOUNT", $argv[4]);	    
+	// // Amount of keywords to scrape
+	// define("KEYWORD_AMOUNT", $argv[4]);	    
+
+	// Amount of keywords/domains per job
+	define("JOB_SIZE", $argv[4]);		
 	
 	// Scrape just new keywords for above engine if set to true
 	define("NEW_KEYWORDS", $argv[5]);	 
