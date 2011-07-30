@@ -40,7 +40,10 @@
 		define("ENGINE", $argv[4]);	
 		
 		// Data model to use
-		define("SCHEDULE", $argv[5]);						
+		define("SCHEDULE", $argv[5]);	
+		
+		// Data model to use
+		define("ONLY_USER", $argv[6]);							
 	}
 	else
 	{
