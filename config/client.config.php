@@ -142,4 +142,4 @@
 	
 
 	// the command: controller | task | job size | options
-	php hub.php client rankings 100 google
+	//php hub.php client rankings 100 google
