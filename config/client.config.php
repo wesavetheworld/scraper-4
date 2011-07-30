@@ -42,11 +42,11 @@
 		// Data model to use
 		define("SCHEDULE", $argv[5]);
 		
-		// Scrape just new keywords for above engine if set to true
-		define("NEW_KEYWORDS", $argv[6]);			
-		
 		// Data model to use
-		define("ONLY_USER", $argv[7]);							
+		define("ONLY_USER", $argv[6]);
+
+		// Scrape just new keywords for above engine if set to true
+		define("NEW_KEYWORDS", $argv[7]);										
 	}
 	else
 	{

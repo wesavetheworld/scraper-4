@@ -131,9 +131,7 @@ class keywords
 						 	domains.user_id,
 							domains.group_id,
 							domains.domain_id,
-							keywords.keyword_id 
-						LIMIT 
-							".KEYWORD_AMOUNT;		
+							keywords.keyword_id";		
 		}
 		// Normal select statement
 		else
@@ -155,6 +153,8 @@ class keywords
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
 							keywords.status !='suspended'
+						AND
+							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
 						AND
 	                    		(keywords.schedule = '".SCHEDULE."' 
 							AND
