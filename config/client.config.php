@@ -37,10 +37,10 @@
 		define("MODEL", "keywords");
 		
 		// Data model to use
-		define("ENGINE", $argv[3]);	
+		define("ENGINE", $argv[4]);	
 		
 		// Data model to use
-		define("SCHEDULE", $argv[4]);						
+		define("SCHEDULE", $argv[5]);						
 	}
 	else
 	{
