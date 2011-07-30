@@ -170,9 +170,12 @@ class rankings
 					filesize($keyword->searchFile) < 500)
 				{      
 					// Add the keyword's search page url to scraping list
-					$urls[$keyword->searchHash] = $keyword->url;   
+					$urls[$keyword->searchHash] = $keyword->url; 
+					
+					// This is a new search
+					$keyword->searchType = "new";
 				}
-			}   	
+			}  	
 		} 
 				
 		// Return the url array
@@ -187,9 +190,13 @@ class rankings
 		{  			        			
 			// If the content has valid headers
 			if($scrapedContent['status'] == 'success')
-			{   				 				
-				// Save the new search file
-				$this->searchSave($keyword, $scrapedContent);
+			{   
+				// If the search is new for the first keyword
+				if($keyword->searchType == "new")
+				{				 				
+					// Save the new search file
+					$this->searchSave($keyword, $scrapedContent);
+				}	
 				
 				// Set the new search as the source
 				$search = $scrapedContent['output']; 						
@@ -213,6 +220,7 @@ class rankings
 	{   
 		// Set header information to be saved with output
 		$content  = "code: ".$scrapedContent['httpInfo']['http_code'];
+		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
 		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
 		$content .= "\n\n".$scrapedContent['output'];
 		
