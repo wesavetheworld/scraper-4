@@ -50,21 +50,21 @@
 
 
 
-	// The type of keyword to update ('daily' or 'hourly')
-	define("SCHEDULE", $argv[3]);	 
+	// // The type of keyword to update ('daily' or 'hourly')
+	// define("SCHEDULE", $argv[3]);	 
 	
-	// // Amount of keywords to scrape
-	// define("KEYWORD_AMOUNT", $argv[4]);	    
+	// // // Amount of keywords to scrape
+	// // define("KEYWORD_AMOUNT", $argv[4]);	    
 		
 	
-	// Scrape just new keywords for above engine if set to true
-	define("NEW_KEYWORDS", $argv[5]);	 
+	// // Scrape just new keywords for above engine if set to true
+	// define("NEW_KEYWORDS", $argv[5]);	 
 	                                 
-	// Only update keywords for this user
-	define("ONLY_USER", $argv[6]);
+	// // Only update keywords for this user
+	// define("ONLY_USER", $argv[6]);
 	
-	// Killswitch won't activate in zombie mode
-	define("ZOMBIE", $argv[7]);	
+	// // Killswitch won't activate in zombie mode
+	// define("ZOMBIE", $argv[7]);	
 	
 	// ===========================================================================// 
 	// ! General settings                                                         //

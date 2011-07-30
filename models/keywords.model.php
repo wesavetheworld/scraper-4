@@ -113,8 +113,7 @@ class keywords
 						WHERE 
 							 keywords.user_id IN ('".ONLY_USER."')
 						ORDER BY
-							keywords.".ENGINE."_status							
-						LIMIT ";
+							keywords.".ENGINE."_status";
 														  					
         } 
 		// If selecting only new keywords
