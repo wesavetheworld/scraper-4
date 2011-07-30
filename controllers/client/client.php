@@ -113,8 +113,16 @@ class client
 					// Serialize items and add to job data
 					$data[MODEL] = $batch;
 
-					// Add engine to job data
-					$data['engine'] = ENGINE;
+					if(MODEL == "keywords")
+					{
+						// Add engine to job data
+						$data['engine'] = ENGINE;
+					}
+					else
+					{
+						// Add engine to job data
+						$data['engine'] = ENGINE;
+					}
 
 					// Serialize job data for transport
 					$data = serialize($data);

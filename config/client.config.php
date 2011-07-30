@@ -34,7 +34,13 @@
 	if(TASK == "rankings")
 	{
 		// Data model to use
-		define("MODEL", "keywords");		
+		define("MODEL", "keywords");
+		
+		// Data model to use
+		define("ENGINE", $argv[3]);	
+		
+		// Data model to use
+		define("SCHEDULE", $argv[4]);						
 	}
 	else
 	{
