@@ -167,7 +167,10 @@ class keywords
 							domains.group_id,
 							domains.domain_id,
 							keywords.keyword_id"; 
-		}                              
+		}   
+		
+		echo $query;
+		die();                           
 																																
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());

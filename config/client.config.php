@@ -49,7 +49,6 @@
 	}
 
 
-
 	// // The type of keyword to update ('daily' or 'hourly')
 	// define("SCHEDULE", $argv[3]);	 
 	
