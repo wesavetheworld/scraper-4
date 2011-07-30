@@ -223,6 +223,8 @@ class rankings
 		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
 		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
 		$content .= "\n\n".$scrapedContent['output'];
+
+		time_nanosleep(0, 250000);
 		
 		// Save search results to a file
 		file_put_contents($keyword->searchFile, $content);		
