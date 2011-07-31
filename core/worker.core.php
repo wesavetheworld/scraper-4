@@ -28,6 +28,13 @@ class worker
 		// The main worker loop
 		$this->daemon();
 	}
+	
+	// When script is ended
+	function __destruct() 
+	{
+		// Unregister job types with jobServer
+		$this->gm->unregisterAll();
+	}	
 
 	// ===========================================================================// 
 	// ! Gearman worker checkin and job type descriptions                         //
@@ -57,7 +64,7 @@ class worker
 		
 		// Register alexa function with gearman server
 		$this->gm->addFunction("alexa", "worker::alexa"); 	
-	}	
+	}		
 	
 	// ===========================================================================// 
 	// ! Infinite daemon loop                                                     //
