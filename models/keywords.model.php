@@ -162,12 +162,11 @@ class keywords
 							OR
 								keywords.calibrate != '0')
 						ORDER BY
-							keywords.".ENGINE."_status,
+							keywords.".ENGINE."_status ASC,
 						 	domains.user_id,
 							domains.group_id,
 							domains.domain_id,
-							keywords.keyword_id
-						ASC"; 
+							keywords.keyword_id"; 
 		}   
 																												
 		// Execute query and return results			
