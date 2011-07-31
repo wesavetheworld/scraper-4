@@ -258,7 +258,7 @@ class rankings
 		}		
 	}
 
-	// Determine the correct parsing regex pattern to use
+	// Determine the correct regex pattern to use for parsing
 	public function parsePattern()
 	{
 		// Search engine is google
