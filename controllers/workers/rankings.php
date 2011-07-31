@@ -228,7 +228,7 @@ class rankings
 		$content = "No at symbols here bitch! ";
 		
 		// Save search results to a file
-		file_put_contents($keyword->searchFile, $content);		
+		file_put_contents($keyword->searchFile, $content, LOCK_EX);		
 	} 
 	
 	// If a keyword just switch result amount (10/100)
