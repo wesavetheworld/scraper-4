@@ -162,7 +162,7 @@ class keywords
 							OR
 								keywords.calibrate != '0')
 						ORDER BY
-							keywords.".ENGINE."_status ASC,
+							keywords.".ENGINE."_status DESC,
 						 	domains.user_id,
 							domains.group_id,
 							domains.domain_id,
