@@ -104,9 +104,11 @@ class rankings
 				// Save search results to a file
 				file_put_contents($keyword->searchFile, $content);	
 			}
+			
 			return 'done';
-
-
+			
+			foreach($keywords->keywords as $key => &$keyword)
+			{
 				// If a valid search results page can be loaded (new scrape or saved file)
 				if($searchResults = $this->getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
 				{  					
