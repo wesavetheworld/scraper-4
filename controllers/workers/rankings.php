@@ -226,7 +226,7 @@ class rankings
 
 		$content = "hey look at this! ";
 		
-		$count = 100
+		$count = 100;
 		while($count != 0)
 		{
 			$content .= $content;
