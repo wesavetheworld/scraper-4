@@ -163,7 +163,7 @@ class keywords
 								keywords.calibrate != '0')
 						ORDER BY
 							keywords.".ENGINE."_status DESC,
-							keywords.keywords,
+							keywords.keyword,
 						 	domains.user_id"; 
 		}   
 																												
