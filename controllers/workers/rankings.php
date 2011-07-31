@@ -219,13 +219,13 @@ class rankings
 	// Save search results to a file
 	public function searchSave($keyword, $scrapedContent)
 	{   
-		// // Set header information to be saved with output
-		// $content  = "code: ".$scrapedContent['httpInfo']['http_code'];
-		// $content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
-		// $content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
-		// $content .= "\n\n".$scrapedContent['output'];
+		// Set header information to be saved with output
+		$content  = "code: ".$scrapedContent['httpInfo']['http_code'];
+		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
+		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
+		$content .= "\n\n".$scrapedContent['output'];
 
-		$content = "No at symbols here bitch! ";
+		//$content = "No at symbols here bitch! ";
 		
 		// Save search results to a file
 		file_put_contents($keyword->searchFile, $content, LOCK_EX);		
