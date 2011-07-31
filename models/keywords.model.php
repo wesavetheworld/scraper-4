@@ -179,8 +179,6 @@ class keywords
 				// Test keyword for all required fields
 				if($keyword->keywordTest())
 				{
-					echo $keyword->date."\n";
-					die('end');
 
 					// Make the keyword save to be used in the url	
 					$keyword->urlSafeKeyword();				     				
@@ -205,9 +203,7 @@ class keywords
 			// Return the keyword array
 			return $keywords;
    		}	
-   		
-   		die('the end');   
-	}
+   			}
 	
 	// Check in and out keywords  
 	private function setCheckOut($status = '1')
