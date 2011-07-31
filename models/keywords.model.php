@@ -154,6 +154,8 @@ class keywords
 						WHERE 
 							keywords.status !='suspended'
 						AND
+							keywords.".ENGINE."_status = '2011-07-30'	
+						AND
 							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
 						AND
 	                    		(keywords.schedule = '".SCHEDULE."' 
