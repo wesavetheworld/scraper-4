@@ -60,10 +60,7 @@ class rankings
 		$this->engine = $jobData['engine'];
 	 		   	
 		// Call processing time
-		utilities::benchmark('keywords selected: '); 
-
-		// Connect to database
-		utilities::databaseConnect();		
+		utilities::benchmark('keywords selected: '); 		
 		        		        
 		// Loop for as long as there are keywords left
 		while($keywords->total > 0)
@@ -134,15 +131,18 @@ class rankings
 
 			// Call processing time
 			utilities::benchmark('Parse all content: ');  
-						
-			// Update finished keywords in DB
-			$keywords->updateKeywords();                
-			
-			// Call processing time
-			utilities::benchmark('update keywords: '); 
 			
 			echo "\nkeywords left: ".$keywords->total."\n";
 		}
+
+		// Connect to database
+		utilities::databaseConnect();
+
+		// Update finished keywords in DB
+		$keywords->updateKeywords();                
+		
+		// Call processing time
+		utilities::benchmark('update keywords: '); 		
 
 		// Retrun total execution time
 		return utilities::benchmark(' ', true, false, true); 		
