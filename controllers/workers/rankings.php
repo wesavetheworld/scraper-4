@@ -68,6 +68,12 @@ class rankings
 			// Check killswitch
 			utilities::checkStatus();
 			 		
+			// Connect to database
+			utilities::databaseConnect();
+
+		// Connect to database
+		utilities::databaseConnect();			
+					 		
 			// Create new scraping instance
 			$scrape = new scraper; 
 
