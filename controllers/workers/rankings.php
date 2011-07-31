@@ -49,7 +49,8 @@ class rankings
 	// ===========================================================================//	 
 	
 	public function rankings($jobData)
-	{  		
+	{  
+			
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);
 
@@ -81,7 +82,7 @@ class rankings
 			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
 									
 			// Execute the scraping
-			$scrape->curlExecute();
+			//$scrape->curlExecute();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ');
@@ -89,6 +90,23 @@ class rankings
 			// Loop through each keyword
 			foreach($keywords->keywords as $key => &$keyword)
 			{   
+
+
+				$test = "hey look at this! ";
+
+				$count = 100;
+				while($count != 0)
+				{
+					$content .= $test;
+					$count--;
+				}
+
+				// Save search results to a file
+				file_put_contents($keyword->searchFile, $content);	
+			}
+			return 'done';
+
+
 				// If a valid search results page can be loaded (new scrape or saved file)
 				if($searchResults = $this->getSearchResults($keyword, $scrape->results[$keyword->searchHash]))
 				{  					
@@ -223,16 +241,7 @@ class rankings
 		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
 		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
 		$content .= "\n\n".$scrapedContent['output'];
-
-		$content = "hey look at this! ";
 		
-		$count = 100;
-		while($count != 0)
-		{
-			$content .= $content;
-			$count--;
-		}
-
 		// Save search results to a file
 		file_put_contents($keyword->searchFile, $content);		
 	} 
