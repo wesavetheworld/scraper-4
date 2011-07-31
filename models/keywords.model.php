@@ -166,7 +166,8 @@ class keywords
 						 	domains.user_id,
 							domains.group_id,
 							domains.domain_id,
-							keywords.keyword_id"; 
+							keywords.keyword_id
+						DESC"; 
 		}   
 																												
 		// Execute query and return results			
