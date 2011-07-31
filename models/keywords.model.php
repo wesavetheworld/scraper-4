@@ -182,6 +182,7 @@ class keywords
 				if($keyword->keywordTest())
 				{
 					echo $keyword->date."\n";
+					die('end');
 
 					// Make the keyword save to be used in the url	
 					$keyword->urlSafeKeyword();				     				
