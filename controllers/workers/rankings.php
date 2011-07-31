@@ -49,8 +49,7 @@ class rankings
 	// ===========================================================================//	 
 	
 	public function rankings($jobData)
-	{  
-			
+	{  	
 		// Get the keywords from the job data				
 		$jobData = unserialize($jobData);
 
