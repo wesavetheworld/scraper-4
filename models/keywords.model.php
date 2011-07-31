@@ -167,7 +167,7 @@ class keywords
 							domains.group_id,
 							domains.domain_id,
 							keywords.keyword_id
-						DESC"; 
+						ASC"; 
 		}   
 																												
 		// Execute query and return results			
