@@ -198,7 +198,7 @@ class rankings
 				if($keyword->searchType == "new")
 				{				 				
 					// Save the new search file
-					//$this->searchSave($keyword, $scrapedContent);
+					$this->searchSave($keyword, $scrapedContent);
 				}	
 				
 				// Set the new search as the source
