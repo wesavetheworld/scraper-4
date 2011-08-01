@@ -186,8 +186,7 @@ class keywords
 						AND
 							keywords.".ENGINE."_status < '2011-08-01'	    				
 						ORDER BY
-							keywords.keyword
-							LIMIT 100"; 		
+							keywords.keyword"; 		
 																												
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
