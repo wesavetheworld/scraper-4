@@ -64,7 +64,7 @@ class client
 		if($items->$class)
 		{
 			// Call processing time
-			utilities::benchmark('items selected: ');
+			utilities::benchmark('items selected: ', "client.log");
 	   
 		 	// Keep track of item loops
 			$i = 0;
@@ -133,13 +133,13 @@ class client
 			}
 		
 			// Call processing time
-			utilities::benchmark("$job jobs defined: ");		
+			utilities::benchmark("$job jobs defined: ", "client.log");		
 		    
 			// Create the jobs
 		    $gmclient->runTasks(); 
    
 			// Call processing time
-			utilities::benchmark('All jobs completed: '); 
+			utilities::benchmark('All jobs completed: ', "client.log"); 
 		}	   	   	
         		        
 	  	// Finish execution

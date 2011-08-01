@@ -489,7 +489,7 @@ class keyword
 			$this->url  = "http://www.bing.com";
 			$this->url .= "/search?q=".$this->urlSafe;
 			
-  			// Check for a search page offset 
+				// Check for a search page offset 
 			$this->setSearchOffset();			
 			
 			// If search results page offset is present

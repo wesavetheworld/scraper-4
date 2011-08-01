@@ -90,7 +90,7 @@ class utilities
       
 	
 	// When called, keeps track of execution time since last call
-	public static function benchmark($description = false, $last = false, $reset = false, $return = false)
+	public static function benchmark($description = false, $log = false, $last = false, $reset = false, $return = false)
 	{
 		// Check benchmarking is turned on in the settings
 		if(BENCHMARK)
@@ -138,6 +138,13 @@ class utilities
 
 				print $description.$duration."\n";
 			}  
+
+			// If a log file has been defined
+			if($log)
+			{
+				// Write to log file
+				utilities::log($description, $log);			
+			}				
 			
 			// Check if script has exceded max execution time yet
 			if(!$last && $time - $firstTime >= MAX_EXECUTION_TIME)
@@ -152,7 +159,7 @@ class utilities
 	}  
 	 
 	// Return notation for the current part of the script
-	public static function notate($description)
+	public static function notate($description, $log = false)
 	{   
 		// If notation is turned on
 		if(NOTATION)
@@ -160,20 +167,24 @@ class utilities
 			// Print description to screen
 			print $description."\n";
 
-			// Write to log file
-			utilities::log($description);			
+			// If a log file has been defined
+			if($log)
+			{
+				// Write to log file
+				utilities::log($description, $log);			
+			}	
 		}			
 	}
 
 	// Log status to log file
-	public static function log($log)
-	{
-		// If a log file is defined in controller's config file
-		if(defined("LOG_FILE"))
+	public static function log($data, $logFile)
+	{	
+		// If a log file has been defined
+		if($logFile)
 		{
 			// Open the log file for writing
-			file_put_contents(LOG_FILE, $log."\n", FILE_APPEND);					
-		}			
+			file_put_contents(LOG_DIRECTORY.$logFile, $data."\n", FILE_APPEND);					
+		}	
 	}
 	
 	// Convert large bytes into readable versions

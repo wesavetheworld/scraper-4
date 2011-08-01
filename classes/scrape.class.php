@@ -137,7 +137,7 @@ class scraper
 		if($this->scrapesBad > 0)
 		{
 	 		// Log current state
-			utilities::notate("Bad scrapes: ".$this->scrapesBad." of ".$this->scrapesTotal." total scrapes");		 
+			utilities::notate("Bad scrapes: ".$this->scrapesBad." of ".$this->scrapesTotal." total scrapes", "scrape.log");		 
 		}	
 		
 		// Clean up the curl_multi handle
@@ -497,6 +497,9 @@ class scraper
 		{
 			$query = "UPDATE proxies SET blocked_".$this->engine." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+
+	 		// Log current state
+			utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
 		}
 		
 		// Update blocked proxies
@@ -504,6 +507,9 @@ class scraper
 		{
 			$query = "UPDATE proxies SET status = 'disabled' WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+
+	 		// Log current state
+			utilities::notate("Proxies denied: ".count($this->proxiesDenied), "scrape.log");				
 		}
 		
 		// Update timed out proxies
@@ -511,6 +517,9 @@ class scraper
 		{
 			$query = "UPDATE proxies SET timeouts = timeouts + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+
+	 		// Log current state
+			utilities::notate("Proxies timedout: ".count($this->proxiesTimeout), "scrape.log");				
 		}				
 	}
 }
