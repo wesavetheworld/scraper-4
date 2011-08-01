@@ -149,9 +149,8 @@ class rankings
 
 		echo "keywords updated: ".count($keywords->updated);
 
-		sleep(5);
 		
-		print_r($keywords->updated); 
+//		print_r($keywords->updated); 
 
 
 		// Update finished keywords in DB
