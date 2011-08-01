@@ -484,6 +484,13 @@ class scraper
 					$this->proxiesDenied[] = $this->results[$i]['proxy_info']['proxy'];
 				}	
    			}
+			// Not a timeout response
+			else
+			{
+				// Nothing returned  from proxy, just dead
+				utilities::notate("\tsom other error", "scrape.log");					
+
+			}   			
  
 			// Set the content scrape as a failure
 			$this->results[$i]['status'] = 'error';  

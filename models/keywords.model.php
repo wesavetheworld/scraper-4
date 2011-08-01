@@ -166,6 +166,28 @@ class keywords
 							keywords.keyword,
 						 	domains.user_id"; 
 		}   
+
+			$query =   "SELECT 
+							keywords.keyword_id,
+							keywords.keyword,
+							keywords.user_id,
+							keywords.g_country,
+							keywords.notifications,
+							keywords.calibrate,
+							keywords.date,							
+							domains.domain_id,
+							domains.domain
+						FROM 
+							keywords
+						JOIN 
+							domains ON keywords.domain_id = domains.domain_id 
+						WHERE 
+							keywords.status !='suspended'
+						AND
+							keywords.".ENGINE."_status < '2011-08-01'	    				
+						ORDER BY
+							keywords.keyword
+							LIMIT 100"; 		
 																												
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
