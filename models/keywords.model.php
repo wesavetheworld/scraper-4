@@ -220,6 +220,10 @@ class keywords
 					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
 				}
 			} 
+			else
+			{
+				echo "nothing to select\n";
+			}
 			   					
 			// Return the keyword array
 			return $keywords;
