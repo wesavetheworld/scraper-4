@@ -492,6 +492,8 @@ class scraper
 	// Update proxies
 	private function updateProxies()
 	{  
+		utilities::notate("updating proxy section", "scrape.log");			
+
 		// Update blocked proxies
 		if(!empty($this->proxiesBlocked))
 		{
