@@ -147,6 +147,13 @@ class rankings
 		// Connect to database
 		utilities::databaseConnect();
 
+		echo "keywords updated: ".count($keywords->updated);
+
+		sleep(5);
+		
+		print_r($keywords->updated); 
+
+
 		// Update finished keywords in DB
 		$keywords->updateKeywords();                
 		
