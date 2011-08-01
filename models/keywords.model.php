@@ -184,7 +184,7 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
-							keywords.google_status = '0000-00-00 00:00:00"; 
+							keywords.google_status = '0000-00-00 00:00:00'"; 
 																												
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
