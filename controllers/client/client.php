@@ -99,7 +99,7 @@ class client
 				$i++;				
 			
 				// If item batch amount has reached job size limit
-				if($i == JOB_SIZE || $i == $items->total - 1)
+				if($i == JOB_SIZE || $i == ($items->total - 1))
 				{   
 					// Set item count object
 					$batch->total = $i;
