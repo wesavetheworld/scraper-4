@@ -124,7 +124,7 @@ class rankings
 						$keywords->updated[$key] = $keyword;
 
 						// Remove keyword from keyword id array
-						unset($keywords->keywords[$key]);  
+						unset($keywords->keywords->$key);  
 					    
 						// Decrease keywords remaining by one
 						$keywords->total--; 
