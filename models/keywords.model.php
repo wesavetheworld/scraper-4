@@ -220,15 +220,15 @@ class keywords
 					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
 				}
 			} 
-			else
-			{
-				echo "nothing to select\n";
-			}
 			   					
 			// Return the keyword array
 			return $keywords;
    		}	
-   			}
+			else
+			{
+				echo "nothing to select\n";
+			}   		
+   	}
 	
 	// Check in and out keywords  
 	private function setCheckOut($status = '1')
