@@ -68,7 +68,7 @@ class client
 	   
 		 	// Keep track of item loops
 			$i = 0;
-		
+				
 			// Loop through all items		
 			foreach($items->$class as &$item)
 			{       
@@ -99,7 +99,7 @@ class client
 				$i++;				
 			
 				// If item batch amount has reached job size limit
-				if($i == JOB_SIZE || $i == $items->total)
+				if($i == JOB_SIZE || $i == $items->total - 1)
 				{   
 					// Set item count object
 					$batch->total = $i;
