@@ -119,6 +119,12 @@ class rankings
 												
 						// Calibrate keyword ranking (10/100 results)
 						$this->calibration($keyword);   
+
+						// Add keyword to completed list
+						$keywords->updated[$key] = $keywords->keyword[$key];
+
+						// Remove keyword from keyword id array
+						unset($keywords->keyword[$key]);  
 					    
 						// Decrease keywords remaining by one
 						$keywords->total--; 

@@ -278,7 +278,7 @@ class keywords
 	public function updateKeywords()
 	{
 		// Loop through finished keywords object
-		foreach($this->keywords as $key => &$keyword)
+		foreach($this->updated as $key => &$keyword)
 		{	 
 			// If this keyword has no ranking yet
 			if(!isset($keyword->rank) && $keyword->rank != '0')
