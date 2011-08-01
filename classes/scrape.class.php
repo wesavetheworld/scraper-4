@@ -42,6 +42,9 @@ class scraper
 	// Will contain any proxies that timeout
 	private $proxiesTimeout = array(); 
 	
+	// Will contain any proxies that timeout
+	private $proxiesDead = array(); 
+		
 	// The amount of scrapes that fail
 	private $scrapesBad = 0; 
 	
@@ -453,6 +456,12 @@ class scraper
 						$this->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];
 					}	
 				}
+				// Not a timeout response
+				else
+				{
+					// Nothing returned  from proxy, just dead
+					$this->proxiesDead[] = $this->results[$i]['proxy_info']['proxy'];
+				}
 			}			
 			// If error code 302 block encountered
 			elseif($this->results[$i]['httpInfo']['http_code'] == 302 
@@ -522,7 +531,17 @@ class scraper
 
 	 		// Log current state
 			utilities::notate("Proxies timedout: ".count($this->proxiesTimeout), "scrape.log");				
-		}				
+		}	
+		
+		// Update timed out proxies
+		if(count($this->proxiesDead) > 0)
+		{
+			$query = "UPDATE proxies SET dead = dead + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
+			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+
+	 		// Log current state
+			utilities::notate("Proxies dead: ".count($this->proxiesDead), "scrape.log");				
+		}						
 	}
 }
 
