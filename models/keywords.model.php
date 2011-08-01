@@ -186,7 +186,7 @@ class keywords
 						WHERE 
 							keywords.status !='suspended'
 						AND
-							keywords.".ENGINE."_status < '2011-07-31'"; 
+							keywords.".ENGINE."_status = '0000-00-00 00:00:00'"; 
 																												
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
