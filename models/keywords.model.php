@@ -158,9 +158,9 @@ class keywords
 						AND
 	                    	(keywords.schedule = '".SCHEDULE."' 
 						AND
-								keywords.".ENGINE."_status < '{$time}'
-							OR
-								keywords.calibrate != '0')
+							keywords.".ENGINE."_status < '{$time}'
+						OR
+							keywords.calibrate != '0')
 						ORDER BY
 							keywords.".ENGINE."_status DESC,
 							keywords.keyword,

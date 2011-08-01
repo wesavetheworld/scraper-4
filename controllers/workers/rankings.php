@@ -255,7 +255,11 @@ class rankings
 		{   
 			// No calibation needed
 			$keyword->calibrate = 0;
-		}		
+		}	
+		
+		// JUST DURING THE FIRST LAUNCH REMOVE LATER!!!!!!!!!!!!!!!!!
+		// No calibation needed
+		$keyword->calibrate = 0;			
 	}
 
 	// Determine the correct regex pattern to use for parsing
