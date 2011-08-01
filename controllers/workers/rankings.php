@@ -41,7 +41,7 @@ class rankings
 		utilities::benchmark(false, false, false, true);
 
 		// Log status
-		utilities::notate("Job started", "worker.log");		  		   	 			
+		utilities::notate("Job started", "rankings.log");		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -60,7 +60,7 @@ class rankings
 		$this->engine = $jobData['engine'];
 	 		   	
 		// Call processing time
-		utilities::benchmark('keywords selected: ', "worker.log"); 		
+		utilities::benchmark('keywords selected: ', "rankings.log"); 		
 		        		        
 		// Loop for as long as there are keywords left
 		while($keywords->total > 0)
@@ -84,7 +84,7 @@ class rankings
 			$scrape->curlExecute();
 			
 			// Call processing time
-			utilities::benchmark('scraping content: ', "worker.log");
+			utilities::benchmark('scraping content: ', "rankings.log");
 			
 			// Loop through each keyword
 			foreach($keywords->keywords as $key => &$keyword)
@@ -133,7 +133,7 @@ class rankings
 			} 
 
 			// Call processing time
-			utilities::benchmark('Parse all content: ', "worker.log");  
+			utilities::benchmark('Parse all content: ', "rankings.log");  
 			
 			echo "\nkeywords left: ".$keywords->total."\n";
 		}
@@ -145,10 +145,10 @@ class rankings
 		$keywords->updateKeywords();                
 		
 		// Call processing time
-		utilities::benchmark('update keywords: ', "worker.log"); 		
+		utilities::benchmark('update keywords: ', "rankings.log"); 		
 
 		// Retrun total execution time
-		return utilities::benchmark(' ', "worker.log", true, false, true); 		
+		return utilities::benchmark(' ', "rankings.log", true, false, true); 		
 	} 
 	
 	// ===========================================================================// 
