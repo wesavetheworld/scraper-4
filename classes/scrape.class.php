@@ -495,7 +495,7 @@ class scraper
 		utilities::notate("updating proxy section", "scrape.log");			
 
 		// Update blocked proxies
-		if(!empty($this->proxiesBlocked))
+		if(count($this->proxiesBlocked) > 0)
 		{
 			$query = "UPDATE proxies SET blocked_".$this->engine." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
@@ -505,7 +505,7 @@ class scraper
 		}
 		
 		// Update blocked proxies
-		if(!empty($this->proxiesDenied))
+		if(count($this->proxiesDenied) > 0)
 		{
 			$query = "UPDATE proxies SET status = 'disabled' WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
@@ -515,7 +515,7 @@ class scraper
 		}
 		
 		// Update timed out proxies
-		if(!empty($this->proxiesTimeout))
+		if(count($this->proxiesTimeout) > 0)
 		{
 			$query = "UPDATE proxies SET timeouts = timeouts + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
 			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
