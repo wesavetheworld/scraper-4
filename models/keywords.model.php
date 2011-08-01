@@ -184,8 +184,6 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
-							keywords.status !='suspended'
-						AND
 							keywords.".ENGINE."_status = '0000-00-00 00:00:00'"; 
 																												
 		// Execute query and return results			
