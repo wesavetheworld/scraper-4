@@ -250,7 +250,8 @@ class keywords
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
 		{    
-			$date = $row->date; 
+
+			$lastRank = $this->keywords->{$row->keyword_id}->lastRank;
 			
 			// If there is a row for today
 			if($row->date == DATE_TODAY)
@@ -261,7 +262,7 @@ class keywords
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;				
 			} 
 			// If there was no rank for today and there is one for yesterday
-			elseif(!$this->keywords->{$row->keyword_id}->lastRank && $row->date == DATE_YESTERDAY)
+			elseif(!$lastRank || $lastRank == '0')
 			{
 				echo "\nRankings for yesterday\n";
 
