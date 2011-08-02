@@ -290,13 +290,17 @@ class keywords
 			// If keyword has not been updated today
 			if($keyword->date != DATE_TODAY)
 			{   
+				utilities::notate("insert", "rankings.log");		  		   	 			
+
 				// Insert a new ranking row
-				$this->insertRanking($keyword);
+				$keyword->updated = $this->insertRanking($keyword);
 			}
 			else
 			{    
+				utilities::notate("update", "rankings.log");		  		   	 			
+
 				// Update an existing ranking row
-				$this->updateRanking($keyword);
+				$keyword->updated = $this->updateRanking($keyword);
 			}
 			
 			// If updating google
@@ -306,22 +310,26 @@ class keywords
 				$setNotify = " notify = '".$keyword->notify."',";
 			}
 			
-			// Update keywords table with update time and notifications
-			$query = "	UPDATE 
-							keywords 
-						SET 
-					  		$setNotify 
-					  		".$keyword->engine."_status = NOW(),  
-					  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
-							calibrate = '".$keyword->calibrate."',
-					 		check_out = '0',
-					  		time = NOW(), 
-					  		date = '".DATE_TODAY."' 
-					  WHERE 
-					  	keyword_id='".$keyword->keyword_id."'";  
-										  
-		    // Execute update query
-			$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()); 
+			// If keyword's tracking data was updated successfully
+			if($keyword->updated)
+			{
+				// Update keywords table with update time and notifications
+				$query = "	UPDATE 
+								keywords 
+							SET 
+						  		$setNotify 
+						  		".$keyword->engine."_status = NOW(),  
+						  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
+								calibrate = '".$keyword->calibrate."',
+						 		check_out = '0',
+						  		time = NOW(), 
+						  		date = '".DATE_TODAY."' 
+						  WHERE 
+						  	keyword_id='".$keyword->keyword_id."'";  
+											  
+			    // Execute update query
+				$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()); 
+			}	
 			
 			// If keyword update successful
 			if($result)
@@ -331,7 +339,13 @@ class keywords
 				
 				// Remove keyword from keyword array
 				unset($this->keywords->$key);        
-			}	
+			}
+			// Keyword update failed	
+			else
+			{
+				// Log status
+				utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
+			}
    		}
 	} 
 	
@@ -351,7 +365,13 @@ class keywords
 					 	date='".DATE_TODAY."'";	
 		
 		// Execute update query
-		mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());				
+		$result = mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
+		
+		// If update worked
+		if($result)
+		{
+			return true;				
+		}	
 	}
 
 	// Insert a new row into tracking table with new rankings
@@ -373,10 +393,14 @@ class keywords
 			          )";
 		
 		// Execute insert query 
-		mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());		
-	}	
-	   
-	
+		$result = mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
+		
+		// If insert worked
+		if($result)
+		{
+			return true;				
+		}		
+	}	   
 }
 
 // ===========================================================================// 
