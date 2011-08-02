@@ -253,14 +253,14 @@ class keywords
 			$date = $row->date; 
 			
 			// If there is a row for today
-			if($row->date = DATE_TODAY)
+			if($row->date == DATE_TODAY)
 			{ 
 				// Add ranking object to rankings array
 				//$keywords[$row->keyword_id]->lastRank = $row->$position;				
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;				
 			} 
 			// If there was no rank for today and there is one for yesterday
-			elseif(!$this->keywords->{$row->keyword_id}->lastRank && $row->date = DATE_YESTERDAY)
+			elseif(!$this->keywords->{$row->keyword_id}->lastRank && $row->date == DATE_YESTERDAY)
 			{
 			 	// Add ranking object to rankings array
 				//$keywords[$row->keyword_id]->lastRank = $row->$position;   
