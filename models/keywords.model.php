@@ -465,6 +465,8 @@ class keyword
 			// Search by 100 results
 			$num = 100;
 		} 
+		
+		utilities::notate("Result count: ". $num, "rankings.log");		  		   	 			
 				 
 		// Set search result total
 		$this->resultCount = $num;
