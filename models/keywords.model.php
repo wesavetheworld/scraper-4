@@ -179,12 +179,13 @@ class keywords
 				// Test keyword for all required fields
 				if($keyword->keywordTest())
 				{
-
 					// Make the keyword save to be used in the url	
 					$keyword->urlSafeKeyword();				     				
 
 					// Determine whether to grab 10 or 100 results per search 
 					$keyword->setResultsCount();
+
+					echo "count: ".$this->resultCount."\n";
 					
 					// Set a unique keyword reference (fix for serializing objects)
 					$keyword->uniqueId();	
