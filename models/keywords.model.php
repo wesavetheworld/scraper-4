@@ -185,8 +185,6 @@ class keywords
 					// Determine whether to grab 10 or 100 results per search 
 					$keyword->setResultsCount();
 
-					echo "count: ".$this->resultCount."\n";
-					
 					// Set a unique keyword reference (fix for serializing objects)
 					$keyword->uniqueId();	
 					
@@ -466,6 +464,8 @@ class keyword
 			// Search by 100 results
 			$num = 100;
 		} 
+
+		echo "last: ".$this->lastRank." switch at: ".NUM_SWITCH_THRESHHOLD." engine: ".$this->engine."\n";
 		
 		utilities::notate("Result count: ". $num, "rankings.log");		  		   	 			
 				 
