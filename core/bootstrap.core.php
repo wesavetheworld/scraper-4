@@ -87,7 +87,8 @@ class bootstrap
 			// If this is a worker instance
 			elseif($this->instanceType == "worker")
 			{
-		
+				// Assign the worker elastic ip to this instance
+				$this->assignIp(WORKER_IP);	
 			}
 		}	
 	}
