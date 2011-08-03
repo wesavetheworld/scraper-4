@@ -54,10 +54,7 @@ class client
    		$class = MODEL;
 		
 		// Select all items from db to update
-		$items = new $class();  
-
-		print_r($items);
-		die();
+		$items = new $class(); 
 
 		define("TOTAL", $items->total);
 	   		
