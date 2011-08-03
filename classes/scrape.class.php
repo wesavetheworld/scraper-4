@@ -499,9 +499,9 @@ class scraper
 			$this->scrapesBad++;
 		   
 		 	// Log current state
-			utilities::notate("\tcode: ".$this->results[$i]['httpInfo']['http_code'], "scrape.log");					
-			utilities::notate("\tsize: ".$this->results[$i]['httpInfo']['size_download'], "scrape.log");
-			utilities::notate("\tproxy source: ".$this->results[$i]['proxy_info']['source'], "scrape.log");			 
+			//utilities::notate("\tcode: ".$this->results[$i]['httpInfo']['http_code'], "scrape.log");					
+			//utilities::notate("\tsize: ".$this->results[$i]['httpInfo']['size_download'], "scrape.log");
+			//utilities::notate("\tproxy source: ".$this->results[$i]['proxy_info']['source'], "scrape.log");			 
 		} 	
 	}
 	

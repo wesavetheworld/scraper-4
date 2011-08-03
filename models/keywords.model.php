@@ -205,11 +205,7 @@ class keywords
 			   					
 			// Return the keyword array
 			return $keywords;
-   		}	
-			else
-			{
-				echo "nothing to select\n";
-			}   		
+   		}	  		
    	}
 	
 	// Check in and out keywords  
@@ -257,15 +253,12 @@ class keywords
 			// If there is a row for today
 			if($row->date == DATE_TODAY)
 			{ 
-				echo "\nRankings for today\n";
 				// Add ranking object to rankings array
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
 			} 
 			// If there was no rank for today and there is one for yesterday
 			elseif(!$lastRank)
 			{
-				echo "\nRankings for yesterday\n";
-
 			 	// Add ranking object to rankings array
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
 			} 
@@ -467,8 +460,6 @@ class keyword
 			// Search by 100 results
 			$num = 100;
 		} 
-
-		echo "last: ".$this->lastRank." switch at: ".NUM_SWITCH_THRESHHOLD." engine: ".$this->engine."\n";
 		
 		utilities::notate("Result count: ". $num, "rankings.log");		  		   	 			
 				 

@@ -149,9 +149,6 @@ class rankings
 
 		echo "keywords updated: ".count($keywords->updated);
 
-		
-//		print_r($keywords->updated); 
-
 
 		// Update finished keywords in DB
 		$keywords->updateKeywords();                
@@ -268,8 +265,6 @@ class rankings
 			// No calibation needed
 			$keyword->calibrate = 0;
 		}	
-
-		utilities::notate("Calibration: ". $keyword->calibrate, "rankings.log");		  		   	 			
 	}
 
 	// Determine the correct regex pattern to use for parsing
