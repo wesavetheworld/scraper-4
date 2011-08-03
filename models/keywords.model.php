@@ -269,8 +269,6 @@ class keywords
 			 	// Add ranking object to rankings array
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
 			} 
-
-			if()
 		}
 	}                                          
 	
