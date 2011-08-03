@@ -135,10 +135,9 @@ class keywords
 						WHERE 
 							keywords.".ENGINE."_status = '0000-00-00 00:00:00'	    				
 						ORDER BY
-						 	domains.user_id,
-							domains.group_id,
-							domains.domain_id,
-							keywords.keyword_id";		
+						 	keywords.".ENGINE."_status DESC,
+							keywords.keyword,
+						 	domains.user_id";		
 		}
 		// Normal select statement
 		else
@@ -173,11 +172,7 @@ class keywords
 							keywords.keyword,
 						 	domains.user_id"; 
 		}   		
-		
-		echo $query;
-		die();		
-				
-																												
+																							
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         
