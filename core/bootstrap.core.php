@@ -88,7 +88,7 @@ class bootstrap
 			elseif($this->instanceType == "worker")
 			{
 				// Assign the worker elastic ip to this instance
-				$this->assignIp(WORKER_IP);	
+				//$this->assignIp(WORKER_IP);	
 			}
 		}	
 	}
@@ -289,7 +289,7 @@ class bootstrap
 		if($this->instanceType == "worker")
 		{
 			// Number of proccesses to run
-			$numProcs = 10;
+			$numProcs = 0;
 
 			// Name of process
 			$name = "process_name=%(process_num)s\n";
