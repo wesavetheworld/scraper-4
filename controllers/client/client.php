@@ -128,7 +128,7 @@ class client
 					$data = serialize($data);
 	
 					// Define a new job for current batch
-				   	///$gmclient->addTask(TASK, $data, null, $job++);  		
+				   	$gmclient->addTask(TASK, $data, null, $job++);  		
 				} 			   		
 			}
 		
