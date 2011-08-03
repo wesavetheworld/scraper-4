@@ -299,7 +299,7 @@ class keywords
 			}
 			else
 			{    
-				utilities::notate("update", "rankings.log");		  		   	 			
+				utilities::notate("update for: ".DATE_TODAY, "rankings.log");		  		   	 			
 
 				// Update an existing ranking row
 				$keyword->updated = $this->updateRanking($keyword);
