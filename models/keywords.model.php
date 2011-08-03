@@ -253,7 +253,7 @@ class keywords
 			// If there is a row for today
 			if($row->date == DATE_TODAY)
 			{ 
-				echo "\nRankings for today".."\n";
+				echo "\nRankings for today\n";
 				// Add ranking object to rankings array
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
 			} 
