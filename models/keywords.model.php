@@ -173,6 +173,10 @@ class keywords
 							keywords.keyword,
 						 	domains.user_id"; 
 		}   		
+		
+		echo $query;
+		die();		
+				
 																												
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
