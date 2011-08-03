@@ -79,10 +79,6 @@ class rankings
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getKeywordUrls($keywords->keywords); 
-
-			print_r($scrape->urls);
-
-			die();
 									
 			// Execute the scraping
 			$scrape->curlExecute();
