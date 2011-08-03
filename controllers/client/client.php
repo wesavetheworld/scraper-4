@@ -56,6 +56,9 @@ class client
 		// Select all items from db to update
 		$items = new $class();  
 
+		print_r($items);
+		die();
+
 		define("TOTAL", $items->total);
 	   		
 		echo "items selected: ".$items->total."\n"; 
@@ -128,7 +131,7 @@ class client
 					$data = serialize($data);
 	
 					// Define a new job for current batch
-				   	$gmclient->addTask(TASK, $data, null, $job++);  		
+				   	///$gmclient->addTask(TASK, $data, null, $job++);  		
 				} 			   		
 			}
 		
