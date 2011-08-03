@@ -64,6 +64,13 @@ class keywords
 			// Select past ranking data for keywords
 			$this->selectRankings();   
 
+			// Loop through keywords
+			foreach($this->keywords as $keyword)
+			{
+				// Determine what type of results page to scrape for a keyword (10/100)
+				$keyword->setResultsCount();
+			}	
+
 		 	utilities::benchmark('keywords f: ');
 			 
 			// Get the total number of keywords selected
@@ -182,9 +189,6 @@ class keywords
 					// Make the keyword save to be used in the url	
 					$keyword->urlSafeKeyword();				     				
 
-					// Determine whether to grab 10 or 100 results per search 
-					$keyword->setResultsCount();
-
 					// Set a unique keyword reference (fix for serializing objects)
 					$keyword->uniqueId();	
 					
@@ -265,6 +269,8 @@ class keywords
 			 	// Add ranking object to rankings array
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
 			} 
+
+			if()
 		}
 	}                                          
 	
