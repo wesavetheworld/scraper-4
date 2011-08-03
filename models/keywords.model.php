@@ -285,15 +285,11 @@ class keywords
 			// If keyword has not been updated today
 			if($keyword->date != DATE_TODAY)
 			{   
-				utilities::notate("insert", "rankings.log");		  		   	 			
-
 				// Insert a new ranking row
 				$keyword->updated = $this->insertRanking($keyword);
 			}
 			else
 			{    
-				utilities::notate("update for: ".DATE_TODAY, "rankings.log");		  		   	 			
-
 				// Update an existing ranking row
 				$keyword->updated = $this->updateRanking($keyword);
 			}
@@ -460,9 +456,7 @@ class keyword
 			// Search by 100 results
 			$num = 100;
 		} 
-		
-		utilities::notate("Result count: ". $num, "rankings.log");		  		   	 			
-				 
+						 
 		// Set search result total
 		$this->resultCount = $num;
 	}
