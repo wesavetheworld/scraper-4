@@ -33,6 +33,9 @@ class client
 		
 		// Connect to database
 		utilities::databaseConnect();
+
+		echo DATE_TODAY;
+		die();
 	}
 	
 	// ===========================================================================// 

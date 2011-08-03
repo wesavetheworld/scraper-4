@@ -270,9 +270,6 @@ class rankings
 		}	
 
 		utilities::notate("Calibration: ". $keyword->calibrate, "rankings.log");		  		   	 			
-
-		
-					
 	}
 
 	// Determine the correct regex pattern to use for parsing
