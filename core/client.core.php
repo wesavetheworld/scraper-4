@@ -121,7 +121,7 @@ class client
 		$command = "php hub.php $controller $options >> ".LOG_DIRECTORY."$controller.log &";
 
 		// Execute command given
-		//exec($command);
+		exec($command);
 
 		echo "command executed: $command ";		
 	}
