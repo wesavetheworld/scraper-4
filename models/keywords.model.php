@@ -77,7 +77,7 @@ class keywords
 			$this->total = count($this->keywordIds);			
 			
 			// Update the keywords select as checked out
-			$this->setCheckOut('1');    	
+			//$this->setCheckOut('1');    	
 			
 			return $keywords;
 		}	
@@ -120,14 +120,23 @@ class keywords
 						WHERE 
 							 keywords.user_id IN ('".ONLY_USER."')
 						ORDER BY
-							keywords.".ENGINE."_status";
+							keywords.".ENGINE."_status,
+							keywords.keyword";
 														  					
         } 
 		// If selecting only new keywords
 		elseif(NEW_KEYWORDS)
 		{
 		 	$query =   "SELECT 
-							* 						
+							keywords.keyword_id,
+							keywords.keyword,
+							keywords.user_id,
+							keywords.g_country,
+							keywords.notifications,
+							keywords.calibrate,
+							keywords.date,							
+							domains.domain_id,
+							domains.domain							
 						FROM 
 							keywords
 						JOIN 
@@ -208,19 +217,19 @@ class keywords
    	}
 	
 	// Check in and out keywords  
-	private function setCheckOut($status = '1')
-	{
-		// Update keyword's check_out status
-		$query = "	UPDATE 
-						keywords 
-					SET 
- 						check_out = {$status}
-				  	WHERE 
-				  		keyword_id IN (".implode(",", $this->keywordIds).")";
+	// private function setCheckOut($status = '1')
+	// {
+	// 	// Update keyword's check_out status
+	// 	$query = "	UPDATE 
+	// 					keywords 
+	// 				SET 
+ // 						check_out = {$status}
+	// 			  	WHERE 
+	// 			  		keyword_id IN (".implode(",", $this->keywordIds).")";
 													  
-		// Execute update query
-		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
-	}                                                                                                 	 
+	// 	// Execute update query
+	// 	mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
+	// }                                                                                                 	 
 	
 	// Select keyword's ranking positions
 	private function selectRankings()
@@ -311,7 +320,6 @@ class keywords
 						  		".$keyword->engine."_status = NOW(),  
 						  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
 								calibrate = '".$keyword->calibrate."',
-						 		check_out = '0',
 						  		time = NOW(), 
 						  		date = '".DATE_TODAY."' 
 						  WHERE 
