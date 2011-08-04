@@ -41,7 +41,7 @@ class client
 			if(date("H:i") == "00:00")
 			{
 				// Update all keyword rankings
-				$this->run("client/rankings", "google all 100");
+				$this->run("client", "google all 100");
 				
 				// Update domain stats
 				$this->domainStats();
@@ -50,7 +50,7 @@ class client
 			elseif(date("H") != 00 && date("i") == 00)
 			{
 				// Update hourly keyword rankings
-				$this->run("client/rankings", "google hourly 100");
+				$this->run("client", "google hourly 100");
 			}
 			// Check for any new domains
 			elseif($this->checkNew(NEW_DOMAINS_FILE))
@@ -63,7 +63,7 @@ class client
 			if($this->checkNew(NEW_KEYWORDS_FILE))
 			{
 				// Update hourly keyword rankings
-				$this->run("client/rankings", "google all 100 new");			
+				$this->run("client", "google all 100 new");			
 			}	
 			
 			// Run cron tasks
