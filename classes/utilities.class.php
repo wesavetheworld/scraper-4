@@ -149,11 +149,11 @@ class utilities
 			// Check if script has exceded max execution time yet
 			if(!$last && $time - $firstTime >= MAX_EXECUTION_TIME)
 			{     
-				// Send any error notifications
-			 	utilities::reportErrors("Scraper max execution time exceeded.");			
+				// // Send any error notifications
+			 // 	utilities::reportErrors("Scraper max execution time exceeded.");			
 
-				// Stop the script 
-			  	utilities::complete();            
+				// // Stop the script 
+			 //  	utilities::complete();            
 			}  
 		}
 	}  
@@ -245,7 +245,7 @@ class utilities
 			echo $error."\n";
 			
 			// Write to log file
-			utilities::log($error);			  
+			utilities::log($error, 'client.log');			  
 			
 			// Add new error to error list
 			$errors .= $error;			  	
