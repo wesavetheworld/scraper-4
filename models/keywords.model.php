@@ -125,7 +125,7 @@ class keywords
 														  					
         } 
 		// If selecting only new keywords
-		elseif(NEW_KEYWORDS)
+		elseif(SCHEDULE == "new")
 		{
 		 	$query =   "SELECT 
 							keywords.keyword_id,
@@ -142,7 +142,9 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
-							keywords.".ENGINE."_status = '0000-00-00 00:00:00'	    				
+							keywords.".ENGINE."_status = '0000-00-00 00:00:00'
+						OR
+							keywords.calibrate != '0'	    				
 						ORDER BY
 						 	keywords.".ENGINE."_status DESC,
 							keywords.keyword,
@@ -171,11 +173,9 @@ class keywords
 						AND
 							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
 						AND
-	                    	(keywords.schedule = '".SCHEDULE."' 
+	                    	skeywords.schedule = '".SCHEDULE."' 
 						AND
 							keywords.".ENGINE."_status < '{$time}'
-						OR
-							keywords.calibrate != '0')
 						ORDER BY
 							keywords.".ENGINE."_status DESC,
 							keywords.keyword,

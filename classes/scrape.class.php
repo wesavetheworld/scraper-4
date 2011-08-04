@@ -71,6 +71,17 @@ class scraper
 	
 	// Final scraped content
 	public $results = array();  
+
+	function __construct()
+	{      
+		// Include keywords data model
+	 	//require_once('models/'.MODEL.'.model.php'); 
+
+	}	
+
+	// ===========================================================================// 
+	// ! Public Methods                                                           //
+	// ===========================================================================//
 	
 	// ===========================================================================// 
 	// ! Public Methods                                                           //
@@ -101,9 +112,7 @@ class scraper
 		
 		// Build curl request
 		$this->curlRequestBuild(); 
-		
-		//print_r($this->ch);die();
-						
+								
 		// Start performing the request
 		do
 		{

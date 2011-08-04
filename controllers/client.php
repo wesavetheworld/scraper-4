@@ -126,9 +126,20 @@ class client
 
 					// Serialize job data for transport
 					$data = serialize($data);
-	
-					// Define a new job for current batch
-				   	$gmclient->addTask(TASK, $data, null, $job++);  		
+
+					// If this is for new keywords and calibration
+					if(SCHEDULE == "new")
+					{
+						// Define a new high priority job for current batch
+				   		$gmclient->addTaskHigh(TASK, $data, null, $job++);						
+
+					}
+					// All other schedules
+					else
+					{
+						// Define a new job for current batch
+				   		$gmclient->addTask(TASK, $data, null, $job++);						
+					}	  		
 				} 			   		
 			}
 		
