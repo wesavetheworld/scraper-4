@@ -44,7 +44,7 @@ class keywords
 		// if(count($this->keywordIds))
 		// {    
 		// 	// Check any remaining keywords back in
-		// 	$this->setCheckOut('0');
+		//$this->setCheckOut('0');
 		// }  
 	}    
 	
@@ -76,8 +76,12 @@ class keywords
 			// Get the total number of keywords selected
 			$this->total = count($this->keywordIds);			
 			
-			// Update the keywords select as checked out
-			//$this->setCheckOut('1');    	
+			// If selecting new or keywords needing calibration
+			if(SCHEDULE == "new")
+			{
+				// Update the keywords select as checked out
+				$this->setCheckOut('1');    	
+			}	
 			
 			return $keywords;
 		}	
@@ -118,7 +122,7 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
-							 keywords.user_id IN ('".ONLY_USER."')
+							 keywords.user_id IN ('".ONLY_USER."') 
 						ORDER BY
 							keywords.".ENGINE."_status,
 							keywords.keyword";
@@ -142,9 +146,11 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
-							keywords.".ENGINE."_status = '0000-00-00 00:00:00'
-						OR
-							keywords.calibrate != '0'	    				
+							keywords.check_out != 1,
+						AND
+								(keywords.".ENGINE."_status = '0000-00-00 00:00:00'
+							OR
+								keywords.calibrate != '0')	    				
 						ORDER BY
 						 	keywords.".ENGINE."_status DESC,
 							keywords.keyword,
@@ -171,9 +177,11 @@ class keywords
 						WHERE 
 							keywords.status !='suspended'
 						AND
+							keywords.check_out != 1,
+						AND	
 							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
 						AND
-	                    	skeywords.schedule = '".SCHEDULE."' 
+	                    	keywords.schedule = '".SCHEDULE."' 
 						AND
 							keywords.".ENGINE."_status < '{$time}'
 						ORDER BY
@@ -217,19 +225,19 @@ class keywords
    	}
 	
 	// Check in and out keywords  
-	// private function setCheckOut($status = '1')
-	// {
-	// 	// Update keyword's check_out status
-	// 	$query = "	UPDATE 
-	// 					keywords 
-	// 				SET 
- // 						check_out = {$status}
-	// 			  	WHERE 
-	// 			  		keyword_id IN (".implode(",", $this->keywordIds).")";
+	private function setCheckOut($status = '1')
+	{
+		// Update keyword's check_out status
+		$query = "	UPDATE 
+						keywords 
+					SET 
+ 						check_out = {$status}
+				  	WHERE 
+				  		keyword_id IN (".implode(",", $this->keywordIds).")";
 													  
-	// 	// Execute update query
-	// 	mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
-	// }                                                                                                 	 
+		// Execute update query
+		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
+	}                                                                                                 	 
 	
 	// Select keyword's ranking positions
 	private function selectRankings()
@@ -320,6 +328,7 @@ class keywords
 						  		".$keyword->engine."_status = NOW(),  
 						  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
 								calibrate = '".$keyword->calibrate."',
+								check_out = 0,
 						  		time = NOW(), 
 						  		date = '".DATE_TODAY."' 
 						  WHERE 
