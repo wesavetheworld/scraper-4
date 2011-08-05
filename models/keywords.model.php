@@ -179,7 +179,7 @@ class keywords
 						AND
 							keywords.check_out != '1',
 						AND	
-							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
+							keywords.".ENGINE."_status != 'shit'	    				
 						AND
 	                    	keywords.schedule = '".SCHEDULE."' 
 						AND
