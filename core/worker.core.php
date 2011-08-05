@@ -57,10 +57,10 @@ class worker
 		$this->gm->addFunction("rankings", "worker::rankings");
 		
 		// Register new keyword rankings function with gearman server
-		$this->gm->addFunction("newRankings", "worker::rankings"); 	
+		$this->gm->addFunction("rankingsNew", "worker::rankings"); 	
 		
 		// Register keyword calibrate rankings function with gearman server
-		$this->gm->addFunction("calibration", "worker::rankings"); 				 
+		$this->gm->addFunction("rankingsCalibrate", "worker::rankings"); 				 
 
 		// Register pagerank function with gearman server
 		$this->gm->addFunction("pageRank", "worker::pageRank"); 
