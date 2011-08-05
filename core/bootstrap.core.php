@@ -325,7 +325,7 @@ class bootstrap
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 					
-		}	s
+		}	
 
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
