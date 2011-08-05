@@ -123,6 +123,6 @@ class client
 		// Execute command given
 		exec($command);
 
-		echo "command executed: $command ";		
+		utilities::notate("command: $command", "clientd.log");		  		   	 				
 	}
 }	
