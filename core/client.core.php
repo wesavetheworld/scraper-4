@@ -73,7 +73,7 @@ class client
 			$this->run("client", "rankingsNew 100 google");
 			
 			// Check for keywords needing calibration
-			$this->run("client", "rankingsCalibrate 100 google");							
+			//$this->run("client", "rankingsCalibrate 100 google");							
 			
 			// Run cron tasks
 			$this->run("tasks");	
