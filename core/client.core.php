@@ -50,7 +50,7 @@ class client
 				$this->domainStats();
 			}
 			// If not the first hour and its the first min
-			elseif(date("H") != "00" && date("i") == "00" || date("i") == "27")
+			elseif(date("H") != "00" && date("i") == "00" || date("i") == "34")
 			{
 				// Update hourly keyword rankings
 				$this->run("client", "rankings 100 google hourly");									
@@ -118,7 +118,7 @@ class client
 	private function run($controller, $options = false)
 	{
 		// Build the command to execute
-		$command = "php hub.php $controller $options >> /home/ec2-user/core/$controller.log &";
+		$command = "php hub.php $controller $options > /dev/null 2>/dev/null &";
 
 		// Execute command given
 		exec($command);
