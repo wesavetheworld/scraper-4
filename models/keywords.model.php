@@ -323,9 +323,11 @@ class keywords
 			if($keyword->date != DATE_TODAY)
 			{   
 				// Insert a new ranking row
-				$keyword->updated = $this->insertRanking($keyword);
+				$keyword->inserted = $this->insertRanking($keyword);
 			}
-			else
+			
+			// If keyword has been updated today or there was a duplicate error on insert 
+			if($keyword->date == DATE_TODAY || !$keyword->inserted)			
 			{    
 				// Update an existing ranking row
 				$keyword->updated = $this->updateRanking($keyword);
@@ -339,7 +341,7 @@ class keywords
 			}
 			
 			// If keyword's tracking data was updated successfully
-			if($keyword->updated)
+			if($keyword->inserted || $keyword->updated)
 			{
 				// Update keywords table with update time and notifications
 				$query = "	UPDATE 
