@@ -131,13 +131,13 @@ class client
 					if(TASK == "rankingsNew")
 					{
 						// Define a new high priority job for current batch
-				   		$gmclient->addTaskHighBackground(TASK, $data, null, $job++);						
+				   		$gmclient->addTaskHighBackground(TASK, $data, null, TASK.$job++);						
 					}
 					// All other schedules
 					else
 					{
 						// Define a new job for current batch
-				   		$gmclient->addTaskLowBackground(TASK, $data, null, $job++);						
+				   		$gmclient->addTaskLowBackground(TASK, $data, null, TASK.$job++);						
 					}	  		
 
 					// Create the jobs
