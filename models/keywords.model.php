@@ -146,11 +146,7 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE 
-							keywords.check_out != '1'							    				
-						AND
-							((keywords.".ENGINE."_status = '0000-00-00 00:00:00')
-						OR
-							(keywords.calibrate != '0'))								 
+keywords.".ENGINE."_status = '0000-00-00 00:00:00'							 
 						ORDER BY
 						 	keywords.".ENGINE."_status DESC,
 							keywords.keyword,
