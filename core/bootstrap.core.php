@@ -281,42 +281,53 @@ class bootstrap
     // Modify supervisord for this specific instance
 	private function editSupervisord()
 	{
-		// The command for supervisord to run
-		$command = "command=php /home/ec2-user/server.php run\n";
-
 		// If this is a worker instance
-		if($this->instanceType == "worker")
+		if($this->instanceType == "client")
 		{
-			// Number of proccesses to run
-			$numProcs = 10;
-
-			// Name of process
-			$name = "process_name=%(process_num)s\n";
+			// Add instance specific daemon info
+			$supervisord = "[program:theApp]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 			
 		}
 		// All other instance types
-		else
+		elseif($this->instanceType == "jobServer")
 		{
-			// Number of proccesses to run
-			$numProcs = 1;	
+			// Add instance specific daemon info
+			$supervisord = "[program:Rankings]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankings rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=9\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 
 			
-			// Name of process(blank for single)
-			$name = "";	
-			
-			// If this is the jobServer
-			if($this->instanceType == "jobServer")				
-			{
-				$command = "command=/usr/local/sbin/gearmand -d\n";
-			}
+			// Add instance specific daemon info
+			$supervisord.= "[program:RankingsNew]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankings new\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 						
+		}
+		// All other instance types
+		elseif($this->instanceType == "worker")
+		{
+			// Add instance specific daemon info
+			$supervisord = "[program:theApp]\n";
+			$supervisord.= "command=/usr/local/sbin/gearmand -d\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=10\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 			
 		}	
 
-		// Add instance specific daemon info
-		$supervisord = "[program:theApp]\n";
-		$supervisord.= $command;
-		$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-		$supervisord.= "autostart=true\n";
-		$supervisord.= "autorestart=true\n";
-		$supervisord.= "numprocs=$numProcs\n"; 
-		$supervisord.= $name; 
+
 
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
