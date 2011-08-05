@@ -265,7 +265,7 @@ class bootstrap
 
 	// ===========================================================================// 
 	// ! Finalize bootstrap                                                       //
-	// ===========================================================================//0
+	// ===========================================================================//10
 	// Save all settings to config file for use
 	private function saveType()
 	{
@@ -288,7 +288,7 @@ class bootstrap
 		if($this->instanceType == "worker")
 		{
 			// Number of proccesses to run
-			$numProcs = 0;
+			$numProcs = 10;
 
 			// Name of process
 			$name = "process_name=%(process_num)s\n";
