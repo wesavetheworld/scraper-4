@@ -69,8 +69,11 @@ class client
 			// 	$this->run("client", "google all 100 new");			
 			// }
 			
-			// Update all hourly keywords
-			$this->run("client", "rankings 100 google new");				
+			// Check for new keywords to update
+			$this->run("client", "rankingsNew 100 google");
+			
+			// Check for keywords needing calibration
+			$this->run("client", "rankingsCalibrate 100 google");							
 			
 			// Run cron tasks
 			$this->run("tasks");	

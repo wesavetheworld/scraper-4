@@ -125,11 +125,10 @@ class keywords
 							 keywords.user_id IN ('".ONLY_USER."') 
 						ORDER BY
 							keywords.".ENGINE."_status,
-							keywords.keyword";
-														  					
+							keywords.keyword";				  					
         } 
 		// If selecting only new keywords
-		elseif(SCHEDULE == "new")
+		elseif(TASK == "rankingsNew")
 		{
 		 	$query =   "SELECT 
 							keywords.keyword_id,
@@ -148,14 +147,38 @@ class keywords
 						WHERE 
 							keywords.check_out != 1							    				
 						AND
-								(keywords.".ENGINE."_status = '0000-00-00 00:00:00'
-							OR
-								keywords.calibrate != '0')								
+							keywords.".ENGINE."_status = '0000-00-00 00:00:00'							
 						ORDER BY
 						 	keywords.".ENGINE."_status DESC,
 							keywords.keyword,
 						 	domains.user_id";		
 		}
+		// If selecting only new keywords
+		elseif(TASK == "rankingsCalibrate")
+		{
+		 	$query =   "SELECT 
+							keywords.keyword_id,
+							keywords.keyword,
+							keywords.user_id,
+							keywords.g_country,
+							keywords.notifications,
+							keywords.calibrate,
+							keywords.date,							
+							domains.domain_id,
+							domains.domain							
+						FROM 
+							keywords
+						JOIN 
+							domains ON keywords.domain_id = domains.domain_id 
+						WHERE 
+							keywords.check_out != 1							    				
+						AND
+							keywords.calibrate != '0'								
+						ORDER BY
+						 	keywords.".ENGINE."_status DESC,
+							keywords.keyword,
+						 	domains.user_id";		
+		}		
 		// Normal select statement
 		else
         {
@@ -188,8 +211,9 @@ class keywords
 							keywords.".ENGINE."_status DESC,
 							keywords.keyword,
 						 	domains.user_id"; 
-		}   		
-																							
+		}   	
+		
+																								
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         

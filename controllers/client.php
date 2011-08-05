@@ -128,7 +128,7 @@ class client
 					$data = serialize($data);
 
 					// If this is for new keywords and calibration
-					if(SCHEDULE == "new")
+					if(TASK == "rankingsNew")
 					{
 						// Define a new high priority job for current batch
 				   		$gmclient->addTaskHigh(TASK, $data, null, $job++);						

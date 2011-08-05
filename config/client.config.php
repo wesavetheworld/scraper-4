@@ -31,7 +31,7 @@
 	define("JOB_SIZE", $argv[3]);	
 
 	// Constants for keyword rankings
-	if(TASK == "rankings")
+	if(in_array(TASK, array("rankings", "rankingsNew", "rankingsCalibrate"))
 	{
 		// Data model to use
 		define("MODEL", "keywords");
