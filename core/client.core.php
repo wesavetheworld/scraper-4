@@ -49,8 +49,8 @@ class client
 				// Update domain stats
 				$this->domainStats();
 			}
-			// If not the first hour and its the first min
-			elseif(date("H") != "00" && date("i") == "00")
+			// The first min of every hour but the first
+			elseif(date("i") == "26")
 			{
 				// Update hourly keyword rankings
 				$this->run("client", "rankings 100 google hourly");									
