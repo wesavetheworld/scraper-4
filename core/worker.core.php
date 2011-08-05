@@ -53,11 +53,9 @@ class worker
 	// Register types of jobs available
 	private function registerJobs()
 	{
-		if($argv[2])
-		{
-			// Register new job type
-			$this->gm->addFunction($argv[3], "worker::".$argv[2] ); 				
-		}	 
+		// Register new job type
+		$this->gm->addFunction(JOB_NAME, "worker::".JOB_FUNCTION); 				
+
 		// Register pagerank function with gearman server
 		//$this->gm->addFunction("pageRank", "worker::pageRank"); 
 		

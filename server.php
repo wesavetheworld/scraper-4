@@ -43,6 +43,16 @@
 		// Define core to use
 		$core = INSTANCE_TYPE;
 
+		if($argv[2])
+		{
+			define("JOB_NAME", $argv[2]);
+		}
+
+		if($argv[3])
+		{
+			define("JOB_FUNCTION", $argv[3]);
+		}		
+
 		// Include main router
 		include("core/$core.core.php");	
 
