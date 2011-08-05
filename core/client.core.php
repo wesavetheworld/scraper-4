@@ -50,7 +50,7 @@ class client
 				$this->domainStats();
 			}
 			// If not the first hour and its the first min
-			elseif(date("H") != 00 && date("i") == 00)
+			elseif(date("H") != "00" && date("i") == "00" || date("i") == "18")
 			{
 				// Update hourly keyword rankings
 				$this->run("client", "rankings 100 google hourly");									
