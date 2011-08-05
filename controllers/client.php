@@ -132,7 +132,6 @@ class client
 					{
 						// Define a new high priority job for current batch
 				   		$gmclient->addTaskHigh(TASK, $data, null, $job++);						
-
 					}
 					// All other schedules
 					else
