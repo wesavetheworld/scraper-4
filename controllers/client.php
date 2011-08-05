@@ -132,13 +132,13 @@ class client
 					{
 						die('would add new here');
 						// Define a new high priority job for current batch
-				   		$gmclient->addTaskHigh(TASK, $data, null, $job++);						
+				   		$gmclient->addTaskHighBackground(TASK, $data, null, $job++);						
 					}
 					// All other schedules
 					else
 					{
 						// Define a new job for current batch
-				   		$gmclient->addTaskLow(TASK, $data, null, $job++);						
+				   		$gmclient->addTaskLowBackground(TASK, $data, null, $job++);						
 					}	  		
 				} 			   		
 			}
