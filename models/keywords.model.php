@@ -177,9 +177,9 @@ class keywords
 						WHERE 
 							keywords.status !='suspended'
 						AND
-							keywords.check_out != '1',
+							keywords.check_out != '1'
 						AND	
-							keywords.".ENGINE."_status != 'shit'	    				
+							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
 						AND
 	                    	keywords.schedule = '".SCHEDULE."' 
 						AND
