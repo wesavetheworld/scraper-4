@@ -118,7 +118,7 @@ class client
 	private function run($controller, $options = false)
 	{
 		// Build the command to execute
-		$command = "php hub.php $controller $options >> ".LOG_DIRECTORY."$controller.log &";
+		$command = "php hub.php $controller $options >> /home/ec2-user/core/$controller.log &";
 
 		// Execute command given
 		exec($command);
