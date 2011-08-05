@@ -63,13 +63,13 @@ class worker
 		$this->gm->addFunction("rankingsCalibrate", "worker::rankings"); 				 
 
 		// Register pagerank function with gearman server
-		$this->gm->addFunction("pageRank", "worker::pageRank"); 
+		//$this->gm->addFunction("pageRank", "worker::pageRank"); 
 		
 		// Register backlinks function with gearman server
-		$this->gm->addFunction("backLinks", "worker::backLinks"); 
+		//$this->gm->addFunction("backLinks", "worker::backLinks"); 
 		
 		// Register alexa function with gearman server
-		$this->gm->addFunction("alexa", "worker::alexa"); 	
+		//$this->gm->addFunction("alexa", "worker::alexa"); 	
 	}		
 	
 	// ===========================================================================// 
