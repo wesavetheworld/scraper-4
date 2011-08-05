@@ -289,7 +289,7 @@ class bootstrap
 		if($this->instanceType == "worker")
 		{
 			// Number of proccesses to run
-			$numProcs = 0;
+			$numProcs = 10;
 
 			// Name of process
 			$name = "process_name=%(process_num)s\n";
