@@ -77,7 +77,7 @@ class keywords
 			$this->total = count($this->keywordIds);			
 			
 			// If selecting new or keywords needing calibration
-			if(SCHEDULE == "new")
+			if(TASK == "rankingsNew")
 			{
 				// Update the keywords select as checked out
 				$this->setCheckOut('1');    	
