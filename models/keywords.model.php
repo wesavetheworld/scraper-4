@@ -218,9 +218,6 @@ class keywords
 					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
 				}
 			} 
-			
-			print_r($this->keywords);
-			die();
    		}	  		
    	}
 	
