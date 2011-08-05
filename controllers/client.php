@@ -130,7 +130,6 @@ class client
 					// If this is for new keywords and calibration
 					if(TASK == "rankingsNew")
 					{
-						die('would add new here');
 						// Define a new high priority job for current batch
 				   		$gmclient->addTaskHighBackground(TASK, $data, null, $job++);						
 					}
