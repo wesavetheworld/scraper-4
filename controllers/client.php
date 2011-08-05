@@ -139,14 +139,14 @@ class client
 						// Define a new job for current batch
 				   		$gmclient->addTaskLowBackground(TASK, $data, null, $job++);						
 					}	  		
+
+					// Create the jobs
+		    		$gmclient->runTasks();					
 				} 			   		
 			}
 		
 			// Call processing time
-			utilities::benchmark("$job jobs defined: ", "client.log");		
-		    
-			// Create the jobs
-		    $gmclient->runTasks(); 
+			utilities::benchmark("$job jobs defined: ", "client.log");		 
    
 			// Call processing time
 			utilities::benchmark('All jobs completed: ', "client.log"); 
