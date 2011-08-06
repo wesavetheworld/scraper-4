@@ -50,8 +50,11 @@ class client
 			// The first min of every hour but the first
 			if(date("i") == "10")
 			{
+				// Get current job Queue total
+				$queue = $this->checkJobQueue('rankings');
+				
 				// If job queue is empty
-				if(!$this->checkJobQueue('rankings'))
+				if(!$queue)
 				{				
 					// Update hourly keyword rankings
 					$this->run("client", "rankings 100 google hourly");									
@@ -59,7 +62,11 @@ class client
 				// Jobs have not finished from last hour
 				else
 				{
-					utilities::notate("Job queue overlap.  Skipped updates this hour", "clientd.log");		  		   	 						
+					// Notify admin of overlap
+					utilities::reportErrors("Hourly scraping overlap: $queue jobs remaining");	
+					
+					// Log overlap notice				
+					utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
 				}
 			}
 			// Check for any new domains
