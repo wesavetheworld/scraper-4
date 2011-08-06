@@ -98,8 +98,7 @@ class stats
 					
 					// Decrease total domains remaining
 					$domains->total--; 
-				} 
-				 							   				
+				}  							   				
 			}
 			
 			//print_r($domains);

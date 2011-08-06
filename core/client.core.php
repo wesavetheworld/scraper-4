@@ -48,7 +48,7 @@ class client
 			}
 
 			// The first min of every hour but the first
-			if(date("i") == "10")
+			if(date("i") == "18")
 			{
 				// Get current job Queue total
 				$queue = $this->checkJobQueue('rankings');
