@@ -51,7 +51,7 @@ class client
 			}
 
 			// The first min of every hour but the first
-			if(date("i") == "55")
+			if(date("i") == "58")
 			{
 				// If job queue is empty
 				if(!$this->checkJobQueue('rankings'))
