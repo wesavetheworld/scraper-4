@@ -53,17 +53,24 @@ class worker
 	// Register types of jobs available
 	private function registerJobs()
 	{
-		// Register new job type
-		$this->gm->addFunction(JOB_NAME, "worker::".JOB_FUNCTION); 				
+		// All keyword ranking jobs
+		if(JOB_FUNCTION == "rankings")
+		{
+			// Register new job type
+			$this->gm->addFunction(JOB_NAME, "worker::".JOB_FUNCTION); 				
+		}
+		// All domain stats jobs
+		else
+		{
+			// Register pagerank function with gearman server
+			$this->gm->addFunction("pageRank", "worker::pageRank"); 
 
-		// Register pagerank function with gearman server
-		//$this->gm->addFunction("pageRank", "worker::pageRank"); 
-		
-		// Register backlinks function with gearman server
-		//$this->gm->addFunction("backLinks", "worker::backLinks"); 
-		
-		// Register alexa function with gearman server
-		//$this->gm->addFunction("alexa", "worker::alexa"); 	
+			// Register backlinks function with gearman server
+			$this->gm->addFunction("backLinks", "worker::backLinks"); 
+
+			// Register alexa function with gearman server
+			$this->gm->addFunction("alexa", "worker::alexa");
+		}	 	
 	}		
 	
 	// ===========================================================================// 

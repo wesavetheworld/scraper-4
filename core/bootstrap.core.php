@@ -308,7 +308,7 @@ class bootstrap
 		// All other instance types
 		elseif($this->instanceType == "worker")
 		{	
-			// Add instance specific daemon info
+			// Add workers for ranking updates
 			$supervisord = "[program:Rankings]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php run rankings rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
@@ -317,14 +317,23 @@ class bootstrap
 			$supervisord.= "numprocs=10\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 
 			
-			// Add instance specific daemon info
+			// Add workers for new keywords
 			$supervisord.= "[program:RankingsNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php run rankingsNew rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 					
+			$supervisord.= "process_name=%(process_num)s\n"; 
+			
+			// Add workers for domain pagerank
+			$supervisord.= "[program:RankingsNew]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run stats\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 													
 		}	
 
 		// Write new supervisord config file
