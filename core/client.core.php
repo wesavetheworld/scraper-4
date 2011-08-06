@@ -45,13 +45,10 @@ class client
 			{
 				// Update all daily keywords
 				$this->run("client", "rankings 100 google daily");				
-				
-				// Update domain stats
-				//$this->domainStats();
 			}
 
 			// The first min of every hour but the first
-			if(date("i") == "05")
+			if(date("i") == "10")
 			{
 				// If job queue is empty
 				if(!$this->checkJobQueue('rankings'))
@@ -59,6 +56,7 @@ class client
 					// Update hourly keyword rankings
 					$this->run("client", "rankings 100 google hourly");									
 				}	
+				// Jobs have not finished from last hour
 				else
 				{
 					utilities::notate("Job queue overlap.  Skipped updates this hour", "clientd.log");		  		   	 						
