@@ -43,7 +43,24 @@ class workerstatus
 		$status = $jobServer->getStatus();
 
 		print_r($status['operations']);
+
+		$this->checkJobQueue('rankings');
 	}
+
+	// Check for oustanding jobs stilled queued
+	private function checkJobQueue($type)
+	{
+		echo "\nQueued $type jobs: ";
+
+		// Instantiate new gearman call
+		$jobServer = new jobServerStatus(JOB_SERVER_IP);	
+
+		// Retrieve list of current jobs in queue
+		$status = $jobServer->getStatus();	
+		
+		// Return specified job type job queue total
+		echo $status['operations'][$type]['total']."\n";	
+	}	
 
 }	    
 

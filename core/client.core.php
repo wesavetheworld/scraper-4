@@ -51,7 +51,7 @@ class client
 			}
 
 			// The first min of every hour but the first
-			if(date("i") == "58")
+			if(date("i") == "05")
 			{
 				// If job queue is empty
 				if(!$this->checkJobQueue('rankings'))
@@ -59,6 +59,10 @@ class client
 					// Update hourly keyword rankings
 					$this->run("client", "rankings 100 google hourly");									
 				}	
+				else
+				{
+					utilities::notate("Job queue overlap.  Skipped updates this hour", "clientd.log");		  		   	 						
+				}
 			}
 			// Check for any new domains
 			// elseif($this->checkNew(NEW_DOMAINS_FILE))
