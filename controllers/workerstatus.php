@@ -42,7 +42,7 @@ class workerstatus
 
 		$status = $jobServer->getStatus();
 
-		print_r($status['operations']);
+		print_r($status['operations']['rankings']['total']);
 	}
 
 }	    

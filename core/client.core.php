@@ -21,6 +21,9 @@ class client
 	
 	function __construct()
 	{
+		// Include gearman class for job status updates
+	 	require_once('classes/gearman.class.php');
+	 			
 		// The main loop
 		$this->daemon();
 	}	
@@ -42,18 +45,20 @@ class client
 			{
 				// Update all daily keywords
 				$this->run("client", "rankings 100 google daily");				
-
-				// Update all hourly keywords
-				$this->run("client", "rankings 100 google hourly");				
 				
 				// Update domain stats
-				$this->domainStats();
+				//$this->domainStats();
 			}
+
 			// The first min of every hour but the first
-			elseif(date("i") == "00")
+			if(date("i") == "49")
 			{
-				// Update hourly keyword rankings
-				$this->run("client", "rankings 100 google hourly");									
+				// If job queue is empty
+				if($this->checkJobQueue('rankings') == 0)
+				{				
+					// Update hourly keyword rankings
+					$this->run("client", "rankings 100 google hourly");									
+				}	
 			}
 			// Check for any new domains
 			// elseif($this->checkNew(NEW_DOMAINS_FILE))
@@ -86,6 +91,19 @@ class client
 	// ===========================================================================// 
 	// ! Supporting functions                                                     //
 	// ===========================================================================//	
+
+	// Check for oustanding jobs stilled queued
+	private function checkJobQueue($type)
+	{
+		// Instantiate new gearman call
+		$jobServer = new jobServerStatus(JOB_SERVER_IP);	
+
+		// Retrieve list of current jobs in queue
+		$status = $jobServer->getStatus();	
+		
+		// Return specified job type job queue total
+		return $status['operations'][$type]['total'];	
+	}
 
 	// Check for any newly added keywords/domains
 	private function checkNew($type)
