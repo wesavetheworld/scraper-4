@@ -327,7 +327,7 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 
 			
 			// Add workers for domain pagerank
-			$supervisord.= "[program:RankingsNew]\n";
+			$supervisord.= "[program:Stats]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php run stats\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
