@@ -51,10 +51,10 @@ class client
 			}
 
 			// The first min of every hour but the first
-			if(date("i") == "49")
+			if(date("i") == "55")
 			{
 				// If job queue is empty
-				if($this->checkJobQueue('rankings') == 0)
+				if(!$this->checkJobQueue('rankings'))
 				{				
 					// Update hourly keyword rankings
 					$this->run("client", "rankings 100 google hourly");									
