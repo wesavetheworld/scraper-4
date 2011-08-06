@@ -302,8 +302,8 @@ class bootstrap
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=10\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 							
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n\n"; 							
 		}
 		// All other instance types
 		elseif($this->instanceType == "worker")
@@ -314,7 +314,7 @@ class bootstrap
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=9\n"; 
+			$supervisord.= "numprocs=10\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 
 			
 			// Add instance specific daemon info
