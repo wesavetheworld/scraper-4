@@ -59,6 +59,8 @@ class client
 		define("TOTAL", $items->total);
 	   		
 		echo "items selected: ".$items->total."\n"; 
+
+		die();
 	           
  		// If items returned
 		if($items->$class)

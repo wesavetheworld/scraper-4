@@ -1,14 +1,14 @@
-<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
+<?php  if(!defined('HUB')) exit('No direct script access keywordsowed\n');
  
 // ******************************* INFORMATION *******************************//
 
 // ***************************************************************************//
 //  
-// ** DOMAINS - Selects domains from db and creates an object of individiual 
-// ** domain objects.
+// ** KEYWORDS - Selects keywords from db and creates an object of individiual 
+// ** keyword objects.
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
-// ** @date	 2011-06-25
+// ** @date	 2011-06-22
 // ** @access	private
 // ** @param	
 // ** @return	constants for application 
@@ -18,82 +18,58 @@
 // ********************************** START **********************************//
 
 class domains 
-{            
-	
-	// Contains the keywords selected
+{   
+	// Contains keywords of the keywords selected
 	public $domains;
 	                  
-	// Contains array of the domain ids selected
+	// Contains keywords of the keyword ids selected
 	public $domainIds;
 	
-	// Contains the count(int) of domains in the main object
+	// Contains the count(int) of keywords in the main object
 	public $total;	
-
-	// The type of stat being collected (pr,backlinks,alexa)
-	public $stat;
 	
 	function __construct($empty = false)
-	{
-		// Establish MySQL connection & select database
-		mysql_connect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS) or die ('Error connecting to mysql');
-		mysql_select_db(DB_NAME_SERPS);	
-	  	
+	{  	
 		if(!$empty)
 		{                             
 			// Select domains
 			$this->getDomains();   
 		}	
-	} 	
-	
+	} 
+    
 	// Called when script execution has ended
 	function __destruct() 
 	{	
-		// If any domains failed to update
-		if(count($this->domainIds))
-		{    
-			// Check any remaining domains back in
-			$this->setCheckOut('0');
-		}  
-	}	
+		// // If any keywords failed to update
+		// if(count($this->keywordIds))
+		// {    
+		// 	// Check any remaining keywords back in
+		$this->setCheckOut('0');
+		// }  
+	}    
 	
 	// ===========================================================================// 
-	// ! Functions for creating keyword objects                                   //
+	// ! Functions for creating domain objects                                   //
 	// ===========================================================================//	
 	
 	// Return the keywords object
 	private function getDomains()
 	{                                             
 		// Select keyword data
-		$domains = $this->selectDomains(); 
-		
-		// If keywords are selected
-		if($domains)
-		{
-			// Loop through keyword list 
-			foreach($domains as $key => &$domain)		
-			{   
-	 			// Build the domain into a working object
-				$this->domains->{$key}  = new domain($domain);
-
-				// If keyword is missing required values
-				if(!$domain)
-				{			 
-					// Remove bad keyword
-					unset($this->domains->{$key} );
-				}
-				// Domain is formed correctly
-				else
-				{    
-					// Add keywords id to checkout list
-					$this->domainIds[$key] = $key;
-				} 
-			} 
-			
+		$this->selectDomains();
+				
+		// If domains are selected
+		if($this->domains)
+		{ 	
+		 	utilities::benchmark('domains f: ');
+			 
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);			
 			
 			// Update the keywords select as checked out
-			$this->setCheckOut('1');
+			$this->setCheckOut('1');    	
+			
+			return $domains;
 		}	
 	} 
 	
@@ -116,116 +92,33 @@ class domains
 						".TASK."_status != '".date("Y-m-d")."'
 
 						 {$where}"; 
-					   																				
+																								
 		// Execute query and return results			
-	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING DOMAINS: ".mysql_error());
+	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         
 		// If keywords are returned
 		if(mysql_num_rows($result) > 0)
 		{
 			// Loop through results
-			while($row = mysql_fetch_object($result))
+			while($domain = mysql_fetch_object($result, 'domain'))
 			{   
-				// Add domain object to domains array
-				$domains[$row->domain_id] = $row;
-			} 
-		   						
-			// Return keyword array
-			return $domains;
-		}    
-	} 
-	
-	// Update domains table with new domain info
-	public function updateDomains()
-	{
-		$stat = $this->stat;
+				// Make the keyword save to be used in the url	
+				$keyword->urlSafeKeyword();				     				
 
-		// Loop through finished domains object
-		foreach($this->domains as $key => &$domain)
-		{   	  
-			// If this domain has no stats yet
-			if(!isset($domain->$stat))
-			{   
-				// Skip domain
-				continue;
-			}
-			
-			// If keyword has not been updated today
-			if($domain->updated != date("Y-m-d"))
-			{
-				// Insert a new stat row
-				$this->insertStat($domain);
-			}
-			else
-			{
-				// Update an existing stat row
-				$this->updateStat($domain);
-			}			
-			
-			// Update keywords table with update time and notifications
-			$query = "	UPDATE 
-							domains 
-						SET 
-				  		 	".$this->stat."_status = NOW(), 
-							check_out = '0',
-				 			updated = NOW()
-					  	WHERE 
-					  		domain_id = ".$domain->domain_id; 
-															  
-		    // Execute update query
-			$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING DOMAINS: ".mysql_error()); 
-			
-			// If keyword update successful
-			if($result)
-			{
-				// Remove domain from domain id array
-				unset($this->domainIds[$key]);        
+				// Set a unique keyword reference (fix for serializing objects)
+				$domain->uniqueId();	
 				
-				// Remove domain from domain array
-				unset($this->domains->$key);        
-			}			
-		}
-	}  
-	
-	// Update existing row in tracking table with new rankings
-	private function updateStat($domain)
-	{	 
-		$stat = $this->stat;
-		     		
-		// Build update query
-		$query = "	UPDATE 
-						domain_stats 
-					SET 
-						".$this->stat." = '".$domain->$stat."'
-					WHERE 
-					 	domain_id = ".$domain->domain_id." 
-					AND 
-					 	date = '".date("Y-m-d")."'";
-							                                            
-		// Execute update query
-		mysql_query($query) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
-	}
+				// Set the engine to use for scraping this keyword
+				$domain->stat = TASK;				
+			 
+				// Add keyword object to keyword array
+				$this->domains->{$domain->domain_id} = $domain;   
 
-	// Insert a new row into tracking table with new rankings
-	private function insertStat($domain)
-	{ 
-		$stat = $this->stat;
-		              		
-		// Build insert query
-		$query = "	INSERT INTO 
-						domain_stats 
-						(domain_id,
-						".$this->stat.",
-						date) 
-			      	VALUES (
-						'".$domain->domain_id."',
-						'".$domain->$stat."',
-						NOW()
-			          )";
-		
-		// Execute insert query 
-		mysql_query($query) or utilities::reportErrors("ERROR ON stats insert: ".mysql_error());		
-	}	  		
+				// Add keywords id to checkout list
+				$this->domainIds[$domain->domain_id] = $domain->domain_id;										
+			} 
+   		}	  		
+   	}
 	
 	// Check in and out keywords  
 	private function setCheckOut($status = '1')
@@ -240,147 +133,316 @@ class domains
 													  
 		// Execute update query
 		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
-	}
-	 
-} 
-
-// ===========================================================================// 
-// ! Create individual domain objects                                         //
-// ===========================================================================//
-
-class domain
-{ 
-	function __construct($domainValues)
+	}                                                                                                 	 
+	
+	// Select keyword's ranking positions
+	private function selectRankings()
 	{
-	 	// Create domain object
-		$this->domainObject($domainValues);   
-	}  
+		// Glue keyword array together
+		$ids = implode(",", array_keys($this->keywordIds));  
+		
+		// Db column containing the ranking
+		$position = ENGINE;
+		
+		// Construct query
+		$query = "	SELECT 
+						* 
+					FROM 
+						tracking 
+					WHERE 
+						keyword_id IN($ids) 
+				    AND 
+						date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
+					ORDER BY
+						date";
+		
+		// Perform query				
+	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());				
+		
+		// Add keyword tracking info to data array
+		while($row = mysql_fetch_object($result))
+		{   
+			// If there is a row for today
+			if($row->date == date("Y-m-d"))
+			{ 
+				// Add ranking object to rankings array
+				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
+			} 
+			// If there was no rank for today and there is one for yesterday
+			elseif(!$lastRank)
+			{
+			 	// Add ranking object to rankings array
+				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
+			} 
+		}
+	}                                          
 	
 	// ===========================================================================// 
-	// ! Domain methods                                                           //
-	// ===========================================================================//   
-
- 	// Create the keyword object from array of values provided
-	private function domainObject($domainValues)
+	// ! Updating keyword objects                                                 //
+	// ===========================================================================//
+	
+	// Update keywords table with new keyword info
+	public function updateKeywords()
 	{
-		// Convert keyword fields into keyword object
-		foreach($domainValues as $key => $value)
+		// Loop through finished keywords object
+		foreach($this->updated as $key => &$keyword)
+		{	 
+			// If this keyword has no ranking yet
+			if(!isset($keyword->rank) && $keyword->rank != '0')
+			{   
+				// Skip keyword
+				continue;
+			} 
+		 
+			// If keyword has not been updated today
+			if($keyword->date != date("Y-m-d"))
+			{   
+				// Insert a new ranking row
+				$keyword->inserted = $this->insertRanking($keyword);
+			}
+			
+			// If keyword has been updated today or there was a duplicate error on insert 
+			if($keyword->date == date("Y-m-d") || !$keyword->inserted)			
+			{    
+				// Update an existing ranking row
+				$keyword->updated = $this->updateRanking($keyword);
+			}
+			
+			// If updating google
+			if($this->engine == "google")
+			{
+				// Save any notifications for keyword
+				$setNotify = " notify = '".$keyword->notify."',";
+			}
+			
+			// If keyword's tracking data was updated successfully
+			if($keyword->inserted || $keyword->updated)
+			{
+				// Update keywords table with update time and notifications
+				$query = "	UPDATE 
+								keywords 
+							SET 
+						  		$setNotify 
+						  		".$keyword->engine."_status = NOW(),  
+						  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
+								calibrate = '".$keyword->calibrate."',
+								check_out = 0,
+						  		time = NOW(), 
+						  		date = '".date("Y-m-d")."' 
+						  WHERE 
+						  	keyword_id='".$keyword->keyword_id."'";  
+											  
+			    // Execute update query
+				$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()); 
+			}	
+			
+			// If keyword update successful
+			if($result)
+			{
+				// Remove keyword from keyword id array
+				unset($this->keywordIds[$key]);        
+				
+				// Remove keyword from keyword array
+				unset($this->keywords->$key);        
+			}
+			// Keyword update failed	
+			else
+			{
+				// Log status
+				utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
+			}
+   		}
+	} 
+	
+	// Update existing row in tracking table with new rankings
+	private function updateRanking($keyword)
+	{	      		
+		// Build update query
+		$query = "	UPDATE 
+						tracking 
+					SET 
+				 		".$keyword->engine." = '".$keyword->rank."', 
+					 	".$keyword->engine."_match = '".$keyword->found."' , 
+					 	dupecount = '0' 
+					 WHERE 
+					 	keyword_id='".$keyword->keyword_id."' 
+					 AND 
+					 	date='".date("Y-m-d")."'";	
+		
+		// Execute update query
+		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
+	}
+
+	// Insert a new row into tracking table with new rankings
+	private function insertRanking($keyword)
+	{	           		
+		// Build insert query
+		$query = "	INSERT INTO 
+						tracking 
+						(keyword_id,".$keyword->engine.",
+						".$keyword->engine."_match,
+						dupecount,
+						date) 
+			      VALUES (
+						'".$keyword->keyword_id."',
+						'".$keyword->rank."',
+						'".mysql_real_escape_string($keyword->found)."',
+						'0',
+						'".date("Y-m-d")."'
+			          )";
+		
+		// Execute insert query 
+		return mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
+	}	   
+}
+
+// ===========================================================================// 
+// ! Create individual keyword objects                                        //
+// ===========================================================================//
+
+class domain 
+{     
+	
+	function __construct()
+	{    
+
+   	} 
+
+	// ===========================================================================// 
+	// ! Keyword methods                                                          //
+	// ===========================================================================// 
+	
+	// Test a keyword array for keywords needed data
+	public function domainTest()
+	{    
+  		// The required keys in the keyword array
+		$required = array('domain_id','domain','user_id');
+				
+		// Loop through each required key
+		foreach($required as $key)
+		{  
+			//If the required value are not found
+			if(empty($this->$key))
+			{   
+				// Log bad keyword for review
+				file_put_contents(KEYWORD_ERROR_FILE, var_export($this, TRUE)."\n\n", FILE_APPEND);
+
+				// Do not continue				   
+				return false;   		
+			} 
+		}   
+		
+		// Keyword object is complete
+		return TRUE;          
+	} 
+	
+	// Create a url that can be scraped
+	public function urlSafeKeyword() 
+	{
+		// Encode keyword to be used as part of ur to scrape
+		$this->urlSafe = htmlspecialchars(htmlentities(urlencode($this->keyword)));
+	}
+	
+	// Determine whether to grab 10 or 100 results per search 
+	public function setResultsCount()
+	{    		 
+		// If last ranking was below the 10/100 switch
+		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->engine == 'bing')
+		{  
+			// Search by 10 results
+			$num = 10;
+		}
+		// Last ranking was over threshhold
+		else
 		{
-			$this->{$key} = $value;
-		}		
-	}  
+			// Search by 100 results
+			$num = 100;
+		} 
+						 
+		// Set search result total
+		$this->resultCount = $num;
+	}
+	
+	// Determine which page of search results to scrape 
+	public function setSearchOffset()
+	{                                             
+	 	// If the keyword has a search page offset
+		if($this->searchPage)
+		{
+			// Combine search page offset with result count (ie 200)
+			$this->searchOffset = $this->searchPage.substr($this->resultCount, 1, 2);
+		}
+	}
 	
 	// Build the search engine results page for the keyword
 	public function setSearchUrl()
-	{     
-		if($this->stat == "backlinks")
+	{   
+		// Get the current search hash 
+		$this->setSearchHash(); 
+		
+		// Check for a search page offset 
+		$this->setSearchOffset();
+		                          
+		// Set the location of the keyword's saved search file
+		$this->searchFile = SAVED_SEARCH_DIR.$this->searchHash.".html";
+		
+		if($this->engine == "google")
 		{
-		 	// Build the yahoo backlinks search url
-		 	$this->url = "https://siteexplorer.search.yahoo.com/search?p=".urlencode($this->domain); 
-		}
-		elseif($this->stat == "pr")
-		{   
-			// Build the google pagerank url
-	   		$this->url = "http://toolbarqueries.google.com/search?client=navclient-auto&ch=".$this->CheckHash($this->HashURL($this->domain)). "&features=Rank&q=info:".$this->domain."&num=100&filter=0"; 
-		}
-		elseif($this->stat == "alexa")
-		{   
-			// Build the alexa url
-	   		$this->url = "http://data.alexa.com/data/hmyq81hNHng1MD?cli=10&dat=ns&ref=&url=".urlencode($this->domain); 
-		}		
-  	} 
-	 
-	// ===========================================================================// 
-	// ! PageRank methods                                                         //
-	// ===========================================================================//	
-	
-	//Genearate a hash for a url
-	private function HashURL($String)
-	{
-	    $Check1 = $this->StrToNum($String, 0x1505, 0x21);
-	    $Check2 = $this->StrToNum($String, 0, 0x1003F);
+			// Build the google search results page url
+			$this->url  = "http://www.google".$this->g_country;
+			$this->url .= "/search?q=".$this->urlSafe;
+			$this->url .= "&num=".$this->resultCount;  		
 
-	    $Check1 >>= 2;     
-	    $Check1 = (($Check1 >> 4) & 0x3FFFFC0 ) | ($Check1 & 0x3F);
-	    $Check1 = (($Check1 >> 4) & 0x3FFC00 ) | ($Check1 & 0x3FF);
-	    $Check1 = (($Check1 >> 4) & 0x3C000 ) | ($Check1 & 0x3FFF);   
-
-	    $T1 = (((($Check1 & 0x3C0) << 4) | ($Check1 & 0x3C)) <<2 ) | ($Check2 & 0xF0F );
-	    $T2 = (((($Check1 & 0xFFFFC000) << 4) | ($Check1 & 0x3C00)) << 0xA) | ($Check2 & 0xF0F0000 );
-
-	    return ($T1 | $T2);
-	}
-
-
-	//genearate a checksum for the hash string
-	private function CheckHash($Hashnum)
-	{
-	    $CheckByte = 0;
-	    $Flag = 0;
-
-	    $HashStr = sprintf('%u', $Hashnum) ;
-	    $length = strlen($HashStr);
-
-	    for ($i = $length - 1;  $i >= 0;  $i --) 
-		{
-	        $Re = $HashStr{$i};
-	        if (1 === ($Flag % 2)) 
-			{             
-	            $Re += $Re;     
-	            $Re = (int)($Re / 10) + ($Re % 10);
-	        }
-	        $CheckByte += $Re;
-	        $Flag ++;   
+			// If search results page offset is present
+			if($this->searchOffset)
+			{  
+			 	// Add the ofset to the url
+				$this->url .= "&start=".$this->searchOffset;	   
+			}	
 	    }
-
-	    $CheckByte %= 10;
-	    if (0 !== $CheckByte) 
-		{
-	        $CheckByte = 10 - $CheckByte;
-	        if (1 === ($Flag % 2) ) 
+		elseif($this->engine == "bing")
+		{                			
+			// Build the bing search results page url
+			$this->url  = "http://www.bing.com";
+			$this->url .= "/search?q=".$this->urlSafe;
+			
+				// Check for a search page offset 
+			$this->setSearchOffset();			
+			
+			// If search results page offset is present
+			if($this->searchOffset)
 			{
-	            if (1 === ($CheckByte % 2)) 
-				{
-	                $CheckByte += 9;
-	            }
-	            $CheckByte >>= 1;
-	        }
-	    }
-
-	    return '7'.$CheckByte.$HashStr;
+				$this->url .= "&first=".$this->searchOffset;	   
+			}			
+		}
 	}
 	
-	function StrToNum($Str, $Check, $Magic)
+	// Create a hash for the keyword's saved search file name
+	public function setSearchHash()
 	{
-	    $Int32Unit = 4294967296;  // 2^32
-
-	    $length = strlen($Str);
-	    for ($i = 0; $i < $length; $i++) 
-		{
-	        $Check *= $Magic;     
-	        //If the float is beyond the boundaries of integer (usually +/- 2.15e+9 = 2^31),
-	        //  the result of converting to integer is undefined
-	        //  refer to http://www.php.net/manual/en/language.types.integer.php
-	        if ($Check >= $Int32Unit) 
-			{
-	            $Check = ($Check - $Int32Unit * (int) ($Check / $Int32Unit));
-	            //if the check less than -2^31
-	            $Check = ($Check < -2147483648) ? ($Check + $Int32Unit) : $Check;
-	        }
-	        $Check += ord($Str{$i});
-	    }
-	    return $Check;
+		// Naming convention for the file
+		$searchHash  = $this->keyword;
+		$searchHash .= $this->engine;
+		$searchHash .= $this->g_country;
+		$searchHash .= $this->resultCount;
+		$searchHash .= $this->searchPage; 
+		
+		// Calculate hash for filename
+		$searchHash = crc32($searchHash);
+		
+		// Format hash
+		$searchHash = vsprintf("%u", $searchHash);
+		
+		// Set keyword's saved search file hash
+		$this->searchHash = $searchHash; 
+        		
+		// Add hash to saved searches array (for final database update)
+		$this->savedSearches[$searchHash] = $searchHash;
 	}
 	
-	public function Rank(){
-		$Xml = $this->loadXml();
-		if(!is_object($Xml) || !isset($Xml->SD[1]) || !is_object($Xml->SD[1])) return 0;
-		return trim($Xml->SD[1]->REACH['RANK']);
-	}
+	public function uniqueId()
+	{
+		$this->uniqueId = "id_".$this->keyword_id;
+	}		
 	
-	
-   
-
- 
-}	
- 
+}
