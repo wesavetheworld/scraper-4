@@ -30,10 +30,7 @@ class worker
 	// ===========================================================================// 
 	
 	function __construct()
-	{           
-
-		// // Include items data model
-	 // 	require_once("models/".$this->model.".model.php"); 		
+	{           		
 
 		// Include serp parsing class
 		require_once('classes/parse.class.php');
@@ -56,6 +53,9 @@ class worker
 	{  	
 		// Get the items model
 		$model = $data['model'];
+
+		// Include items data model
+	 	require_once("models/".$model.".model.php"); 		
 				
 		// Get the keywords from the job data				
 		$jobData = unserialize($data['jobData']);	
