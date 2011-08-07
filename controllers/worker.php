@@ -103,26 +103,26 @@ class worker
 				if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
 				{  			
 					// Parse scraped content
-					$this->parse($content);		
+					$this->parse($content, ${$this->class});		
  	   			}	
 			} 
 
 			// Call processing time
 			utilities::benchmark('Parse all content: ', "rankings.log");  
 			
-			echo "\nkeywords left: ".$keywords->total."\n";
+			echo "\nkeywords left: ".${$this->model}->total."\n";
 		}
 
 		// Connect to database
 		utilities::databaseConnect();
 
-		echo "keywords updated: ".count($keywords->updated);
+		echo "keywords updated: ".count(${$this->model}->updated);
 
 		// Update DB with new data
 		$this->updateItems();
 		
 		// Call processing time
-		utilities::benchmark('update keywords: ', "rankings.log"); 		
+		utilities::benchmark('update items: ', "rankings.log"); 		
 
 		// Retrun total execution time
 		return utilities::benchmark(' ', "rankings.log", true, false, true); 		
@@ -265,7 +265,7 @@ class worker
 		}			
 	}
 
-	private function parse()
+	private function parse($content, ${$class})
 	{
 		// Create new parsing object
 		$parse = new parse;	
@@ -273,64 +273,64 @@ class worker
 		if(STAT == "backlinks")
 		{
 			// Find the keyword's domain in one of the ranking urls
-			$parse->findElements(PARSE_PATTERN, $searchResults); 
+			$parse->findElements(PARSE_PATTERN, $content); 
 			
 			// Set backlinks for domain
-			$domain->backlinks =  str_replace(",","",$parse->elements[0]); 
+			${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
 		}
 		elseif(STAT == "pr")
 		{    
 			// Set the pagerank for domain
-			$domain->pr = $parse->pageRank($searchResults); 
+			${$this->class}->pr = $parse->pageRank($content); 
 		} 
 		elseif(STAT == "alexa")
 		{    
 			// Set the alexa rank for domain
-			$domain->alexa = $parse->alexa($searchResults); 
+			${$this->class}->alexa = $parse->alexa($content); 
 					
-			echo "alexa: ".$domain->alexa."\n";						
+			echo "alexa: ".${$this->class}->alexa."\n";						
 		}
 		else
 		{
 			// Find the keyword's domain in one of the ranking urls
-			$parse->findElements($this->parsePattern(), $searchResults)->findInElements($keyword->domain);			 
+			$parse->findElements($this->parsePattern(), $content)->findInElements(${$this->class}->domain);			 
 						   				
 			// If domain was found or keyword on last search page
-			if($parse->found || ${$item}->searchPage == SEARCH_DEPTH - 1)
+			if($parse->found || ${$this->class}->searchPage == SEARCH_DEPTH - 1)
 			{   
 				// If a ranking was found 
 				if($parse->found)
 				{   
 					// Set new keyword rank (amount of results per page + position on current page)
-					$keyword->rank = $keyword->searchOffset + $parse->position; 
+					${$this->class}->rank = ${$this->class}->searchOffset + $parse->position; 
 												
 					// Set the matching url that was found ranking
-					$keyword->found = $parse->found;  
+					${$this->class}->found = $parse->found;  
 				}
 				// If no ranking was found
 				else
 				{    
 					// "0" is used for "not found"
-					$keyword->rank = 0;   
+					${$this->class}->rank = 0;   
 				}  
 										
 				// Calibrate keyword ranking (10/100 results)
-				$this->calibration($keyword);   
+				$this->calibration(${$this->class});   
 
 				// Add keyword to completed list
-				$keywords->updated[$key] = $keyword;
+				${$this->model}->updated[$key] = ${$this->class};
 
 				// Remove keyword from keyword id array
-				unset($keywords->keywords->$key);  
+				unset(${$this->model}->{$this->model}->$key);  
 			    
 				// Decrease keywords remaining by one
-				$keywords->total--; 
+				${$this->class}->total--; 
 			}
 			// Domain was not found ranking
 			else
 			{ 
 				// Increase search results page for next scrape
-				$keyword->searchPage++; 						
+				${$this->class}->searchPage++; 						
 			} 
 		}			
 	}
