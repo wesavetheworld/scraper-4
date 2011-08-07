@@ -182,6 +182,9 @@ class worker
 
 		echo "keywords updated: ".count(${$this->model}->updated);
 
+		print_r(${$this->model});
+
+		die("end");
 		// Update DB with new data
 		$this->updateItems();
 		
