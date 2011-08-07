@@ -57,19 +57,19 @@ class workerCore
 		if(JOB_NAME != "stats")
 		{
 			// Register new job type
-			$this->gm->addFunction(JOB_NAME, "worker::".JOB_FUNCTION); 				
+			$this->gm->addFunction(JOB_NAME, "workerCore::".JOB_FUNCTION); 				
 		}
 		// All domain stats jobs
 		else
 		{
 			// Register pagerank function with gearman server
-			$this->gm->addFunction("pageRank", "worker::pageRank"); 
+			$this->gm->addFunction("pageRank", "workerCore::pageRank"); 
 
 			// Register backlinks function with gearman server
-			$this->gm->addFunction("backLinks", "worker::backLinks"); 
+			$this->gm->addFunction("backLinks", "workerCore::backLinks"); 
 
 			// Register alexa function with gearman server
-			$this->gm->addFunction("alexa", "worker::alexa");
+			$this->gm->addFunction("alexa", "workerCore::alexa");
 		}	 	
 	}		
 	
