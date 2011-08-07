@@ -91,7 +91,7 @@ class worker
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
 									
 			// Execute the scraping
-			$scrape->curlExecute();
+			//$scrape->curlExecute();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', "rankings.log");
@@ -99,12 +99,12 @@ class worker
 			// Loop through each keyword
 			foreach(${$this->model}->{$this->model} as $key => &${$this->class})
 			{
+
+				print_r(${$this->class});
+				die();
 				// If a valid search results page can be loaded (new scrape or saved file)
 				if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
 				{  			
-			
-			
-						
 					// Create new parsing object
 					$parse = new parse;	
 					
@@ -171,13 +171,6 @@ class worker
 							${$this->class}->searchPage++; 						
 						} 
 					}					
-						
-						
-			
-			
-			
-			
-					
  	   			}	
 			} 
 
