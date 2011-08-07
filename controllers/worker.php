@@ -69,8 +69,7 @@ class worker
 		// Get the items from the job data				
 		${$model} = $jobData[$model];
 
-		//print_r($jobData);
-		print_r(${$model});
+		echo ${$model}->total;
 
 		die("the end");
 	 		   	
