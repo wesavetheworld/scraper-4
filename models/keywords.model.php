@@ -277,7 +277,7 @@ class keywords
 					WHERE 
 						keyword_id IN($ids) 
 				    AND 
-						date IN ('".DATE_TODAY."','".DATE_YESTERDAY."')
+						date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
 					ORDER BY
 						date";
 		
@@ -288,7 +288,7 @@ class keywords
 		while($row = mysql_fetch_object($result))
 		{   
 			// If there is a row for today
-			if($row->date == DATE_TODAY)
+			if($row->date == date("Y-m-d"))
 			{ 
 				// Add ranking object to rankings array
 				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
@@ -320,14 +320,14 @@ class keywords
 			} 
 		 
 			// If keyword has not been updated today
-			if($keyword->date != DATE_TODAY)
+			if($keyword->date != date("Y-m-d"))
 			{   
 				// Insert a new ranking row
 				$keyword->inserted = $this->insertRanking($keyword);
 			}
 			
 			// If keyword has been updated today or there was a duplicate error on insert 
-			if($keyword->date == DATE_TODAY || !$keyword->inserted)			
+			if($keyword->date == date("Y-m-d") || !$keyword->inserted)			
 			{    
 				// Update an existing ranking row
 				$keyword->updated = $this->updateRanking($keyword);
@@ -353,7 +353,7 @@ class keywords
 								calibrate = '".$keyword->calibrate."',
 								check_out = 0,
 						  		time = NOW(), 
-						  		date = '".DATE_TODAY."' 
+						  		date = '".date("Y-m-d")."' 
 						  WHERE 
 						  	keyword_id='".$keyword->keyword_id."'";  
 											  
@@ -392,16 +392,10 @@ class keywords
 					 WHERE 
 					 	keyword_id='".$keyword->keyword_id."' 
 					 AND 
-					 	date='".DATE_TODAY."'";	
+					 	date='".date("Y-m-d")."'";	
 		
 		// Execute update query
-		$result = mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
-		
-		// If update worked
-		if($result)
-		{
-			return true;				
-		}	
+		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
 	}
 
 	// Insert a new row into tracking table with new rankings
@@ -419,17 +413,11 @@ class keywords
 						'".$keyword->rank."',
 						'".mysql_real_escape_string($keyword->found)."',
 						'0',
-						'".DATE_TODAY."'
+						'".date("Y-m-d")."'
 			          )";
 		
 		// Execute insert query 
-		$result = mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
-		
-		// If insert worked
-		if($result)
-		{
-			return true;				
-		}		
+		return mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
 	}	   
 }
 
