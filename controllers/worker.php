@@ -52,28 +52,31 @@ class worker
 	public function worker($data)
 	{  	
 		// Get the items model
-		$model = $data['model'];
+		$this->model = $data['model'];
 
 		// Include items data model
-	 	require_once("models/".$model.".model.php"); 		
+	 	require_once("models/".$this->model.".model.php"); 		
 				
 		// Get the keywords from the job data				
 		$jobData = unserialize($data['jobData']);	
 
    		// Remove "s" from object for singular item class
-		$class = substr($model, 0, -1); 		
+		$this->class = substr($this->model, 0, -1); 		
 		
 		// Set the search engine to use
 		$this->engine = $jobData['engine'];				
 
 		// Get the items from the job data				
-		${$model} = $jobData[$model];
+		${$this->model} = $jobData[$this->model];
+
+		print_r(${$this->model}->{$this->model});
+		die();
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
 		        		        
 		// Loop for as long as there are keywords left
-		while(${$model}->total > 0)
+		while(${$this->model}->total > 0)
 		{    
 			// Check killswitch
 			utilities::checkStatus();
@@ -88,7 +91,7 @@ class worker
 			$scrape->engine = $this->engine;
 
 			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls(${$model}->$model); 
+			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
 
 			print_r($scrape->urls);
 
@@ -140,7 +143,7 @@ class worker
 	public function getUrls($items)
 	{    
 		// Loop through each keyword
-		foreach($items as $key => &$item)
+		foreach($items as $key => &${$class})
 		{  
 			// Generate the search page url 
 			${$item}->setSearchUrl();			  		
