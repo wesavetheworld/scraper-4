@@ -64,7 +64,10 @@ class domains
 		 	utilities::benchmark('domains f: ');
 			 
 			// Get the total number of keywords selected
-			$this->total = count($this->domainIds);			
+			$this->total = count($this->domainIds);		
+			
+			print_r($this->domainIds);
+			die('the end')	;
 			
 			// Update the keywords select as checked out
 			$this->setCheckOut('1');    	
