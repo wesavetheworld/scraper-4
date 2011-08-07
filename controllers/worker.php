@@ -73,7 +73,7 @@ class worker
 		utilities::benchmark('items selected: ', "rankings.log"); 		
 		        		        
 		// Loop for as long as there are keywords left
-		while(${$model}}->total > 0)
+		while(${$model}->total > 0)
 		{    
 			// Check killswitch
 			utilities::checkStatus();
