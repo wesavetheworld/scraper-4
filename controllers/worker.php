@@ -68,9 +68,6 @@ class worker
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
-
-		print_r(${$this->model}->{$this->model});
-		die();
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
@@ -146,21 +143,19 @@ class worker
 		foreach($items as $key => &${$class})
 		{  
 			// Generate the search page url 
-			${$item}->setSearchUrl();			  		
+			${$class}->setSearchUrl();			  		
 			 			                     			
 			// If keyword's search hash is unique
-			if(!$urls[${$item}->searchHash])
+			if(!$urls[${$class}->searchHash])
 			{    				
 				// If no saved search or saved search is from another hour
-				if(!file_exists(${$item}->searchFile) || 
-					date("Y-m-d-G", filemtime(${$item}->searchFile)) != date("Y-m-d-G") || 
-					filesize(${$item}->searchFile) < 500)
+				if(!file_exists(${$class}->searchFile) || date("Y-m-d-G", filemtime(${$class}->searchFile)) != date("Y-m-d-G") || filesize(${$class}->searchFile) < 500)
 				{      
 					// Add the keyword's search page url to scraping list
-					$urls[${$item}->searchHash] = ${$item}->url; 
+					$urls[${$class}->searchHash] = ${$class}->url; 
 					
 					// This is a new search
-					${$item}->searchType = "new";
+					${$class}->searchType = "new";
 				}
 			}  	
 		} 
