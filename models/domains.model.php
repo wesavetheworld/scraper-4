@@ -108,8 +108,8 @@ class domains
 				//$keyword->urlSafeKeyword();				     				
 
 				// Set a unique keyword reference (fix for serializing objects)
-				$domain->uniqueId();	
-				
+				$domain->uniqueId = "id_".$domain->domain_id;
+
 				// Set the engine to use for scraping this keyword
 				$domain->stat = TASK;				
 			 
@@ -440,11 +440,6 @@ class domain
         		
 		// Add hash to saved searches array (for final database update)
 		$this->savedSearches[$searchHash] = $searchHash;
-	}
-	
-	public function uniqueId()
-	{
-		$this->uniqueId = "id_".$this->keyword_id;
 	}		
 	
 }
