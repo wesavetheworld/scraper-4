@@ -60,6 +60,8 @@ class client
 	   		
 		echo "items selected: ".$items->total."\n"; 
 
+		print_r($items);
+
 		die();
 	           
  		// If items returned
