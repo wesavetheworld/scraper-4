@@ -89,6 +89,8 @@ class domains
 					FROM 
 						domains 
 					WHERE 
+						check_out = 0
+					AND	
 						".TASK."_status != '".date("Y-m-d")."'
 
 						 {$where}"; 
