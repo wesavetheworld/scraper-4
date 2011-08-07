@@ -68,6 +68,10 @@ class worker
 
 		// Get the items from the job data				
 		${$model} = $jobData[$model];
+
+		print_r(${$model}->$class);
+
+		die();
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
