@@ -58,10 +58,14 @@ class worker
 
 		echo "model: ".$model;
 
-		echo "class: ".$class;
+		echo "\nclass: ".$class;
 
-		die("\ndone\n");  
+		echo "\ninclude: models/$model.model.php\n"
+
+		echo "\n\n";
 		
+die();
+
 		// Include items data model
 	 	require_once("models/$model.model.php"); 					
 
