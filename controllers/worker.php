@@ -62,14 +62,6 @@ class worker
 
    		// Remove "s" from object for singular item class
 		$class = substr($model, 0, -1); 		
-
-		echo "model: ".$model;
-
-		echo "\nclass: ".$class;
-
-		echo "\ninclude: models/$model.model.php\n";
-
-		echo "\n\n";	
 		
 		// Set the search engine to use
 		$this->engine = $jobData['engine'];				
@@ -77,8 +69,8 @@ class worker
 		// Get the items from the job data				
 		${$model} = $jobData[$model];
 
-		print_r($jobData);
-		//print_r(${$model});
+		//print_r($jobData);
+		print_r(${$model});
 
 		die("the end");
 	 		   	
