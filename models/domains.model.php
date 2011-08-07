@@ -113,7 +113,7 @@ class domains
 					FROM 
 						domains 
 					WHERE 
-						".$this->stat."_status != '".date("Y-m-d")."'
+						".TASK."_status != '".date("Y-m-d")."'
 
 						 {$where}"; 
 					   																				

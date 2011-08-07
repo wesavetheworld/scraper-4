@@ -48,7 +48,7 @@
 	else
 	{
 		// Data model to use
-		define("MODEL", "domains");		
+		define("MODEL", "domains");				
 	}
 	
 	// ===========================================================================// 
