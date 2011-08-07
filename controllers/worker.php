@@ -68,6 +68,13 @@ class worker
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
+
+		if($data['stat'])
+		{
+			$this->stat = $data['stat'];
+
+			${$this->model}->stat = $this->stat;			
+		}		
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
@@ -89,6 +96,10 @@ class worker
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
+
+			print_r($scrape->urls);
+
+			die();
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -105,7 +116,7 @@ class worker
 					// Create new parsing object
 					$parse = new parse;	
 					
-					if(STAT == "backlinks")
+					if($this->stat == "backlinks")
 					{
 						// Find the keyword's domain in one of the ranking urls
 						$parse->findElements(PARSE_PATTERN, $content); 
@@ -113,12 +124,12 @@ class worker
 						// Set backlinks for domain
 						${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
 					}
-					elseif(STAT == "pr")
+					elseif($this->stat == "pr")
 					{    
 						// Set the pagerank for domain
 						${$this->class}->pr = $parse->pageRank($content); 
 					} 
-					elseif(STAT == "alexa")
+					elseif($this->stat == "alexa")
 					{    
 						// Set the alexa rank for domain
 						${$this->class}->alexa = $parse->alexa($content); 
@@ -217,20 +228,34 @@ class worker
 		{  
 			// Generate the search page url 
 			${$this->class}->setSearchUrl();			  		
-			 			                     			
-			// If keyword's search hash is unique
-			if(!$urls[${$this->class}->searchHash])
-			{    				
-				// If no saved search or saved search is from another hour
-				if(!file_exists(${$this->class}->searchFile) || date("Y-m-d-G", filemtime(${$this->class}->searchFile)) != date("Y-m-d-G") || filesize(${$this->class}->searchFile) < 500)
-				{      
+			
+			// If getting domain urls
+			if($this->model == "domains")
+			{ 			                     	
+				// If keyword's search hash is unique
+				if(!$urls[${$this->class}->url])
+				{    				
 					// Add the keyword's search page url to scraping list
-					$urls[${$this->class}->searchHash] = ${$this->class}->url; 
-					
-					// This is a new search
-					${$this->class}->searchType = "new";
+					$urls[${$this->class}->url] = ${$this->class}->url;   
 				}
-			}  	
+			}
+			// If getting keyword urls
+			else
+			{	    			                     			
+				// If keyword's search hash is unique
+				if(!$urls[${$this->class}->searchHash])
+				{    				
+					// If no saved search or saved search is from another hour
+					if(!file_exists(${$this->class}->searchFile) || date("Y-m-d-G", filemtime(${$this->class}->searchFile)) != date("Y-m-d-G") || filesize(${$this->class}->searchFile) < 500)
+					{      
+						// Add the keyword's search page url to scraping list
+						$urls[${$this->class}->searchHash] = ${$this->class}->url; 
+						
+						// This is a new search
+						${$this->class}->searchType = "new";
+					}
+				} 
+			}	 	
 		} 
 				
 		// Return the url array

@@ -108,9 +108,11 @@ class workerCore
 	// Collect keyword rankings
 	public static function rankings($job)
 	{	
-		// Load the controller and get job results
-		 //$job = new load('workers/rankings', $job->workload());	
-		 $job = new load('worker', array('model'=>'keywords', 'jobData'=>$job->workload()));	
+		 // Build job data array
+		 $job = array('model'=>'keywords', 'jobData'=>$job->workload());
+		 
+		 // Instantiate new worker	
+		 $job = new load('worker', $job);	
 
 		 return $job->results;
 	}
@@ -118,8 +120,13 @@ class workerCore
 	// Collect domain pagerank
 	public static function pageRank($job)
 	{	
-		// Load the controller and get job results
-		return  new load('workers/rankings', $job->workload());	
+		 // Build job data array
+		 $job = array('model'=>'domains', 'stat'=>'pr', 'jobData'=>$job->workload());
+		 
+		 // Instantiate new worker	
+		 $job = new load('worker', $job);	
+
+		 return $job->results;
 	}	
 
 	// Collect domain backlinks

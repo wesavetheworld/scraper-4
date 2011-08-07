@@ -28,6 +28,9 @@ class domains
 	
 	// Contains the count(int) of domains in the main object
 	public $total;	
+
+	// The type of stat being collected (pr,backlinks,alexa)
+	public $stat;
 	
 	function __construct($empty = false)
 	{
@@ -110,7 +113,7 @@ class domains
 					FROM 
 						domains 
 					WHERE 
-						".STAT."_status != '".date("Y-m-d")."'
+						".$this->stat."_status != '".date("Y-m-d")."'
 
 						 {$where}"; 
 					   																				
@@ -135,7 +138,7 @@ class domains
 	// Update domains table with new domain info
 	public function updateDomains()
 	{
-		$stat = STAT;
+		$stat = $this->stat;
 
 		// Loop through finished domains object
 		foreach($this->domains as $key => &$domain)
@@ -148,7 +151,7 @@ class domains
 			}
 			
 			// If keyword has not been updated today
-			if($domain->updated != DATE_TODAY)
+			if($domain->updated != date("Y-m-d"))
 			{
 				// Insert a new stat row
 				$this->insertStat($domain);
@@ -163,7 +166,7 @@ class domains
 			$query = "	UPDATE 
 							domains 
 						SET 
-				  		 	".STAT."_status = NOW(), 
+				  		 	".$this->stat."_status = NOW(), 
 							check_out = '0',
 				 			updated = NOW()
 					  	WHERE 
@@ -187,17 +190,17 @@ class domains
 	// Update existing row in tracking table with new rankings
 	private function updateStat($domain)
 	{	 
-		$stat = STAT;
+		$stat = $this->stat;
 		     		
 		// Build update query
 		$query = "	UPDATE 
 						domain_stats 
 					SET 
-						".STAT." = '".$domain->$stat."'
+						".$this->stat." = '".$domain->$stat."'
 					WHERE 
 					 	domain_id = ".$domain->domain_id." 
 					AND 
-					 	date = '".DATE_TODAY."'";
+					 	date = '".date("Y-m-d")."'";
 							                                            
 		// Execute update query
 		mysql_query($query) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
@@ -206,13 +209,13 @@ class domains
 	// Insert a new row into tracking table with new rankings
 	private function insertStat($domain)
 	{ 
-		$stat = STAT;
+		$stat = $this->stat;
 		              		
 		// Build insert query
 		$query = "	INSERT INTO 
 						domain_stats 
 						(domain_id,
-						".STAT.",
+						".$this->stat.",
 						date) 
 			      	VALUES (
 						'".$domain->domain_id."',
@@ -270,17 +273,17 @@ class domain
 	// Build the search engine results page for the keyword
 	public function setSearchUrl()
 	{     
-		if(STAT == "backlinks")
+		if($this->stat == "backlinks")
 		{
 		 	// Build the yahoo backlinks search url
 		 	$this->url = "https://siteexplorer.search.yahoo.com/search?p=".urlencode($this->domain); 
 		}
-		elseif(STAT == "pr")
+		elseif($this->stat == "pr")
 		{   
 			// Build the google pagerank url
 	   		$this->url = "http://toolbarqueries.google.com/search?client=navclient-auto&ch=".$this->CheckHash($this->HashURL($this->domain)). "&features=Rank&q=info:".$this->domain."&num=100&filter=0"; 
 		}
-		elseif(STAT == "alexa")
+		elseif($this->stat == "alexa")
 		{   
 			// Build the alexa url
 	   		$this->url = "http://data.alexa.com/data/hmyq81hNHng1MD?cli=10&dat=ns&ref=&url=".urlencode($this->domain); 
