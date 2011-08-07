@@ -22,12 +22,19 @@ class worker
 	// Search engine
 	private $engine;
 
+	// Data model to use
+	private $model;
+
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
 	
 	function __construct()
 	{           
+
+		// Include items data model
+	 	require_once("models/".$this->model.".model.php"); 		
+
 		// Include serp parsing class
 		require_once('classes/parse.class.php');
 
@@ -45,13 +52,13 @@ class worker
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	 
 	
-	public function worker($jobData)
+	public function worker($data)
 	{  	
-		// Get the keywords from the job data				
-		$jobData = unserialize($jobData);
-
 		// Get the items model
-		$model = $jobData['model'];	
+		$model = $data['model'];
+				
+		// Get the keywords from the job data				
+		$jobData = unserialize($data['jobData']);	
 
    		// Remove "s" from object for singular item class
 		$class = substr($model, 0, -1); 		
@@ -62,10 +69,7 @@ class worker
 
 		echo "\ninclude: models/$model.model.php\n";
 
-		echo "\n\n";
-		
-		// Include items data model
-	 	require_once("models/$model.model.php"); 					
+		echo "\n\n";					
 
 		// Set the search engine to use
 		$this->engine = $jobData['engine'];				
