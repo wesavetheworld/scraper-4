@@ -43,6 +43,9 @@
 		// Define core to use
 		$core = INSTANCE_TYPE;
 
+		// Define core class
+		$class = $core."Core";
+
 		if($argv[2])
 		{
 			define("JOB_NAME", $argv[2]);
@@ -57,5 +60,5 @@
 		include("core/$core.core.php");	
 
 		// Instantiate core
-		new $core."Core"();
+		new $class();
 	}	
