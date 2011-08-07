@@ -319,13 +319,13 @@ class worker
 		if($this->model == "keywords")
 		{
 			// Update finished keywords in DB
-			$keywords->updateKeywords();                
+			${$this->model}->updateKeywords();                
 		}
 		// If updating domains
 		elseif($this->model == "domains")
 		{
 			// Update finished domains in DB
-			$domains->updateDomains();  			
+			${$this->model}->updateDomains();  			
 		}			
 	}
 
