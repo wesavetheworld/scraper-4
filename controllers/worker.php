@@ -71,8 +71,6 @@ class worker
 
 		echo "\n\n";	
 		
-		die();				
-
 		// Set the search engine to use
 		$this->engine = $jobData['engine'];				
 
