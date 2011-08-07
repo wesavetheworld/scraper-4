@@ -265,7 +265,7 @@ class worker
 		}			
 	}
 
-	private function parse($content, ${$class})
+	private function parse($content, $class)
 	{
 		// Create new parsing object
 		$parse = new parse;	
