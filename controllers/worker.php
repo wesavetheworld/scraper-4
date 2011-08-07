@@ -99,9 +99,6 @@ class worker
 			// Loop through each keyword
 			foreach(${$this->model}->{$this->model} as $key => &${$this->class})
 			{
-
-				print_r(${$this->class});
-				die();
 				// If a valid search results page can be loaded (new scrape or saved file)
 				if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
 				{  			
@@ -162,7 +159,7 @@ class worker
 							unset(${$this->model}->{$this->model}->$key);  
 						    
 							// Decrease keywords remaining by one
-							${$this->class}->total--; 
+							${$this->model}->total--; 
 						}
 						// Domain was not found ranking
 						else
