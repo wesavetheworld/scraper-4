@@ -69,7 +69,7 @@ class worker
 		// Get the items from the job data				
 		${$model} = $jobData[$model];
 
-		print_r(${$model}->$class);
+		print_r(${$model}->$model);
 
 		die();
 	 		   	
