@@ -16,7 +16,7 @@
 
 // ********************************** START **********************************// 
 
-class client 
+class clientCore 
 {    
 	
 	function __construct()

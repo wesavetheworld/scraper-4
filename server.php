@@ -41,7 +41,7 @@
 	if($argv[1] == 'run') 
 	{
 		// Define core to use
-		$core = INSTANCE_TYPE;
+		$core = INSTANCE_TYPE."Core";
 
 		if($argv[2])
 		{
