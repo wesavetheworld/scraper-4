@@ -66,9 +66,6 @@ class domains
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);		
 			
-			print_r($this->domainIds);
-			die('the end')	;
-			
 			// Update the keywords select as checked out
 			$this->setCheckOut('1');    	
 			
@@ -136,6 +133,8 @@ class domains
 				  	WHERE 
 				  		domain_id IN (".implode(",", $this->domainIds).")";
 													  
+echo $query;
+
 		// Execute update query
 		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
 	}                                                                                                 	 
