@@ -60,7 +60,7 @@ class worker
 
 		echo "\nclass: ".$class;
 
-		echo "\ninclude: models/$model.model.php\n"
+		echo "\ninclude: models/$model.model.php\n";
 
 		echo "\n\n";
 		
