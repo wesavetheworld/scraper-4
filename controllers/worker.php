@@ -91,7 +91,7 @@ class worker
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
 									
 			// Execute the scraping
-			//$scrape->curlExecute();
+			$scrape->curlExecute();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', "rankings.log");
