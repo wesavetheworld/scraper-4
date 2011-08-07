@@ -68,10 +68,6 @@ class worker
 
 		// Get the items from the job data				
 		${$model} = $jobData[$model];
-
-		print_r(${$model}->$model);
-
-		die();
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
@@ -92,7 +88,7 @@ class worker
 			$scrape->engine = $this->engine;
 
 			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls(${$model}->${$class}); 
+			$scrape->urls = $this->getUrls(${$model}->$model); 
 
 			print_r($scrape->urls);
 
