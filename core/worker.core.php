@@ -110,7 +110,7 @@ class workerCore
 	{	
 		// Load the controller and get job results
 		 //$job = new load('workers/rankings', $job->workload());	
-		 $job = new load('worker', array('model'=>'keywords', 'jobData'=>$job->workload());	
+		 $job = new load('worker', array('model'=>'keywords', 'jobData'=>$job->workload()));	
 
 		 return $job->results;
 	}
