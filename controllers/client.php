@@ -109,6 +109,9 @@ class client
 
 					// Create job data array
 					$data = array();
+
+					// Define the data model to use for this job
+					$data['model'] = MODEL;					
 					 
 					// Serialize items and add to job data
 					$data[MODEL] = $batch;
