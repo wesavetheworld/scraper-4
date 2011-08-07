@@ -89,10 +89,6 @@ class worker
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
-
-			print_r($scrape->urls);
-
-			die();
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -101,10 +97,10 @@ class worker
 			utilities::benchmark('scraping content: ', "rankings.log");
 			
 			// Loop through each keyword
-			foreach(${$model}->${$class} as $key => &$item)
+			foreach(${$this->model}->{$this->model} as $key => &${$this->class})
 			{
 				// If a valid search results page can be loaded (new scrape or saved file)
-				if($content = $this->getContent($item, $scrape->results[$keyword->searchHash]))
+				if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
 				{  			
 					// Parse scraped content
 					$this->parse($content);		
@@ -140,22 +136,22 @@ class worker
 	public function getUrls($items)
 	{    
 		// Loop through each keyword
-		foreach($items as $key => &${$class})
+		foreach($items as $key => &${$this->class})
 		{  
 			// Generate the search page url 
-			${$class}->setSearchUrl();			  		
+			${$this->class}->setSearchUrl();			  		
 			 			                     			
 			// If keyword's search hash is unique
-			if(!$urls[${$class}->searchHash])
+			if(!$urls[${$this->class}->searchHash])
 			{    				
 				// If no saved search or saved search is from another hour
-				if(!file_exists(${$class}->searchFile) || date("Y-m-d-G", filemtime(${$class}->searchFile)) != date("Y-m-d-G") || filesize(${$class}->searchFile) < 500)
+				if(!file_exists(${$this->class}->searchFile) || date("Y-m-d-G", filemtime(${$this->class}->searchFile)) != date("Y-m-d-G") || filesize(${$this->class}->searchFile) < 500)
 				{      
 					// Add the keyword's search page url to scraping list
-					$urls[${$class}->searchHash] = ${$class}->url; 
+					$urls[${$this->class}->searchHash] = ${$this->class}->url; 
 					
 					// This is a new search
-					${$class}->searchType = "new";
+					${$this->class}->searchType = "new";
 				}
 			}  	
 		} 
