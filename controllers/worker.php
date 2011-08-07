@@ -182,11 +182,21 @@ class worker
 
 		echo "keywords updated: ".count(${$this->model}->updated);
 
-		print_r(${$this->model});
+		// If updating keywords
+		if($this->model == "keywords")
+		{
+			// Update finished keywords in DB
+			${$this->model}->updateKeywords();                
+		}
+		// If updating domains
+		elseif($this->model == "domains")
+		{
+			// Update finished domains in DB
+			${$this->model}->updateDomains();  			
+		}	
 
-		die("end");
 		// Update DB with new data
-		$this->updateItems();
+		//$this->updateItems();
 		
 		// Call processing time
 		utilities::benchmark('update items: ', "rankings.log"); 		
