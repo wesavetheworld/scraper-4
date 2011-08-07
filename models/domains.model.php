@@ -103,7 +103,7 @@ class domains
 			while($domain = mysql_fetch_object($result, 'domain'))
 			{   
 				// Make the keyword save to be used in the url	
-				$keyword->urlSafeKeyword();				     				
+				//$keyword->urlSafeKeyword();				     				
 
 				// Set a unique keyword reference (fix for serializing objects)
 				$domain->uniqueId();	
