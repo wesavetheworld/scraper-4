@@ -32,8 +32,8 @@ class worker
 	function __construct()
 	{           
 
-		// Include items data model
-	 	require_once("models/".$this->model.".model.php"); 		
+		// // Include items data model
+	 // 	require_once("models/".$this->model.".model.php"); 		
 
 		// Include serp parsing class
 		require_once('classes/parse.class.php');
@@ -69,7 +69,9 @@ class worker
 
 		echo "\ninclude: models/$model.model.php\n";
 
-		echo "\n\n";					
+		echo "\n\n";	
+		
+		die();				
 
 		// Set the search engine to use
 		$this->engine = $jobData['engine'];				
