@@ -52,6 +52,8 @@ class worker
 
 		// Get the items model
 		$model = $jobData['model'];	
+
+		die($model."\n".$class);
 		
    		// Remove "s" from object for singular item class
 		$class = substr($model, 0, -1);   
