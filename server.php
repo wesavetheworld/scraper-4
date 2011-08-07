@@ -41,7 +41,7 @@
 	if($argv[1] == 'run') 
 	{
 		// Define core to use
-		$core = INSTANCE_TYPE."Core";
+		$core = INSTANCE_TYPE;
 
 		if($argv[2])
 		{
@@ -57,5 +57,5 @@
 		include("core/$core.core.php");	
 
 		// Instantiate core
-		new $core();
+		new $core."Core"();
 	}	
