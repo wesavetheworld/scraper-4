@@ -64,8 +64,6 @@ class worker
 
 		echo "\n\n";
 		
-die();
-
 		// Include items data model
 	 	require_once("models/$model.model.php"); 					
 
