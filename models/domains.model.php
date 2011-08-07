@@ -44,7 +44,7 @@ class domains
 		// if(count($this->keywordIds))
 		// {    
 		// 	// Check any remaining keywords back in
-		$this->setCheckOut('0');
+		//$this->setCheckOut('0');
 		// }  
 	}    
 	
