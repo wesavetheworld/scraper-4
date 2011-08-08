@@ -73,7 +73,7 @@ class clientCore
 				}
 			}
 
-			// Every 3 minutes
+			// Every 2 minutes
 			if(intval(date("i")) % 2 == 0)
 			{
 				// Update domain stats
