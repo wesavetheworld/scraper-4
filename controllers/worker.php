@@ -241,9 +241,10 @@ class worker
 				{    
 					// Set the pagerank for domain
 					$item->pr = $this->parse->pageRank($content); 
-					
-					$item->pr = 10; 
 
+					echo $content;
+					die();
+					
 					echo $item->pr."\n";
 				} 
 				elseif($this->task == "alexa")
