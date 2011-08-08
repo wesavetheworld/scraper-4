@@ -238,8 +238,6 @@ class worker
 			${$this->model}->updateDomains();  			
 		}	
 
-		die('the end');
-
 		// Update DB with new data
 		//$this->updateItems();
 		
