@@ -90,7 +90,7 @@ class domains
 			$date = TASK."_status = '0000-00-00'";
 		}
 		else
-
+		{
 			$date = TASK."_status != '".date("Y-m-d")."'";
 		}
 		
