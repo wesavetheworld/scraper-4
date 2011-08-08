@@ -80,6 +80,8 @@ class worker
 		
 		
 		print_r($jobData);	
+
+		die();
 			 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', $this->task.".log"); 		
