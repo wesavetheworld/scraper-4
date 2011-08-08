@@ -223,9 +223,14 @@ class worker
 
 	private function parseDomains($key, &$item)
 	{
+
+		echo $this->scrape->results[$item->url];
+		die();
 		// If a valid search results page can be loaded (new scrape or saved file)
 		if($content = $this->getContent($item, $this->scrape->results[$item->url]) || $item->bad == 10)
 		{  	
+
+			echo $content;
 			if($item->bad != 10)
 			{					
 				if($this->task == "backlinks")
