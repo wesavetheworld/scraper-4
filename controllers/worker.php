@@ -228,6 +228,7 @@ class worker
 		{  	
 
 			echo $content;
+			die();
 			if($item->bad != 10)
 			{					
 				if($this->task == "backlinks")
@@ -349,9 +350,6 @@ class worker
   			// Load a valid saved search file as the source
 			$search = file_get_contents($item->searchFile);
 		} 	
-		
-				echo $search;
-				die();
 		
 		return $search;
 	}
