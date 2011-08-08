@@ -77,7 +77,7 @@ class worker
 
 				
 		
-		print_r($items);	
+		print_r($items->{$this->model});	
 
 		die();
 
