@@ -327,12 +327,13 @@ class domain
 			} 
 			elseif($key == "domain")
 			{
-				echo "domain: ".$this->$key."\n";
-				// 
 				$domain = explode(".", $this->$key);
+				
+				echo "domain: ".$this->$key." : ".count($domain)."\n";
 				
 				if(count($domain) == 1)
 				{
+					echo " - bad\n";
 					return false;
 				}
 			}
