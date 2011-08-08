@@ -27,7 +27,7 @@ class domains
 	
 	// Contains the count(int) of keywords in the main object
 	public $total;	
-	
+
 	function __construct($empty = false)
 	{  	
 		if(!$empty)
@@ -98,8 +98,7 @@ class domains
 					AND	
 						".TASK."_status != '".date("Y-m-d")."'
 					{$new}		
-					{$user}
-					LIMIT 5"; 
+					{$user}"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
