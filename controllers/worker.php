@@ -370,7 +370,7 @@ class worker
 	}
 
 	// Update database with new items
-	private function updateItems(&$items)
+	private function updateItems()
 	{
 		// If updating keywords
 		if($this->model == "keywords")
