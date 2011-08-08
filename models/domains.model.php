@@ -28,6 +28,8 @@ class domains
 	// Contains the count(int) of keywords in the main object
 	public $total;	
 
+	public $task;
+
 	function __construct($empty = false)
 	{  	
 		if(!$empty)
@@ -99,6 +101,8 @@ class domains
 						".TASK."_status != '".date("Y-m-d")."'
 					{$new}		
 					{$user}"; 
+
+					echo $query;
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
@@ -116,7 +120,7 @@ class domains
 					$domain->uniqueId = "id_".$domain->domain_id;
 
 					// Set the engine to use for scraping this keyword
-					$domain->stat = TASK;				
+					$domain->stat = $this->task;				
 				 
 					// Add keyword object to keyword array
 					$this->domains->{$domain->domain_id} = $domain;   
