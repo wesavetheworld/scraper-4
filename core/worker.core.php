@@ -120,6 +120,9 @@ class workerCore
 	// Collect domain pagerank
 	public static function pageRank($job)
 	{	
+
+		echo "right function \n";
+		die();
 		 // Build job data array
 		 $job = array('model'=>'domains', 'stat'=>'pr', 'jobData'=>$job->workload());
 		 
