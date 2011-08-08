@@ -138,6 +138,7 @@ class worker
 							// Set the pagerank for domain
 							${$this->class}->pr = $parse->pageRank($content); 
 
+							echo "content: $content -> ";
 							echo ${$this->class}->pr."\n";
 						} 
 						elseif($this->stat == "alexa")
