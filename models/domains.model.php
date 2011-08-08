@@ -133,8 +133,6 @@ class domains
 				  	WHERE 
 				  		domain_id IN (".implode(",", $this->domainIds).")";
 													  
-echo $query;
-
 		// Execute update query
 		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
 	}                                                                                                 	 

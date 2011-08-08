@@ -54,7 +54,7 @@ class workerCore
 	private function registerJobs()
 	{
 		// All keyword ranking jobs
-		if(JOB_NAME != "stats")
+		if(JOB_FUNCTION == "rankings")
 		{
 			// Register new job type
 			$this->gm->addFunction(JOB_NAME, "workerCore::".JOB_FUNCTION); 				
