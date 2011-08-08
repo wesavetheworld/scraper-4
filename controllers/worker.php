@@ -372,6 +372,10 @@ class worker
 	// Update database with new items
 	private function updateItems()
 	{
+
+		print_r($this->items);
+
+		die();
 		// If updating keywords
 		if($this->model == "keywords")
 		{
