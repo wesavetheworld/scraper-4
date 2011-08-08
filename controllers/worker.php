@@ -234,9 +234,13 @@ class worker
 		// If updating domains
 		elseif($this->model == "domains")
 		{
+			echo "domain update function\n";
+
 			// Update finished domains in DB
 			${$this->model}->updateDomains();  			
 		}	
+
+		die('the end');
 
 		// Update DB with new data
 		//$this->updateItems();
