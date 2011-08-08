@@ -51,9 +51,6 @@ class worker
 	
 	public function worker($data)
 	{  	
-
-		echo $data['stat'];
-		die();
 		// Get the items model
 		$this->model = $data['model'];
 
@@ -64,10 +61,7 @@ class worker
 			${$this->model}->stat = $this->stat;	
 			
 			$this->engine =  "google";
-		}		
-		
-		echo "stat: ". $data['stat'];
-		die();				
+		}					
 
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
@@ -85,7 +79,7 @@ class worker
 		${$this->model} = $jobData[$this->model];
 
 		
-		echo "stat: ". $data['model'];
+		echo "stat: ". $data['model']."\n";
 		die();	
 	 		   	
 		// Call processing time
