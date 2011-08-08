@@ -223,9 +223,6 @@ class worker
 
 	private function parseDomains($key, &$item)
 	{
-
-		print_r($this->scrape->results[$item->url]['output']);
-		die();
 		// If a valid search results page can be loaded (new scrape or saved file)
 		if($content = $this->getContent($item, $this->scrape->results[$item->url]) || $item->bad == 10)
 		{  	
@@ -331,6 +328,7 @@ class worker
 			// If the content has valid headers
 			if($content['status'] == 'success')
 			{   
+				echo "success";
 				// If the search is new for the first keyword
 				if($item->searchType == "new")
 				{				 				
@@ -345,7 +343,12 @@ class worker
 				{
 					$search = "99";
 				}				
-			}				
+			}	
+			else
+			{
+								echo "failure";
+
+			}			
 		} 
 		elseif($this->model != 'domains')
 		{    
