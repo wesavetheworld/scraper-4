@@ -317,6 +317,8 @@ class worker
 				{
 					$search = "0";
 				}				
+
+				echo "search: $search\n";
 			}				
 		} 
 		elseif($this->model != 'domains')
