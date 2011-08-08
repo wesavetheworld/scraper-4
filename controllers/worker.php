@@ -260,8 +260,9 @@ class worker
 		foreach($items as $key => &$item)
 		{  
 			// Generate the search page url 
-			$item->setSearchUrl();			  		
-			echo "item: $item | stat: ".$item->stat." url: ".$item->url."\n";
+			//$item->setSearchUrl();			  		
+			//echo "item: $item | stat: ".$item->stat." url: ".$item->url."\n";
+			echo "item: $item | stat: ".$item->stat."\n";
 			
 			// If getting domain urls
 			if($this->model == "domains")
