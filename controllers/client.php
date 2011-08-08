@@ -115,6 +115,7 @@ class client
 					
 					// Define the task for the worker
 					$data['task'] = TASK;					
+					$data['dick'] = "punch";					
 
 					// If task is backlinks
 					if(TASK == "backlinks")
@@ -141,8 +142,6 @@ class client
 					// Serialize items and add to job data
 					$data[MODEL] = $batch;
 					
-					die('good it stopped')					;
-
 					// Serialize job data for transport
 					$data = serialize($data);
 					
