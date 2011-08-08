@@ -259,13 +259,11 @@ class worker
 		// Loop through each keyword
 		foreach($items as $key => &$item)
 		{  
-
-			print_r($item);
-			die();
 			// Generate the search page url 
-			//$item->setSearchUrl();			  		
+			$item->setSearchUrl();			  		
 			echo "item: ".$item->domain." | stat: ".$item->stat." url: ".$item->url."\n";
 			
+			die();
 			// If getting domain urls
 			if($this->model == "domains")
 			{ 			                     	
