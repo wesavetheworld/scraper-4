@@ -91,9 +91,12 @@ class client
 				{
 					$id = "domain_id";
 				}
+
+				// Singlular model item
+				$obj = substr(MODEL, 0, -1); 
 				
 				// Add item id to checkout list                                                                           	
-				$batch->{MODEL."Ids"}[$item->uniqueId] = $item->$id;														 
+				$batch->{$obj."Ids"}[$item->uniqueId] = $item->$id;														 
 			
 				// Keep track of keywords in batch
 				$i++;				
