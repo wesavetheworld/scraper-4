@@ -151,7 +151,7 @@ class worker
 						// Decrease total domains remaining
 						${$this->model}->total--; 
 
-						echo  "\ndomains remaining: ". ${$this->class}->total."\n";
+						echo  "\ndomains remaining: ". ${$this->model}->total."\n";
 					}	
 				}	
 				// Content for keywords

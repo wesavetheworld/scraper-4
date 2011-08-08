@@ -184,55 +184,44 @@ class domains
 	// ===========================================================================//
 	
 	// Update keywords table with new keyword info
-	public function updateKeywords()
+	public function updateDomains()
 	{
 		// Loop through finished keywords object
-		foreach($this->updated as $key => &$keyword)
+		foreach($this->updated as $key => &$domain)
 		{	 
 			// If this keyword has no ranking yet
-			if(!isset($keyword->rank) && $keyword->rank != '0')
+			if(!isset($domain->{$this->stat}) && $keyword->{$this->stat} != '0')
 			{   
 				// Skip keyword
 				continue;
 			} 
 		 
 			// If keyword has not been updated today
-			if($keyword->date != date("Y-m-d"))
+			if($domain->date != date("Y-m-d"))
 			{   
 				// Insert a new ranking row
-				$keyword->inserted = $this->insertRanking($keyword);
+				$domain->inserted = $this->insertStat($domain);
 			}
 			
 			// If keyword has been updated today or there was a duplicate error on insert 
-			if($keyword->date == date("Y-m-d") || !$keyword->inserted)			
+			if($domain->date == date("Y-m-d") || !$domain->inserted)			
 			{    
 				// Update an existing ranking row
-				$keyword->updated = $this->updateRanking($keyword);
-			}
-			
-			// If updating google
-			if($this->engine == "google")
-			{
-				// Save any notifications for keyword
-				$setNotify = " notify = '".$keyword->notify."',";
+				$domain->updated = $this->updateStat($domain);
 			}
 			
 			// If keyword's tracking data was updated successfully
-			if($keyword->inserted || $keyword->updated)
+			if($domain->inserted || $domain->updated)
 			{
 				// Update keywords table with update time and notifications
 				$query = "	UPDATE 
-								keywords 
+								domains 
 							SET 
-						  		$setNotify 
-						  		".$keyword->engine."_status = NOW(),  
-						  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
-								calibrate = '".$keyword->calibrate."',
-								check_out = 0,
-						  		time = NOW(), 
-						  		date = '".date("Y-m-d")."' 
-						  WHERE 
-						  	keyword_id='".$keyword->keyword_id."'";  
+					  		 	".$this->stat."_status = NOW(), 
+								check_out = '0',
+					 			updated = NOW()
+						  	WHERE 
+						  		domain_id = ".$domain->domain_id; 
 											  
 			    // Execute update query
 				$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()); 
@@ -241,12 +230,12 @@ class domains
 			// If keyword update successful
 			if($result)
 			{
-				// Remove keyword from keyword id array
-				unset($this->keywordIds[$key]);        
+				// Remove domain from domain id array
+				unset($this->domainIds[$key]);        
 				
-				// Remove keyword from keyword array
-				unset($this->keywords->$key);        
-			}
+				// Remove domain from domain array
+				unset($this->domains->$key);        
+			}	
 			// Keyword update failed	
 			else
 			{
@@ -257,45 +246,40 @@ class domains
 	} 
 	
 	// Update existing row in tracking table with new rankings
-	private function updateRanking($keyword)
-	{	      		
+	private function updateStat($domain)
+	{	 		     		
 		// Build update query
 		$query = "	UPDATE 
-						tracking 
+						domain_stats 
 					SET 
-				 		".$keyword->engine." = '".$keyword->rank."', 
-					 	".$keyword->engine."_match = '".$keyword->found."' , 
-					 	dupecount = '0' 
-					 WHERE 
-					 	keyword_id='".$keyword->keyword_id."' 
-					 AND 
-					 	date='".date("Y-m-d")."'";	
-		
+						".$this->stat." = '".$domain->$stat."'
+					WHERE 
+					 	domain_id = ".$domain->domain_id." 
+					AND 
+					 	date = '".date("Y-m-d")."'";
+							                                            
 		// Execute update query
-		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
+		return mysql_query($query) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
 	}
 
 	// Insert a new row into tracking table with new rankings
-	private function insertRanking($keyword)
-	{	           		
+	private function insertStat($domain)
+	{ 		              		
 		// Build insert query
 		$query = "	INSERT INTO 
-						tracking 
-						(keyword_id,".$keyword->engine.",
-						".$keyword->engine."_match,
-						dupecount,
+						domain_stats 
+						(domain_id,
+						".$this->stat.",
 						date) 
-			      VALUES (
-						'".$keyword->keyword_id."',
-						'".$keyword->rank."',
-						'".mysql_real_escape_string($keyword->found)."',
-						'0',
-						'".date("Y-m-d")."'
+			      	VALUES (
+						'".$domain->domain_id."',
+						'".$domain->$stat."',
+						NOW()
 			          )";
 		
 		// Execute insert query 
-		return mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
-	}	   
+		return mysql_query($query) or utilities::reportErrors("ERROR ON stats insert: ".mysql_error());		
+	}   
 }
 
 // ===========================================================================// 
