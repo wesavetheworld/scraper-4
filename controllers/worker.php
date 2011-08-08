@@ -150,6 +150,8 @@ class worker
 
 						// Decrease total domains remaining
 						${$this->class}->total--; 
+
+						echo  "\ndomains remaining: ". ${$this->class}->total."\n";
 					}	
 				}	
 				// Content for keywords
@@ -201,7 +203,7 @@ class worker
 					}	
 				}					
 			} 
-			
+
 			// Call processing time
 			utilities::benchmark('Parse all content: ', "rankings.log");  
 			
