@@ -103,21 +103,13 @@ class worker
 			$scrape->urls = $this->getUrls($items->{$this->model}); 	
 									
 			// Execute the scraping
-			//$scrape->curlExecute();
+			$scrape->curlExecute();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', $this->task.".log");
 
 			// Loop through each keyword
 			foreach($items->{$this->model} as $key => &$item)
-			{
-				print_r($item);
-			}			
-			
-			die();
-			
-			// Loop through each keyword
-			foreach($items->{$this->model} as $key => &${$this->class})
 			{
 				// Create new parsing object
 				$parse = new parse;	
@@ -126,7 +118,7 @@ class worker
 				if($this->model == "domains")
 				{
 					// If a valid search results page can be loaded (new scrape or saved file)
-					if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->url]))
+					if($content = $this->getContent($item, $scrape->results[$item->url]))
 					{  						
 						if($this->task == "backlinks")
 						{
@@ -134,25 +126,25 @@ class worker
 							$parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
 							
 							// Set backlinks for domain
-							${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
+							$item->backlinks =  str_replace(",","",$parse->elements[0]); 
 						}
 						elseif($this->task == "pr")
 						{    
 							// Set the pagerank for domain
-							${$this->class}->pr = $parse->pageRank($content); 
+							$item->pr = $parse->pageRank($content); 
 
-							echo ${$this->class}->pr."\n";
+							echo $item->pr."\n";
 						} 
 						elseif($this->task == "alexa")
 						{    
 							// Set the alexa rank for domain
-							${$this->class}->alexa = $parse->alexa($content); 
+							$item->alexa = $parse->alexa($content); 
 									
-							echo "alexa: ".${$this->class}->alexa."\n";						
+							echo "alexa: ".$item->alexa."\n";						
 						}
 
 						// Add keyword to completed list
-						$items->updated[$key] = ${$this->class};
+						$items->updated[$key] = $item;
 
 						// Remove keyword from keyword id array
 						unset($items->{$this->model}->$key); 						
@@ -164,42 +156,42 @@ class worker
 					}	
 					else
 					{
-						echo ${$this->class}->url."\n";
+						echo $item->url."\n";
 					}
 				}	
 				// Content for keywords
 				elseif($this->model == "keywords")
 				{
 					// If a valid search results page can be loaded (new scrape or saved file)
-					if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
+					if($content = $this->getContent($item, $scrape->results[$item->searchHash]))
 					{  							
 						// Find the keyword's domain in one of the ranking urls
-						$parse->findElements($this->parsePattern(), $content)->findInElements(${$this->class}->domain);			 
+						$parse->findElements($this->parsePattern(), $content)->findInElements($item->domain);			 
 									   				
 						// If domain was found or keyword on last search page
-						if($parse->found || ${$this->class}->searchPage == SEARCH_DEPTH - 1)
+						if($parse->found || $item->searchPage == SEARCH_DEPTH - 1)
 						{   
 							// If a ranking was found 
 							if($parse->found)
 							{   
 								// Set new keyword rank (amount of results per page + position on current page)
-								${$this->class}->rank = ${$this->class}->searchOffset + $parse->position; 
+								$item->rank = $item->searchOffset + $parse->position; 
 															
 								// Set the matching url that was found ranking
-								${$this->class}->found = $parse->found;  
+								$item->found = $parse->found;  
 							}
 							// If no ranking was found
 							else
 							{    
 								// "0" is used for "not found"
-								${$this->class}->rank = 0;   
+								$item->rank = 0;   
 							}  
 													
 							// Calibrate keyword ranking (10/100 results)
-							$this->calibration(${$this->class});   
+							$this->calibration($item);   
 
 							// Add keyword to completed list
-							$items->updated[$key] = ${$this->class};
+							$items->updated[$key] = $item;
 
 							// Remove keyword from keyword id array
 							unset($items->{$this->model}->$key);  
@@ -211,7 +203,7 @@ class worker
 						else
 						{ 
 							// Increase search results page for next scrape
-							${$this->class}->searchPage++; 						
+							$item->searchPage++; 						
 						} 
 					}	
 				}					
@@ -259,35 +251,35 @@ class worker
 	public function getUrls($items)
 	{    
 		// Loop through each keyword
-		foreach($items as $key => &${$this->class})
+		foreach($items as $key => &$item)
 		{  
 			// Generate the search page url 
-			${$this->class}->setSearchUrl();			  		
+			$item->setSearchUrl();			  		
 			
 			// If getting domain urls
 			if($this->model == "domains")
 			{ 			                     	
 				// If keyword's search hash is unique
-				if(!$urls[${$this->class}->url])
+				if(!$urls[$item->url])
 				{    				
 					// Add the keyword's search page url to scraping list
-					$urls[${$this->class}->url] = ${$this->class}->url;   
+					$urls[$item->url] = $item->url;   
 				}
 			}
 			// If getting keyword urls
 			else
 			{	    			                     			
 				// If keyword's search hash is unique
-				if(!$urls[${$this->class}->searchHash])
+				if(!$urls[$item->searchHash])
 				{    				
 					// If no saved search or saved search is from another hour
-					if(!file_exists(${$this->class}->searchFile) || date("Y-m-d-G", filemtime(${$this->class}->searchFile)) != date("Y-m-d-G") || filesize(${$this->class}->searchFile) < 500)
+					if(!file_exists($item->searchFile) || date("Y-m-d-G", filemtime($item->searchFile)) != date("Y-m-d-G") || filesize($item->searchFile) < 500)
 					{      
 						// Add the keyword's search page url to scraping list
-						$urls[${$this->class}->searchHash] = ${$this->class}->url; 
+						$urls[$item->searchHash] = $item->url; 
 						
 						// This is a new search
-						${$this->class}->searchType = "new";
+						$item->searchType = "new";
 					}
 				} 
 			}	 	
