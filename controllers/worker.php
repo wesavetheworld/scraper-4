@@ -73,7 +73,9 @@ class worker
 		{
 			$this->stat = $data['stat'];
 
-			${$this->model}->stat = $this->stat;			
+			${$this->model}->stat = $this->stat;	
+			
+			$this->engine =  "google";
 		}		
 	 		   	
 		// Call processing time
