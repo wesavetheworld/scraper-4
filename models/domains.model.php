@@ -187,8 +187,13 @@ class domains
 	public function updateDomains()
 	{
 
-		print_r($this->updated);die();
+		foreach($this->updated as $key => &$domain)
+		{
+			echo "pr: ".$domain->pr."\n";
+			
+		}		
 
+		die('the end');
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
 		{	 

@@ -159,11 +159,6 @@ class worker
 
 						echo  "\ndomains remaining: ". ${$this->model}->total."\n";
 					}	
-					else
-					{
-						echo "no content\n";
-						print_r(${$this->model}->{$this->model});
-					}
 				}	
 				// Content for keywords
 				elseif($this->model == "keywords")
