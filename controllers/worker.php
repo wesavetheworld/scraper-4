@@ -309,14 +309,14 @@ class worker
 					// Save the new search file
 					$this->searchSave($item, $content);
 				}	
-
-				if($this->stat == "pr" && empty($content))
-				{
-					$content = "0";
-				}
 				
 				// Set the new search as the source
-				$search = $content['output']; 						
+				$search = $content['output']; 
+
+				if($this->stat == "pr" && empty($search))
+				{
+					$search = "0";
+				}				
 			}				
 		} 
 		elseif($this->model != 'domains')
