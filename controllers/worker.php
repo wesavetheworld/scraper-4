@@ -303,6 +303,8 @@ class worker
 			// If the content has valid headers
 			if($content['status'] == 'success')
 			{   
+				echo "a success\n";
+
 				// If the search is new for the first keyword
 				if($item->searchType == "new")
 				{				 				
