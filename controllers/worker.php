@@ -58,25 +58,25 @@ class worker
 		$this->model = $data['model'];	
 		
    		// Remove "s" from object for singular item class
-		$this->class = substr($this->model, 0, -1); 	
+		$this->class = substr($this->model, 0, -1); 
 		
-		// Task is this worker performing
-		$this->task = $data['task'];
-		
-		// Search engine used (for proxy use)
-		$this->engine = $data['engine'];
-		
-		echo "engine: ". $this->engine;
-
-		print_r($data);
-		
-		return true;					
-
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
 				
 		// Get the keywords from the job data				
-		$jobData = unserialize($data['jobData']);			
+		$jobData = unserialize($data['jobData']);						
+		
+		// Task is this worker performing
+		$this->task = $jobData['task'];
+		
+		// Search engine used (for proxy use)
+		$this->engine = $jobData['engine'];
+		
+		echo "engine: ". $this->engine;
+
+		//print_r($data);
+		
+		return true;					
 
 		// Get the items from the job data				
 		$items = $jobData[$this->model];
