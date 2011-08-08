@@ -200,6 +200,7 @@ class domains
 			// If keyword has not been updated today
 			if($domain->date != date("Y-m-d"))
 			{   
+				echo "inserting\n";
 				// Insert a new ranking row
 				$domain->inserted = $this->insertStat($domain);
 			}
@@ -207,6 +208,8 @@ class domains
 			// If keyword has been updated today or there was a duplicate error on insert 
 			if($domain->date == date("Y-m-d") || !$domain->inserted)			
 			{    
+				echo "updating \n";
+
 				// Update an existing ranking row
 				$domain->updated = $this->updateStat($domain);
 			}
@@ -214,6 +217,8 @@ class domains
 			// If keyword's tracking data was updated successfully
 			if($domain->inserted || $domain->updated)
 			{
+				echo "\n updating domains table\n";
+
 				// Update keywords table with update time and notifications
 				$query = "	UPDATE 
 								domains 
@@ -231,6 +236,7 @@ class domains
 			// If keyword update successful
 			if($result)
 			{
+				echo "table update complete\n";
 				// Remove domain from domain id array
 				unset($this->domainIds[$key]);        
 				

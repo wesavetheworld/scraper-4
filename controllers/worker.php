@@ -223,7 +223,7 @@ class worker
 		// Connect to database
 		utilities::databaseConnect();
 
-		echo "keywords updated: ".count(${$this->model}->updated);
+		echo $this->model." updated: ".count(${$this->model}->updated);
 
 		// If updating keywords
 		if($this->model == "keywords")
