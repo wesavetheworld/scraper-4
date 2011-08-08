@@ -139,7 +139,7 @@ class client
 						$data['engine'] = ENGINE;
 					}
 					
-					$data['engine'] = 'penis';
+					$data['penis'] = 'cock';
 
 
 					// Serialize job data for transport
