@@ -57,6 +57,18 @@ class worker
 		// Get the items model
 		$this->model = $data['model'];
 
+		if($data['stat'])
+		{
+			$this->stat = $data['stat'];
+
+			${$this->model}->stat = $this->stat;	
+			
+			$this->engine =  "google";
+		}		
+		
+		echo "stat: ". $data['stat'];
+		die();				
+
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
 				
@@ -72,19 +84,6 @@ class worker
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
 
-		if($data['stat'])
-		{
-			echo "\nyes\n";
-			$this->stat = $data['stat'];
-
-			${$this->model}->stat = $this->stat;	
-			
-			$this->engine =  "google";
-		}	
-		else
-		{
-			echo "\nno\n";
-		}
 		
 		echo "stat: ". $data['model'];
 		die();	
