@@ -281,11 +281,11 @@ class domains
 		$query = "	INSERT INTO 
 						domain_stats 
 						(domain_id,
-						".$this->stat.",
+						".$domain->stat.",
 						date) 
 			      	VALUES (
 						'".$domain->domain_id."',
-						'".$domain->$stat."',
+						'".$domain->{$domain->stat}."',
 						NOW()
 			          )";
 
