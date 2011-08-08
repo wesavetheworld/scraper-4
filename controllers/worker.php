@@ -118,29 +118,32 @@ class worker
 				if($this->model == "domains")
 				{
 					// If a valid search results page can be loaded (new scrape or saved file)
-					if($content = $this->getContent($item, $scrape->results[$item->url]))
-					{  						
-						if($this->task == "backlinks")
-						{
-							// Find the keyword's domain in one of the ranking urls
-							$parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
-							
-							// Set backlinks for domain
-							$item->backlinks =  str_replace(",","",$parse->elements[0]); 
-						}
-						elseif($this->task == "pr")
-						{    
-							// Set the pagerank for domain
-							$item->pr = $parse->pageRank($content); 
+					if($content = $this->getContent($item, $scrape->results[$item->url]) || $item->bad == 10)
+					{  	
+						if($item->bad != 10)
+						{					
+							if($this->task == "backlinks")
+							{
+								// Find the keyword's domain in one of the ranking urls
+								$parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
+								
+								// Set backlinks for domain
+								$item->backlinks =  str_replace(",","",$parse->elements[0]); 
+							}
+							elseif($this->task == "pr")
+							{    
+								// Set the pagerank for domain
+								$item->pr = $parse->pageRank($content); 
 
-							echo $item->pr."\n";
-						} 
-						elseif($this->task == "alexa")
-						{    
-							// Set the alexa rank for domain
-							$item->alexa = $parse->alexa($content); 
-									
-							echo "alexa: ".$item->alexa."\n";						
+								echo $item->pr."\n";
+							} 
+							elseif($this->task == "alexa")
+							{    
+								// Set the alexa rank for domain
+								$item->alexa = $parse->alexa($content); 
+										
+								echo "alexa: ".$item->alexa."\n";						
+							}
 						}
 
 						// Add keyword to completed list
@@ -156,7 +159,7 @@ class worker
 					}	
 					else
 					{
-						echo $item->url."\n";
+						$item->bad++;
 					}
 				}	
 				// Content for keywords
