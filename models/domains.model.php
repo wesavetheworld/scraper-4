@@ -228,7 +228,7 @@ class domains
 				$query = "	UPDATE 
 								domains 
 							SET 
-					  		 	".$this->stat."_status = NOW(), 
+					  		 	".$domain->stat."_status = NOW(), 
 								check_out = '0',
 					 			updated = NOW()
 						  	WHERE 
