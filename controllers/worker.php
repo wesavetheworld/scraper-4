@@ -166,9 +166,7 @@ class worker
 			{
 				$this->parseKeywords($key, $item);
 			}
-		}		
-						die();
-						
+		}								
 	}
 
 	private function parseKeywords($key, &$item)
