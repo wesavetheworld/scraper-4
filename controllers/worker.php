@@ -80,8 +80,6 @@ class worker
 
 		print_r($items);
 
-		return true;
-
 		die();
 	 		   	
 		// Call processing time
