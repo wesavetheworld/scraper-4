@@ -162,16 +162,15 @@ class worker
 			if($this->model == "domains")
 			{
 				$this->parseDomains($key, $item);
-
-				print_r($item);
-				die();
 			}	
 			// Content for keywords
 			elseif($this->model == "keywords")
 			{
 				$this->parseKeywords($key, $item);
 			}
-		}								
+		}		
+						die();
+						
 	}
 
 	private function parseKeywords($key, &$item)
@@ -242,8 +241,7 @@ class worker
 					// Set the pagerank for domain
 					$item->pr = $this->parse->pageRank($content); 
 
-					echo "content: $content";
-					die();
+					echo "content: $content \n";
 					
 					echo $item->pr."\n";
 				} 
