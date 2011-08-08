@@ -114,8 +114,7 @@ class client
 					$data = array();				
 					
 					// Define the task for the worker
-					//$data['task'] = TASK;					
-					$data->dick = "punch";					
+					$data['task'] = TASK;					
 
 					// If task is backlinks
 					if(TASK == "backlinks")
@@ -137,8 +136,6 @@ class client
 						$data['engine'] = ENGINE;
 					}
 					
-					$data['penis'] = 'cock';
-
 					// Serialize items and add to job data
 					$data[MODEL] = $batch;
 					
