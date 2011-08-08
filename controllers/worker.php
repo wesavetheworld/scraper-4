@@ -148,9 +148,6 @@ class worker
 								
 		// Execute the scraping
 		$this->scrape->curlExecute();	
-		
-		print_r($this->scrape->results);
-		die();	
 	}
 
 	private function parseContent()
@@ -165,6 +162,9 @@ class worker
 			if($this->model == "domains")
 			{
 				$this->parseDomains($key, $item);
+
+				print_r($item);
+				die();
 			}	
 			// Content for keywords
 			elseif($this->model == "keywords")
