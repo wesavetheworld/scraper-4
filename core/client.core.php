@@ -69,6 +69,14 @@ class clientCore
 					utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
 				}
 			}
+
+			// Every 3 minutes
+			if(date("i") % 3))
+			{
+				// Update domain stats
+				$this->domainStats();	
+			}
+
 			// Check for any new domains
 			// elseif($this->checkNew(NEW_DOMAINS_FILE))
 			// {
@@ -135,13 +143,13 @@ class clientCore
 	private function domainStats()
 	{
 		// Update all domain's pagerank
-		$this->run("client/stats", "pr");
+		$this->run("client", "pr 100");
 		
 		// Update all domain's backlinks			
-		$this->run("client/stats", "backlinks");
+		$this->run("client", "backlinks 100");
 
 		// Update all domain's alexa rankings
-		$this->run("client/stats", "alexa");		
+		$this->run("client", "alexa 100");		
 	}	
 
 	// Execute bash command that detaches from daemon
