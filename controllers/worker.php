@@ -159,17 +159,17 @@ class worker
 			// Content for domains
 			if($this->model == "domains")
 			{
-				$this->parseDomains();
+				$this->parseDomains($key, $item);
 			}	
 			// Content for keywords
 			elseif($this->model == "keywords")
 			{
-				$this->parseKeywords();
+				$this->parseKeywords($key, $item);
 			}
 		}								
 	}
 
-	private function parseKeywords()
+	private function parseKeywords($key, &$item)
 	{
 		// If a valid search results page can be loaded (new scrape or saved file)
 		if($content = $this->getContent($item, $this->scrape->results[$item->searchHash]))
@@ -217,7 +217,7 @@ class worker
 		}	
 	}
 
-	private function parseDomains()
+	private function parseDomains($key, &$item)
 	{
 		// If a valid search results page can be loaded (new scrape or saved file)
 		if($content = $this->getContent($item, $this->scrape->results[$item->url]) || $item->bad == 10)
