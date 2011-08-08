@@ -192,7 +192,7 @@ class domains
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
 		{	 
-			echo $domain->domain."\n";
+			echo $domain->domain." - ".$domain->{$this->stat}."\n";
 
 			// If this keyword has no ranking yet
 			if(!isset($domain->{$this->stat}) && $keyword->{$this->stat} != '0')
