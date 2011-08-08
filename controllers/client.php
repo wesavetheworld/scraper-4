@@ -139,7 +139,9 @@ class client
 					$data['penis'] = 'cock';
 
 					// Serialize items and add to job data
-					$data[MODEL] = $batch;					
+					$data[MODEL] = $batch;
+					
+					die('good it stopped')					;
 
 					// Serialize job data for transport
 					$data = serialize($data);
