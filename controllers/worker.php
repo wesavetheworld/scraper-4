@@ -78,8 +78,7 @@ class worker
 		{
 			// Set the search engine to use
 			$this->engine = $jobData['engine'];					
-		}
-			
+		}	
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
@@ -110,6 +109,10 @@ class worker
 									
 			// Execute the scraping
 			$scrape->curlExecute();
+
+			print_r($scrape->results);
+
+			die();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', "rankings.log");
