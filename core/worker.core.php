@@ -114,10 +114,15 @@ class workerCore
 	}	
 
 	// Collect domain backlinks
-	public static function backLinks($job)
+	public static function backlinks($job)
 	{	
-		// Load the controller and get job results
-		return new load('workers/rankings', $job->workload());	
+		 // Build job data array
+		 $job = array('model'=>'domains', 'stat'=>'backlinks', 'jobData'=>$job->workload());
+		 
+		 // Instantiate new worker	
+		 $job = new load('worker', $job);	
+
+		 return $job->results;
 	}	
 
 	// Collect domain alexa rank
