@@ -90,7 +90,9 @@ class worker
 		echo $this->model." updated: ".count($this->items->updated);
 
 		// Update DB with new data
-		$this->updateItems();
+		//$this->updateItems();
+
+		die('end');
 		
 		// Call processing time
 		utilities::benchmark('update items: ', $this->task.".log"); 		
