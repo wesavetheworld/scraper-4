@@ -67,6 +67,8 @@ class worker
 		$this->engine = $data['engine'];
 		
 		echo "engine: ". $this->engine;
+
+		print_r($data);
 		
 		return true;					
 
