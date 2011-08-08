@@ -76,7 +76,10 @@ class worker
 			${$this->model}->stat = $this->stat;	
 			
 			$this->engine =  "google";
-		}		
+		}	
+		
+		echo "stat: ". $this->stat;
+		die();	
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
@@ -113,30 +116,38 @@ class worker
 				{  			
 					// Create new parsing object
 					$parse = new parse;	
-					
-					if($this->stat == "backlinks")
+
+					// Content for domains
+					if($this->model == "domains")
 					{
-						// Find the keyword's domain in one of the ranking urls
-						$parse->findElements(PARSE_PATTERN, $content); 
-						
-						// Set backlinks for domain
-						${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
-					}
-					elseif($this->stat == "pr")
-					{    
-						echo "\npr loaded\n";
-						die();
-						// Set the pagerank for domain
-						${$this->class}->pr = $parse->pageRank($content); 
-					} 
-					elseif($this->stat == "alexa")
-					{    
-						// Set the alexa rank for domain
-						${$this->class}->alexa = $parse->alexa($content); 
-								
-						echo "alexa: ".${$this->class}->alexa."\n";						
-					}
-					else
+						if($this->stat == "backlinks")
+						{
+							// Find the keyword's domain in one of the ranking urls
+							$parse->findElements(PARSE_PATTERN, $content); 
+							
+							// Set backlinks for domain
+							${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
+						}
+						elseif($this->stat == "pr")
+						{    
+							echo "\npr loaded\n";
+							die();
+							// Set the pagerank for domain
+							${$this->class}->pr = $parse->pageRank($content); 
+						} 
+						elseif($this->stat == "alexa")
+						{    
+							// Set the alexa rank for domain
+							${$this->class}->alexa = $parse->alexa($content); 
+									
+							echo "alexa: ".${$this->class}->alexa."\n";						
+						}
+
+						// Decrease total domains remaining
+						${$this->class}->total--; 
+					}	
+					// Content for keywords
+					elseif($this->model == "keywords")
 					{
 						// Find the keyword's domain in one of the ranking urls
 						$parse->findElements($this->parsePattern(), $content)->findInElements(${$this->class}->domain);			 
