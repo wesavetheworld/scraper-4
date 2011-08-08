@@ -27,6 +27,8 @@ class domains
 	
 	// Contains the count(int) of keywords in the main object
 	public $total;	
+
+	public $dick;
 	
 	function __construct($empty = false)
 	{  	
