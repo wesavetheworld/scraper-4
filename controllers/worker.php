@@ -201,9 +201,7 @@ class worker
 					}	
 				}					
 			} 
-
-			die('end');
-
+			
 			// Call processing time
 			utilities::benchmark('Parse all content: ', "rankings.log");  
 			
