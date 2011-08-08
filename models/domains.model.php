@@ -83,7 +83,7 @@ class domains
 			$user = "AND user_id = ".ONLY_USER;
 		} 
 
-		if(NEW)
+		if(ONLY_NEW)
 		{
 			$new = "AND updated = '0000-00-00'";
 		}
