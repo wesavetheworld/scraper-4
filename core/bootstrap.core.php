@@ -327,13 +327,31 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 
 			
 			// Add workers for domain pagerank
-			$supervisord.= "[program:Stats]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run stats\n";
+			$supervisord.= "[program:pageRank]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run pr pr\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=0\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 													
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 	
+			
+			// Add workers for domain pagerank
+			$supervisord.= "[program:backlinks]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run backlinks backlinks\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 	
+			
+			// Add workers for domain pagerank
+			$supervisord.= "[program:alexa]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run alexa alexa\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 																	
 		}	
 
 		// Write new supervisord config file
