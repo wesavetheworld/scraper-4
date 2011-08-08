@@ -101,9 +101,14 @@ class worker
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
+			
+			foreach($scrape->urls as $url)
+			{
+				echo $url."\n";
 
-			print_r($scrape->urls);
-			die();			
+			}
+			
+			die();		
 									
 			// Execute the scraping
 			$scrape->curlExecute();
