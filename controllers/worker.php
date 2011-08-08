@@ -303,21 +303,20 @@ class worker
 			// If the content has valid headers
 			if($content['status'] == 'success')
 			{   
-				echo "a success\n";
-
 				// If the search is new for the first keyword
 				if($item->searchType == "new")
 				{				 				
 					// Save the new search file
 					$this->searchSave($item, $content);
 				}	
+
+				if($this->stat == "pr" && empty($content))
+				{
+					$content = "0";
+				}
 				
 				// Set the new search as the source
 				$search = $content['output']; 						
-			}
-			else
-			{
-				echo "not a success\n";
 			}				
 		} 
 		elseif($this->model != 'domains')
