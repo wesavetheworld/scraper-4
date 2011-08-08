@@ -325,7 +325,7 @@ class domain
 				// Do not continue				   
 				return false;   		
 			} 
-			elseif($key == "domain_id")
+			elseif($key == "domain")
 			{
 				// 
 				$domain = explode(".", $this->$key);
