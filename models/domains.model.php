@@ -327,7 +327,7 @@ class domain
 			} 
 			elseif($key == "domain")
 			{
-				echo $this->$key."\n";
+				echo "domain: ".$this->$key."\n";
 				// 
 				$domain = explode(".", $this->$key);
 				
