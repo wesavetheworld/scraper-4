@@ -75,6 +75,12 @@ class worker
 		// Get the items from the job data				
 		$items = $jobData[$this->model];
 
+				
+		
+		print_r($items);	
+
+		die();
+
 		// Set the task for the data model
 		$items->task = $this->task;		
 			 		   	
