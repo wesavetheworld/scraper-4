@@ -149,7 +149,7 @@ class worker
 						}
 
 						// Decrease total domains remaining
-						${$this->class}->total--; 
+						${$this->model}->total--; 
 
 						echo  "\ndomains remaining: ". ${$this->class}->total."\n";
 					}	
