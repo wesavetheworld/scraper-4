@@ -47,7 +47,7 @@ class clientCore
 				$this->run("client", "rankings 100 google daily");	
 				
 				// Update domain stats
-				$this->domainStats();				
+				//$this->domainStats();				
 			}
 
 			// The first min of every hour but the first
@@ -77,7 +77,7 @@ class clientCore
 			if(intval(date("i")) % 2 == 0)
 			{
 				// Update domain stats
-				$this->domainStats('new');	
+				//$this->domainStats('new');	
 			}
 
 			// Check for any new domains
