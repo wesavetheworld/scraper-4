@@ -83,7 +83,7 @@ class worker
 			echo "\nno\n";
 		}
 		
-		echo "stat: ". $data['stat'];
+		echo "stat: ". $data['model'];
 		die();	
 	 		   	
 		// Call processing time
