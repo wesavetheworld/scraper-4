@@ -109,10 +109,6 @@ class worker
 									
 			// Execute the scraping
 			$scrape->curlExecute();
-
-			print_r($scrape->results);
-
-			die();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', "rankings.log");
@@ -120,15 +116,15 @@ class worker
 			// Loop through each keyword
 			foreach(${$this->model}->{$this->model} as $key => &${$this->class})
 			{
-				// If a valid search results page can be loaded (new scrape or saved file)
-				if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
-				{  			
-					// Create new parsing object
-					$parse = new parse;	
+				// Create new parsing object
+				$parse = new parse;	
 
-					// Content for domains
-					if($this->model == "domains")
-					{
+				// Content for domains
+				if($this->model == "domains")
+				{
+					// If a valid search results page can be loaded (new scrape or saved file)
+					if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->url]))
+					{  						
 						if($this->stat == "backlinks")
 						{
 							// Find the keyword's domain in one of the ranking urls
@@ -155,9 +151,13 @@ class worker
 						// Decrease total domains remaining
 						${$this->class}->total--; 
 					}	
-					// Content for keywords
-					elseif($this->model == "keywords")
-					{
+				}	
+				// Content for keywords
+				elseif($this->model == "keywords")
+				{
+					// If a valid search results page can be loaded (new scrape or saved file)
+					if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->searchHash]))
+					{  							
 						// Find the keyword's domain in one of the ranking urls
 						$parse->findElements($this->parsePattern(), $content)->findInElements(${$this->class}->domain);			 
 									   				
@@ -198,13 +198,8 @@ class worker
 							// Increase search results page for next scrape
 							${$this->class}->searchPage++; 						
 						} 
-					}					
- 	   			}	
- 	   			else
- 	   			{
- 	   				echo "no content\n";
- 	   				die();
- 	   			}
+					}	
+				}					
 			} 
 
 			// Call processing time

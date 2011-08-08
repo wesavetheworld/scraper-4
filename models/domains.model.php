@@ -400,11 +400,7 @@ class domain
 	public function setSearchHash()
 	{
 		// Naming convention for the file
-		$searchHash  = $this->keyword;
-		$searchHash .= $this->engine;
-		$searchHash .= $this->g_country;
-		$searchHash .= $this->resultCount;
-		$searchHash .= $this->searchPage; 
+		$searchHash  = $this->domain;
 		
 		// Calculate hash for filename
 		$searchHash = crc32($searchHash);
@@ -414,9 +410,6 @@ class domain
 		
 		// Set keyword's saved search file hash
 		$this->searchHash = $searchHash; 
-        		
-		// Add hash to saved searches array (for final database update)
-		$this->savedSearches[$searchHash] = $searchHash;
 	}	
 	
     // ===========================================================================// 
