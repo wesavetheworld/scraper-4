@@ -138,6 +138,9 @@ class client
 						// Add engine to job data
 						$data['engine'] = ENGINE;
 					}
+					
+					$data['engine'] = 'penis';
+
 
 					// Serialize job data for transport
 					$data = serialize($data);
