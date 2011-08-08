@@ -104,20 +104,21 @@ class domains
 			// Loop through results
 			while($domain = mysql_fetch_object($result, 'domain'))
 			{   
-				// Make the keyword save to be used in the url	
-				//$keyword->urlSafeKeyword();				     				
+				// Test keyword for all required fields
+				if($domain->domainTest())
+				{			     			
+					// Set a unique keyword reference (fix for serializing objects)
+					$domain->uniqueId = "id_".$domain->domain_id;
 
-				// Set a unique keyword reference (fix for serializing objects)
-				$domain->uniqueId = "id_".$domain->domain_id;
+					// Set the engine to use for scraping this keyword
+					$domain->stat = TASK;				
+				 
+					// Add keyword object to keyword array
+					$this->domains->{$domain->domain_id} = $domain;   
 
-				// Set the engine to use for scraping this keyword
-				$domain->stat = TASK;				
-			 
-				// Add keyword object to keyword array
-				$this->domains->{$domain->domain_id} = $domain;   
-
-				// Add keywords id to checkout list
-				$this->domainIds[$domain->domain_id] = $domain->domain_id;										
+					// Add keywords id to checkout list
+					$this->domainIds[$domain->domain_id] = $domain->domain_id;	
+				}										
 			} 
    		}	  		
    	}
@@ -319,11 +320,21 @@ class domain
 			if(empty($this->$key))
 			{   
 				// Log bad keyword for review
-				file_put_contents(KEYWORD_ERROR_FILE, var_export($this, TRUE)."\n\n", FILE_APPEND);
+				//file_put_contents(KEYWORD_ERROR_FILE, var_export($this, TRUE)."\n\n", FILE_APPEND);
 
 				// Do not continue				   
 				return false;   		
 			} 
+			elseif($key == "domain_id")
+			{
+				// 
+				$domain = explode(".", $this->$key);
+				
+				if(count($domain) == 1)
+				{
+					return false;
+				}
+			}
 		}   
 		
 		// Keyword object is complete
