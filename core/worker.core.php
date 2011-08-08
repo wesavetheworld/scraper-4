@@ -128,7 +128,12 @@ class workerCore
 	// Collect domain alexa rank
 	public static function alexa($job)
 	{	
-		// Load the controller and get job results
-		return new load('workers/rankings', $job->workload());	
+		 // Build job data array
+		 $job = array('model'=>'domains', 'stat'=>'alexa', 'jobData'=>$job->workload());
+		 
+		 // Instantiate new worker	
+		 $job = new load('worker', $job);	
+
+		 return $job->results;
 	}	
 }	
