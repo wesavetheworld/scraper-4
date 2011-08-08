@@ -264,7 +264,7 @@ class domains
 		$query = "	UPDATE 
 						domain_stats 
 					SET 
-						".$this->stat." = '".$domain->$stat."'
+						".$domain->stat." = '".$domain->{$domain->stat}."'
 					WHERE 
 					 	domain_id = ".$domain->domain_id." 
 					AND 
@@ -289,7 +289,7 @@ class domains
 						NOW()
 			          )";
 
-			          echo $query;
+			         // echo $query;
 		
 		// Execute insert query 
 		return mysql_query($query) or utilities::reportErrors("ERROR ON stats insert: ".mysql_error());		
