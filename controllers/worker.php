@@ -71,12 +71,16 @@ class worker
 		
 		// Search engine used (for proxy use)
 		$this->engine = $jobData['engine'];		
-		
-		// Set the task for the data model
-		${$this->model}->task = $this->task;	
 
 		// Get the items from the job data				
-		${$this->model} = $jobData[$this->model];
+		$items = $jobData[$this->model];
+
+		// Set the task for the data model
+		$items->task = $this->task;			
+
+		print_r($items);
+
+		die();
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', $this->task.".log"); 		
