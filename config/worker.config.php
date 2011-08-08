@@ -17,31 +17,6 @@
 	
 	// ********************************** START **********************************//   
 
-	// ===========================================================================// 
-	// ! Passed arguments through CLI ($argv[1] used for controller)              //
-	// ===========================================================================//    
-	
-	die('it loaded');
-	// Amount of keywords to scrape
-	define("KEYWORD_AMOUNT", 1000);
-		    
-	// Avoid potential runaway scripts by limiting max execution time      
-	define("MAX_EXECUTION_TIME", 300);
-	
-	// What search engine to scrape
-	define("ENGINE", 'google');
-	
-	// What search engine to scrape
-	define("ENGINE", 'hourly');
-	
-	// Scrape just new keywords for above engine if set to true
-	define("NEW_KEYWORDS", $argv[5]);  
-	
-	// Only update keywords for this user
-	define("ONLY_USER", 65);    
-	
-	// Only update keywords for this user
-	define("SCHEDULE", 'hourly');
 	
    	// ===========================================================================// 
 	// ! General settings                                                         //
@@ -107,21 +82,6 @@
 	// ===========================================================================// 
 	// ! Database structure and update time depending on search engine            //
 	// ===========================================================================//
+
+	define("PARSE_PATTERN_BACKLINKS", '/Inlinks \((.*)\)/Us');  	
 	
-	// Set constants depending on current search engine
-	switch(ENGINE)
-	{
-		case "google": 
-		
-			// The regular expression for parsing google rankings
-			define("PARSE_PATTERN",PARSE_PATTERN_GOOGLE);	
-			
-			break;		
-				
-		case "bing":			
-			
-			// The regular expression for parsing bing rankings
-			define("PARSE_PATTERN",PARSE_PATTERN_BING);	   						
-			
-			break;			
-	}

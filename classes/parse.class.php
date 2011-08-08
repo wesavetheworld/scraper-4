@@ -54,6 +54,7 @@ class parse
 	public function pageRank($pr)
 	{      
 		$pos = strpos($pr, "Rank_");
+		
 		if($pos === false)
 		{
 			$pr = 0;

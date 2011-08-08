@@ -128,7 +128,7 @@ class worker
 						if($this->stat == "backlinks")
 						{
 							// Find the keyword's domain in one of the ranking urls
-							$parse->findElements(PARSE_PATTERN, $content); 
+							$parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
 							
 							// Set backlinks for domain
 							${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
