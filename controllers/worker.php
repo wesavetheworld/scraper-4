@@ -138,7 +138,6 @@ class worker
 							// Set the pagerank for domain
 							${$this->class}->pr = $parse->pageRank($content); 
 
-							echo "content: $content -> ";
 							echo ${$this->class}->pr."\n";
 						} 
 						elseif($this->stat == "alexa")
@@ -292,51 +291,45 @@ class worker
 	}
     
 	// Load the correct source for the keyword's search results
-	public function getContent($keyword, $scrapedContent = false)
+	public function getContent($item, $content = false)
 	{   
 		// If a new url was scraped for this keyword
-		if($scrapedContent)
+		if($content)
 		{  			        			
 			// If the content has valid headers
-			if($scrapedContent['status'] == 'success')
+			if($content['status'] == 'success')
 			{   
 				// If the search is new for the first keyword
-				if($keyword->searchType == "new")
+				if($item->searchType == "new")
 				{				 				
 					// Save the new search file
-					$this->searchSave($keyword, $scrapedContent);
+					$this->searchSave($item, $content);
 				}	
 				
 				// Set the new search as the source
-				$search = $scrapedContent['output']; 						
-			}
-			else
-			{
-				static $errors = 0;
-			}					
+				$search = $content['output']; 						
+			}				
 		} 
 		elseif($this->model != 'domains')
 		{    
   			// Load a valid saved search file as the source
-			$search = file_get_contents($keyword->searchFile);
+			$search = file_get_contents($item->searchFile);
 		} 	
 		
 		return $search;
 	}
 
 	// Save search results to a file
-	public function searchSave($keyword, $scrapedContent)
+	public function searchSave($item, $content)
 	{   
 		// Set header information to be saved with output
-		$content  = "code: ".$scrapedContent['httpInfo']['http_code'];
-		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
-		$content .= "\n size: ".$scrapedContent['httpInfo']['size_download'];
-		$content .= "\n\n".$scrapedContent['output'];
-
-		//$content = "No at symbols here bitch! ";
+		$save  = "code: ".$content['httpInfo']['http_code'];
+		$save .= "\n size: ".$content['httpInfo']['size_download'];
+		$save .= "\n\n".$content['output'];
+		$save .= "\nthe end\n";
 		
 		// Save search results to a file
-		file_put_contents($keyword->searchFile, $content, LOCK_EX);		
+		file_put_contents($item->searchFile, $save, LOCK_EX);		
 	} 
 	
 	// If a keyword just switch result amount (10/100)
