@@ -71,7 +71,7 @@ class clientCore
 			}
 
 			// Every 3 minutes
-			if(date("i") % 3))
+			if(date("i") % 3 == 0))
 			{
 				// Update domain stats
 				$this->domainStats();	
