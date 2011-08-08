@@ -53,24 +53,8 @@ class workerCore
 	// Register types of jobs available
 	private function registerJobs()
 	{
-		// All keyword ranking jobs
-		if(JOB_FUNCTION == "rankings")
-		{
-			// Register new job type
-			$this->gm->addFunction(JOB_NAME, "workerCore::".JOB_FUNCTION); 				
-		}
-		// All domain stats jobs
-		else
-		{
-			// Register pagerank function with gearman server
-			$this->gm->addFunction("pr", "workerCore::pageRank"); 
-
-			// Register backlinks function with gearman server
-			$this->gm->addFunction("backLinks", "workerCore::backLinks"); 
-
-			// Register alexa function with gearman server
-			$this->gm->addFunction("alexa", "workerCore::alexa");
-		}	 	
+		// Register job function with jobServer
+		$this->gm->addFunction(JOB_NAME, "workerCore::".JOB_FUNCTION); 				
 	}		
 	
 	// ===========================================================================// 
@@ -118,7 +102,7 @@ class workerCore
 	}
 
 	// Collect domain pagerank
-	public static function pageRank($job)
+	public static function pr($job)
 	{	
 		 // Build job data array
 		 $job = array('model'=>'domains', 'stat'=>'pr', 'jobData'=>$job->workload());
