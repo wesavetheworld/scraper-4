@@ -186,6 +186,9 @@ class domains
 	// Update keywords table with new keyword info
 	public function updateDomains()
 	{
+
+		print_r($this->updated);die();
+
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
 		{	 
