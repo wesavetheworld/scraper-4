@@ -121,7 +121,7 @@ class workerCore
 	public static function pageRank($job)
 	{	
 		 // Build job data array
-		 $job = array('model'=>'domains', 'stat'=>'pr', 'jobData'=>$job->workload());
+		 $job = array('model'=>'penis', 'stat'=>'pr', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
 		 $job = new load('worker', $job);	
