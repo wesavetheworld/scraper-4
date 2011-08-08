@@ -315,7 +315,7 @@ class worker
 
 				if($this->stat == "pr" && empty($search))
 				{
-					$search = "0";
+					$search = "23";
 				}				
 
 				echo "search: $search\n";
