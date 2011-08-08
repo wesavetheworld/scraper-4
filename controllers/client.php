@@ -116,24 +116,24 @@ class client
 					// Define the task for the worker
 					$data['task'] = TASK;					
 
+					// If no engine defined
+					if(ENGINE)
+					{
+						// Add engine to job data
+						$data['engine'] = ENGINE;						
+					}
 					// If task is backlinks
-					if(TASK == "backlinks")
+					elseif(TASK == "backlinks")
 					{
 						// Add engine to job data
 						$data['engine'] = "yahoo";						
 						
-					}
-					// If no engine defined
-					elseif(!ENGINE)
-					{
-						// Add engine to job data
-						$data['engine'] = "google";						
-					}
+					}					
 					// all other task types
 					else
 					{
 						// Add engine to job data
-						$data['engine'] = ENGINE;
+						$data['engine'] = "google";
 					}
 					
 					// Serialize items and add to job data

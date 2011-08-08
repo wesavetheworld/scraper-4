@@ -68,7 +68,7 @@ class worker
 		
 		echo "engine: ". $this->engine;
 		
-		die();						
+		return true;					
 
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
