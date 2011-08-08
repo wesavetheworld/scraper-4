@@ -338,9 +338,6 @@ class worker
 				// Set the new search as the source
 				$search = $content['output']; 
 
-				echo $search;
-				die();
-
 				if($this->task == "pr" && empty($search))
 				{
 					$search = "99";
@@ -352,6 +349,9 @@ class worker
   			// Load a valid saved search file as the source
 			$search = file_get_contents($item->searchFile);
 		} 	
+		
+				echo $search;
+				die();
 		
 		return $search;
 	}
