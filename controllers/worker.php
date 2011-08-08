@@ -123,7 +123,7 @@ class worker
 				if($this->model == "domains")
 				{
 					// If a valid search results page can be loaded (new scrape or saved file)
-					if($content = $scrape->results[${$this->class}->url])
+					if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->url]))
 					{  						
 						if($this->stat == "backlinks")
 						{
@@ -315,7 +315,7 @@ class worker
 				static $errors = 0;
 			}					
 		} 
-		else
+		elseif($this->model != 'domains')
 		{    
   			// Load a valid saved search file as the source
 			$search = file_get_contents($keyword->searchFile);
