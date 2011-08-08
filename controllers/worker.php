@@ -299,8 +299,7 @@ class worker
 	{   
 		// If a new url was scraped for this keyword
 		if($content)
-		{  		
-			echo "made it this far\n";	        			
+		{  						        			
 			// If the content has valid headers
 			if($content['status'] == 'success')
 			{   
@@ -313,6 +312,10 @@ class worker
 				
 				// Set the new search as the source
 				$search = $content['output']; 						
+			}
+			else
+			{
+				echo "not a success\n";
 			}				
 		} 
 		elseif($this->model != 'domains')
