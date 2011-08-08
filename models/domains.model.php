@@ -68,8 +68,12 @@ class domains
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);		
 			
-			// Update the keywords select as checked out
-			$this->setCheckOut('1');    	
+			// If gathering new domains
+			if(ONLY_NEW)
+			{
+				// Update the keywords select as checked out
+				$this->setCheckOut('1');    	
+			}	
 			
 			return $domains;
 		}	
@@ -130,10 +134,6 @@ class domains
 
 					// Add keywords id to checkout list
 					$this->domainIds[$domain->domain_id] = $domain->domain_id;	
-				}	
-				else
-				{
-					echo "bad domain: ".$domain->domain."\n";
 				}									
 			} 
    		}	  		
