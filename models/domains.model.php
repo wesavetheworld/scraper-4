@@ -379,44 +379,21 @@ class domain
 	// Build the search engine results page for the keyword
 	public function setSearchUrl()
 	{   
-		// Get the current search hash 
-		$this->setSearchHash(); 
-		
-		// Check for a search page offset 
-		$this->setSearchOffset();
-		                          
-		// Set the location of the keyword's saved search file
-		$this->searchFile = SAVED_SEARCH_DIR.$this->searchHash.".html";
-		
-		if($this->engine == "google")
+		if($this->stat == "backlinks")
 		{
-			// Build the google search results page url
-			$this->url  = "http://www.google".$this->g_country;
-			$this->url .= "/search?q=".$this->urlSafe;
-			$this->url .= "&num=".$this->resultCount;  		
-
-			// If search results page offset is present
-			if($this->searchOffset)
-			{  
-			 	// Add the ofset to the url
-				$this->url .= "&start=".$this->searchOffset;	   
-			}	
-	    }
-		elseif($this->engine == "bing")
-		{                			
-			// Build the bing search results page url
-			$this->url  = "http://www.bing.com";
-			$this->url .= "/search?q=".$this->urlSafe;
-			
-				// Check for a search page offset 
-			$this->setSearchOffset();			
-			
-			// If search results page offset is present
-			if($this->searchOffset)
-			{
-				$this->url .= "&first=".$this->searchOffset;	   
-			}			
+		 	// Build the yahoo backlinks search url
+		 	$this->url = "https://siteexplorer.search.yahoo.com/search?p=".urlencode($this->domain); 
 		}
+		elseif($this->stat == "pr")
+		{   
+			// Build the google pagerank url
+	   		$this->url = "http://toolbarqueries.google.com/search?client=navclient-auto&ch=".$this->CheckHash($this->HashURL($this->domain)). "&features=Rank&q=info:".$this->domain."&num=100&filter=0"; 
+		}
+		elseif($this->stat == "alexa")
+		{   
+			// Build the alexa url
+	   		$this->url = "http://data.alexa.com/data/hmyq81hNHng1MD?cli=10&dat=ns&ref=&url=".urlencode($this->domain); 
+		}	
 	}
 	
 	// Create a hash for the keyword's saved search file name

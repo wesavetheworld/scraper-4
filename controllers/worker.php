@@ -69,9 +69,6 @@ class worker
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
 
-		print_r(${$this->model});
-		die();
-
 		if($data['stat'])
 		{
 			$this->stat = $data['stat'];
