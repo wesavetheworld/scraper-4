@@ -187,14 +187,6 @@ class domains
 	// Update keywords table with new keyword info
 	public function updateDomains()
 	{
-
-		foreach($this->updated as $key => &$domain)
-		{
-			echo "pr: ".$domain->pr."\n";
-			
-		}		
-
-		die('the end');
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
 		{	 
