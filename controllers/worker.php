@@ -54,6 +54,8 @@ class worker
 		// Get the items model
 		$this->model = $data['model'];
 
+		echo "model: ",$this->model;
+
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
 				
