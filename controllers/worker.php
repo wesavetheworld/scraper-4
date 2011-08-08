@@ -70,13 +70,7 @@ class worker
 		$this->task = $jobData['task'];
 		
 		// Search engine used (for proxy use)
-		$this->engine = $jobData['engine'];
-		
-		echo "engine: ". $this->engine;
-
-		//print_r($data);
-		
-		return true;					
+		$this->engine = $jobData['engine'];					
 
 		// Get the items from the job data				
 		$items = $jobData[$this->model];
