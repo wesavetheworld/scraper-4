@@ -261,8 +261,7 @@ class worker
 		{  
 			// Generate the search page url 
 			//$item->setSearchUrl();			  		
-			//echo "item: $item | stat: ".$item->stat." url: ".$item->url."\n";
-			echo "item: $item | stat: ".$item->stat."\n";
+			echo "item:  | stat: ".$item->stat." url: ".$item->url."\n";
 			
 			// If getting domain urls
 			if($this->model == "domains")
