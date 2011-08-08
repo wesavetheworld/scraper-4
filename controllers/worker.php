@@ -28,6 +28,9 @@ class worker
 	// Search engine
 	private $engine;
 
+	// Contains the objects for the task
+	private $items;
+
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
@@ -76,13 +79,13 @@ class worker
 		$items = $jobData[$this->model];
 
 		// Set the task for the data model
-		$items->task = $this->task;		
+		$this->items->task = $this->task;		
 			 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', $this->task.".log"); 		
 		        		        
 		// Loop for as long as there are keywords left
-		while($items->total > 0)
+		while($this->items->total > 0)
 		{    
 			// Check killswitch
 			utilities::checkStatus();
@@ -100,7 +103,7 @@ class worker
 			$scrape->task = $this->task;
 
 			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls($items->{$this->model}); 				
+			$scrape->urls = $this->getUrls($this->items->{$this->model}); 				
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -109,7 +112,7 @@ class worker
 			utilities::benchmark('scraping content: ', $this->task.".log");
 
 			// Loop through each keyword
-			foreach($items->{$this->model} as $key => &$item)
+			foreach($this->items->{$this->model} as $key => &$item)
 			{
 				// Create new parsing object
 				$parse = new parse;	
@@ -147,15 +150,15 @@ class worker
 						}
 
 						// Add keyword to completed list
-						$items->updated[$key] = $item;
+						$this->items->updated[$key] = $item;
 
 						// Remove keyword from keyword id array
-						unset($items->{$this->model}->$key); 						
+						unset($this->items->{$this->model}->$key); 						
 
 						// Decrease total domains remaining
-						$items->total--; 
+						$this->items->total--; 
 
-						echo  "\ndomains remaining: ". $items->total."\n";
+						echo  "\ndomains remaining: ". $this->items->total."\n";
 					}	
 					else
 					{
@@ -194,13 +197,13 @@ class worker
 							$this->calibration($item);   
 
 							// Add keyword to completed list
-							$items->updated[$key] = $item;
+							$this->items->updated[$key] = $item;
 
 							// Remove keyword from keyword id array
-							unset($items->{$this->model}->$key);  
+							unset($this->items->{$this->model}->$key);  
 						    
 							// Decrease keywords remaining by one
-							$items->total--; 
+							$this->items->total--; 
 						}
 						// Domain was not found ranking
 						else
@@ -215,13 +218,13 @@ class worker
 			// Call processing time
 			utilities::benchmark('Parse all content: ', $this->task.".log");  
 			
-			echo "\nkeywords left: ".$items->total."\n";
+			echo "\nkeywords left: ".$this->items->total."\n";
 		}
 
 		// Connect to database
 		utilities::databaseConnect();
 
-		echo $this->model." updated: ".count($items->updated);
+		echo $this->model." updated: ".count($this->items->updated);
 
 		// Update DB with new data
 		$this->updateItems();
@@ -367,19 +370,19 @@ class worker
 	}
 
 	// Update database with new items
-	private function updateItems()
+	private function updateItems(&$items)
 	{
 		// If updating keywords
 		if($this->model == "keywords")
 		{
 			// Update finished keywords in DB
-			$items->updateKeywords();                
+			$this->items->updateKeywords();                
 		}
 		// If updating domains
 		elseif($this->model == "domains")
 		{
 			// Update finished domains in DB
-			$items->updateDomains();  			
+			$this->items->updateDomains();  			
 		}				
 	}
 
