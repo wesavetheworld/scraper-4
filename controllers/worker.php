@@ -148,6 +148,12 @@ class worker
 							echo "alexa: ".${$this->class}->alexa."\n";						
 						}
 
+						// Add keyword to completed list
+						${$this->model}->updated[$key] = ${$this->class};
+
+						// Remove keyword from keyword id array
+						unset(${$this->model}->{$this->model}->$key); 						
+
 						// Decrease total domains remaining
 						${$this->model}->total--; 
 
