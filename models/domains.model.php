@@ -98,7 +98,8 @@ class domains
 					AND	
 						".TASK."_status != '".date("Y-m-d")."'
 					{$new}		
-					{$user}"; 
+					{$user}
+					LIMIT 5"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
