@@ -76,7 +76,10 @@ class worker
 		$items = $jobData[$this->model];
 
 		// Set the task for the data model
-		$items->task = $this->task;			
+		$items->task = $this->task;		
+		
+		
+		print_r($jobData);	
 			 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', $this->task.".log"); 		
