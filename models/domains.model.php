@@ -375,6 +375,10 @@ class domain
 		{   
 			// Build the alexa url
 	   		$this->url = "http://data.alexa.com/data/hmyq81hNHng1MD?cli=10&dat=ns&ref=&url=".urlencode($this->domain); 
+		}
+		else
+		{
+			echo "no stat found";
 		}	
 	}
 	
