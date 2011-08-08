@@ -104,6 +104,9 @@ class worker
 									
 			// Execute the scraping
 			$scrape->curlExecute();
+
+			print_r($scrape->results);
+			die();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', "rankings.log");
