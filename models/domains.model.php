@@ -80,8 +80,13 @@ class domains
 		if(ONLY_USER)
 		{   
 			// Select data for only a single user
-			$where = "AND domains.user_id = ".ONLY_USER;
+			$user = "AND user_id = ".ONLY_USER;
 		} 
+
+		if(NEW)
+		{
+			$new = "AND updated = '0000-00-00'";
+		}
 		
 		// Construct query
 		$query =   "SELECT 
@@ -92,8 +97,8 @@ class domains
 						check_out = 0
 					AND	
 						".TASK."_status != '".date("Y-m-d")."'
-
-						 {$where}"; 
+					{$new}		
+					{$user}"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
@@ -137,48 +142,7 @@ class domains
 		// Execute update query
 		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
 	}                                                                                                 	 
-	
-	// Select keyword's ranking positions
-	private function selectRankings()
-	{
-		// Glue keyword array together
-		$ids = implode(",", array_keys($this->keywordIds));  
-		
-		// Db column containing the ranking
-		$position = ENGINE;
-		
-		// Construct query
-		$query = "	SELECT 
-						* 
-					FROM 
-						tracking 
-					WHERE 
-						keyword_id IN($ids) 
-				    AND 
-						date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
-					ORDER BY
-						date";
-		
-		// Perform query				
-	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());				
-		
-		// Add keyword tracking info to data array
-		while($row = mysql_fetch_object($result))
-		{   
-			// If there is a row for today
-			if($row->date == date("Y-m-d"))
-			{ 
-				// Add ranking object to rankings array
-				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
-			} 
-			// If there was no rank for today and there is one for yesterday
-			elseif(!$lastRank)
-			{
-			 	// Add ranking object to rankings array
-				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
-			} 
-		}
-	}                                          
+	                                      
 	
 	// ===========================================================================// 
 	// ! Updating keyword objects                                                 //

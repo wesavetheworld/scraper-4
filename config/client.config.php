@@ -50,7 +50,9 @@
 		// Data model to use
 		define("MODEL", "domains");	
 
-		define("ONLY_USER", $argv[4]);														
+		define("NEW", $argv[4]);	
+															
+		define("ONLY_USER", $argv[5]);														
 	}
 	
 	// ===========================================================================// 

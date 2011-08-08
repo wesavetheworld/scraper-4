@@ -44,7 +44,10 @@ class clientCore
 			if(date("H:i") == "00:00")
 			{
 				// Update all daily keywords
-				$this->run("client", "rankings 100 google daily");				
+				$this->run("client", "rankings 100 google daily");	
+				
+				// Update domain stats
+				$this->domainStats();				
 			}
 
 			// The first min of every hour but the first
@@ -74,7 +77,7 @@ class clientCore
 			if(intval(date("i")) % 2 == 0)
 			{
 				// Update domain stats
-				$this->domainStats();	
+				$this->domainStats('new');	
 			}
 
 			// Check for any new domains
@@ -140,16 +143,16 @@ class clientCore
 	}
 
 	// Update all domain's stats
-	private function domainStats()
+	private function domainStats($new = false)
 	{
 		// Update all domain's pagerank
-		$this->run("client", "pr 100");
+		$this->run("client", "pr 100 $new");
 		
 		// Update all domain's backlinks			
-		$this->run("client", "backlinks 100");
+		$this->run("client", "backlinks 100 $new");
 
 		// Update all domain's alexa rankings
-		$this->run("client", "alexa 100");		
+		$this->run("client", "alexa 100 $new");		
 	}	
 
 	// Execute bash command that detaches from daemon
