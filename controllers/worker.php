@@ -315,10 +315,8 @@ class worker
 
 				if($this->stat == "pr" && empty($search))
 				{
-					$search = "23";
+					$search = "99";
 				}				
-
-				echo "search: $search\n";
 			}				
 		} 
 		elseif($this->model != 'domains')
