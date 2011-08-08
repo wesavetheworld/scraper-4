@@ -223,8 +223,10 @@ class worker
 
 	private function parseDomains($key, &$item)
 	{
+		$content = $this->getContent($item, $this->scrape->results[$item->url]);
+
 		// If a valid search results page can be loaded (new scrape or saved file)
-		if($content = $this->getContent($item, $this->scrape->results[$item->url]) || $item->bad == 10)
+		if($content || $item->bad == 10)
 		{  	
 
 			echo $content;
