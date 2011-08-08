@@ -441,7 +441,7 @@ class scraper
 		$this->scrapesTotal++;
 		   
 		// Scraped content has a 200 success code and size is greater than 5 bytes
-		if($this->results[$i]['httpInfo']['http_code'] == 200 && $this->results[$i]['httpInfo']['size_download'] > 500 || $this->results[$i]['httpInfo']['http_code'] == 200 && STAT == 'alexa' )
+		if($this->results[$i]['httpInfo']['http_code'] == 200 && $this->results[$i]['httpInfo']['size_download'] > 500 || $this->results[$i]['httpInfo']['http_code'] == 200 && $this->stat)
 		{   
 			// Set the content scrape as a success
 			$this->results[$i]['status'] = 'success';

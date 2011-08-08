@@ -25,6 +25,9 @@ class worker
 	// Data model to use
 	private $model;
 
+	// The type of stat to collect for domains
+	private $stat = false;
+
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
@@ -99,22 +102,14 @@ class worker
 			// Set search engine to scrape
 			$scrape->engine = $this->engine;
 
-			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
-			
-			foreach($scrape->urls as $url)
-			{
-				echo $url."\n";
+			// If a domain stats connection
+			$scrape->stat = $this->stat;
 
-			}
-			
-			die();		
+			// Build an array of search engine urls to scrape
+			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 	
 									
 			// Execute the scraping
 			$scrape->curlExecute();
-
-			print_r($scrape->results);
-			die();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', "rankings.log");
