@@ -135,10 +135,10 @@ class worker
 						}
 						elseif($this->stat == "pr")
 						{    
-							echo "\npr loaded\n";
-							die();
 							// Set the pagerank for domain
 							${$this->class}->pr = $parse->pageRank($content); 
+
+							echo ${$this->class}->pr."\n";
 						} 
 						elseif($this->stat == "alexa")
 						{    
@@ -201,6 +201,8 @@ class worker
 					}	
 				}					
 			} 
+
+			die('end');
 
 			// Call processing time
 			utilities::benchmark('Parse all content: ', "rankings.log");  
