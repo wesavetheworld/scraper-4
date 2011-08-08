@@ -115,7 +115,7 @@ class client
 					
 					// Define the task for the worker
 					//$data['task'] = TASK;					
-					$data['dick'] = "punch";					
+					$data->dick = "punch";					
 
 					// If task is backlinks
 					if(TASK == "backlinks")
