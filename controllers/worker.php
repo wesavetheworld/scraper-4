@@ -80,13 +80,15 @@ class worker
 
 		print_r($items);
 
+		return true;
+
 		die();
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', $this->task.".log"); 		
 		        		        
 		// Loop for as long as there are keywords left
-		while(${$this->model}->total > 0)
+		while($items->total > 0)
 		{    
 			// Check killswitch
 			utilities::checkStatus();
