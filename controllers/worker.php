@@ -58,7 +58,7 @@ class worker
 	public function worker($data)
 	{  	
 		// Construct job object
-		$this->buildJob(&$data);	
+		$this->buildJob($data);	
 		        		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
