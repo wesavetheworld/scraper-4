@@ -100,13 +100,7 @@ class worker
 			$scrape->task = $this->task;
 
 			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls($items->{$this->model}); 
-			
-		
-		
-		print_r($scrape->urls);	
-
-		die();				
+			$scrape->urls = $this->getUrls($items->{$this->model}); 				
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -261,7 +255,7 @@ class worker
 		{  
 			// Generate the search page url 
 			$item->setSearchUrl();			  		
-			
+
 			// If getting domain urls
 			if($this->model == "domains")
 			{ 			                     	

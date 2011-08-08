@@ -368,8 +368,6 @@ class domain
 		}
 		elseif($this->stat == "pr")
 		{   
-						echo "pr found";
-
 			// Build the google pagerank url
 	   		$this->url = "http://toolbarqueries.google.com/search?client=navclient-auto&ch=".$this->CheckHash($this->HashURL($this->domain)). "&features=Rank&q=info:".$this->domain."&num=100&filter=0"; 
 		}
@@ -378,10 +376,6 @@ class domain
 			// Build the alexa url
 	   		$this->url = "http://data.alexa.com/data/hmyq81hNHng1MD?cli=10&dat=ns&ref=&url=".urlencode($this->domain); 
 		}
-		else
-		{
-			echo "no stat found";
-		}	
 	}
 	
 	// Create a hash for the keyword's saved search file name
