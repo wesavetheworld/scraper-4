@@ -87,7 +87,11 @@ class domains
 
 		if(ONLY_NEW)
 		{
-			$new = "AND updated = '0000-00-00'";
+			$date = TASK."_status = '0000-00-00'";
+		}
+		else
+
+			$date = TASK."_status != '".date("Y-m-d")."'";
 		}
 		
 		// Construct query
@@ -98,9 +102,8 @@ class domains
 					WHERE 
 						check_out = 0
 					AND	
-						".TASK."_status != '".date("Y-m-d")."'
-					{$new}		
-					{$user}"; 
+						{$date}		
+						{$user}"; 
 
 					echo $query;
 																								
