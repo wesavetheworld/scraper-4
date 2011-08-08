@@ -51,6 +51,9 @@ class worker
 	
 	public function worker($data)
 	{  	
+
+		echo $data['stat'];
+		die();
 		// Get the items model
 		$this->model = $data['model'];
 
