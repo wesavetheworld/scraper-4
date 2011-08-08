@@ -114,7 +114,7 @@ class client
 					$data = array();				
 					
 					// Define the task for the worker
-					$data['task'] = TASK;					
+					//$data['task'] = TASK;					
 					$data['dick'] = "punch";					
 
 					// If task is backlinks
