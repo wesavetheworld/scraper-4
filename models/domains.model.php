@@ -187,9 +187,13 @@ class domains
 	// Update keywords table with new keyword info
 	public function updateDomains()
 	{
+		echo "\nupdate area good\n";
+
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
 		{	 
+			echo $domain->domain."\n";
+			
 			// If this keyword has no ranking yet
 			if(!isset($domain->{$this->stat}) && $keyword->{$this->stat} != '0')
 			{   
