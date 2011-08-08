@@ -63,7 +63,7 @@ class workerCore
 		else
 		{
 			// Register pagerank function with gearman server
-			$this->gm->addFunction("pageRank", "workerCore::pageRank"); 
+			$this->gm->addFunction("pr", "workerCore::pageRank"); 
 
 			// Register backlinks function with gearman server
 			$this->gm->addFunction("backLinks", "workerCore::backLinks"); 
