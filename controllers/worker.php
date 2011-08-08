@@ -147,7 +147,10 @@ class worker
 		$this->scrape->urls = $this->getUrls($this->items->{$this->model}); 				
 								
 		// Execute the scraping
-		$this->scrape->curlExecute();		
+		$this->scrape->curlExecute();	
+		
+		print_r($this->scrape->results);
+		die();	
 	}
 
 	private function parseContent()
