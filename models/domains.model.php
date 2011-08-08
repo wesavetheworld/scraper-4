@@ -127,7 +127,11 @@ class domains
 
 					// Add keywords id to checkout list
 					$this->domainIds[$domain->domain_id] = $domain->domain_id;	
-				}										
+				}	
+				else
+				{
+					echo "bad domain: ".$domain->domain."\n";
+				}									
 			} 
    		}	  		
    	}
