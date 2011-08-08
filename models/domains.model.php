@@ -288,6 +288,8 @@ class domains
 						'".$domain->$stat."',
 						NOW()
 			          )";
+
+			          echo $query;
 		
 		// Execute insert query 
 		return mysql_query($query) or utilities::reportErrors("ERROR ON stats insert: ".mysql_error());		
