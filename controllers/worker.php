@@ -159,6 +159,10 @@ class worker
 
 						echo  "\ndomains remaining: ". ${$this->model}->total."\n";
 					}	
+					else
+					{
+						echo ${$this->class}->url."\n";
+					}
 				}	
 				// Content for keywords
 				elseif($this->model == "keywords")
