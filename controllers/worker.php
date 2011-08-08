@@ -101,19 +101,23 @@ class worker
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls($items->{$this->model}); 	
-
-			print_r($scrape->urls);
-
-			die();
 									
 			// Execute the scraping
-			$scrape->curlExecute();
+			//$scrape->curlExecute();
 			
 			// Call processing time
 			utilities::benchmark('scraping content: ', $this->task.".log");
+
+			// Loop through each keyword
+			foreach($items->{$this->model} as $key => &$item)
+			{
+				print_r($item);
+			}			
+			
+			die();
 			
 			// Loop through each keyword
-			foreach(${$this->model}->{$this->model} as $key => &${$this->class})
+			foreach($items->{$this->model} as $key => &${$this->class})
 			{
 				// Create new parsing object
 				$parse = new parse;	
@@ -148,15 +152,15 @@ class worker
 						}
 
 						// Add keyword to completed list
-						${$this->model}->updated[$key] = ${$this->class};
+						$items->updated[$key] = ${$this->class};
 
 						// Remove keyword from keyword id array
-						unset(${$this->model}->{$this->model}->$key); 						
+						unset($items->{$this->model}->$key); 						
 
 						// Decrease total domains remaining
-						${$this->model}->total--; 
+						$items->total--; 
 
-						echo  "\ndomains remaining: ". ${$this->model}->total."\n";
+						echo  "\ndomains remaining: ". $items->total."\n";
 					}	
 					else
 					{
@@ -195,13 +199,13 @@ class worker
 							$this->calibration(${$this->class});   
 
 							// Add keyword to completed list
-							${$this->model}->updated[$key] = ${$this->class};
+							$items->updated[$key] = ${$this->class};
 
 							// Remove keyword from keyword id array
-							unset(${$this->model}->{$this->model}->$key);  
+							unset($items->{$this->model}->$key);  
 						    
 							// Decrease keywords remaining by one
-							${$this->model}->total--; 
+							$items->total--; 
 						}
 						// Domain was not found ranking
 						else
@@ -216,25 +220,25 @@ class worker
 			// Call processing time
 			utilities::benchmark('Parse all content: ', $this->task.".log");  
 			
-			echo "\nkeywords left: ".${$this->model}->total."\n";
+			echo "\nkeywords left: ".$items->total."\n";
 		}
 
 		// Connect to database
 		utilities::databaseConnect();
 
-		echo $this->model." updated: ".count(${$this->model}->updated);
+		echo $this->model." updated: ".count($items->updated);
 
 		// If updating keywords
 		if($this->model == "keywords")
 		{
 			// Update finished keywords in DB
-			${$this->model}->updateKeywords();                
+			$items->updateKeywords();                
 		}
 		// If updating domains
 		elseif($this->model == "domains")
 		{
 			// Update finished domains in DB
-			${$this->model}->updateDomains();  			
+			$items->updateDomains();  			
 		}	
 
 		// Update DB with new data
@@ -387,13 +391,13 @@ class worker
 		if($this->model == "keywords")
 		{
 			// Update finished keywords in DB
-			${$this->model}->updateKeywords();                
+			$items->updateKeywords();                
 		}
 		// If updating domains
 		elseif($this->model == "domains")
 		{
 			// Update finished domains in DB
-			${$this->model}->updateDomains();  			
+			$items->updateDomains();  			
 		}			
 	}
 
