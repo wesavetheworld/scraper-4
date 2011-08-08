@@ -328,7 +328,6 @@ class worker
 			// If the content has valid headers
 			if($content['status'] == 'success')
 			{   
-				echo "success";
 				// If the search is new for the first keyword
 				if($item->searchType == "new")
 				{				 				
@@ -339,15 +338,13 @@ class worker
 				// Set the new search as the source
 				$search = $content['output']; 
 
+				echo $search;
+				die();
+
 				if($this->task == "pr" && empty($search))
 				{
 					$search = "99";
 				}				
-			}	
-			else
-			{
-								echo "failure";
-
 			}			
 		} 
 		elseif($this->model != 'domains')
