@@ -21,6 +21,7 @@
 	// ! Passed arguments through CLI ($argv[1] used for controller)              //
 	// ===========================================================================//    
 	
+	die('it loaded');
 	// Amount of keywords to scrape
 	define("KEYWORD_AMOUNT", 1000);
 		    
