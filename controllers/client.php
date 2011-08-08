@@ -115,9 +115,6 @@ class client
 					
 					// Define the task for the worker
 					$data['task'] = TASK;					
-					 
-					// Serialize items and add to job data
-					$data[MODEL] = $batch;
 
 					// If task is backlinks
 					if(TASK == "backlinks")
@@ -141,22 +138,14 @@ class client
 					
 					$data['penis'] = 'cock';
 
+					// Serialize items and add to job data
+					$data[MODEL] = $batch;					
 
 					// Serialize job data for transport
 					$data = serialize($data);
-
-					// If this is for new keywords and calibration
-					if(TASK == "rankingsNew")
-					{
-						// Define a new high priority job for current batch
-				   		$gmclient->addTaskHighBackground(TASK, $data, null, TASK."_".$job++."_".time());						
-					}
-					// All other schedules
-					else
-					{
-						// Define a new job for current batch
-				   		$gmclient->addTaskLowBackground(TASK, $data, null, TASK."_".$job++."_".time());						
-					}	  		
+					
+					// Define a new high priority job for current batch
+				   	$gmclient->addTaskBackground(TASK, $data, null, TASK."_".$job++."_".time());						  		
 
 					// Create the jobs
 		    		$gmclient->runTasks();					
