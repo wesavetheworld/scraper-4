@@ -52,16 +52,7 @@ class worker
 	public function worker($data)
 	{  	
 		// Get the items model
-		$this->model = $data['model'];
-
-		if($data['stat'])
-		{
-			$this->stat = $data['stat'];
-
-			${$this->model}->stat = $this->stat;	
-			
-			$this->engine =  "google";
-		}					
+		$this->model = $data['model'];			
 
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
@@ -72,8 +63,20 @@ class worker
    		// Remove "s" from object for singular item class
 		$this->class = substr($this->model, 0, -1); 		
 		
-		// Set the search engine to use
-		$this->engine = $jobData['engine'];				
+		if($data['stat'])
+		{
+			$this->stat = $data['stat'];
+
+			${$this->model}->stat = $this->stat;	
+			
+			$this->engine = "google";
+		}	
+		else
+		{
+			// Set the search engine to use
+			$this->engine = $jobData['engine'];					
+		}
+			
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
@@ -96,7 +99,7 @@ class worker
 			// Set search engine to scrape
 			$scrape->engine = $this->engine;
 
-			echo $scrape->engine;
+			echo $this->engine;
 			die();
 
 			// Build an array of search engine urls to scrape
