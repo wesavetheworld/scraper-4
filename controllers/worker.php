@@ -77,10 +77,6 @@ class worker
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
-
-		
-		echo "stat: ". $data['model']."\n";
-		die();	
 	 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', "rankings.log"); 		
@@ -192,6 +188,11 @@ class worker
 						} 
 					}					
  	   			}	
+ 	   			else
+ 	   			{
+ 	   				echo "no content\n";
+ 	   				die();
+ 	   			}
 			} 
 
 			// Call processing time
