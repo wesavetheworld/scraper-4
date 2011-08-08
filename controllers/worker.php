@@ -71,12 +71,17 @@ class worker
 
 		if($data['stat'])
 		{
+			echo "\nyes\n";
 			$this->stat = $data['stat'];
 
 			${$this->model}->stat = $this->stat;	
 			
 			$this->engine =  "google";
 		}	
+		else
+		{
+			echo "\nno\n";
+		}
 		
 		echo "stat: ". $this->stat;
 		die();	
