@@ -54,8 +54,6 @@ class worker
 		// Get the items model
 		$this->model = $data['model'];
 
-		echo "model: ",$this->model;
-
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
 				
@@ -70,6 +68,9 @@ class worker
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
+
+		print_r(${$this->model});
+		die();
 
 		if($data['stat'])
 		{
