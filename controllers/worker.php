@@ -223,21 +223,8 @@ class worker
 
 		echo $this->model." updated: ".count($items->updated);
 
-		// If updating keywords
-		if($this->model == "keywords")
-		{
-			// Update finished keywords in DB
-			$items->updateKeywords();                
-		}
-		// If updating domains
-		elseif($this->model == "domains")
-		{
-			// Update finished domains in DB
-			$items->updateDomains();  			
-		}	
-
 		// Update DB with new data
-		//$this->updateItems();
+		$this->updateItems();
 		
 		// Call processing time
 		utilities::benchmark('update items: ', $this->task.".log"); 		
@@ -393,7 +380,7 @@ class worker
 		{
 			// Update finished domains in DB
 			$items->updateDomains();  			
-		}			
+		}				
 	}
 
 	private function parse($content, $class)
