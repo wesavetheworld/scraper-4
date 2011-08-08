@@ -64,7 +64,11 @@ class worker
 		$this->task = $data['task'];
 		
 		// Search engine used (for proxy use)
-		$this->engine = $data['engine'];						
+		$this->engine = $data['engine'];
+		
+		echo "engine: ". $this->engine;
+		
+		die();						
 
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
