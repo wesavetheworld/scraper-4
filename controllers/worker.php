@@ -57,6 +57,54 @@ class worker
 	
 	public function worker($data)
 	{  	
+		// Construct job object
+		$this->buildJob();	
+		        		        
+		// Loop for as long as there are keywords left
+		while($this->items->total > 0)
+		{    
+			// Check killswitch
+			utilities::checkStatus();
+			 		
+			// Connect to database
+			utilities::databaseConnect();		
+
+			// Scrape content for items
+			$this->scrapeContent();
+			
+			// Call processing time
+			utilities::benchmark('scraping content: ', $this->task.".log");
+
+			// Parse the scraped content
+			$this->parseContent();
+
+			// Call processing time
+			utilities::benchmark('Parse all content: ', $this->task.".log");  
+			
+			echo "\nkeywords left: ".$this->items->total."\n";
+		}
+
+		// Connect to database
+		utilities::databaseConnect();
+
+		echo $this->model." updated: ".count($this->items->updated);
+
+		// Update DB with new data
+		$this->updateItems();
+		
+		// Call processing time
+		utilities::benchmark('update items: ', $this->task.".log"); 		
+
+		// Retrun total execution time
+		return utilities::benchmark(' ', $this->task.".log", true, false, true); 		
+	} 
+	// ===========================================================================// 
+	// ! Core worker functions                                                    //
+	// ===========================================================================//
+	
+	// Construct job object
+	private function buildJob()
+	{
 		// Get the items model
 		$this->model = $data['model'];	
 		
@@ -80,162 +128,143 @@ class worker
 
 		// Set the task for the data model
 		$this->items->task = $this->task;		
-			 		   	
-		// Call processing time
-		utilities::benchmark('items selected: ', $this->task.".log"); 		
-		        		        
-		// Loop for as long as there are keywords left
-		while($this->items->total > 0)
-		{    
-			// Check killswitch
-			utilities::checkStatus();
-			 		
-			// Connect to database
-			utilities::databaseConnect();		
-					 		
-			// Create new scraping instance
-			$scrape = new scraper; 
+	}
 
-			// Set search engine to scrape
-			$scrape->engine = $this->engine;
+	private function scrapeContent()
+	{
+		// Create new scraping instance
+		$this->scrape = new scraper; 
 
-			// If a domain stats connection
-			$scrape->task = $this->task;
+		// Set search engine to scrape
+		$this->scrape->engine = $this->engine;
 
-			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls($this->items->{$this->model}); 				
-									
-			// Execute the scraping
-			$scrape->curlExecute();
-			
-			// Call processing time
-			utilities::benchmark('scraping content: ', $this->task.".log");
+		// If a domain stats connection
+		$this->scrape->task = $this->task;
 
-			// Loop through each keyword
-			foreach($this->items->{$this->model} as $key => &$item)
-			{
-				// Create new parsing object
-				$parse = new parse;	
-
-				// Content for domains
-				if($this->model == "domains")
-				{
-					// If a valid search results page can be loaded (new scrape or saved file)
-					if($content = $this->getContent($item, $scrape->results[$item->url]) || $item->bad == 10)
-					{  	
-						if($item->bad != 10)
-						{					
-							if($this->task == "backlinks")
-							{
-								// Find the keyword's domain in one of the ranking urls
-								$parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
+		// Build an array of search engine urls to scrape
+		$this->scrape->urls = $this->getUrls($this->items->{$this->model}); 				
 								
-								// Set backlinks for domain
-								$item->backlinks =  str_replace(",","",$parse->elements[0]); 
-							}
-							elseif($this->task == "pr")
-							{    
-								// Set the pagerank for domain
-								$item->pr = $parse->pageRank($content); 
+		// Execute the scraping
+		$this->scrape->curlExecute();		
+	}
 
-								echo $item->pr."\n";
-							} 
-							elseif($this->task == "alexa")
-							{    
-								// Set the alexa rank for domain
-								$item->alexa = $parse->alexa($content); 
+	private function parseContent()
+	{	
+		// Loop through each keyword
+		foreach($this->items->{$this->model} as $key => &$item)
+		{		
+			// Create new parsing object
+			$this->parse = new parse;	
+
+			// Content for domains
+			if($this->model == "domains")
+			{
+				$this->parseDomains();
+			}	
+			// Content for keywords
+			elseif($this->model == "keywords")
+			{
+				$this->parseKeywords();
+			}
+		}								
+	}
+
+	private function parseKeywords()
+	{
+		// If a valid search results page can be loaded (new scrape or saved file)
+		if($content = $this->getContent($item, $this->scrape->results[$item->searchHash]))
+		{  							
+			// Find the keyword's domain in one of the ranking urls
+			$this->parse->findElements($this->parsePattern(), $content)->findInElements($item->domain);			 
+						   				
+			// If domain was found or keyword on last search page
+			if($this->parse->found || $item->searchPage == SEARCH_DEPTH - 1)
+			{   
+				// If a ranking was found 
+				if($this->parse->found)
+				{   
+					// Set new keyword rank (amount of results per page + position on current page)
+					$item->rank = $item->searchOffset + $this->parse->position; 
+												
+					// Set the matching url that was found ranking
+					$item->found = $this->parse->found;  
+				}
+				// If no ranking was found
+				else
+				{    
+					// "0" is used for "not found"
+					$item->rank = 0;   
+				}  
 										
-								echo "alexa: ".$item->alexa."\n";						
-							}
-						}
+				// Calibrate keyword ranking (10/100 results)
+				$this->calibration($item);   
 
-						// Add keyword to completed list
-						$this->items->updated[$key] = $item;
+				// Add keyword to completed list
+				$this->items->updated[$key] = $item;
 
-						// Remove keyword from keyword id array
-						unset($this->items->{$this->model}->$key); 						
-
-						// Decrease total domains remaining
-						$this->items->total--; 
-
-						echo  "\ndomains remaining: ". $this->items->total."\n";
-					}	
-					else
-					{
-						$item->bad++;
-					}
-				}	
-				// Content for keywords
-				elseif($this->model == "keywords")
-				{
-					// If a valid search results page can be loaded (new scrape or saved file)
-					if($content = $this->getContent($item, $scrape->results[$item->searchHash]))
-					{  							
-						// Find the keyword's domain in one of the ranking urls
-						$parse->findElements($this->parsePattern(), $content)->findInElements($item->domain);			 
-									   				
-						// If domain was found or keyword on last search page
-						if($parse->found || $item->searchPage == SEARCH_DEPTH - 1)
-						{   
-							// If a ranking was found 
-							if($parse->found)
-							{   
-								// Set new keyword rank (amount of results per page + position on current page)
-								$item->rank = $item->searchOffset + $parse->position; 
-															
-								// Set the matching url that was found ranking
-								$item->found = $parse->found;  
-							}
-							// If no ranking was found
-							else
-							{    
-								// "0" is used for "not found"
-								$item->rank = 0;   
-							}  
-													
-							// Calibrate keyword ranking (10/100 results)
-							$this->calibration($item);   
-
-							// Add keyword to completed list
-							$this->items->updated[$key] = $item;
-
-							// Remove keyword from keyword id array
-							unset($this->items->{$this->model}->$key);  
-						    
-							// Decrease keywords remaining by one
-							$this->items->total--; 
-						}
-						// Domain was not found ranking
-						else
-						{ 
-							// Increase search results page for next scrape
-							$item->searchPage++; 						
-						} 
-					}	
-				}					
+				// Remove keyword from keyword id array
+				unset($this->items->{$this->model}->$key);  
+			    
+				// Decrease keywords remaining by one
+				$this->items->total--; 
+			}
+			// Domain was not found ranking
+			else
+			{ 
+				// Increase search results page for next scrape
+				$item->searchPage++; 						
 			} 
+		}	
+	}
 
-			// Call processing time
-			utilities::benchmark('Parse all content: ', $this->task.".log");  
-			
-			echo "\nkeywords left: ".$this->items->total."\n";
+	private function parseDomains()
+	{
+		// If a valid search results page can be loaded (new scrape or saved file)
+		if($content = $this->getContent($item, $this->scrape->results[$item->url]) || $item->bad == 10)
+		{  	
+			if($item->bad != 10)
+			{					
+				if($this->task == "backlinks")
+				{
+					// Find the keyword's domain in one of the ranking urls
+					$this->parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
+					
+					// Set backlinks for domain
+					$item->backlinks =  str_replace(",","",$this->parse->elements[0]); 
+				}
+				elseif($this->task == "pr")
+				{    
+					// Set the pagerank for domain
+					$item->pr = $this->parse->pageRank($content); 
+
+					echo $item->pr."\n";
+				} 
+				elseif($this->task == "alexa")
+				{    
+					// Set the alexa rank for domain
+					$item->alexa = $this->parse->alexa($content); 
+							
+					echo "alexa: ".$item->alexa."\n";						
+				}
+			}
+
+			// Add keyword to completed list
+			$this->items->updated[$key] = $item;
+
+			// Remove keyword from keyword id array
+			unset($this->items->{$this->model}->$key); 						
+
+			// Decrease total domains remaining
+			$this->items->total--; 
+
+			echo  "\ndomains remaining: ". $this->items->total."\n";
+		}	
+		else
+		{
+			$item->bad++;
 		}
+	}
 
-		// Connect to database
-		utilities::databaseConnect();
-
-		echo $this->model." updated: ".count($this->items->updated);
-
-		// Update DB with new data
-		$this->updateItems();
-		
-		// Call processing time
-		utilities::benchmark('update items: ', $this->task.".log"); 		
-
-		// Retrun total execution time
-		return utilities::benchmark(' ', $this->task.".log", true, false, true); 		
-	} 
-	
 	// ===========================================================================// 
 	// ! Supporting methods                                                       //
 	// ===========================================================================//	
@@ -384,16 +413,7 @@ class worker
 			// Update finished domains in DB
 			$this->items->updateDomains();  			
 		}				
-	}
-
-	private function parse($content, $class)
-	{
-			
-	}
-
-	
-	
-	 
+	}	
 }	    
 
 
