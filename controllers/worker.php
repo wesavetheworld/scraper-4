@@ -242,7 +242,7 @@ class worker
 					// Set the pagerank for domain
 					$item->pr = $this->parse->pageRank($content); 
 
-					echo $content;
+					echo "content: $content";
 					die();
 					
 					echo $item->pr."\n";
