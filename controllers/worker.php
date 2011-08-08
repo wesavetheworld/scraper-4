@@ -299,7 +299,8 @@ class worker
 	{   
 		// If a new url was scraped for this keyword
 		if($content)
-		{  			        			
+		{  		
+			echo "made it this far\n";	        			
 			// If the content has valid headers
 			if($content['status'] == 'success')
 			{   
