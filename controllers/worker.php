@@ -96,10 +96,6 @@ class worker
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
-
-			print_r($scrape->urls);
-
-			die();
 									
 			// Execute the scraping
 			$scrape->curlExecute();
@@ -126,6 +122,8 @@ class worker
 					}
 					elseif($this->stat == "pr")
 					{    
+						echo "\npr loaded\n";
+						die();
 						// Set the pagerank for domain
 						${$this->class}->pr = $parse->pageRank($content); 
 					} 
