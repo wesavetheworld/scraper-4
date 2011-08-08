@@ -75,12 +75,6 @@ class worker
 		// Get the items from the job data				
 		$items = $jobData[$this->model];
 
-				
-		
-		print_r($items->{$this->model});	
-
-		die();
-
 		// Set the task for the data model
 		$items->task = $this->task;		
 			 		   	
@@ -267,6 +261,7 @@ class worker
 		{  
 			// Generate the search page url 
 			$item->setSearchUrl();			  		
+			echo "item: $item | url: ".$item->url."\n";
 			
 			// If getting domain urls
 			if($this->model == "domains")
