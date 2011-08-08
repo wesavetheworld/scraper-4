@@ -77,11 +77,6 @@ class worker
 
 		// Set the task for the data model
 		$items->task = $this->task;		
-		
-		
-		print_r($jobData);	
-
-		die();
 			 		   	
 		// Call processing time
 		utilities::benchmark('items selected: ', $this->task.".log"); 		
@@ -105,7 +100,13 @@ class worker
 			$scrape->task = $this->task;
 
 			// Build an array of search engine urls to scrape
-			$scrape->urls = $this->getUrls($items->{$this->model}); 	
+			$scrape->urls = $this->getUrls($items->{$this->model}); 
+			
+		
+		
+		print_r($scrape->urls);	
+
+		die();				
 									
 			// Execute the scraping
 			$scrape->curlExecute();
