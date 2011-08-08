@@ -76,7 +76,7 @@ class worker
 		$this->engine = $jobData['engine'];					
 
 		// Get the items from the job data				
-		$items = $jobData[$this->model];
+		$this->items = $jobData[$this->model];
 
 		// Set the task for the data model
 		$this->items->task = $this->task;		
