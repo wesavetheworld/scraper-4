@@ -329,11 +329,8 @@ class domain
 			{
 				$domain = explode(".", $this->$key);
 				
-				echo "domain: ".$this->$key." : ".count($domain)."\n";
-				
 				if(count($domain) < 2)
 				{
-					echo " - bad\n";
 					return false;
 				}
 			}
