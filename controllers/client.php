@@ -111,19 +111,28 @@ class client
 					$i = 0;  
 
 					// Create job data array
-					$data = array();
-
-					// Define the data model to use for this job
-					$data['model'] = MODEL;					
+					$data = array();				
+					
+					// Define the task for the worker
+					$data['task'] = TASK;					
 					 
 					// Serialize items and add to job data
 					$data[MODEL] = $batch;
 
-					if(MODEL == "keywords")
+					// If task is backlinks
+					if(TASK == "backlinks")
 					{
 						// Add engine to job data
-						$data['engine'] = ENGINE;
+						$data['engine'] = "yahoo";						
+						
 					}
+					// If no engine defined
+					elseif(!ENGINE)
+					{
+						// Add engine to job data
+						$data['engine'] = "google";						
+					}
+					// all other task types
 					else
 					{
 						// Add engine to job data

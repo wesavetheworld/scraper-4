@@ -105,7 +105,7 @@ class workerCore
 	public static function pr($job)
 	{	
 		 // Build job data array
-		 $job = array('model'=>'domains', 'stat'=>'pr', 'jobData'=>$job->workload());
+		 $job = array('model'=>'domains', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
 		 $job = new load('worker', $job);	
@@ -117,7 +117,7 @@ class workerCore
 	public static function backlinks($job)
 	{	
 		 // Build job data array
-		 $job = array('model'=>'domains', 'stat'=>'backlinks', 'jobData'=>$job->workload());
+		 $job = array('model'=>'domains', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
 		 $job = new load('worker', $job);	
@@ -129,7 +129,7 @@ class workerCore
 	public static function alexa($job)
 	{	
 		 // Build job data array
-		 $job = array('model'=>'domains', 'stat'=>'alexa', 'jobData'=>$job->workload());
+		 $job = array('model'=>'domains', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
 		 $job = new load('worker', $job);	

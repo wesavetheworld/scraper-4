@@ -19,14 +19,14 @@
 
 class worker 
 {  
-	// Search engine
-	private $engine;
+	// What job is the worker performing
+	private $task;
 
 	// Data model to use
-	private $model;
+	private $model;	
 
-	// The type of stat to collect for domains
-	private $stat = false;
+	// Search engine
+	private $engine;
 
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
@@ -45,7 +45,7 @@ class worker
 		utilities::benchmark(false, false, false, true);
 
 		// Log status
-		utilities::notate("Job started", "rankings.log");		  		   	 			
+		utilities::notate("Job started", $this->task.".log");		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -55,7 +55,10 @@ class worker
 	public function worker($data)
 	{  	
 		// Get the items model
-		$this->model = $data['model'];			
+		$this->model = $data['model'];	
+		
+   		// Remove "s" from object for singular item class
+		$this->class = substr($this->model, 0, -1); 					
 
 		// Include items data model
 	 	require_once("models/".$this->model.".model.php"); 		
@@ -63,28 +66,20 @@ class worker
 		// Get the keywords from the job data				
 		$jobData = unserialize($data['jobData']);	
 
-   		// Remove "s" from object for singular item class
-		$this->class = substr($this->model, 0, -1); 		
+		// Task is this worker performing
+		$this->task = $jobData['task'];
 		
-		if($data['stat'])
-		{
-			$this->stat = $data['stat'];
-
-			${$this->model}->stat = $this->stat;	
-			
-			$this->engine = "google";
-		}	
-		else
-		{
-			// Set the search engine to use
-			$this->engine = $jobData['engine'];					
-		}	
+		// Search engine used (for proxy use)
+		$this->engine = $jobData['engine'];		
+		
+		// Set the task for the data model
+		${$this->model}->task = $this->task;	
 
 		// Get the items from the job data				
 		${$this->model} = $jobData[$this->model];
 	 		   	
 		// Call processing time
-		utilities::benchmark('items selected: ', "rankings.log"); 		
+		utilities::benchmark('items selected: ', $this->task.".log"); 		
 		        		        
 		// Loop for as long as there are keywords left
 		while(${$this->model}->total > 0)
@@ -102,7 +97,7 @@ class worker
 			$scrape->engine = $this->engine;
 
 			// If a domain stats connection
-			$scrape->stat = $this->stat;
+			$scrape->task = $this->task;
 
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 	
@@ -111,7 +106,7 @@ class worker
 			$scrape->curlExecute();
 			
 			// Call processing time
-			utilities::benchmark('scraping content: ', "rankings.log");
+			utilities::benchmark('scraping content: ', $this->task.".log");
 			
 			// Loop through each keyword
 			foreach(${$this->model}->{$this->model} as $key => &${$this->class})
@@ -125,7 +120,7 @@ class worker
 					// If a valid search results page can be loaded (new scrape or saved file)
 					if($content = $this->getContent(${$this->class}, $scrape->results[${$this->class}->url]))
 					{  						
-						if($this->stat == "backlinks")
+						if($this->task == "backlinks")
 						{
 							// Find the keyword's domain in one of the ranking urls
 							$parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
@@ -133,14 +128,14 @@ class worker
 							// Set backlinks for domain
 							${$this->class}->backlinks =  str_replace(",","",$parse->elements[0]); 
 						}
-						elseif($this->stat == "pr")
+						elseif($this->task == "pr")
 						{    
 							// Set the pagerank for domain
 							${$this->class}->pr = $parse->pageRank($content); 
 
 							echo ${$this->class}->pr."\n";
 						} 
-						elseif($this->stat == "alexa")
+						elseif($this->task == "alexa")
 						{    
 							// Set the alexa rank for domain
 							${$this->class}->alexa = $parse->alexa($content); 
@@ -215,7 +210,7 @@ class worker
 			} 
 
 			// Call processing time
-			utilities::benchmark('Parse all content: ', "rankings.log");  
+			utilities::benchmark('Parse all content: ', $this->task.".log");  
 			
 			echo "\nkeywords left: ".${$this->model}->total."\n";
 		}
@@ -242,10 +237,10 @@ class worker
 		//$this->updateItems();
 		
 		// Call processing time
-		utilities::benchmark('update items: ', "rankings.log"); 		
+		utilities::benchmark('update items: ', $this->task.".log"); 		
 
 		// Retrun total execution time
-		return utilities::benchmark(' ', "rankings.log", true, false, true); 		
+		return utilities::benchmark(' ', $this->task.".log", true, false, true); 		
 	} 
 	
 	// ===========================================================================// 
@@ -313,7 +308,7 @@ class worker
 				// Set the new search as the source
 				$search = $content['output']; 
 
-				if($this->stat == "pr" && empty($search))
+				if($this->task == "pr" && empty($search))
 				{
 					$search = "99";
 				}				
