@@ -99,9 +99,6 @@ class worker
 			// Set search engine to scrape
 			$scrape->engine = $this->engine;
 
-			echo $this->engine;
-			die();
-
 			// Build an array of search engine urls to scrape
 			$scrape->urls = $this->getUrls(${$this->model}->{$this->model}); 
 									
