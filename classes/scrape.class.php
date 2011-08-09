@@ -427,11 +427,7 @@ class scraper
 				$this->results[$i]['proxy_info']['username'] = $this->proxies[$loop]['username'];
 				$this->results[$i]['proxy_info']['password'] = $this->proxies[$loop]['password'];
 				$this->results[$i]['proxy_info']['source'] = (!empty($this->proxies[$loop]['source'])) ? $this->proxies[$loop]['source'] : '';  
-			} 
-			
-			print_r($this->results);
-			
-			die('the end');  
+			}   
 			
 			// Check headers for errors (302,407, blank response)
 			$this->checkHeaders($i);
