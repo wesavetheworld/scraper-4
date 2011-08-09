@@ -77,8 +77,8 @@ class clientCore
 			if(intval(ltrim(date("i"), "0")) % 2 == 0)
 			{
 				// Update domain stats
-				//$this->domainStats('new');	
-				utilities::notate("would have run domain stats", "clientd.log");		  		   	 				
+				$this->domainStats('new');	
+				//utilities::notate("would have run domain stats", "clientd.log");		  		   	 				
 
 			}
 
