@@ -74,10 +74,12 @@ class clientCore
 			}
 
 			// Every 2 minutes
-			if(intval(date("i")) % 2 == 0)
+			if(intval(ltrim(date("i"), "0")) % 2 == 0)
 			{
 				// Update domain stats
 				//$this->domainStats('new');	
+				utilities::notate("would have run domain stats", "clientd.log");		  		   	 				
+
 			}
 
 			// Check for any new domains
