@@ -299,6 +299,7 @@ class scraper
 	// *****************************************************************************
 	private function curlRequestBuild()
 	{
+		// Open log file for writing
 		$this->fp = fopen('/home/ec2-user/data/logs/curl.log', "w");
 
 		// Loop through urls and build multi curl request
@@ -326,7 +327,7 @@ class scraper
 			// Turn on curl error code debugging
 			curl_setopt($this->ch[$i], CURLOPT_VERBOSE, TRUE);
 			
-			//
+			// Write errors to log file
 			curl_setopt($this->ch[$i], CURLOPT_STDERR, $this->fp);
 			
 			// Follow any HTTP Redirects
