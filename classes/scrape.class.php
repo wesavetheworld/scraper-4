@@ -300,7 +300,7 @@ class scraper
 	private function curlRequestBuild()
 	{
 		// Open log file for
-		$this->fp = fopen('/home/ec2-user/data/logs/curl.log', "w");
+		//$this->fp = fopen('/home/ec2-user/data/logs/curl.log', "w");
 
 		// Loop through urls and build multi curl request
 		foreach($this->urls as $i => $url)
@@ -328,7 +328,7 @@ class scraper
 			curl_setopt($this->ch[$i], CURLOPT_VERBOSE, TRUE);
 			
 			// Write errors to log file
-			curl_setopt($this->ch[$i], CURLOPT_STDERR, $this->fp);
+			//curl_setopt($this->ch[$i], CURLOPT_STDERR, $this->fp);
 			
 			// Follow any HTTP Redirects
 			if($this->redirectFollow)
@@ -427,7 +427,11 @@ class scraper
 				$this->results[$i]['proxy_info']['username'] = $this->proxies[$loop]['username'];
 				$this->results[$i]['proxy_info']['password'] = $this->proxies[$loop]['password'];
 				$this->results[$i]['proxy_info']['source'] = (!empty($this->proxies[$loop]['source'])) ? $this->proxies[$loop]['source'] : '';  
-			}   
+			} 
+			
+			print_r($this->results);
+			
+			die('the end');  
 			
 			// Check headers for errors (302,407, blank response)
 			$this->checkHeaders($i);
