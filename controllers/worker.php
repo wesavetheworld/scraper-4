@@ -298,14 +298,14 @@ class worker
 				if(!$urls[$item->searchHash])
 				{    				
 					// If no saved search or saved search is from another hour
-					if(!file_exists($item->searchFile) || date("Y-m-d-G", filemtime($item->searchFile)) != date("Y-m-d-G") || filesize($item->searchFile) < 500)
-					{      
+					// if(!file_exists($item->searchFile) || date("Y-m-d-G", filemtime($item->searchFile)) != date("Y-m-d-G") || filesize($item->searchFile) < 500)
+					// {      
 						// Add the keyword's search page url to scraping list
 						$urls[$item->searchHash] = $item->url; 
 						
 						// This is a new search
 						$item->searchType = "new";
-					}
+					//}
 				} 
 			}	 	
 		} 
