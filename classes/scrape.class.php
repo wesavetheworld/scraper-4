@@ -299,7 +299,7 @@ class scraper
 	// *****************************************************************************
 	private function curlRequestBuild()
 	{
-		$fp = fopen('/home/ec2-user/data/logs/curl.log', "w");
+		$this->fp = fopen('/home/ec2-user/data/logs/curl.log', "w");
 
 		// Loop through urls and build multi curl request
 		foreach($this->urls as $i => $url)
@@ -326,7 +326,8 @@ class scraper
 			// Turn on curl error code debugging
 			curl_setopt($this->ch[$i], CURLOPT_VERBOSE, TRUE);
 			
-			curl_setopt($this->ch[$i], CURLOPT_STDERR, $fp);
+			//
+			curl_setopt($this->ch[$i], CURLOPT_STDERR, $this->fp);
 			
 			// Follow any HTTP Redirects
 			if($this->redirectFollow)
