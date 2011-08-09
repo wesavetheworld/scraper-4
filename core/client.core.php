@@ -47,7 +47,7 @@ class clientCore
 				$this->run("client", "rankings 100 google daily");	
 				
 				// Update domain stats
-				//$this->domainStats();				
+				$this->domainStats();				
 			}
 
 			// The first min of every hour but the first
@@ -78,8 +78,6 @@ class clientCore
 			{
 				// Update domain stats
 				$this->domainStats('new');	
-				//utilities::notate("would have run domain stats", "clientd.log");		  		   	 				
-
 			}
 
 			// Check for any new domains
@@ -166,6 +164,6 @@ class clientCore
 		// Execute command given
 		exec($command);
 
-		utilities::notate("command: $command", "clientd.log");		  		   	 				
+		utilities::notate("command: $controller $options", "clientd.log");		  		   	 				
 	}
 }	
