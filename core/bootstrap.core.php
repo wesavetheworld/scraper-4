@@ -314,7 +314,7 @@ class bootstrap
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=10\n"; 
+			$supervisord.= "numprocs=0\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 
 			
 			// Add workers for new keywords
