@@ -172,7 +172,6 @@ class domains
 			// If this keyword has no ranking yet
 			if(!isset($domain->{$domain->stat}))
 			{   
-				echo "\nskipping\n";
 				// Skip keyword
 				continue;
 			} 
@@ -180,7 +179,6 @@ class domains
 			// If keyword has not been updated today
 			if($domain->date != date("Y-m-d"))
 			{   
-				echo "inserting\n";
 				// Insert a new ranking row
 				$domain->inserted = $this->insertStat($domain);
 			}
@@ -188,8 +186,6 @@ class domains
 			// If keyword has been updated today or there was a duplicate error on insert 
 			if($domain->date == date("Y-m-d") || !$domain->inserted)			
 			{    
-				echo "updating \n";
-
 				// Update an existing ranking row
 				$domain->updated = $this->updateStat($domain);
 			}
