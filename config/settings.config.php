@@ -75,7 +75,7 @@
 	// ===========================================================================//	
                            
 	// Should errors be sent using notifo
-	define("NOTIFO", FALSE);
+	define("NOTIFO", TRUE);
 
 	// API username
 	define("NOTIFO_API_USERNAME", "sescout_errors");
