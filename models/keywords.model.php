@@ -171,10 +171,7 @@ class keywords
 							keywords.".ENGINE."_status DESC,
 							keywords.keyword,
 						 	domains.user_id"; 
-		}   	
-
-		echo $query;
-		
+		}   			
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
@@ -346,29 +343,7 @@ class keywords
 		
 		// Execute update query
 		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
-	}
-
-	// // Insert a new row into tracking table with new rankings
-	// private function insertRanking($keyword)
-	// {	           		
-	// 	// Build insert query
-	// 	$query = "	INSERT INTO 
-	// 					tracking 
-	// 					(keyword_id,".$keyword->engine.",
-	// 					".$keyword->engine."_match,
-	// 					dupecount,
-	// 					date) 
-	// 		      VALUES (
-	// 					'".$keyword->keyword_id."',
-	// 					'".$keyword->rank."',
-	// 					'".mysql_real_escape_string($keyword->found)."',
-	// 					'0',
-	// 					'".date("Y-m-d")."'
-	// 		          )";
-		
-	// 	// Execute insert query 
-	// 	return mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
-	// }	   
+	}   
 }
 
 // ===========================================================================// 

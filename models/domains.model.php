@@ -167,34 +167,16 @@ class domains
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
 		{	 
-			echo $domain->domain." - ".$domain->{$domain->stat}."\n";
-
 			// If this keyword has no ranking yet
 			if(!isset($domain->{$domain->stat}))
 			{   
 				// Skip keyword
 				continue;
 			} 
-		 
-			// If keyword has not been updated today
-			if($domain->date != date("Y-m-d"))
-			{   
-				// Insert a new ranking row
-				$domain->inserted = $this->insertStat($domain);
-			}
 			
-			// If keyword has been updated today or there was a duplicate error on insert 
-			if($domain->date == date("Y-m-d") || !$domain->inserted)			
-			{    
-				// Update an existing ranking row
-				$domain->updated = $this->updateStat($domain);
-			}
-			
-			// If keyword's tracking data was updated successfully
-			if($domain->inserted || $domain->updated)
+			// If domains's tracking data was updated successfully
+			if($this->updateStat($domain))
 			{
-				echo "\n updating domains table\n";
-
 				// Update keywords table with update time and notifications
 				$query = "	UPDATE 
 								domains 
@@ -205,50 +187,30 @@ class domains
 						  	WHERE 
 						  		domain_id = ".$domain->domain_id; 
 											  
-			    // Execute update query
-				$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()); 
+				// If domain update successful
+				if(mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error())
+				{
+					// Remove domain from domain id array
+					unset($this->domainIds[$key]);        
+					
+					// Remove domain from domain array
+					unset($this->domains->$key);        
+				}	
+				// Keyword update failed	
+				else
+				{
+					// Log status
+					utilities::notate("Could not update domain", "rankings.log");		  		   	 			
+				}			
 			}	
 			
-			// If keyword update successful
-			if($result)
-			{
-				echo "table update complete\n";
-				// Remove domain from domain id array
-				unset($this->domainIds[$key]);        
-				
-				// Remove domain from domain array
-				unset($this->domains->$key);        
-			}	
-			// Keyword update failed	
-			else
-			{
-				// Log status
-				utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
-			}
    		}
 	} 
 	
 	// Update existing row in tracking table with new rankings
 	private function updateStat($domain)
-	{	 		     		
+	{	 		     	
 		// Build update query
-		$query = "	UPDATE 
-						domain_stats 
-					SET 
-						".$domain->stat." = '".$domain->{$domain->stat}."'
-					WHERE 
-					 	domain_id = ".$domain->domain_id." 
-					AND 
-					 	date = '".date("Y-m-d")."'";
-							                                            
-		// Execute update query
-		return mysql_query($query) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
-	}
-
-	// Insert a new row into tracking table with new rankings
-	private function insertStat($domain)
-	{ 		              		
-		// Build insert query
 		$query = "	INSERT INTO 
 						domain_stats 
 						(domain_id,
@@ -258,13 +220,13 @@ class domains
 						'".$domain->domain_id."',
 						'".$domain->{$domain->stat}."',
 						NOW()
-			          )";
-
-			         // echo $query;
-		
-		// Execute insert query 
-		return mysql_query($query) or utilities::reportErrors("ERROR ON stats insert: ".mysql_error());		
-	}   
+			            )
+    			    ON DUPLICATE KEY UPDATE 
+    			    	".$domain->stat." = '".$domain->{$domain->stat}."'";	
+							                                            
+		// Execute update query
+		return mysql_query($query) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
+	} 
 }
 
 // ===========================================================================// 
