@@ -188,7 +188,7 @@ class domains
 						  		domain_id = ".$domain->domain_id; 
 											  
 				// If domain update successful
-				if(mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error())
+				if(mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
 				{
 					// Remove domain from domain id array
 					unset($this->domainIds[$key]);        
