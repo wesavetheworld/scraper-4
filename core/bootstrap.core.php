@@ -328,7 +328,7 @@ class bootstrap
 
 			// Add workers for ranking updates
 			$supervisord = "[program:Bing]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsGoogleNew rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankingsNewGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -337,7 +337,7 @@ class bootstrap
 			
 			// Add workers for ranking updates
 			$supervisord = "[program:Bing]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsBingNew rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankingsNewBing rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";

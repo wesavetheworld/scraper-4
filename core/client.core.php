@@ -63,10 +63,7 @@ class clientCore
 				if(!$queue)
 				{				
 					// Update hourly keyword rankings for google
-					$this->run("client", "rankings 100 google hourly");		
-					
-					// Update hourly keyword rankings for bing
-					$this->run("client", "rankings 100 google hourly");													
+					$this->run("client", "rankings 100 google hourly");															
 				}	
 				// Jobs have not finished from last hour
 				else
@@ -102,6 +99,7 @@ class clientCore
 			
 			// Check for new keywords to update
 			$this->run("client", "rankingsNew 100 google");
+			$this->run("client", "rankingsNew 100 bing");
 			
 			// Check for keywords needing calibration
 			//$this->run("client", "rankingsCalibrate 100 google");							
