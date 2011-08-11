@@ -57,7 +57,7 @@ class clientCore
 			if(date("i") == "00")
 			{
 				// Get current job Queue total
-				$queue = $this->checkJobQueue('rankings');
+				$queue = $this->checkJobQueue('rankingsGoogle');
 				
 				// If job queue is empty
 				if(!$queue)
