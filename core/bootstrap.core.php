@@ -309,22 +309,40 @@ class bootstrap
 		elseif($this->instanceType == "worker")
 		{	
 			// Add workers for ranking updates
-			$supervisord = "[program:Rankings]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankings rankings\n";
+			$supervisord = "[program:Google]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankingsGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=10\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 
-			
-			// Add workers for new keywords
-			$supervisord.= "[program:RankingsNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsNew rankings\n";
+
+			// Add workers for ranking updates
+			$supervisord = "[program:Google]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankingsBing rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=10\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 			
+
+			// Add workers for ranking updates
+			$supervisord = "[program:Bing]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankingsGoogleNew rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 
+			
+			// Add workers for ranking updates
+			$supervisord = "[program:Bing]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php run rankingsBingNew rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";						
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:pageRank]\n";

@@ -43,8 +43,11 @@ class clientCore
 			// If first hour of the day
 			if(date("H:i") == "00:00")
 			{
-				// Update all daily keywords
+				// Update all daily keywords for google
 				$this->run("client", "rankings 100 google daily");	
+				
+				// Update all daily keywords for bing
+				$this->run("client", "rankings 100 bing daily");	
 				
 				// Update domain stats
 				$this->domainStats();				
@@ -59,8 +62,11 @@ class clientCore
 				// If job queue is empty
 				if(!$queue)
 				{				
-					// Update hourly keyword rankings
-					$this->run("client", "rankings 100 google hourly");									
+					// Update hourly keyword rankings for google
+					$this->run("client", "rankings 100 google hourly");		
+					
+					// Update hourly keyword rankings for bing
+					$this->run("client", "rankings 100 google hourly");													
 				}	
 				// Jobs have not finished from last hour
 				else

@@ -30,8 +30,21 @@
 	// Amount of keywords/domains per job
 	define("JOB_SIZE", $argv[3]);	
 
-	// Constants for keyword rankings
-	if(in_array(TASK, array("rankings", "rankingsNew", "rankingsCalibrate")))
+	// Constants for domain stats
+	if(in_array(TASK, array("pr", "backlinks", "alexa")))
+	{
+		// Data model to use
+		define("MODEL", "domains");	
+
+		// Data model to use
+		define("ENGINE", "");			
+
+		define("ONLY_NEW", $argv[4]);	
+															
+		define("ONLY_USER", $argv[5]);								
+	}
+	//Constants for keywords
+	else
 	{
 		// Data model to use
 		define("MODEL", "keywords");
@@ -43,19 +56,7 @@
 		define("SCHEDULE", $argv[5]);
 		
 		// Data model to use
-		define("ONLY_USER", $argv[6]);									
-	}
-	else
-	{
-		// Data model to use
-		define("MODEL", "domains");	
-
-		// Data model to use
-		define("ENGINE", "");			
-
-		define("ONLY_NEW", $argv[4]);	
-															
-		define("ONLY_USER", $argv[5]);														
+		define("ONLY_USER", $argv[6]);															
 	}
 	
 	// ===========================================================================// 

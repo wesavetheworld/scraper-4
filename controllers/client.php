@@ -48,7 +48,7 @@ class client
 		$gmclient->addServer(JOB_SERVER_IP);   
 		
 		// Set the function to be used when jobs are complete
-   		$gmclient->setCompleteCallback("client::jobComplete");
+   		//$gmclient->setCompleteCallback("client::jobComplete");
 
    		// Set the class to instantiate
    		$class = MODEL;
@@ -111,30 +111,16 @@ class client
 					$i = 0;  
 
 					// Create job data array
-					$data = array();				
-					
-					// Define the task for the worker
-					$data['task'] = TASK;					
+					$data = array();									
 
-					// If no engine defined
-					if(ENGINE)
-					{
-						// Add engine to job data
-						$data['engine'] = ENGINE;						
-					}
-					// If task is backlinks
-					elseif(TASK == "backlinks")
-					{
-						// Add engine to job data
-						$data['engine'] = "yahoo";						
-						
-					}					
-					// all other task types
-					else
-					{
-						// Add engine to job data
-						$data['engine'] = "google";
-					}
+					// Define the engine used for the job (google,bing,yahoo)
+					$data['engine'] = $this->getEngine();						
+
+					// Define the type of job to create
+					$task = $this->getTask();
+
+					// Define the task for the worker
+					$data['task'] = $task;					
 					
 					// Serialize items and add to job data
 					$data[MODEL] = $batch;
@@ -143,7 +129,7 @@ class client
 					$data = serialize($data);
 					
 					// Define a new high priority job for current batch
-				   	$gmclient->addTaskBackground(TASK, $data, null, TASK."_".$job++."_".time());						  		
+				   	$gmclient->addTaskBackground($task, $data, null, $task."_".$job++."_".time());						  		
 
 					// Create the jobs
 		    		$gmclient->runTasks();					
@@ -166,40 +152,80 @@ class client
 	// ===========================================================================//	
 
 	// Runs as jobs are checked back in
-  	public static function jobComplete($task) 
-	{ 
-		$time = intval(round(trim($task->data())));
+ //  	public static function jobComplete($task) 
+	// { 
+	// 	$time = intval(round(trim($task->data())));
 
-		// Show task completion message
-		print "Task ".$task->unique()." completed in $time seconds\n";
+	// 	// Show task completion message
+	// 	print "Task ".$task->unique()." completed in $time seconds\n";
 
-		static $rates = array();
-		static $jobs = 0;
+	// 	static $rates = array();
+	// 	static $jobs = 0;
 
-		$jobs++;
-		$items = JOB_SIZE * $jobs;
-		$itemsLeft = TOTAL - $items;
+	// 	$jobs++;
+	// 	$items = JOB_SIZE * $jobs;
+	// 	$itemsLeft = TOTAL - $items;
 
-		$workers = 48;
+	// 	$workers = 48;
 
-		// 16 workers @ 100 keywords each at the returned time
-		$rate = round((3600 / $time) * ($workers * JOB_SIZE));
+	// 	// 16 workers @ 100 keywords each at the returned time
+	// 	$rate = round((3600 / $time) * ($workers * JOB_SIZE));
 
-		$rates[] = $rate;
-		$avg =  number_format(round(array_sum($rates) / count($rates)));
+	// 	$rates[] = $rate;
+	// 	$avg =  number_format(round(array_sum($rates) / count($rates)));
 
-		// 16 workers @ 100 keywords each at the returned time
-		$rate = number_format($rate);		
+	// 	// 16 workers @ 100 keywords each at the returned time
+	// 	$rate = number_format($rate);		
 		
-		// Get total time so far
-		utilities::benchmark("\ttime so far: ", true); 		
+	// 	// Get total time so far
+	// 	utilities::benchmark("\ttime so far: ", true); 		
 
-		print "\tupdate rate: $rate items per hour\n";
-		print "\taverage rate: $avg items per hour\n";
-		print "\titems updated so far: $items\n";
-		print "\titems left: $itemsLeft\n";
-	}
+	// 	print "\tupdate rate: $rate items per hour\n";
+	// 	print "\taverage rate: $avg items per hour\n";
+	// 	print "\titems updated so far: $items\n";
+	// 	print "\titems left: $itemsLeft\n";
+	// }
+
+	// ===========================================================================// 
+	// ! Supporting methods                                                       //
+	// ===========================================================================//	
 	 
+	// Determine the engine to set for the job
+	private function getEngine()
+	{
+		// If no engine set
+		if(ENGINE)
+		{
+			return ENGINE;						
+		}
+		// If task is backlinks
+		elseif(TASK == "backlinks")
+		{
+			return "yahoo";						
+		}					
+		// all other task types
+		else
+		{
+			return "google";
+		}	 	
+	}
+
+	 // Creat the task name for created jobs
+	 private function getTask()
+	 {
+	 	// If an engine is set (keywords)
+		if(ENGINE)
+		{
+			// Creates format like: taskEngine
+			return TASK.ucfirst(ENGINE);
+		}
+		// No engine present (domains)
+		else
+		{
+			return TASK	 		
+		}	 	
+	 }
+
 }	    
 
 
