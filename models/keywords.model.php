@@ -212,6 +212,8 @@ class keywords
 							keywords.keyword,
 						 	domains.user_id"; 
 		}   	
+
+		echo $query;
 		
 																								
 		// Execute query and return results			
