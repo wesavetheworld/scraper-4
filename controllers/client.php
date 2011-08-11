@@ -222,7 +222,7 @@ class client
 		// No engine present (domains)
 		else
 		{
-			return TASK	 		
+			return TASK;	 		
 		}	 	
 	 }
 
