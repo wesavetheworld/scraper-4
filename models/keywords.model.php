@@ -95,12 +95,21 @@ class keywords
 		{   
 			// Today
 			$time = date("Y-m-d");
+
+			$schedule = "'daily'";
 		} 
 		// Update only hourly keywords
 		else
 		{    
 			// This hour
 			$time = date("Y-m-d H");
+			
+			$schedule = "'hourly'";
+		}
+
+		if(ENGINE == 'bing')
+		{
+			$schedule = "'hourly','daily'";
 		}
            
 		// If single user argument present
@@ -152,33 +161,7 @@ class keywords
 						 	keywords.".ENGINE."_status DESC,
 							keywords.keyword,
 						 	domains.user_id";		
-		}
-		// If selecting only new keywords
-		elseif(TASK == "rankingsCalibrate")
-		{
-		 	$query =   "SELECT 
-							keywords.keyword_id,
-							keywords.keyword,
-							keywords.user_id,
-							keywords.g_country,
-							keywords.notifications,
-							keywords.calibrate,
-							keywords.date,							
-							domains.domain_id,
-							domains.domain							
-						FROM 
-							keywords
-						JOIN 
-							domains ON keywords.domain_id = domains.domain_id 
-						WHERE 
-							keywords.check_out != 1							    				
-						AND
-							keywords.calibrate != '0'								
-						ORDER BY
-						 	keywords.".ENGINE."_status DESC,
-							keywords.keyword,
-						 	domains.user_id";		
-		}		
+		}	
 		// Normal select statement
 		else
         {
@@ -204,7 +187,7 @@ class keywords
 						AND	
 							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
 						AND
-	                    	keywords.schedule = '".SCHEDULE."' 
+	                    	keywords.schedule IN ($schedule)
 						AND
 							keywords.".ENGINE."_status < '{$time}'
 						ORDER BY
