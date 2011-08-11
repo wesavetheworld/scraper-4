@@ -279,22 +279,7 @@ class keywords
 			{   
 				// Skip keyword
 				continue;
-			} 
-		 
-			// // If keyword has not been updated today
-			// if($keyword->date != date("Y-m-d"))
-			// {   
-			// 	// Insert a new ranking row
-			// 	$keyword->inserted = $this->insertRanking($keyword);
-			// }
-			
-			// // If keyword has been updated today or there was a duplicate error on insert 
-			// if($keyword->date == date("Y-m-d") || !$keyword->inserted)			
-			// {    
-			// 	// Update an existing ranking row
-			// 	$keyword->updated = $this->updateRanking($keyword);
-			// }
-		
+			}
 	
 			// If keyword's tracking data was updated successfully
 			if($this->updateRanking($keyword))
@@ -357,7 +342,7 @@ class keywords
 			            )
 			      ON DUPLICATE KEY UPDATE 
 			      		".$keyword->engine." = '".$keyword->rank."', 
-					 	".$keyword->engine."_match = '".$keyword->found."' , ";			          				 	
+					 	".$keyword->engine."_match = '".$keyword->found."'";			          				 	
 		
 		// Execute update query
 		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
