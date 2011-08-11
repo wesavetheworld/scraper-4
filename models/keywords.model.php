@@ -111,12 +111,9 @@ class keywords
 		{
 			$schedule = "'hourly','daily'";
 		}
-           
-		// If single user argument present
-		if(ONLY_USER)
-		{   
-			// Construct query
-			$query =   "SELECT 
+
+		// Build base select statement
+		$select = "SELECT 
 							keywords.keyword_id,
 							keywords.keyword,
 							keywords.user_id,
@@ -129,7 +126,13 @@ class keywords
 						FROM 
 							keywords
 						JOIN 
-							domains ON keywords.domain_id = domains.domain_id 
+							domains ON keywords.domain_id = domains.domain_id ";
+           
+		// If single user argument present
+		if(ONLY_USER)
+		{   
+			// Construct query
+			$query =   "$select 
 						WHERE 
 							 keywords.user_id IN ('".ONLY_USER."') 
 						ORDER BY
@@ -139,20 +142,7 @@ class keywords
 		// If selecting only new keywords
 		elseif(TASK == "rankingsNew")
 		{
-		 	$query =   "SELECT 
-							keywords.keyword_id,
-							keywords.keyword,
-							keywords.user_id,
-							keywords.g_country,
-							keywords.notifications,
-							keywords.calibrate,
-							keywords.date,							
-							domains.domain_id,
-							domains.domain							
-						FROM 
-							keywords
-						JOIN 
-							domains ON keywords.domain_id = domains.domain_id 
+		 	$query =   "$select
 						WHERE 
 							keywords.check_out != 1							    				
 						AND
@@ -166,20 +156,7 @@ class keywords
 		else
         {
 			// Construct query
-			$query =   "SELECT 
-							keywords.keyword_id,
-							keywords.keyword,
-							keywords.user_id,
-							keywords.g_country,
-							keywords.notifications,
-							keywords.calibrate,
-							keywords.date,							
-							domains.domain_id,
-							domains.domain
-						FROM 
-							keywords
-						JOIN 
-							domains ON keywords.domain_id = domains.domain_id 
+			$query =   "$select 
 						WHERE 
 							keywords.status !='suspended'
 						AND
@@ -304,30 +281,31 @@ class keywords
 				continue;
 			} 
 		 
-			// If keyword has not been updated today
-			if($keyword->date != date("Y-m-d"))
-			{   
-				// Insert a new ranking row
-				$keyword->inserted = $this->insertRanking($keyword);
-			}
+			// // If keyword has not been updated today
+			// if($keyword->date != date("Y-m-d"))
+			// {   
+			// 	// Insert a new ranking row
+			// 	$keyword->inserted = $this->insertRanking($keyword);
+			// }
 			
-			// If keyword has been updated today or there was a duplicate error on insert 
-			if($keyword->date == date("Y-m-d") || !$keyword->inserted)			
-			{    
-				// Update an existing ranking row
-				$keyword->updated = $this->updateRanking($keyword);
-			}
-			
-			// If updating google
-			if($this->engine == "google")
-			{
-				// Save any notifications for keyword
-				$setNotify = " notify = '".$keyword->notify."',";
-			}
-			
+			// // If keyword has been updated today or there was a duplicate error on insert 
+			// if($keyword->date == date("Y-m-d") || !$keyword->inserted)			
+			// {    
+			// 	// Update an existing ranking row
+			// 	$keyword->updated = $this->updateRanking($keyword);
+			// }
+		
+	
 			// If keyword's tracking data was updated successfully
-			if($keyword->inserted || $keyword->updated)
+			if($this->updateRanking($keyword))
 			{
+				// If updating google
+				if($this->engine == "google")
+				{
+					// Save any notifications for keyword
+					$setNotify = " notify = '".$keyword->notify."',";
+				}
+
 				// Update keywords table with update time and notifications
 				$query = "	UPDATE 
 								keywords 
@@ -342,51 +320,28 @@ class keywords
 						  WHERE 
 						  	keyword_id='".$keyword->keyword_id."'";  
 											  
-			    // Execute update query
-				$result = mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()); 
+				// If keyword update successful
+				if(mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
+				{
+					// Remove keyword from keyword id array
+					unset($this->keywordIds[$key]);        
+					
+					// Remove keyword from keyword array
+					unset($this->keywords->$key);        
+				}
+				// Keyword update failed	
+				else
+				{
+					// Log status
+					utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
+				}				
 			}	
-			
-			// If keyword update successful
-			if($result)
-			{
-				// Remove keyword from keyword id array
-				unset($this->keywordIds[$key]);        
-				
-				// Remove keyword from keyword array
-				unset($this->keywords->$key);        
-			}
-			// Keyword update failed	
-			else
-			{
-				// Log status
-				utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
-			}
    		}
 	} 
 	
 	// Update existing row in tracking table with new rankings
 	private function updateRanking($keyword)
 	{	      		
-		// Build update query
-		$query = "	UPDATE 
-						tracking 
-					SET 
-				 		".$keyword->engine." = '".$keyword->rank."', 
-					 	".$keyword->engine."_match = '".$keyword->found."' , 
-					 	dupecount = '0' 
-					 WHERE 
-					 	keyword_id='".$keyword->keyword_id."' 
-					 AND 
-					 	date='".date("Y-m-d")."'";	
-		
-		// Execute update query
-		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
-	}
-
-	// Insert a new row into tracking table with new rankings
-	private function insertRanking($keyword)
-	{	           		
-		// Build insert query
 		$query = "	INSERT INTO 
 						tracking 
 						(keyword_id,".$keyword->engine.",
@@ -399,11 +354,36 @@ class keywords
 						'".mysql_real_escape_string($keyword->found)."',
 						'0',
 						'".date("Y-m-d")."'
-			          )";
+			            )
+			      ON DUPLICATE KEY UPDATE 
+			      		".$keyword->engine." = '".$keyword->rank."', 
+					 	".$keyword->engine."_match = '".$keyword->found."' , ";			          				 	
 		
-		// Execute insert query 
-		return mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
-	}	   
+		// Execute update query
+		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
+	}
+
+	// // Insert a new row into tracking table with new rankings
+	// private function insertRanking($keyword)
+	// {	           		
+	// 	// Build insert query
+	// 	$query = "	INSERT INTO 
+	// 					tracking 
+	// 					(keyword_id,".$keyword->engine.",
+	// 					".$keyword->engine."_match,
+	// 					dupecount,
+	// 					date) 
+	// 		      VALUES (
+	// 					'".$keyword->keyword_id."',
+	// 					'".$keyword->rank."',
+	// 					'".mysql_real_escape_string($keyword->found)."',
+	// 					'0',
+	// 					'".date("Y-m-d")."'
+	// 		          )";
+		
+	// 	// Execute insert query 
+	// 	return mysql_query($query) or utilities::reportErrors("ERROR ON INSERTING: ".mysql_error());	
+	// }	   
 }
 
 // ===========================================================================// 
