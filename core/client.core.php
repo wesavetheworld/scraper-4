@@ -40,8 +40,6 @@ class clientCore
 		// Loop forever
 		while(TRUE)
 		{
-			utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
-
 			// Check system status
 			utilities::checkStatus();
 
@@ -217,7 +215,10 @@ class clientCore
 		utilities::notate("sleeping for 60 - ".intval(ltrim(date("i"), "0"))." = $sleep seconds", "clientd.log");		  		   	 				
 		
 		// Wait for the remaining seconds in the minute
-		sleep($sleep);
+		sleep(intval($sleep));
+
+		utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
+
 	}
 
 	// Execute bash command that detaches from daemon
