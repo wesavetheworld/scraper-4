@@ -215,7 +215,7 @@ class clientCore
 		utilities::notate("sleeping for 60 - ".intval(ltrim(date("i"), "0"))." = $sleep seconds", "clientd.log");		  		   	 				
 		
 		// Wait for the remaining seconds in the minute
-		sleep($sleep);
+		time_sleep_until(time() + $sleep);		
 
 		utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
 	}
