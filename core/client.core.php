@@ -212,18 +212,17 @@ class clientCore
 		// Get remaining seconds in current minute
 		//$sleep = intval(60 - intval(ltrim(date("i"), "0")));
 		
-		$sleep = date("i") + 1;
+		// $sleep = date("i") + 1;
 
-		$sleep = date("H:$sleep");
-		
-		utilities::notate("sleeping until $sleep", "clientd.log");		  		   	 				
+		// $sleep = date("H:$sleep");
+		// utilities::notate("sleeping until $sleep", "clientd.log");		  		   	 				
 
-		$sleep = strtotime($sleep);
+		// $sleep = strtotime($sleep);
 
-		// Wait for the remaining seconds in the minute
-		time_sleep_until($sleep);		
-
-		utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
+		// // Wait for the remaining seconds in the minute
+		// time_sleep_until($sleep);		
+		sleep(60);
+		// utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
 	}
 
 	// Execute bash command that detaches from daemon
