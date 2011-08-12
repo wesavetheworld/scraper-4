@@ -23,6 +23,9 @@ class clientCore
 	{
 		// Include gearman class for job status updates
 	 	require_once('classes/gearman.class.php');
+	 	
+		// Include the amazon SDK
+		require_once('classes/amazon/sdk.class.php');
 	 			
 		// The main loop
 		$this->daemon();
@@ -43,74 +46,94 @@ class clientCore
 			// If first hour of the day
 			if(date("H:i") == "00:00")
 			{
-				// Update all daily keywords for google
-				$this->run("client", "rankings 100 google daily");	
-				
-				// Update all daily keywords for bing
-				$this->run("client", "rankings 100 bing daily");	
-				
-				// Update domain stats
-				$this->domainStats();				
+				// Run all daily tasks
+				$this->daily();			
 			}
 
 			// The first min of every hour but the first
 			if(date("i") == "00")
 			{
-				// Get current job Queue total
-				$queue = $this->checkJobQueue('rankingsGoogle');
-				
-				// If job queue is empty
-				if(!$queue)
-				{				
-					// Update hourly keyword rankings for google
-					$this->run("client", "rankings 100 google hourly");															
-				}	
-				// Jobs have not finished from last hour
-				else
-				{
-					// Notify admin of overlap
-					utilities::reportErrors("Hourly scraping overlap: $queue jobs remaining");	
-					
-					// Log overlap notice				
-					utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
-				}
+				// Run all hourly tasks
+				$this->hourly();
 			}
 
 			// Every 2 minutes
 			if(intval(ltrim(date("i"), "0")) % 2 == 0)
 			{
-				// Update domain stats
-				$this->domainStats('new');	
+				// Run all every other minute tasks
+				$this->twoMinutes();			
 			}
 
-			// Check for any new domains
-			// elseif($this->checkNew(NEW_DOMAINS_FILE))
-			// {
-			// 	// Update domain stats
-			// 	//$this->domainStats();		
-			// }	
+			// Run all minute tasks 
+			$this->minute();	
 
-			// // Check for any new keywords
-			// if($this->checkNew(NEW_KEYWORDS_FILE))
-			// {
-			// 	// Update hourly keyword rankings
-			// 	$this->run("client", "google all 100 new");			
-			// }
-			
-			// Check for new keywords to update
-			$this->run("client", "rankingsNew 100 google");
-			$this->run("client", "rankingsNew 100 bing");
-			
-			// Check for keywords needing calibration
-			//$this->run("client", "rankingsCalibrate 100 google");							
-			
-			// Run cron tasks
-			$this->run("tasks");	
-
-			// Wait 1 min then loop again
-			sleep(60);	
+			// Wait for next loop
+			$this->meditate();	
 		}
+	}
+	
+	// ===========================================================================// 
+	// ! Time based functions                                                     //
+	// ===========================================================================//
+	
+	// Tasks that should be run daily
+	private function daily()
+	{
+		// Update all daily keywords for google
+		$this->run("client", "rankings 100 google daily");	
+
+		// Boot up bing workers
+		//$this->bootBing();
+		
+		// Update all daily keywords for bing
+		$this->run("client", "rankings 100 bing daily");	
+		
+		// Update domain stats
+		$this->domainStats();			
 	}	
+	
+	// Tasks that should be run hourly
+	private function hourly()
+	{
+		// Get current job Queue total
+		$queue = $this->checkJobQueue('rankingsGoogle');
+		
+		// If job queue is empty
+		if(!$queue)
+		{				
+			// Update hourly keyword rankings for google
+			$this->run("client", "rankings 100 google hourly");															
+		}	
+		// Jobs have not finished from last hour
+		else
+		{
+			// Notify admin of overlap
+			utilities::reportErrors("Hourly scraping overlap: $queue jobs remaining");	
+			
+			// Log overlap notice				
+			utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
+		}		
+	}	
+	
+	// Tasks that should be run every 2 minutes
+	private function twoMinutes()
+	{
+		// Update domain stats
+		$this->domainStats('new');	
+
+		// Check for new keywords to update for google
+		$this->run("client", "rankingsNew 100 google");
+		
+		// Check for new keywords to update for bing
+		$this->run("client", "rankingsNew 100 bing");			
+	}
+	
+	// Tasks that should be run every minute
+	private function minute()
+	{
+		// Run cron tasks
+		$this->run("tasks");		
+	}		
 
 	// ===========================================================================// 
 	// ! Supporting functions                                                     //
@@ -128,6 +151,26 @@ class clientCore
 		// Return specified job type job queue total
 		return $status['operations'][$type]['total'];	
 	}
+
+	// // boot bing instances
+	// private function bootBing()
+	// {
+	// 	// Create a new amazon object
+	// 	$ec2 = new AmazonEC2();
+
+	// 	// Set the region to access instances
+	// 	$ec2->set_region('us-west-1');	
+	// }
+
+	// // boot bing instances
+	// private function shutDownBing()
+	// {
+	// 	// Create a new amazon object
+	// 	$ec2 = new AmazonEC2();
+
+	// 	// Set the region to access instances
+	// 	$ec2->set_region('us-west-1');	
+	// }	
 
 	// Check for any newly added keywords/domains
 	private function checkNew($type)
@@ -158,6 +201,22 @@ class clientCore
 		// Update all domain's alexa rankings
 		$this->run("client", "alexa 100 $new");		
 	}	
+	
+	// ===========================================================================// 
+	// ! Main daemon functions                                                    //
+	// ===========================================================================//	
+
+	// Determine amount of time to wait before daemon loops again
+	private function meditate()
+	{
+		// Get remaining seconds in current minute
+		$sleep = 60 - intval(ltrim(date("i"), "0"));
+
+		utilities::notate("sleeping for $sleep seconds", "clientd.log");		  		   	 				
+		
+		// Wait for the remaining seconds in the minute
+		sleep($sleep);
+	}
 
 	// Execute bash command that detaches from daemon
 	private function run($controller, $options = false)

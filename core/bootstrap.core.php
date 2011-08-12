@@ -286,7 +286,7 @@ class bootstrap
 		{
 			// Add instance specific daemon info
 			$supervisord = "[program:theApp]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run\n";
+			$supervisord.= "command=php /home/ec2-user/server.php client\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -305,12 +305,24 @@ class bootstrap
 			$supervisord.= "numprocs=1\n"; 
 			$supervisord.= "process_name=%(process_num)s\n\n"; 							
 		}
+		// If this instance is for bing
+		elseif($this->instanceType == "bing")
+		{
+			// Add workers for ranking updates
+			$supervisord = "[program:Bing]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsBing rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=10\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";			
+		}			
 		// All other instance types
 		elseif($this->instanceType == "worker")
 		{	
 			// Add workers for ranking updates
 			$supervisord = "[program:Google]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsGoogle rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -318,17 +330,8 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 
 
 			// Add workers for ranking updates
-			$supervisord.= "[program:Bing]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsBing rankings\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=10\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 			
-
-			// Add workers for ranking updates
 			$supervisord.= "[program:GoogleNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsNewGoogle rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -337,7 +340,7 @@ class bootstrap
 			
 			// Add workers for ranking updates
 			$supervisord.= "[program:BingNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run rankingsNewBing rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewBing rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -346,7 +349,7 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:pageRank]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run pr pr\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker pr pr\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -355,7 +358,7 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:backlinks]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run backlinks backlinks\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker backlinks backlinks\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -364,7 +367,7 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:alexa]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php run alexa alexa\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker alexa alexa\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";

@@ -38,10 +38,10 @@
 	// ! Route instance to correct core daemon                                    //
 	// ===========================================================================// 
 
-	if($argv[1] == 'run') 
-	{
+   	else
+   	{
 		// Define core to use
-		$core = INSTANCE_TYPE;
+		$core = $argv[1];
 
 		// Define core class
 		$class = $core."Core";
