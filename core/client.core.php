@@ -214,7 +214,7 @@ class clientCore
 		// Get remaining seconds in current minute
 		$sleep = 60 - intval(ltrim(date("i"), "0"));
 
-		utilities::notate("sleeping for $sleep seconds", "clientd.log");		  		   	 				
+		utilities::notate("sleeping for 60 - ".intval(ltrim(date("i"), "0"))." = $sleep seconds", "clientd.log");		  		   	 				
 		
 		// Wait for the remaining seconds in the minute
 		sleep($sleep);
