@@ -40,6 +40,8 @@ class clientCore
 		// Loop forever
 		while(TRUE)
 		{
+			utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
+
 			// Check system status
 			utilities::checkStatus();
 
