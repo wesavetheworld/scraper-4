@@ -210,12 +210,18 @@ class clientCore
 	private function meditate()
 	{
 		// Get remaining seconds in current minute
-		$sleep = intval(60 - intval(ltrim(date("i"), "0")));
-
-		utilities::notate("sleeping for 60 - ".intval(ltrim(date("i"), "0"))." = $sleep seconds", "clientd.log");		  		   	 				
+		//$sleep = intval(60 - intval(ltrim(date("i"), "0")));
 		
+		$sleep = date("i") + 1;
+
+		$sleep = date("H:$sleep");
+		
+		utilities::notate("sleeping until $sleep", "clientd.log");		  		   	 				
+
+		$sleep = strtotime($sleep);
+
 		// Wait for the remaining seconds in the minute
-		time_sleep_until(time() + $sleep);		
+		time_sleep_until($sleep);		
 
 		utilities::notate("starting at ".date("i"), "clientd.log");		  		   	 				
 	}
