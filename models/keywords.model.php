@@ -283,6 +283,8 @@ class keywords
 			$this->dbConnect();
 		}
 
+		print_r($this->updated);die();
+
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$keyword)
 		{	 
