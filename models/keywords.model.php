@@ -30,8 +30,8 @@ class keywords
 	
 	function __construct($empty = false)
 	{  	
-		// Establish DB connection
-		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+		// Connect to database
+		$this->dbConnect();
 				
 		if(!$empty)
 		{                             
@@ -49,7 +49,13 @@ class keywords
 		// 	// Check any remaining keywords back in
 		//$this->setCheckOut('0');
 		// }  
-	}    
+	}  
+	
+	private function dbConnect()
+	{
+		// Establish DB connection
+		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+	}  
 	
 	// ===========================================================================// 
 	// ! Functions for creating keyword objects                                   //
@@ -271,6 +277,12 @@ class keywords
 	// Update keywords table with new keyword info
 	public function updateKeywords()
 	{
+		// If no connection to the database yet(worker)
+		if(!$this->db)
+		{
+			$this->dbConnect();
+		}
+
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$keyword)
 		{	 

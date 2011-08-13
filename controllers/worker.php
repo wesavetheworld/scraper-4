@@ -106,8 +106,8 @@ class worker
 		$this->class = substr($this->model, 0, -1); 
 		
 		// Include items data model
-	 	require_once("models/".$this->model.".model.php"); 		
-				
+	 	require_once("models/".$this->model.".model.php"); 
+	 					
 		// Get the keywords from the job data				
 		$jobData = unserialize($data['jobData']);						
 		
