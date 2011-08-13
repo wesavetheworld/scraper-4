@@ -30,6 +30,9 @@ class keywords
 	
 	function __construct($empty = false)
 	{  	
+		// Establish DB connection
+		utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+				
 		if(!$empty)
 		{                             
 			// Select keywords

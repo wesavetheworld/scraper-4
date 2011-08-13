@@ -30,9 +30,6 @@ class client
 	
 	  	// Initiate benchmarking
 		utilities::benchmark();		
-		
-		// Connect to database
-		utilities::databaseConnect();
 	}
 	
 	// ===========================================================================// 

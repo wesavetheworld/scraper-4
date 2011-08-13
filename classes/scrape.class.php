@@ -100,8 +100,11 @@ class scraper
 		// If proxy use is turned on
 		if($this->proxy_use)
 		{
-			// Get a list of proxies equal to urls in array
-			$this->proxies = $this->proxyDatabaseSelect(count($this->urls));
+			// Instantiate new proxies object
+			$this->proxies = new proxies($this->engine);
+
+			// Select proxies for use
+			$this->proxies->selectProxies(count($this->urls));
 		}
 		
 		// Reset the proxy array back to the beginning
@@ -158,7 +161,7 @@ class scraper
 		// Update each proxyies status that was uses
 		if($this->engine != "bing")
 		{
-			$this->updateProxies();
+			$this->proxies->updateProxyUse();
 		}	
 	}
 	
@@ -167,90 +170,24 @@ class scraper
 	// ===========================================================================// 
 	
  	// Select proxies for scraping from the database
-	private function proxyDatabaseSelect($totalProxies = 1, $blockedProxies = false)
-	{
-		// If executing locally
-		if(ENVIRONMENT == 'local')
-		{   
-			// Exclude proxies requiring ip authentication
-			$excludeIpAuth = "AND ip_auth != 1";
-		}
+	// private function proxyDatabaseSelect($totalProxies = 1, $blockedProxies = false)
+	// {
+	// 	// Instantiate new proxies object
+	// 	$this->proxies = new proxies($this->engine);
 
-		// Grab proxies with lowest 24 hour use counts
-		$sql = "SELECT 
-					* 
-				FROM 
-					proxies 
-				WHERE 
-					status='active'
-				AND 
-					blocked_".$this->engine." = 0 
-					{$excludeIpAuth} 
-			   	ORDER BY 
-					hr_use, 
-					RAND()
-				LIMIT 
-					{$totalProxies}";
-					
-		$result = mysql_query($sql) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
+	// 	// Select proxies for use
+	// 	$this->proxies->selectProxies($totalProxies, $blockedProxies);
 
-		// Check if proxies exist
-		if(mysql_num_rows($result) == 0)
-		{    
-			// Send any error notifications
-		 	utilities::reportErrors("No proxies to select");			
-
-			// No proxies found, so stop 
-		  	utilities::complete();			
-		}	
-
-		// Build proxy and SQL array
-		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
-		{
-			// for SQL
-			$currentProxies[] = $proxy['proxy'];
-
-			// Proxy array
-			$proxies[] = $proxy;
-		}
-		 
-		// 
-		if(!$this->proxyStrain($proxies, $totalProxies))
-		{
- 			// Send any error notifications
-		 	utilities::reportErrors("Too few proxies. Aborting to save lives.");			
-
-			// No proxies found, so stop 
-		  	utilities::complete();   		
-		}
-
-		// Glue the ips together for the update query below
-		$currentProxies = implode("','", $currentProxies);
-
-		// Update proxies use count
-		// this update process should be called outside this function
-		$sql = "UPDATE proxies SET hr_use = hr_use + 1 WHERE proxy IN ('$currentProxies')";
-		mysql_query($sql) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());;   
-
-		// Make sure proxy array count matches $totalProxies 
-		$keyIndex = 0;
-		while($totalProxies > count($proxies))
-		{
-			$proxies[] = $proxies[$keyIndex];
-			$keyIndex++;
-		}
-
-		return $proxies;
-	} 
+	// } 
 	
-	// Make sure there are enough proxies for a request not to get proxies blocked
-	private function proxyStrain($proxies, $uses)
-	{   
-		// Get the amount of proxies being used
-		$proxyTotal = count($proxies);
+	// // Make sure there are enough proxies for a request not to get proxies blocked
+	// private function proxyStrain($proxies, $uses)
+	// {   
+	// 	// Get the amount of proxies being used
+	// 	$proxyTotal = count($proxies);
 		
-		return true;
-	} 
+	// 	return true;
+	// } 
 	
 	// *****************************************************************************
 	// ** proxySelect
@@ -261,7 +198,7 @@ class scraper
 	private function proxySelect()
 	{
 		// Set current proxy
-		$this->proxy = $this->proxies[$this->proxyKey];   
+		$this->proxy = $this->proxies->proxies[$this->proxyKey];   
 		
 		// Increment key
 		$this->proxyKey++;
@@ -422,11 +359,11 @@ class scraper
 			if($this->proxy_use)
 			{
 				// Add proxy info to results array
-				$this->results[$i]['proxy_info']['proxy'] = $this->proxies[$loop]['proxy'];
-				$this->results[$i]['proxy_info']['port'] = $this->proxies[$loop]['port'];
-				$this->results[$i]['proxy_info']['username'] = $this->proxies[$loop]['username'];
-				$this->results[$i]['proxy_info']['password'] = $this->proxies[$loop]['password'];
-				$this->results[$i]['proxy_info']['source'] = (!empty($this->proxies[$loop]['source'])) ? $this->proxies[$loop]['source'] : '';  
+				$this->results[$i]['proxy_info']['proxy'] = $this->proxies->proxies[$loop]['proxy'];
+				$this->results[$i]['proxy_info']['port'] = $this->proxies->proxies[$loop]['port'];
+				$this->results[$i]['proxy_info']['username'] = $this->proxies->proxies[$loop]['username'];
+				$this->results[$i]['proxy_info']['password'] = $this->proxies->proxies[$loop]['password'];
+				$this->results[$i]['proxy_info']['source'] = $this->proxies->proxies[$loop]['source'];  
 			}   
 			
 			// Check headers for errors (302,407, blank response)
@@ -455,6 +392,9 @@ class scraper
 			// Set the content scrape as a success
 			$this->results[$i]['status'] = 'success';
 			
+			// Add proxy used to good proxy array
+			$this->proxies->proxiesGood[] = $this->results[$i]['proxy_info']['proxy'];			
+			
 			// Increment the amount of successful scrapes
 			$this->scrapesGood++;						
 		}
@@ -471,14 +411,14 @@ class scraper
 					if($this->proxy_use)
 					{			
 						// Add proxy to timeout list
-						$this->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];
+						$this->proxies->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];
 					}	
 				}
 				// Not a timeout response
 				else
 				{
 					// Nothing returned  from proxy, just dead
-					$this->proxiesDead[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxies->proxiesDead[] = $this->results[$i]['proxy_info']['proxy'];
 				}
 			}			
 			// If error code 302 block encountered
@@ -489,7 +429,7 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to blocked list
-					$this->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxies->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
 				}	
 			}  
 			// If error code 407 auth encountered
@@ -499,14 +439,14 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to denied list
-					$this->proxiesDenied[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxies->proxiesDenied[] = $this->results[$i]['proxy_info']['proxy'];
 				}	
    			}
 			// Not a timeout response
 			else
 			{
 				// Nothing returned  from proxy, just dead
-				utilities::notate("\tsom other error", "scrape.log");					
+				utilities::notate("\tsome other error", "scrape.log");					
 
 			}   			
  
@@ -524,50 +464,50 @@ class scraper
 	}
 	
 	// Update proxies
-	private function updateProxies()
-	{  
-		utilities::notate("updating proxy section", "scrape.log");			
+	// private function updateProxies()
+	// {  
+	// 	utilities::notate("updating proxy section", "scrape.log");			
 
-		// Update blocked proxies
-		if(count($this->proxiesBlocked) > 0)
-		{
-			$query = "UPDATE proxies SET blocked_".$this->engine." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+	// 	// Update blocked proxies
+	// 	if(count($this->proxiesBlocked) > 0)
+	// 	{
+	// 		$query = "UPDATE proxies SET blocked_".$this->engine." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
+	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
-	 		// Log current state
-			utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
-		}
+	//  		// Log current state
+	// 		utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
+	// 	}
 		
-		// Update blocked proxies
-		if(count($this->proxiesDenied) > 0)
-		{
-			$query = "UPDATE proxies SET status = 'disabled' WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+	// 	// Update blocked proxies
+	// 	if(count($this->proxiesDenied) > 0)
+	// 	{
+	// 		$query = "UPDATE proxies SET status = 'disabled' WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
+	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
-	 		// Log current state
-			utilities::notate("Proxies denied: ".count($this->proxiesDenied), "scrape.log");				
-		}
+	//  		// Log current state
+	// 		utilities::notate("Proxies denied: ".count($this->proxiesDenied), "scrape.log");				
+	// 	}
 		
-		// Update timed out proxies
-		if(count($this->proxiesTimeout) > 0)
-		{
-			$query = "UPDATE proxies SET timeouts = timeouts + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+	// 	// Update timed out proxies
+	// 	if(count($this->proxiesTimeout) > 0)
+	// 	{
+	// 		$query = "UPDATE proxies SET timeouts = timeouts + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
+	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
-	 		// Log current state
-			utilities::notate("Proxies timedout: ".count($this->proxiesTimeout), "scrape.log");				
-		}	
+	//  		// Log current state
+	// 		utilities::notate("Proxies timedout: ".count($this->proxiesTimeout), "scrape.log");				
+	// 	}	
 		
-		// Update timed out proxies
-		if(count($this->proxiesDead) > 0)
-		{
-			$query = "UPDATE proxies SET dead = dead + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+	// 	// Update timed out proxies
+	// 	if(count($this->proxiesDead) > 0)
+	// 	{
+	// 		$query = "UPDATE proxies SET dead = dead + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
+	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
-	 		// Log current state
-			utilities::notate("Proxies dead: ".count($this->proxiesDead), "scrape.log");				
-		}						
-	}
+	//  		// Log current state
+	// 		utilities::notate("Proxies dead: ".count($this->proxiesDead), "scrape.log");				
+	// 	}						
+	// }
 }
 
 

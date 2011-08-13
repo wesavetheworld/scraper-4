@@ -64,10 +64,7 @@ class worker
 		while($this->items->total > 0)
 		{    
 			// Check killswitch
-			utilities::checkStatus();
-			 		
-			// Connect to database
-			utilities::databaseConnect();		
+			utilities::checkStatus();		
 
 			// Scrape content for items
 			$this->scrapeContent();
@@ -83,9 +80,6 @@ class worker
 			
 			echo "\nkeywords left: ".$this->items->total."\n";
 		}
-
-		// Connect to database
-		utilities::databaseConnect();
 
 		echo $this->model." updated: ".count($this->items->updated);
 

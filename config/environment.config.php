@@ -92,6 +92,22 @@
 		define("DB_SERPS_PASS", "tF1xFmMu");
 	
 		// Database name
-		define("DB_NAME_SERPS", "serps"); 
-    }       	  
+		define("DB_NAME_SERPS", "serps"); 	
+    } 
+
+	// ===========================================================================// 
+	// ! Proxy Database credentials                                               //
+	// ===========================================================================//          	  
+
+		// Proxy Database host
+		define("PROXY_HOST", "proxies.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+	
+		// Proxy Database username
+		define("PROXY_USER", "seproxies");
+	
+		// Proxy Database password
+		define("PROXY_PASS", "lskLPQVksidu34");
+	
+		// Proxy Database name
+		define("PROXY_DB", "proxies"); 		
 ?>

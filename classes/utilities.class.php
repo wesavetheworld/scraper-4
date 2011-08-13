@@ -8,11 +8,17 @@ class utilities
 	// ===========================================================================//
     
    	// Connect to database
-	public static function databaseConnect()
+	public static function databaseConnect($host, $user, $pass, $db)
 	{	
-		// Establish MySQL connection & select database
-		mysql_connect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS) or die ('Error connecting to mysql');
-		mysql_select_db(DB_NAME_SERPS);
+		static $db = false;
+
+		// If no database connection yet
+		if(!$db)
+		{
+			// Establish MySQL connection & select database
+			mysql_connect($host, $user, $pass) or die ('Error connecting to mysql');
+			mysql_select_db($db);
+		}	
 	}
 	
 	// Check for needed constants
