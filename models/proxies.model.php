@@ -28,7 +28,7 @@ class proxies
 		$this->engine = $engine;
 
 		// Establish DB connection
-		utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);		
+		$this->db = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);		
 	} 
     
     // Select proxies for use
@@ -50,7 +50,7 @@ class proxies
 				LIMIT 
 					{$totalProxies}";
 					
-		$result = mysql_query($sql) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
+		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
 
 		// Check if proxies exist
 		if(mysql_num_rows($result) == 0)
@@ -85,7 +85,7 @@ class proxies
 		if(count($this->proxiesBlocked) > 0)
 		{
 			$query = "UPDATE proxies SET blocked_".$this->engine." = 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
 			utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
@@ -95,7 +95,7 @@ class proxies
 		if(count($this->proxiesDenied) > 0)
 		{
 			$query = "UPDATE proxies SET status = 'disabled', hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
 			utilities::notate("Proxies denied: ".count($this->proxiesDenied), "scrape.log");				
@@ -105,7 +105,7 @@ class proxies
 		if(count($this->proxiesTimeout) > 0)
 		{
 			$query = "UPDATE proxies SET timeouts = timeouts + 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
 			utilities::notate("Proxies timedout: ".count($this->proxiesTimeout), "scrape.log");				
@@ -115,7 +115,7 @@ class proxies
 		if(count($this->proxiesDead) > 0)
 		{
 			$query = "UPDATE proxies SET dead = dead + 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
 			utilities::notate("Proxies dead: ".count($this->proxiesDead), "scrape.log");				
@@ -125,7 +125,7 @@ class proxies
 		if(count($this->proxiesGood) > 0)
 		{
 			$query = "UPDATE proxies SET hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
-			mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
 		}								
 	}    
 }	

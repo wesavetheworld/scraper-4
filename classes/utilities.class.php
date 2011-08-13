@@ -10,17 +10,14 @@ class utilities
    	// Connect to database
 	public static function databaseConnect($host, $user, $pass, $db)
 	{	
-		static $first = true;
+		// Establish MySQL connection & select database
+		$connection = mysql_connect($host, $user, $pass, true) or die ('Error connecting to mysql');
+		
+		// Select database
+		mysql_select_db($db, $connection); 
 
-		if($first)
-		{
-			// Establish MySQL connection & select database
-			mysql_connect($host, $user, $pass, true) or die ('Error connecting to mysql');
-			mysql_select_db($db);
-
-			// Don't reconnect to database on future calls
-			$first = false;
-		}	
+		// Return connection
+		return $connection;
 	}
 	
 	// Check for needed constants

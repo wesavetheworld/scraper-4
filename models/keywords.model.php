@@ -31,7 +31,7 @@ class keywords
 	function __construct($empty = false)
 	{  	
 		// Establish DB connection
-		utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
 				
 		if(!$empty)
 		{                             
@@ -177,7 +177,7 @@ class keywords
 		}   			
 																								
 		// Execute query and return results			
-	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         
 		// If keywords are returned
 		if(mysql_num_rows($result) > 0)
@@ -219,7 +219,7 @@ class keywords
 				  		keyword_id IN (".implode(",", $this->keywordIds).")";
 													  
 		// Execute update query
-		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
+		mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
 	}                                                                                                 	 
 	
 	// Select keyword's ranking positions
@@ -244,7 +244,7 @@ class keywords
 						date";
 		
 		// Perform query				
-	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());				
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());				
 		
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
@@ -306,7 +306,7 @@ class keywords
 						  	keyword_id='".$keyword->keyword_id."'";  
 											  
 				// If keyword update successful
-				if(mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
+				if(mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
 				{
 					// Remove keyword from keyword id array
 					unset($this->keywordIds[$key]);        
@@ -345,7 +345,7 @@ class keywords
 					 	".$keyword->engine."_match = '".$keyword->found."'";			          				 	
 		
 		// Execute update query
-		return mysql_query($query) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
+		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
 	}   
 }
 
