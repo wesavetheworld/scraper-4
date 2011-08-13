@@ -32,8 +32,8 @@ class domains
 
 	function __construct($empty = false)
 	{  	
-		// Establish DB connection
-		utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+		// Connect to database
+		$this->dbConnect();
 						
 		if(!$empty)
 		{                             
@@ -51,7 +51,15 @@ class domains
 		// 	// Check any remaining keywords back in
 		//$this->setCheckOut('0');
 		// }  
-	}    
+	}  
+	  
+	private function dbConnect()
+	{
+		echo "connecting to db";
+
+		// Establish DB connection
+		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+	}  	
 	
 	// ===========================================================================// 
 	// ! Functions for creating domain objects                                   //
@@ -115,7 +123,7 @@ class domains
 					echo $query;
 																								
 		// Execute query and return results			
-	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         
 		// If keywords are returned
 		if(mysql_num_rows($result) > 0)
@@ -154,7 +162,7 @@ class domains
 				  		domain_id IN (".implode(",", $this->domainIds).")";
 													  
 		// Execute update query
-		mysql_query($query) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
+		mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
 	}                                                                                                 	 
 	                                      
 	
@@ -165,7 +173,11 @@ class domains
 	// Update keywords table with new keyword info
 	public function updateDomains()
 	{
-		echo "\nupdate area good\n";
+		// If no connection to the database yet(worker)
+		if(!$this->db)
+		{
+			$this->dbConnect();
+		}
 
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$domain)
@@ -191,7 +203,7 @@ class domains
 						  		domain_id = ".$domain->domain_id; 
 											  
 				// If domain update successful
-				if(mysql_query($query) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
+				if(mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
 				{
 					// Remove domain from domain id array
 					unset($this->domainIds[$key]);        
@@ -228,7 +240,7 @@ class domains
     			    	".$domain->stat." = '".$domain->{$domain->stat}."'";	
 							                                            
 		// Execute update query
-		return mysql_query($query) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
+		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
 	} 
 }
 

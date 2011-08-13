@@ -318,8 +318,6 @@ class keywords
 						  		date = '".date("Y-m-d")."' 
 						  WHERE 
 						  	keyword_id='".$keyword->keyword_id."'";  
-
-						  	echo $query;
 											  
 				// If keyword update successful
 				if(mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
