@@ -75,7 +75,7 @@ class scraper
 	function __construct()
 	{      
 		// Include keywords data model
-	 	//require_once('models/'.MODEL.'.model.php'); 
+		require_once('models/proxies.model.php'); 
 
 	}	
 
