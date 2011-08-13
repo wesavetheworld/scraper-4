@@ -53,6 +53,8 @@ class keywords
 	
 	private function dbConnect()
 	{
+		echo "connecting to db";
+
 		// Establish DB connection
 		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
 	}  
@@ -281,9 +283,9 @@ class keywords
 		if(!$this->db)
 		{
 			$this->dbConnect();
-		}
 
-		print_r($this->updated);die();
+			print_r($this->db);
+		}
 
 		// Loop through finished keywords object
 		foreach($this->updated as $key => &$keyword)
@@ -318,6 +320,8 @@ class keywords
 						  		date = '".date("Y-m-d")."' 
 						  WHERE 
 						  	keyword_id='".$keyword->keyword_id."'";  
+
+						  	echo $query;
 											  
 				// If keyword update successful
 				if(mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
