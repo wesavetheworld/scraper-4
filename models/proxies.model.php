@@ -71,9 +71,6 @@ class proxies
 			// Proxy array
 			$this->proxies[] = $proxy;
 		}
-  
-  		// Update proxies use count
-  		$this->updateProxyUse();
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
