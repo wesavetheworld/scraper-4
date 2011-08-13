@@ -283,8 +283,6 @@ class keywords
 		if(!$this->db)
 		{
 			$this->dbConnect();
-
-			print_r($this->db);
 		}
 
 		// Loop through finished keywords object
