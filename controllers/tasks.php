@@ -130,17 +130,11 @@ class tasks
 	// Resets all stats for proxies (use/blocked/status)
 	private function proxyReset()
 	{
-		$query = "	UPDATE 
-						proxies 
-					SET 
-						status = 'active', 
-						blocked_google = '0', 
-						blocked_bing = '0', 
-						blocked_yahoo = '0', 
-						timeouts = '0', 
-						hr_use = '0'";
-						
-		mysql_query($query)  or utilities::reportErrors("ERROR ON PROXY RESET: ".mysql_error());;  
+		// Instantiate a new proxy object
+		$proxies = new proxies();
+
+		// Rest proxy stats
+		$proxies->reset();
 		
 		// Log current state
 		utilities::notate("\tProxy stats reset"); 

@@ -29,12 +29,12 @@ class keywords
 	public $total;	
 	
 	function __construct($empty = false)
-	{  	
-		// Connect to database
-		$this->dbConnect();
-				
+	{  			
 		if(!$empty)
-		{                             
+		{
+			// Connect to database
+			$this->dbConnect();
+		                             
 			// Select keywords
 			$this->getKeywords();   
 		}	

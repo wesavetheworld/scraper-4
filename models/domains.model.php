@@ -31,12 +31,12 @@ class domains
 	public $task = TASK;
 
 	function __construct($empty = false)
-	{  	
-		// Connect to database
-		$this->dbConnect();
-						
+	{  					
 		if(!$empty)
 		{                             
+			// Connect to database
+			$this->dbConnect();
+					
 			// Select domains
 			$this->getDomains();   
 		}	

@@ -52,25 +52,39 @@ class proxies
 					
 		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
 
-		// Check if proxies exist
-		if(mysql_num_rows($result) == 0)
+		// If enough proxies were selected
+		if($this->minCheck(mysql_num_rows($result), $totalProxies))
+		{	
+			// Build proxy and SQL array
+			while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
+			{
+				// for SQL
+				$this->currentProxies[] = $proxy['proxy'];
+
+				// Proxy array
+				$this->proxies[] = $proxy;
+			}
+		}	
+
+		// Make sure enough proxies are returned
+		$this->minCheck();
+    }
+
+    // Make sure that the minimum required proxies are returned
+    public function minCheck($total, $requested);
+    {
+		if($total == 0 || $total < $requested)
 		{    
 			// Send any error notifications
-		 	utilities::reportErrors("No proxies to select");			
+		 	utilities::reportErrors("Not enough proxies to select");			
 
 			// No proxies found, so stop 
 		  	utilities::complete();			
-		}	
-
-		// Build proxy and SQL array
-		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
+		}   
+		else
 		{
-			// for SQL
-			$this->currentProxies[] = $proxy['proxy'];
-
-			// Proxy array
-			$this->proxies[] = $proxy;
-		}
+			return true;
+		} 	
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
@@ -124,5 +138,21 @@ class proxies
 			$query = "UPDATE proxies SET hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
 		}								
-	}    
+	}  
+	
+	// Rest all proxy stats
+	private function reset()
+	{
+		$query = "	UPDATE 
+						proxies 
+					SET 
+						status = 'active', 
+						blocked_google = '0', 
+						blocked_bing = '0', 
+						blocked_yahoo = '0', 
+						timeouts = '0', 
+						hr_use = '0'";
+						
+		mysql_query($query, $this->db)  or utilities::reportErrors("ERROR ON PROXY RESET: ".mysql_error());
+	}	   
 }	
