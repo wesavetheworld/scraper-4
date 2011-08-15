@@ -150,7 +150,7 @@ class tasks
 		foreach(glob(STATUS_DIRECTORY.'*.txt') as $status)
 		{   
 			// Remove status file
-			unlink($status);s
+			unlink($status);
 		}   
     
 		// Loop through all log files
