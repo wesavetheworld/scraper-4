@@ -221,7 +221,7 @@ class keywords
    	}
 	
 	// Check in and out keywords  
-	private function setCheckOut($status = '1', $all = false)
+	public function setCheckOut($status = '1', $all = false)
 	{
 		// If not checking in all keywords
 		if(!$all)
