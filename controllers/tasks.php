@@ -186,7 +186,7 @@ class tasks
 	private function keywordCheckIn()
 	{   
 		// Instantiate a new keywords object
-		$keywords = new keywords(false);
+		$keywords = new keywords(true);
 
 		// Check keywords back in
 		$keywords->setCheckOut(0, true);
@@ -199,7 +199,7 @@ class tasks
 	private function checkKeywordSchedules()
 	{        	
 		// Instantiate a new keywords object
-		$keywords = new keywords(false);
+		$keywords = new keywords(true);
 
 		// Make sure keyword schedules are honored
 		$keywords->checkSchedules();
