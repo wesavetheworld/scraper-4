@@ -148,6 +148,7 @@ class proxies
 						blocked_bing = '0', 
 						blocked_yahoo = '0', 
 						timeouts = '0', 
+						dead = '0',
 						hr_use = '0'";
 						
 		mysql_query($query, $this->db)  or utilities::reportErrors("ERROR ON PROXY RESET: ".mysql_error());
