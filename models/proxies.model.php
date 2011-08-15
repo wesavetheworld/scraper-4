@@ -22,7 +22,7 @@ class proxies
 	// The engine used for the proxies
 	public $engine;
 
-	function __construct($engine)
+	function __construct($engine = false)
 	{  	
 		// Set the engine for proxies
 		$this->engine = $engine;
