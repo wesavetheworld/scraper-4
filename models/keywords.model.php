@@ -216,15 +216,21 @@ class keywords
    	}
 	
 	// Check in and out keywords  
-	private function setCheckOut($status = '1')
+	private function setCheckOut($status = '1', $all = false)
 	{
+		// If not checking in all keywords
+		if(!$all)
+		{
+			$where = "WHERE 
+				  		keyword_id IN (".implode(",", $this->keywordIds).")";
+		}
+
 		// Update keyword's check_out status
 		$query = "	UPDATE 
 						keywords 
 					SET 
  						check_out = {$status}
-				  	WHERE 
-				  		keyword_id IN (".implode(",", $this->keywordIds).")";
+				  	$where";
 													  
 		// Execute update query
 		mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON CHECKING OUT: ".mysql_error()); 
@@ -360,7 +366,63 @@ class keywords
 		
 		// Execute update query
 		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
-	}   
+	}  
+
+	// Check the status of keywords in the db
+	public function checkSchedules()
+	{
+		// Construct query
+		$query =   "SELECT 
+						schedule,
+						google_status,
+						date
+					FROM 
+						keywords
+					WHERE
+						status != 'suspended'";  
+																										
+		// Execute query and return results			
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
+        
+		// If keywords are returned
+		if(mysql_num_rows($result) > 0)
+		{   
+			// Loop through results
+			while($keyword = mysql_fetch_object($result))
+			{  
+				if($keyword->schedule == "hourly")
+				{
+					$hourly++;
+					
+					if($keyword->google_status < date("Y-m-d H"))
+					{
+						$hourlyLate++;
+					}
+				}
+				elseif($keyword->schedule == "daily")
+				{
+					$daily++; 
+					
+					if($keyword->google_status < date("Y-m-d")) 
+					{
+						$dailyLate++;
+					}
+				}				
+				
+				$total++;
+			}
+			
+			if($hourlyLate > 0)
+			{
+				utilities::reportErrors("$hourlyLate of $hourly keywords not updated this hour");
+			}
+			
+			if($dailyLate > 0)
+			{
+				utilities::reportErrors("$dailyLate of $daily daily keywords not updated today");
+			}			 
+   		}		
+	} 
 }
 
 // ===========================================================================// 

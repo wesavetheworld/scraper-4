@@ -24,6 +24,9 @@ class tasks
 		// Include settings for ranking collecting
 		include('config/rankings.config.php'); 
 
+		// Include keywords data model
+		require_once('models/keywords.model.php'); 		
+
 		// Include proxy data model
 		require_once('models/proxies.model.php'); 		
 		
@@ -91,10 +94,7 @@ class tasks
 	
 	// Any tasks that should be run hourly
 	private function halfHour()
-	{ 
-		// Connect to the database
-		utilities::databaseConnect();
-		                       
+	{ 		                       
 		// Check in any old keywords
 		$this->keywordCheckIn();
 	}			
@@ -185,82 +185,24 @@ class tasks
 	// Check back in any keywords left checked out for some reason
 	private function keywordCheckIn()
 	{   
-		// Checkouts from last hour
-		$old = date("Y-m-d G:00");  
+		// Instantiate a new keywords object
+		$keywords = new keywords();
 
-	 	// Build update query
-		$query = "	UPDATE 
-						keywords 
-					SET 
-						check_out = '0'
-					WHERE 
-					 	google_status < '$old'
-					AND 
-						check_out = 1";
-							                                            
-		// Execute update query
-		mysql_query($query) or utilities::reportErrors("ERROR ON cron keyword check in: ".mysql_error());
+		// Check keywords back in
+		$keywords->setCheckOut(0, true);
 		
 		// Log current state
 		utilities::notate("\tOld keywords checked in");		   
 	}
 	
 	// Check that all keywords are following their schedules
-	private function checkSchedules()
-	{        		
-		// Construct query
-		$query =   "SELECT 
-						schedule,
-						google_status,
-						date
-					FROM 
-						keywords
-					WHERE
-						status != 'suspended'";  
-																										
-		// Execute query and return results			
-	    $result = mysql_query($query) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
-        
-		// If keywords are returned
-		if(mysql_num_rows($result) > 0)
-		{   
-			// Loop through results
-			while($keyword = mysql_fetch_object($result))
-			{  
-				if($keyword->schedule == "hourly")
-				{
-					$hourly++;
-					
-					if($keyword->google_status < date("Y-m-d H"))
-					{
-						$hourlyLate++;
-					}
-				}
-				elseif($keyword->schedule == "daily")
-				{
-					$daily++; 
-					
-					if($keyword->google_status < date("Y-m-d")) 
-					{
-						$dailyLate++;
-					}
-				}				
-				
-				$total++;
-			}
-			
-			if($hourlyLate > 0)
-			{
-				utilities::reportErrors("$hourlyLate of $hourly keywords not updated this hour");
-			}
-			
-			if($dailyLate > 0)
-			{
-				utilities::reportErrors("$dailyLate of $daily daily keywords not updated today");
-			}			 
-						
-			// Return the keyword array
-   		}
+	private function checkKeywordSchedules()
+	{        	
+		// Instantiate a new keywords object
+		$keywords = new keywords();
+
+		// Make sure keyword schedules are honored
+		$keywords->checkSchedules();
 		
 		// Log current state
 		utilities::notate("\tSchedule check complete");	   
