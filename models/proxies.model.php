@@ -138,7 +138,7 @@ class proxies
 	}  
 	
 	// Rest all proxy stats
-	private function reset()
+	public function reset()
 	{
 		$query = "	UPDATE 
 						proxies 
