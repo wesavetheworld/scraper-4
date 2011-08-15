@@ -68,7 +68,7 @@ class proxies
     }
 
     // Make sure that the minimum required proxies are returned
-    public function minCheck($total, $requested);
+    public function minCheck($total, $requested)
     {
 		if($total == 0 || $total < $requested)
 		{    
