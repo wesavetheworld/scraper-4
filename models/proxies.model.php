@@ -64,10 +64,7 @@ class proxies
 				// Proxy array
 				$this->proxies[] = $proxy;
 			}
-		}	
-
-		// Make sure enough proxies are returned
-		$this->minCheck();
+		}
     }
 
     // Make sure that the minimum required proxies are returned
