@@ -28,7 +28,7 @@ class proxies
 		$this->engine = $engine;
 
 		// Establish DB connection
-		$this->db = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);		
+		$this->db = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
 	} 
     
     // Select proxies for use

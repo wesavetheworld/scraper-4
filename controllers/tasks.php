@@ -23,6 +23,9 @@ class tasks
 	{    
 		// Include settings for ranking collecting
 		include('config/rankings.config.php'); 
+
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 		
 		
 	  	// Initiate benchmarking
 		utilities::benchmark();		  
@@ -147,7 +150,7 @@ class tasks
 		foreach(glob(STATUS_DIRECTORY.'*.txt') as $status)
 		{   
 			// Remove status file
-			unlink($status);
+			unlink($status);s
 		}   
     
 		// Loop through all log files
