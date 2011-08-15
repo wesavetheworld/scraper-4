@@ -28,14 +28,19 @@ class keywords
 	// Contains the count(int) of keywords in the main object
 	public $total;	
 	
-	function __construct($empty = false)
-	{  			
-		if(!$empty)
+	function __construct($empty = false, $dbConnect = false)
+	{  		
+		// If a db connection is requested
+		if($dbConnect)
 		{
 			// Connect to database
-			$this->dbConnect();
-		                             
-			// Select keywords
+			$this->dbConnect();	
+		}
+		
+		// If a keyword object should be built		
+		if(!$empty)
+		{
+		    // Select keywords
 			$this->getKeywords();   
 		}	
 	} 
