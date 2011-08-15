@@ -31,7 +31,7 @@ class keywords
 	function __construct($empty = false, $dbConnect = false)
 	{  		
 		// If a db connection is requested
-		if($dbConnect)
+		if(!$empty || $dbConnect)
 		{
 			// Connect to database
 			$this->dbConnect();	
