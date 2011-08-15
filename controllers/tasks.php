@@ -103,13 +103,13 @@ class tasks
 	private function hourly()
 	{  
 		// Connect to the database
-		utilities::databaseConnect();
+		//utilities::databaseConnect();
 		
 		// Reset all of the proxy stats
 		$this->proxyReset();
 		
 		// Check that all keywords are following their schedules
-		$this->checkSchedules();				
+		//$this->checkSchedules();				
 	}
 	
 	// Any tasks that should be run daily
