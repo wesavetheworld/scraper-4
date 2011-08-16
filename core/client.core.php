@@ -18,6 +18,9 @@
 
 class clientCore 
 {    
+
+	// Bing instance status
+	private $bingStatus = false;
 	
 	function __construct()
 	{
@@ -112,16 +115,20 @@ class clientCore
 			
 			// Log overlap notice				
 			utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
-		}		
+		}	
 		
-		// Get number of bing jobs
-		$queue = $this->checkJobQueue('rankingsBing');			
-		
-		// If job queue is empty
-		if(!$queue)
-		{				
-			// Update hourly keyword rankings for google
-			$this->bing('stop');															
+		// If bing instances are on
+		if($this->bingStatus)	
+		{
+			// Get number of bing jobs
+			$queue = $this->checkJobQueue('rankingsBing');			
+			
+			// If job queue is empty
+			if(!$queue)
+			{				
+				// Update hourly keyword rankings for google
+				$this->bing('stop');															
+			}	
 		}				
 	}	
 	
@@ -194,7 +201,6 @@ class clientCore
 			{
 				// Add instance id to array
 				$id = (array)$instance->instanceId[0];
-				
 				$instanceIds[] = $id[0];
 			}
 		}	
@@ -207,7 +213,20 @@ class clientCore
 			
 			// Log overlap notice				
 			utilities::notate("Bing instances modified: $action", "clientd.log");	
-		}					
+		}	
+		
+		// If starting bing instances
+		if($action == "start")
+		{
+			// Set bing status to on
+			$this->bingStatus = true; 
+		}	
+		// If stopping bing instances
+		elseif($action == "stop")
+		{
+			// Set bing status to off
+			$this->bingStatus = false; 			
+		}
 	}
 
 	// Check for oustanding jobs stilled queued
