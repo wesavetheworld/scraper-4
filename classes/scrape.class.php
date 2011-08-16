@@ -334,9 +334,11 @@ class scraper
 		{                                          			
 			// Get HTTP information array (response code, content-type, etc)
 			$this->results[$i]['httpInfo'] = curl_getinfo($this->ch[$i]);
-			
-			// Check for errors
-			$curlError = curl_error($this->ch[$i]);
+
+			// Attach any cUrl errors to output
+			$this->results[$i]['curlError'] = curl_error($this->ch[$i]);
+
+			print_r(curl_error($this->ch[$i]));
 
 			// Set the output data
 			$this->results[$i]['output'] = curl_multi_getcontent($this->ch[$i]); 

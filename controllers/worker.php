@@ -336,7 +336,7 @@ class worker
 		elseif($this->model != 'domains')
 		{    
   			// Load a valid saved search file as the source
-			$search = file_get_contents($item->searchFile);
+			//$search = file_get_contents($item->searchFile);
 		} 	
 		
 		return $search;
