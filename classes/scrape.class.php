@@ -299,8 +299,8 @@ class scraper
 			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
 			//curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 30);
 
-			curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, 30);
-			curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 30);			
+			curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 5);			
 			
 			// Set random referer if array is supplied
 			if(!empty($this->referer))
@@ -337,10 +337,6 @@ class scraper
 
 			// Attach any cUrl errors to output
 			$this->results[$i]['curlError'] = curl_error($this->ch[$i]);
-
-			print "curl error:\n";
-			print_r(curl_error($this->ch[$i]));
-			print "end of curl error\n\n";
 
 			// Set the output data
 			$this->results[$i]['output'] = curl_multi_getcontent($this->ch[$i]); 
