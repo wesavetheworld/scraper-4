@@ -389,7 +389,15 @@ class scraper
 	{   
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
-		   
+
+		// If curl returned an error 
+		if($this->results[$i]['curlError'])
+		{
+			echo "\nThere was an error: ".$this->results[$i]['curlError']."\n";
+			return false;
+		}
+		   		
+
 		// Scraped content has a 200 success code and size is greater than 5 bytes
 		if($this->results[$i]['httpInfo']['http_code'] == 200 && $this->results[$i]['httpInfo']['size_download'] > 500 || $this->results[$i]['httpInfo']['http_code'] == 200 && $this->task != "rankings")
 		{   
