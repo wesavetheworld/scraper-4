@@ -395,6 +395,15 @@ class scraper
 		{
 			echo "\nThere was an error: ".$this->results[$i]['curlError']."\n";
 			return false;
+			// Set the content scrape as a failure
+			$this->results[$i]['status'] = 'error';  
+
+						// Add proxy to timeout list
+						$this->proxies->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];			
+			
+			// Increment the amount of failed scrapes
+			$this->scrapesBad++;
+		   			
 		}
 		   		
 
