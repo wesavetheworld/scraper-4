@@ -198,12 +198,16 @@ class clientCore
 				$instanceIds[] = $id[0];
 			}
 		}	
-		
-		// Modify bing instance statuses by instanceIds
-		$this->manageInstance($instanceIds, $action);	
-		
-		// Log overlap notice				
-		utilities::notate("Bing instances modified: $action", "clientd.log");					
+
+		// If instance ids are returned
+		if(count($instanceIds) > 0)
+		{
+			// Modify bing instance statuses by instanceIds
+			$this->manageInstance($instanceIds, $action);	
+			
+			// Log overlap notice				
+			utilities::notate("Bing instances modified: $action", "clientd.log");	
+		}					
 	}
 
 	// Check for oustanding jobs stilled queued
