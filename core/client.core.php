@@ -81,12 +81,12 @@ class clientCore
 	{
 		// Update all daily keywords for google
 		$this->run("client", "rankings 100 google daily");	
-
-		// Boot up bing workers
-		//$this->bootBing();
 		
 		// Update all daily keywords for bing
 		$this->run("client", "rankings 100 bing daily");	
+
+		// Turn on bing servers
+		$this->bing('start');		
 		
 		// Update domain stats
 		$this->domainStats();			
@@ -112,7 +112,10 @@ class clientCore
 			
 			// Log overlap notice				
 			utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
-		}		
+		}	
+		
+		// Turn on bing servers
+		$this->bing('start');			
 	}	
 	
 	// Tasks that should be run every 2 minutes
@@ -133,11 +136,70 @@ class clientCore
 	{
 		// Run cron tasks
 		$this->run("tasks");		
+				$this->bing('start');			
+
 	}		
 
 	// ===========================================================================// 
 	// ! Supporting functions                                                     //
 	// ===========================================================================//	
+
+	private function getInstances()
+	{
+		// Create a new amazon object
+		$ec2 = new AmazonEC2();
+
+		// Set the region to access instances
+		$ec2->set_region('us-west-1');
+				
+		// Get info on all worker instances
+		$response = $ec2->describe_instances();		
+
+		// If request failed
+		if(!$response->isOK())
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't load instance data"); 
+			
+	  		// Finish execution
+			utilities::complete();
+		}	
+
+		// Return instance objects
+		return $response->body->reservationSet;		
+	}
+
+	// Manage bing servers
+	private function bing($action)
+	{
+		// Filter instances to only bing
+		$opt = array(
+				    'Filter' => array(
+				        array('Name' => 'tag-value', 'Value' => 'bing')
+				    )
+				);
+
+		// Get a list of all bing instances
+		$instances = $this->getInstances($opt);
+
+		// Loop through selected instances
+		foreach($instances->item as $items)
+		{	
+			foreach($items->instancesSet->item as $instance)
+			{
+				// Add instance id to array
+				$id = (array)$instance->instanceId[0];
+				
+				$instanceIds[] = $id[0];
+			}
+		}	
+		
+		// Modify bing instance statuses by instanceIds
+		$this->manageInstance($instanceIds, $action);	
+		
+		// Log overlap notice				
+		utilities::notate("Bing instances modified: $action", "clientd.log");					
+	}
 
 	// Check for oustanding jobs stilled queued
 	private function checkJobQueue($type)
@@ -152,25 +214,25 @@ class clientCore
 		return $status['operations'][$type]['total'];	
 	}
 
-	// // boot bing instances
-	// private function bootBing()
-	// {
-	// 	// Create a new amazon object
-	// 	$ec2 = new AmazonEC2();
+	// Manage ec2 instance states (start,stop)
+	private function manageInstance($instanceId, $function)
+	{
+		// Create a new amazon object
+		$ec2 = new AmazonEC2();
 
-	// 	// Set the region to access instances
-	// 	$ec2->set_region('us-west-1');	
-	// }
+		// Set the region to access instances
+		$ec2->set_region('us-west-1');	
 
-	// // boot bing instances
-	// private function shutDownBing()
-	// {
-	// 	// Create a new amazon object
-	// 	$ec2 = new AmazonEC2();
+		// Create function's function name
+		$function = $function."_instances";
 
-	// 	// Set the region to access instances
-	// 	$ec2->set_region('us-west-1');	
-	// }	
+		// Perform requested action
+		if($ec2->$function($instanceId))
+		{
+			// The process was a success
+			return true;
+		}
+	}
 
 	// Check for any newly added keywords/domains
 	private function checkNew($type)

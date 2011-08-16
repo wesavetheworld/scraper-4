@@ -28,7 +28,7 @@ class tasks
 		require_once('models/keywords.model.php'); 		
 
 		// Include proxy data model
-		require_once('models/proxies.model.php'); 		
+		require_once('models/proxies.model.php'); 				
 		
 	  	// Initiate benchmarking
 		utilities::benchmark();		  
