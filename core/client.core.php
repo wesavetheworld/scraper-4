@@ -112,10 +112,17 @@ class clientCore
 			
 			// Log overlap notice				
 			utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
-		}	
+		}		
 		
-		// Turn on bing servers
-		$this->bing('start');			
+		// Get number of bing jobs
+		$queue = $this->checkJobQueue('rankingsBing');			
+		
+		// If job queue is empty
+		if(!$queue)
+		{				
+			// Update hourly keyword rankings for google
+			$this->bing('stop');															
+		}				
 	}	
 	
 	// Tasks that should be run every 2 minutes
@@ -136,8 +143,6 @@ class clientCore
 	{
 		// Run cron tasks
 		$this->run("tasks");		
-				$this->bing('start');			
-
 	}		
 
 	// ===========================================================================// 
