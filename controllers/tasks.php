@@ -201,9 +201,6 @@ class tasks
 				$instanceIds[] = $id[0];
 			}
 		}
-		
-		print_r($instanceIds);
-		die();	
 
 		// If instance ids are returned
 		if(count($instanceIds) > 0)
