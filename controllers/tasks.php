@@ -45,7 +45,7 @@ class tasks
 	public function tasks()
 	{   
 		// Log current state
-		utilities::notate("Cron started at: ".TIME_CURRENT); 
+		utilities::notate("Cron started at: ".TIME_CURRENT, "tasks.log"); 
     
 		// If cron is passed an argument through CLI
 		if($method = $_SERVER['argv'][2])
@@ -56,11 +56,11 @@ class tasks
 		// No method was provided
 		else
 		{
-			utilities::notate("No method provided"); 
+			utilities::notate("No method provided", "tasks.log"); 
 		}
 		
 		// Log current state
-		utilities::notate("Cron complete");
+		utilities::notate("Cron complete", "tasks.log");
 		
 		// Finish execution
 		utilities::complete();		   
@@ -80,7 +80,7 @@ class tasks
 		$proxies->reset();
 		
 		// Log current state
-		utilities::notate("\tProxy stats reset"); 
+		utilities::notate("\tProxy stats reset", "tasks.log"); 
 	}
 	
 	// Remove the log files from the day
@@ -101,7 +101,7 @@ class tasks
 		} 
 		
 		// Log current state
-		utilities::notate("\tLog files cleaned up");
+		utilities::notate("\tLog files cleaned up", "tasks.log");
 	}
 	
 	// Remove old saved searches
@@ -119,7 +119,7 @@ class tasks
 		}
 		
 		// Log current state
-		utilities::notate("\tSearch directory cleaned");
+		utilities::notate("\tSearch directory cleaned", "tasks.log");
 	} 
 	
 	// Check back in any keywords left checked out for some reason
@@ -132,7 +132,7 @@ class tasks
 		$keywords->setCheckOut(0, true);
 		
 		// Log current state
-		utilities::notate("\tOld keywords checked in");		   
+		utilities::notate("\tOld keywords checked in", "tasks.log");		   
 	}
 	
 	// Check that all keywords are following their schedules
@@ -145,7 +145,7 @@ class tasks
 		$keywords->checkSchedules();
 		
 		// Log current state
-		utilities::notate("\tSchedule check complete");	   
+		utilities::notate("\tSchedule check complete", "tasks.log");	   
 	}      
 	
 	// Turn on/off the kill switch                                                    
@@ -158,7 +158,7 @@ class tasks
 			file_put_contents(KILL_SWITCH_FILE, "kill");  
 
 			// Log current state
-			utilities::notate("\tKillswitch flicked");	
+			utilities::notate("\tKillswitch flicked", "tasks.log");	
 		}
 		else
 		{    
@@ -170,7 +170,7 @@ class tasks
 			}   
 			
 			// Log current state
-			utilities::notate("\tIt's alive!!!");			   
+			utilities::notate("\tIt's alive!!!", "tasks.log");			   
 		}
 	}
 
@@ -209,7 +209,7 @@ class tasks
 			$this->manageInstance($instanceIds, $action);	
 			
 			// Log overlap notice				
-			utilities::notate("Bing instances modified: $action", "clientd.log");	
+			utilities::notate("Bing instances modified: $action", "tasks.log");	
 		}	
 		
 		// If starting bing instances
@@ -286,6 +286,6 @@ class tasks
 		file_put_contents(SYSTEM_STATUS, $status);	
 		
 		// Log current state
-		utilities::notate("\tSystem: $status");			
+		utilities::notate("\tSystem: $status", "tasks.log");			
 	}
 }	
