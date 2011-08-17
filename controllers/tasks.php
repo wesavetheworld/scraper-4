@@ -177,32 +177,6 @@ class tasks
 	// ===========================================================================// 
 	// ! ec2 related methods                                                      //
 	// ===========================================================================//	
-
-	// Get inforation for ec2 instances
-	private function getInstances()
-	{
-		// Create a new amazon object
-		$ec2 = new AmazonEC2();
-
-		// Set the region to access instances
-		$ec2->set_region('us-west-1');
-				
-		// Get info on all worker instances
-		$response = $ec2->describe_instances();		
-
-		// If request failed
-		if(!$response->isOK())
-		{
-			// Send admin error message
-			utilities::reportErrors("Can't load instance data"); 
-			
-	  		// Finish execution
-			utilities::complete();
-		}	
-
-		// Return instance objects
-		return $response->body->reservationSet;		
-	}
 	
 	// Manage bing servers
 	private function bing($action)
@@ -227,6 +201,32 @@ class tasks
 				$instanceIds[] = $id[0];
 			}
 		}
+
+	// Get inforation for ec2 instances
+	private function getInstances($opt)
+	{
+		// Create a new amazon object
+		$ec2 = new AmazonEC2();
+
+		// Set the region to access instances
+		$ec2->set_region('us-west-1');
+				
+		// Get info on all worker instances
+		$response = $ec2->describe_instances($opt);		
+
+		// If request failed
+		if(!$response->isOK())
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't load instance data"); 
+			
+	  		// Finish execution
+			utilities::complete();
+		}	
+
+		// Return instance objects
+		return $response->body->reservationSet;		
+	}		
 		
 		print_r($instanceIds);
 		die();	
