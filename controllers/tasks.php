@@ -19,16 +19,20 @@
 
 class tasks 
 {  
+	// Include dependencies on instantiation	
  	function __construct()
 	{    
-		// Include settings for ranking collecting
+		//Include settings for ranking collecting
 		require_once('config/rankings.config.php'); 
 
 		// Include keywords data model
 		require_once('models/keywords.model.php'); 		
 
 		// Include proxy data model
-		require_once('models/proxies.model.php'); 				
+		require_once('models/proxies.model.php'); 
+		
+		// Include the amazon SDK
+		require_once('classes/amazon/sdk.class.php');						
 		
 	  	// Initiate benchmarking
 		utilities::benchmark();		  
@@ -47,7 +51,7 @@ class tasks
 		if($method = $_SERVER['argv'][2])
 		{  
 			// Call the method
-			$this->$method();   		
+			$this->$method($_SERVER['argv'][3]);   		
 		}
 		// No method was provided
 		else
@@ -202,9 +206,7 @@ class tasks
 	
 	// Manage bing servers
 	private function bing($action)
-	{
-		return false;
-		
+	{		
 		// Filter instances to only bing
 		$opt = array(
 				    'Filter' => array(
@@ -224,7 +226,10 @@ class tasks
 				$id = (array)$instance->instanceId[0];
 				$instanceIds[] = $id[0];
 			}
-		}	
+		}
+		
+		print_r($instanceIds);
+		die();	
 
 		// If instance ids are returned
 		if(count($instanceIds) > 0)

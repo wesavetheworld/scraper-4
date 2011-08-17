@@ -26,9 +26,6 @@ class clientCore
 	{
 		// Include gearman class for job status updates
 	 	require_once('classes/gearman.class.php');
-	 	
-		// Include the amazon SDK
-		require_once('classes/amazon/sdk.class.php');
 	}	
 
 	// ===========================================================================// 
