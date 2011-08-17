@@ -58,7 +58,7 @@ class workerCore
 	// ! Infinite daemon loop                                                     //
 	// ===========================================================================//		
 
-	private function daemon()
+	public function daemon()
 	{
 		// Log current status
 		utilities::notate("Waiting for jobs..."); 
