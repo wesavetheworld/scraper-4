@@ -90,7 +90,11 @@ class clientCore
 		$this->run("client", "rankings 100 google daily");	
 		
 		// Update all daily keywords for bing
-		$this->run("client", "rankings 100 bing daily");			
+		$this->run("client", "rankings 100 bing daily");	
+		
+		// Turn on bing instances		
+		$this->run("tasks", "bing start");
+		$this->bingStatus = true;					
 		
 		// Update domain stats
 		$this->domainStats();			
@@ -128,7 +132,7 @@ class clientCore
 		}	
 		
 		// If bing instances are on
-		if($this->bingStatus)	
+		if($this->bingStatus && date("H:i") != "00:00" )	
 		{
 			// Get number of bing jobs
 			$queue = $this->checkJobQueue('rankingsBing');			
@@ -136,8 +140,9 @@ class clientCore
 			// If job queue is empty
 			if(!$queue)
 			{				
-				// Update hourly keyword rankings for google
-				//$this->bing('stop');															
+				// Turn off bing instances		
+				$this->run("tasks", "bing stop");
+				$this->bingStatus = false;																			
 			}	
 		}				
 	}	
