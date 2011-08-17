@@ -24,9 +24,6 @@ class workerCore
 
 		// Register job types with jobServer
 		$this->registerJobs();
-
-		// The main worker loop
-		$this->daemon();
 	}
 	
 	// When script is ended

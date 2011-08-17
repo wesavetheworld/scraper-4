@@ -22,7 +22,7 @@
 	// ===========================================================================//
 	
 	// Used to identify this instance from others
-	define("INSTANCE", 'instanceNameHere');     
+	define("INSTANCE", 'instanceNameHere');  	  
 	
 	// Report errors to admin (utilities function)
 	define('REPORT_ERRORS', TRUE);

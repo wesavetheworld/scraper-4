@@ -60,5 +60,8 @@
 		include("core/$core.core.php");	
 
 		// Instantiate core
-		new $class();
+		$type = new $class();
+
+		// Run the instance daemon daemon
+		$type->daemon();
 	}	

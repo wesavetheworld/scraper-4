@@ -4,7 +4,7 @@
 
 // ***************************************************************************//
 //  
-// ** CRON - All of the tasks that need to be performed regularly for the health
+// ** tasks - All of the tasks that need to be performed regularly for the health
 // ** of the aplication.
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
@@ -22,7 +22,7 @@ class tasks
  	function __construct()
 	{    
 		// Include settings for ranking collecting
-		include('config/rankings.config.php'); 
+		require_once('config/rankings.config.php'); 
 
 		// Include keywords data model
 		require_once('models/keywords.model.php'); 		
@@ -49,36 +49,10 @@ class tasks
 			// Call the method
 			$this->$method();   		
 		}
-		// Else run normal cron tasks
+		// No method was provided
 		else
-		{		
-			// If it's 4am (00 is too soon for most daily tasks)
-			if(date("H:i") == "04:00")
-			{                  
-				// Run all daily tasks
-				$this->daily();
-			} 
-			
-			// If it's the 30min mark
-			if(date("i") == '30')
-			{   
-				// Run all hourly tasks
-				$this->halfHour();
-			}			
-		
-			// If it's the last minute of the hour
-			if(date("i") == '59')
-			{   
-				// Run all hourly tasks
-				$this->hourly();
-			}
-		
-			// If it's the last minute of the day
-			if(date("H:i") == "23:59")
-			{                  
-				// Run all daily tasks
-				$this->lastMinute();
-			}		
+		{
+			utilities::notate("No method provided"); 
 		}
 		
 		// Log current state
@@ -86,48 +60,10 @@ class tasks
 		
 		// Finish execution
 		utilities::complete();		   
-	}
+	} 
 	
 	// ===========================================================================// 
-	// ! Schedule type methods                                                    //
-	// ===========================================================================//	 
-	
-	// Any tasks that should be run hourly
-	private function halfHour()
-	{ 		                       
-		// Check in any old keywords
-		$this->keywordCheckIn();
-	}			
-	
-	// Any tasks that should be run hourly
-	private function hourly()
-	{  
-		// Connect to the database
-		//utilities::databaseConnect();
-		
-		// Reset all of the proxy stats
-		$this->proxyReset();
-		
-		// Check that all keywords are following their schedules
-		//$this->checkSchedules();				
-	}
-	
-	// Any tasks that should be run daily
-	private function daily()
-	{
-		// Remove old saved search files
-		$this->cleanSearchDirectory();
-	}
-	
-	// Any tasks that should be run at the end of the day
-	private function lastMinute()
-	{   
-		// Clean up the server logs
- 	    $this->cleanLogs(); 
-	}	 
-	
-	// ===========================================================================// 
-	// ! Private Methods                                                          //
+	// ! Clen up type methods                                                     //
 	// ===========================================================================//	   
 	
 	// Resets all stats for proxies (use/blocked/status)
@@ -234,6 +170,110 @@ class tasks
 		}
 	}
 
+	// ===========================================================================// 
+	// ! ec2 related methods                                                      //
+	// ===========================================================================//	
+
+	// Get inforation for ec2 instances
+	private function getInstances()
+	{
+		// Create a new amazon object
+		$ec2 = new AmazonEC2();
+
+		// Set the region to access instances
+		$ec2->set_region('us-west-1');
+				
+		// Get info on all worker instances
+		$response = $ec2->describe_instances();		
+
+		// If request failed
+		if(!$response->isOK())
+		{
+			// Send admin error message
+			utilities::reportErrors("Can't load instance data"); 
+			
+	  		// Finish execution
+			utilities::complete();
+		}	
+
+		// Return instance objects
+		return $response->body->reservationSet;		
+	}
+	
+	// Manage bing servers
+	private function bing($action)
+	{
+		return false;
+		
+		// Filter instances to only bing
+		$opt = array(
+				    'Filter' => array(
+				        array('Name' => 'tag-value', 'Value' => 'bing')
+				    )
+				);
+
+		// Get a list of all bing instances
+		$instances = $this->getInstances($opt);
+
+		// Loop through selected instances
+		foreach($instances->item as $items)
+		{	
+			foreach($items->instancesSet->item as $instance)
+			{
+				// Add instance id to array
+				$id = (array)$instance->instanceId[0];
+				$instanceIds[] = $id[0];
+			}
+		}	
+
+		// If instance ids are returned
+		if(count($instanceIds) > 0)
+		{
+			// Modify bing instance statuses by instanceIds
+			$this->manageInstance($instanceIds, $action);	
+			
+			// Log overlap notice				
+			utilities::notate("Bing instances modified: $action", "clientd.log");	
+		}	
+		
+		// If starting bing instances
+		if($action == "start")
+		{
+			// Set bing status to on
+			$this->bingStatus = true; 
+		}	
+		// If stopping bing instances
+		elseif($action == "stop")
+		{
+			// Set bing status to off
+			$this->bingStatus = false; 			
+		}
+	}	
+
+	// Manage ec2 instance states (start,stop)
+	private function manageInstance($instanceId, $function)
+	{
+		// Create a new amazon object
+		$ec2 = new AmazonEC2();
+
+		// Set the region to access instances
+		$ec2->set_region('us-west-1');	
+
+		// Create function's function name
+		$function = $function."_instances";
+
+		// Perform requested action
+		if($ec2->$function($instanceId))
+		{
+			// The process was a success
+			return true;
+		}
+	}
+		
+	// ===========================================================================// 
+	// ! General methods                                                          //
+	// ===========================================================================//	
+
 	// Set a system status message (pause,kill)
 	private function system()
 	{
@@ -246,7 +286,4 @@ class tasks
 		// Log current state
 		utilities::notate("\tSystem: $status");			
 	}
-
-
-	
 }	

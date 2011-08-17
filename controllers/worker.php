@@ -352,7 +352,7 @@ class worker
 		$save .= "\nthe end\n";
 		
 		// Save search results to a file
-		//file_put_contents($item->searchFile, $save);		
+		file_put_contents($item->searchFile, $save);		
 	} 
 	
 	// If a keyword just switch result amount (10/100)
