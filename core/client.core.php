@@ -184,6 +184,8 @@ class clientCore
 	// Manage bing servers
 	private function bing($action)
 	{
+		return false;
+		
 		// Filter instances to only bing
 		$opt = array(
 				    'Filter' => array(
