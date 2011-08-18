@@ -136,7 +136,7 @@ class tasks
 	}
 	
 	// Check that all keywords are following their schedules
-	private function checkKeywordSchedules()
+	private function checkSchedules()
 	{        	
 		// Instantiate a new keywords object
 		$keywords = new keywords(true, true);
