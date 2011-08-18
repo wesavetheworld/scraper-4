@@ -85,10 +85,10 @@ class bootstrap
 				$this->assignIp(CLIENT_IP);			
 			}
 			// If this is a worker instance
-			elseif($this->instanceType == "worker")
+			elseif($this->instanceName == "worker1")
 			{
 				// Assign the worker elastic ip to this instance
-				//$this->assignIp(WORKER_IP);	
+				$this->assignIp(WORKER_IP);	
 			}
 		}	
 	}
@@ -132,6 +132,12 @@ class bootstrap
 				// Set current instance type
 				$this->instanceType = $tag->value;
 			}
+			// If current tag is the name tag
+			elseif($tag->key == 'name')
+			{	
+				// Set current instance name
+				$this->instanceName = $tag->value;				
+			}	
 		}	
 	}
 
