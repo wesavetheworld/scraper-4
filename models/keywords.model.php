@@ -400,7 +400,7 @@ class keywords
 					$hourly++;
 					
 					// Get time for last hour (current time -2 minutes)
-					if($keyword->google_status < date("Y-m-d H", time() - 120))
+					if($keyword->google_status < date("Y-m-d H", time() - 3600))
 					{
 						$hourlyLate++;
 					}
