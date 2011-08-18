@@ -399,7 +399,8 @@ class keywords
 				{
 					$hourly++;
 					
-					if($keyword->google_status < date("Y-m-d H"))
+					// Get time for last hour (current time -2 minutes)
+					if($keyword->google_status < date("Y-m-d H", time() - 120))
 					{
 						$hourlyLate++;
 					}
@@ -419,7 +420,7 @@ class keywords
 			
 			if($hourlyLate > 0)
 			{
-				utilities::reportErrors("$hourlyLate of $hourly keywords not updated this hour");
+				utilities::reportErrors("$hourlyLate of $hourly keywords not updated last hour");
 			}
 			
 			if($dailyLate > 0)
