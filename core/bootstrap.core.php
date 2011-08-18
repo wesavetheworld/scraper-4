@@ -133,7 +133,7 @@ class bootstrap
 				$this->instanceType = $tag->value;
 			}
 			// If current tag is the name tag
-			elseif($tag->key == 'name')
+			elseif($tag->key == 'Name')
 			{	
 				// Set current instance name
 				$this->instanceName = $tag->value;				
