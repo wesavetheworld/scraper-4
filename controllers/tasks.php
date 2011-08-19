@@ -307,12 +307,16 @@ class tasks
 	}
 
 	// Get a list of all current system processes 
-	private function getSupervisordPid()
+	private function killAll()
 	{
+		// Get supervisord's pid from system file
 		$pid = file_get_contents('/tmp/supervisord.pid');
 
-		echo "pid: $pid\n";
+		// Kill supervisord and all of its scripts (client/worker/etc)
+		exec("kill $pid");
 		
+		// Log current state
+		utilities::notate("Supervisor stopped", "tasks.log");
 	}
 
 	// Set a system status message (pause,kill)
