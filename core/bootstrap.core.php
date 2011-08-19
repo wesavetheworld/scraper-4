@@ -297,7 +297,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=client-%(process_num)s\n"; 			
+			$supervisord.= "process_name=clientCore\n"; 			
 		}
 		// All other instance types
 		elseif($this->instanceType == "jobServer")
