@@ -291,44 +291,54 @@ class tasks
 				// Open the system status file
 				$system = file_get_contents(SYSTEM_STATUS);
 
-				// Get each part of the system message
-				$system = explode("|", $system);
-				$action = $system[0];
-				$who = $system[1];
-
-				// If system command applies to this instance
-				if(in_array($who, array($instanceType, 'all')))
+				// If there is a system command
+				if($system)
 				{
-					// If there is a system message
-					if($action == 'reset')
-					{
-						// Kill all scripts
-						$this->killSupervisord();		
+					// Get each part of the system message
+					$system = explode("|", $system);
+					$action = $system[0];
+					$who = $system[1];
 
-						// Restart the application
-						$this->restartSupervisordd();
+					// If system command applies to this instance
+					if(in_array($who, array($instanceType, 'all')))
+					{
+						// If there is a system message
+						if($action == 'reset')
+						{
+							// Kill all scripts
+							$this->killSupervisord();		
+
+							// Restart the application
+							$this->restartSupervisordd();
+						}
+						elseif($action == "reboot")
+						{
+							// Kill all scripts
+							$this->killSupervisord();						
+							
+							// Shutdown the server
+							exec("reboot");
+						}					
+						elseif($action == "shutdown")
+						{
+							// Kill all scripts
+							$this->killSupervisord();						
+							
+							// Shutdown the server
+							exec("shutdown now");
+						}
+
+						echo "some command has been run";
 					}
-					elseif($action == "reboot")
+					else
 					{
-						// Kill all scripts
-						$this->killSupervisord();						
-						
-						// Shutdown the server
-						exec("reboot");
-					}					
-					elseif($action == "shutdown")
-					{
-						// Kill all scripts
-						$this->killSupervisord();						
-						
-						// Shutdown the server
-						exec("shutdown now");
+						echo "not for me";
 					}
 				}
 				else
 				{
-					echo "not for me";
-				}	
+					echo "no commands to run";
+				}		
 			} 
 			else
 			{
