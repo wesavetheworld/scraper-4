@@ -291,6 +291,9 @@ class tasks
 				// Open the system status file
 				$system = file_get_contents(SYSTEM_STATUS);
 
+									echo $system;
+
+
 				// If there is a system command
 				if($system)
 				{
