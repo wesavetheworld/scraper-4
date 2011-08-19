@@ -63,51 +63,34 @@
 	define('DATA_DIRECTORY', '/home/ec2-user/data'); 	
 
 	// ===========================================================================// 
-	// ! Database credentials                                                     //
+	// ! SERPS Database credentials                                                     //
 	// ===========================================================================//
 	
-	if(ENVIRONMENT == 'local')
-	{
-		// Database host
-		define("DB_HOST", ":/Applications/MAMP/tmp/mysql/mysql.sock");
-	
-		// Database username
-		define("DB_SERP_USER", "root");
-	
-		// Database password
-		define("DB_SERPS_PASS", "root");
-	
-		// Database name
-		define("DB_NAME_SERPS", "mongo"); 
-    }  
-    elseif(ENVIRONMENT == 'ec2')
-    {
-		// Database host
-		define("DB_HOST", "dbmaster.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
-	
-		// Database username
-		define("DB_SERP_USER", "scout");
-	
-		// Database password
-		define("DB_SERPS_PASS", "tF1xFmMu");
-	
-		// Database name
-		define("DB_NAME_SERPS", "serps"); 	
-    } 
+	// Database host
+	define("DB_HOST", "dbmaster.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+
+	// Database username
+	define("DB_SERP_USER", "scout");
+
+	// Database password
+	define("DB_SERPS_PASS", "tF1xFmMu");
+
+	// Database name
+	define("DB_NAME_SERPS", "serps"); 	
 
 	// ===========================================================================// 
 	// ! Proxy Database credentials                                               //
 	// ===========================================================================//          	  
 
-		// Proxy Database host
-		define("PROXY_HOST", "proxies.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
-	
-		// Proxy Database username
-		define("PROXY_USER", "seproxies");
-	
-		// Proxy Database password
-		define("PROXY_PASS", "lskLPQVksidu34");
-	
-		// Proxy Database name
-		define("PROXY_DB", "proxies"); 		
+	// Proxy Database host
+	define("PROXY_HOST", "proxies.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+
+	// Proxy Database username
+	define("PROXY_USER", "seproxies");
+
+	// Proxy Database password
+	define("PROXY_PASS", "lskLPQVksidu34");
+
+	// Proxy Database name
+	define("PROXY_DB", "proxies"); 		
 ?>

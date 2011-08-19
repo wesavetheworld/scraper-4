@@ -297,7 +297,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 			
+			$supervisord.= "process_name=client-%(process_num)s\n"; 			
 		}
 		// All other instance types
 		elseif($this->instanceType == "jobServer")
@@ -356,6 +356,15 @@ class bootstrap
 		// All other instance types
 		elseif($this->instanceType == "worker")
 		{	
+			// Check system status 
+			$supervisord = "[program:Google]\n";
+			$supervisord.= "command=php /home/ec2-user/hub.php tasks checkSystem\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=10\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";
+
 			// Add workers for ranking updates
 			$supervisord = "[program:Google]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsGoogle rankings\n";

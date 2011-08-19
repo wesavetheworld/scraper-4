@@ -23,16 +23,16 @@ class tasks
  	function __construct()
 	{    
 		//Include settings for ranking collecting
-		require_once('config/rankings.config.php'); 
+		// require_once('config/rankings.config.php'); 
 
-		// Include keywords data model
-		require_once('models/keywords.model.php'); 		
+		// // Include keywords data model
+		// require_once('models/keywords.model.php'); 		
 
-		// Include proxy data model
-		require_once('models/proxies.model.php'); 
+		// // Include proxy data model
+		// require_once('models/proxies.model.php'); 
 		
-		// Include the amazon SDK
-		require_once('classes/amazon/sdk.class.php');						
+		// // Include the amazon SDK
+		// require_once('classes/amazon/sdk.class.php');						
 		
 	  	// Initiate benchmarking
 		utilities::benchmark();		  
@@ -270,11 +270,58 @@ class tasks
 			// The process was a success
 			return true;
 		}
-	}
+	}	
 		
 	// ===========================================================================// 
-	// ! General methods                                                          //
+	// ! System monitoring methods                                                //
 	// ===========================================================================//	
+
+	// Check the system for actions to take
+	private function monitorSystem()
+	{
+		// Infinite loop
+		while(TRUE)
+		{
+			// Check if the system status file exists
+			if(file_exists(SYSTEM_STATUS))
+			{
+				// Open the system status file
+				$system = file_get_contents(SYSTEM_STATUS);
+
+				// If there is a system message
+				if($system)
+				{
+					$this->getSystemProcesses();
+					// Get a list of all current system processes 
+					$pidList = system("ps aux");
+
+
+					// Stop all running workers
+
+				}
+			}
+
+			// Wait 30 seconds and check again
+			sleep(30);
+		}	
+	}
+
+	// Get a list of all current system processes 
+	private function getSystemProcesses()
+	{
+		exec("ps aux", $pidList);	
+
+		foreach($pidList as &$pid)
+		{
+			$pid = explode("   ", $pid);
+
+			print_r($pid);
+		}
+//		print_r($pidList);
+		
+		//echo $pidList;	
+		
+	}
 
 	// Set a system status message (pause,kill)
 	private function system()
