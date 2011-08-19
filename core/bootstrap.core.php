@@ -297,7 +297,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=clientCore\n"; 			
+			$supervisord.= "process_name=clientCore\n"; 						
 		}
 		// All other instance types
 		elseif($this->instanceType == "jobServer")
@@ -309,7 +309,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n\n"; 							
+			$supervisord.= "process_name=%(process_num)s\n\n"; 										
 		}
 		// If this instance is for bing
 		elseif($this->instanceType == "bing")
@@ -321,7 +321,16 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=10\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";			
+			$supervisord.= "process_name=%(process_num)s\n";
+			
+			// Check system status 
+			$supervisord.= "[program:monitorSystem]\n";
+			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem bing\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";						
 		}	
 		// If this instance is for bing
 		elseif($this->instanceType == "domains")
@@ -351,22 +360,22 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 		
+			$supervisord.= "process_name=%(process_num)s\n"; 
+			
+			// Check system status 
+			$supervisord.= "[program:monitorSystem]\n";
+			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem domains\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";					
 		}				
 		// All other instance types
 		elseif($this->instanceType == "worker")
 		{	
-			// Check system status 
-			$supervisord = "[program:Google]\n";
-			$supervisord.= "command=php /home/ec2-user/hub.php tasks checkSystem\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=10\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";
-
 			// Add workers for ranking updates
-			$supervisord.= "[program:Google]\n";
+			$supervisord = "[program:Google]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -386,6 +395,15 @@ class bootstrap
 			// Add workers for ranking updates
 			$supervisord.= "[program:BingNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewBing rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";
+			
+			// Check system status 
+			$supervisord.= "[program:monitorSystem]\n";
+			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem worker\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";

@@ -279,6 +279,9 @@ class tasks
 	// Check the system for actions to take
 	private function monitorSystem()
 	{
+		// What type of isntance is running
+		$instanceType = $_SERVER['argv'][3];
+
 		// Infinite loop
 		while(TRUE)
 		{
@@ -288,17 +291,40 @@ class tasks
 				// Open the system status file
 				$system = file_get_contents(SYSTEM_STATUS);
 
-				// If there is a system message
-				if($system)
+				// Get each part of the system message
+				$system = explode("|", $system);
+				$action = $system[0];
+				$who = $system[1];
+
+				// If system command applies to this instance
+				if(in_array($who, array($instanceType, 'all')))
 				{
-					$this->getSystemProcesses();
-					// Get a list of all current system processes 
-					$pidList = system("ps aux");
+					// If there is a system message
+					if($action == 'reset')
+					{
+						// Kill all scripts
+						$this->killSupervisord();		
 
-
-					// Stop all running workers
-
-				}
+						// Restart the application
+						$this->restartSupervisordd();
+					}
+					elseif($action == "reboot")
+					{
+						// Kill all scripts
+						$this->killSupervisord();						
+						
+						// Shutdown the server
+						exec("reboot");
+					}					
+					elseif($action == "shutdown")
+					{
+						// Kill all scripts
+						$this->killSupervisord();						
+						
+						// Shutdown the server
+						exec("shutdown now");
+					}
+				}	
 			}
 
 			// Wait 30 seconds and check again
@@ -307,19 +333,26 @@ class tasks
 	}
 
 	// Get a list of all current system processes 
-	private function killAll()
+	private function killSupervisord()
 	{
 		// Get supervisord's pid from system file
 		$pid = file_get_contents('/tmp/supervisord.pid');
 
-		// Kill supervisord and all of its scripts (client/worker/etc)
+		// Kill supervisord and all of its processes (client/worker/etc)
 		exec("kill $pid");
-
-		// Restart supervisord and all of its scripts
-		exec('supervisord');
 		
 		// Log current state
-		utilities::notate("Supervisor stopped", "tasks.log");
+		utilities::notate("Killing supervisord and all sub processes", "tasks.log");
+	}
+
+	// Restart supervisord and all of its processes
+	private function restartSupervisord()
+	{
+		// Restart supervisord and all of its scripts
+		exec('supervisord');
+				
+		// Log current state
+		utilities::notate("Restarting supervisord", "tasks.log");		
 	}
 
 	// Set a system status message (pause,kill)
