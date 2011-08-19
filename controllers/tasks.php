@@ -295,7 +295,7 @@ class tasks
 				if($system)
 				{
 					// Get each part of the system message
-					$system = explode("|", $system);
+					$system = explode("_", $system);
 					$action = $system[0];
 					$who = $system[1];
 
