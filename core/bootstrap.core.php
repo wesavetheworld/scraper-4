@@ -327,7 +327,7 @@ class bootstrap
 		elseif($this->instanceType == "domains")
 		{
 			// Add workers for domain pagerank
-			$supervisord.= "[program:pageRank]\n";
+			$supervisord = "[program:pageRank]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker pr pr\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -366,7 +366,7 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n";
 
 			// Add workers for ranking updates
-			$supervisord = "[program:Google]\n";
+			$supervisord.= "[program:Google]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";

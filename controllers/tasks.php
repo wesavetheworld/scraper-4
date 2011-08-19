@@ -307,19 +307,11 @@ class tasks
 	}
 
 	// Get a list of all current system processes 
-	private function getSystemProcesses()
+	private function getSupervisordPid()
 	{
-		exec("ps aux", $pidList);	
+		$pid = file_get_contents('/tmp/supervisord.pid');
 
-		foreach($pidList as &$pid)
-		{
-			$pid = explode("   ", $pid);
-
-			print_r($pid);
-		}
-//		print_r($pidList);
-		
-		//echo $pidList;	
+		echo "pid: $pid\n";
 		
 	}
 
