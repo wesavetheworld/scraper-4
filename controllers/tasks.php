@@ -325,6 +325,10 @@ class tasks
 						exec("shutdown now");
 					}
 				}	
+			} 
+			else
+			{
+				echo "file does not exist";
 			}
 
 			// Wait 30 seconds and check again
