@@ -314,6 +314,9 @@ class tasks
 
 		// Kill supervisord and all of its scripts (client/worker/etc)
 		exec("kill $pid");
+
+		// Restart supervisord and all of its scripts
+		exec('supervisord');
 		
 		// Log current state
 		utilities::notate("Supervisor stopped", "tasks.log");
