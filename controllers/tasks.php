@@ -324,6 +324,10 @@ class tasks
 						// Shutdown the server
 						exec("shutdown now");
 					}
+				}
+				else
+				{
+					echo "not for me";
 				}	
 			} 
 			else
