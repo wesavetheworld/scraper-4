@@ -23,16 +23,16 @@ class tasks
  	function __construct()
 	{    
 		//Include settings for ranking collecting
-		// require_once('config/rankings.config.php'); 
+		require_once('config/rankings.config.php'); 
 
-		// // Include keywords data model
-		// require_once('models/keywords.model.php'); 		
+		// Include keywords data model
+		require_once('models/keywords.model.php'); 		
 
-		// // Include proxy data model
-		// require_once('models/proxies.model.php'); 
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 
 		
-		// // Include the amazon SDK
-		// require_once('classes/amazon/sdk.class.php');						
+		// Include the amazon SDK
+		require_once('classes/amazon/sdk.class.php');						
 		
 	  	// Initiate benchmarking
 		utilities::benchmark();		  
