@@ -57,6 +57,8 @@ class worker
 	
 	public function worker($data)
 	{  	
+		echo "start worker!\n";
+		
 		// Construct job object
 		$this->buildJob($data);	
 		        		        
