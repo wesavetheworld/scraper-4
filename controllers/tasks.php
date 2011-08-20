@@ -301,42 +301,47 @@ class tasks
 					$system = explode("_", $system);
 					$action = $system[0];
 					$who = $system[1];
+					$time = $system[2];
 
-					// If system command applies to this instance
-					if(in_array($who, array($instanceType, 'all')))
+					// If the command timestamp is not older than 60 seconds
+					if($time < (time() - 60))
 					{
-						// If there is a system message
-						if($action == 'reset')
+						// If system command applies to this instance
+						if(in_array($who, array($instanceType, 'all')))
 						{
-							// Kill all scripts
-							$this->killSupervisord();		
+							// If there is a system message
+							if($action == 'reset')
+							{
+								// Kill all scripts
+								$this->killSupervisord();		
 
-							// Restart the application
-							$this->restartSupervisordd();
-						}
-						elseif($action == "reboot")
-						{
-							// Kill all scripts
-							$this->killSupervisord();						
-							
-							// Shutdown the server
-							exec("reboot");
-						}					
-						elseif($action == "shutdown")
-						{
-							// Kill all scripts
-							$this->killSupervisord();						
-							
-							// Shutdown the server
-							exec("shutdown now");
-						}
+								// Restart the application
+								$this->restartSupervisordd();
+							}
+							elseif($action == "reboot")
+							{
+								// Kill all scripts
+								$this->killSupervisord();						
+								
+								// Shutdown the server
+								exec("reboot");
+							}					
+							elseif($action == "shutdown")
+							{
+								// Kill all scripts
+								$this->killSupervisord();						
+								
+								// Shutdown the server
+								exec("shutdown now");
+							}
 
-						echo "some command has been run";
-					}
-					else
-					{
-						echo "not for me";
-					}
+							echo "some command has been run";
+						}
+						else
+						{
+							echo "not for me";
+						}
+					}	
 				}
 				else
 				{
@@ -379,8 +384,8 @@ class tasks
 	// Set a system status message (pause,kill)
 	private function system()
 	{
-		// Set the system status
-		$status = $_SERVER['argv'][3];
+		// Set the system status + a timestamp
+		$status = $_SERVER['argv'][3]."_".time();
 
 		// Write status file
 		file_put_contents(SYSTEM_STATUS, $status);	
