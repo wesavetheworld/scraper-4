@@ -69,7 +69,7 @@ class worker
 		while($this->items->total > 0)
 		{    
 
-			utilities::notate("total: ".$this->items->total, $this->task.".log");		  		   	 			
+			//utilities::notate("total: ".$this->items->total, $this->task.".log");		  		   	 			
 
 
 			// Check killswitch
