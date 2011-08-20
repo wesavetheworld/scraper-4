@@ -321,7 +321,7 @@ class worker
 				if($item->searchType == "new")
 				{				 				
 					// Save the new search file
-					$this->searchSave($item, $content);
+					//$this->searchSave($item, $content);
 				}	
 				
 				// Set the new search as the source
