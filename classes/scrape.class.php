@@ -393,12 +393,25 @@ class scraper
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
 		{
+			// If error code 302 block encountered
+			if($this->results[$i]['httpInfo']['http_code'] == 302 || $this->results[$i]['httpInfo']['http_code'] == 503) 
+			{   
+				// If proxy use on
+				if($this->proxy_use)
+				{
+					// Add proxy to blocked list
+					$this->proxies->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
+				}	
+			}  
+			else
+			{
+				// Add proxy to timeout list
+				$this->proxies->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];				
+			}
+
 			//echo "\nThere was an error: ".$this->results[$i]['curlError']."\n";
 			// Set the content scrape as a failure
-			$this->results[$i]['status'] = 'error';  
-
-			// Add proxy to timeout list
-			$this->proxies->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];			
+			$this->results[$i]['status'] = 'error';  			
 			
 			// Increment the amount of failed scrapes
 			$this->scrapesBad++;
