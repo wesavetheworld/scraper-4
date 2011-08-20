@@ -166,6 +166,9 @@ class utilities
 	// Return notation for the current part of the script
 	public static function notate($description, $log = false)
 	{   
+		print $description."\n";
+		return true;
+
 		// If notation is turned on
 		if(NOTATION)
 		{   
