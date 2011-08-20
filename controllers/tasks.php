@@ -318,10 +318,7 @@ class tasks
 							elseif($action == "reboot")
 							{
 								// Kill all scripts
-								$this->killSupervisord();	
-								
-								// Sleep long enough to allow all scripts to be killed
-								sleep(20);													
+								$this->killSupervisord();												
 								
 								// Shutdown the server
 								exec("reboot");
@@ -329,10 +326,7 @@ class tasks
 							elseif($action == "shutdown")
 							{
 								// Kill all scripts
-								$this->killSupervisord();	
-								
-								// Sleep long enough to allow all scripts to be killed
-								sleep(20);													
+								$this->killSupervisord();													
 								
 								// Shutdown the server
 								exec("shutdown now");
@@ -373,6 +367,9 @@ class tasks
 
 		// Kill supervisord and all of its processes (client/worker/etc)
 		exec("kill $pid");
+
+		// Sleep long enough to allow all scripts to be killed
+		sleep(20);			
 		
 		// Log current state
 		utilities::notate("Killing supervisord and all sub processes", "tasks.log");
