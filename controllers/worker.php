@@ -48,7 +48,7 @@ class worker
 		utilities::benchmark(false, false, false, true);
 
 		// Log status
-		utilities::notate("Job started", $this->task.".log");		  		   	 			
+		utilities::notate("Job started", "worker.log");		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -57,8 +57,7 @@ class worker
 	
 	public function worker($data)
 	{  	
-		utilities::notate("started worker", $this->task.".log");		  		   	 			
-
+		utilities::notate("started worker", "worker.log");		  		   	 			
 
 		// Construct job object
 		$this->buildJob($data);	
