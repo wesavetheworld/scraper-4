@@ -79,13 +79,13 @@ class worker
 			$this->scrapeContent();
 			
 			// Call processing time
-			utilities::benchmark('scraping content: ', $this->task.".log");
+			//utilities::benchmark('scraping content: ', $this->task.".log");
 
 			// Parse the scraped content
 			$this->parseContent();
 
 			// Call processing time
-			utilities::benchmark('Parse all content: ', $this->task.".log");  
+			//utilities::benchmark('Parse all content: ', $this->task.".log");  
 			
 			echo "\nkeywords left: ".$this->items->total."\n";
 		}
@@ -96,10 +96,11 @@ class worker
 		$this->updateItems();
 		
 		// Call processing time
-		utilities::benchmark('update items: ', $this->task.".log"); 		
+		///utilities::benchmark('update items: ', $this->task.".log"); 		
 
 		// Retrun total execution time
-		return utilities::benchmark(' ', $this->task.".log", true, false, true); 		
+		//return utilities::benchmark(' ', $this->task.".log", true, false, true); 		
+		return true;
 	} 
 	// ===========================================================================// 
 	// ! Core worker functions                                                    //
