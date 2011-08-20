@@ -152,7 +152,7 @@ class scraper
 		if($this->scrapesBad > 0)
 		{
 	 		// Log current state
-			utilities::notate("Bad scrapes: ".$this->scrapesBad." of ".$this->scrapesTotal." total scrapes", "scrape.log");		 
+			//utilities::notate("Bad scrapes: ".$this->scrapesBad." of ".$this->scrapesTotal." total scrapes", "scrape.log");		 
 		}	
 		
 		// Clean up the curl_multi handle
@@ -338,6 +338,8 @@ class scraper
 			// Attach any cUrl errors to output
 			$this->results[$i]['curlError'] = curl_error($this->ch[$i]);
 
+			echo $this->results[$i]['curlError']."\n";
+
 			// Set the output data
 			$this->results[$i]['output'] = curl_multi_getcontent($this->ch[$i]); 
 						
@@ -399,8 +401,6 @@ class scraper
 			// Increment the amount of failed scrapes
 			$this->scrapesBad++;
 			return false;
-
-		   			
 		}
 		   		
 
@@ -464,7 +464,7 @@ class scraper
 			else
 			{
 				// Nothing returned  from proxy, just dead
-				utilities::notate("\tsome other error", "scrape.log");					
+				//utilities::notate("\tsome other error", "scrape.log");					
 
 			}   			
  
