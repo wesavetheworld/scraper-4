@@ -63,6 +63,8 @@ class worker
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
 		{    
+			echo "total: ".$this->items->total."\n";
+
 			// Check killswitch
 			utilities::checkStatus();		
 

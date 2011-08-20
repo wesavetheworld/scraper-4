@@ -372,7 +372,7 @@ class tasks
 		sleep(20);			
 		
 		// Log current state
-		utilities::notate("Killing supervisord and all sub processes", "tasks.log");
+		utilities::notate("Killed supervisord and all sub processes", "tasks.log");
 	}
 
 	// Restart supervisord and all of its processes
