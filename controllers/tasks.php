@@ -321,7 +321,10 @@ class tasks
 							elseif($action == "reboot")
 							{
 								// Kill all scripts
-								$this->killSupervisord();						
+								$this->killSupervisord();	
+								
+								// Sleep long enough to allow all scripts to be killed
+								sleep(20);													
 								
 								// Shutdown the server
 								exec("reboot");
@@ -329,7 +332,10 @@ class tasks
 							elseif($action == "shutdown")
 							{
 								// Kill all scripts
-								$this->killSupervisord();						
+								$this->killSupervisord();	
+								
+								// Sleep long enough to allow all scripts to be killed
+								sleep(20);													
 								
 								// Shutdown the server
 								exec("shutdown now");
