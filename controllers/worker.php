@@ -57,15 +57,18 @@ class worker
 	
 	public function worker($data)
 	{  	
-		echo "start worker!\n";
-		
+		utilities::notate("started worker", $this->task.".log");		  		   	 			
+
+
 		// Construct job object
 		$this->buildJob($data);	
 		        		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
 		{    
-			echo "total: ".$this->items->total."\n";
+
+			utilities::notate("total: ".$this->items->total, $this->task.".log");		  		   	 			
+
 
 			// Check killswitch
 			utilities::checkStatus();		
