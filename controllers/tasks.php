@@ -304,7 +304,7 @@ class tasks
 					$time = $system[2];
 
 					// If the command timestamp is not older than 60 seconds
-					if($time < (time() - 60))
+					if($time > (time() - 60))
 					{
 						// If system command applies to this instance
 						if(in_array($who, array($instanceType, 'all')))
