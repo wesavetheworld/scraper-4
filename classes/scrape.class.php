@@ -388,6 +388,8 @@ class scraper
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
+		 echo "\nheader: ".$this->results[$i]['httpInfo']['http_code']; 	
+
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
 		{
@@ -404,8 +406,6 @@ class scraper
 		}
 		   	
 		   	
-		 echo "\nheader: ".$this->results[$i]['httpInfo']['http_code']; 	
-
 		// Scraped content has a 200 success code and size is greater than 5 bytes
 		if($this->results[$i]['httpInfo']['http_code'] == 200 && $this->results[$i]['httpInfo']['size_download'] > 500 || $this->results[$i]['httpInfo']['http_code'] == 200 && $this->task != "rankings")
 		{   
@@ -442,7 +442,8 @@ class scraper
 				}
 			}			
 			// If error code 302 block encountered
-			elseif($this->results[$i]['httpInfo']['http_code'] == 302 
+			elseif($this->results[$i]['httpInfo']['http_code'] == 302
+					|| $this->results[$i]['httpInfo']['http_code'] == 503 
 					|| $this->results[$i]['httpInfo']['http_code'] == 200 && $this->results[$i]['httpInfo']['size_download'] < 500)
 			{   
 				// If proxy use on
