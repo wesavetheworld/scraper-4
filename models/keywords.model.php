@@ -343,7 +343,7 @@ class keywords
 				else
 				{
 					// Log status
-					utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
+					//utilities::notate("Could not update keyword", "rankings.log");		  		   	 			
 				}				
 			}	
    		}
@@ -460,7 +460,7 @@ class keyword
 			if(empty($this->$key))
 			{   
 				// Log bad keyword for review
-				file_put_contents(KEYWORD_ERROR_FILE, var_export($this, TRUE)."\n\n", FILE_APPEND);
+				//file_put_contents(KEYWORD_ERROR_FILE, var_export($this, TRUE)."\n\n", FILE_APPEND);
 
 				// Do not continue				   
 				return false;   		

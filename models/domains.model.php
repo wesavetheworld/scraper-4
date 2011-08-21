@@ -215,7 +215,7 @@ class domains
 				else
 				{
 					// Log status
-					utilities::notate("Could not update domain", "rankings.log");		  		   	 			
+					//utilities::notate("Could not update domain", "rankings.log");		  		   	 			
 				}			
 			}	
 			
