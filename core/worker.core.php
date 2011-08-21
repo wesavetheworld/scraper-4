@@ -50,8 +50,8 @@ class workerCore
 	// Register types of jobs available
 	private function registerJobs()
 	{
-		// Register job function with jobServer
-		$this->gm->addFunction(JOB_NAME, "workerCore::".JOB_FUNCTION); 				
+		// Register job function with jobServer (600 is max execution in seconds before timeout)
+		$this->gm->addFunction(JOB_NAME, "workerCore::".JOB_FUNCTION, $job, 10); 				
 	}		
 	
 	// ===========================================================================// 
