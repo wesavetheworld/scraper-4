@@ -27,7 +27,7 @@
 	while($gm->work())
 	{   
 
-		echo "code: ".$gm->returnCode();
+		echo "code: ".GEARMAN_SUCCESS;
 		print_r($gm);
 		// // If job failed
 		// if($this->gm->returnCode() != GEARMAN_SUCCESS)
