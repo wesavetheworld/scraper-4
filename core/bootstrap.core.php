@@ -415,6 +415,6 @@ class bootstrap
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
 		// Run supervisord daemon
-		exec("/usr/bin/supervisord &");
+		//exec("/usr/bin/supervisord &");
 	}	
 }			
