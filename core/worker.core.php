@@ -95,6 +95,9 @@ class workerCore
 		 // Instantiate new worker	
 		 $job = new load('worker', $job);
 
+
+		 return false;
+		 
 		 // Finalize job (success/failure)
 		 return $job->complete;
 	}
