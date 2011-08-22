@@ -88,21 +88,8 @@ class workerCore
 		 
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
-
-		static $count = 0;
-		echo "\nwait\n";
-		sleep(3);
-		$count++;
-		if($count % 2 == 0)
-		{
-			echo "\njob failed";
-			$job->sendFail();
-		}
-		else
-		{	
-			echo "\n job success";
-			return true;
-		}	
+echo "failing now...\n";
+exit();		
 		 // return false;
 		// $job->sendFail();
 
