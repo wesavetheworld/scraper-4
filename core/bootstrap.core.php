@@ -381,7 +381,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=10\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 
 			// Add workers for ranking updates
 			$supervisord.= "[program:GoogleNew]\n";
@@ -390,7 +390,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 			
 			// Add workers for ranking updates
 			$supervisord.= "[program:BingNew]\n";
@@ -399,7 +399,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";
 			
 			// Check system status 
 			$supervisord.= "[program:monitorSystem]\n";
@@ -408,7 +408,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";																							
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";																							
 		}	
 
 		// Write new supervisord config file
