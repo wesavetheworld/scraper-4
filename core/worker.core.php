@@ -96,10 +96,10 @@ class workerCore
 		 $job = new load('worker', $job);
 
 
-		 return false;
-		 
+		 //return false;
+
 		 // Finalize job (success/failure)
-		 return $job->complete;
+		 //return $job->complete;
 	}
 
 	// Collect domain pagerank
