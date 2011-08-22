@@ -50,7 +50,7 @@
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
 		sleep(3);	
-		return true;
+		return false;
 		 // return false;
 		//$job->sendFail();
 
