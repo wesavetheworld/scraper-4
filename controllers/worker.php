@@ -71,6 +71,7 @@ class worker
 			// If job has run for too long
 			if(utilities::benchmark('checkTimeOut'))
 			{
+				echo "\nworker timed out\n";
 				return false;
 			}
 		}
