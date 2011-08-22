@@ -24,7 +24,7 @@
 	$gm->addFunction(JOB_NAME, JOB_FUNCTION); 
 	
 	// Continuous loop waiting for jobs
-	while($this->gm->work())
+	while($gm->work())
 	{   
 		// // If job failed
 		// if($this->gm->returnCode() != GEARMAN_SUCCESS)
