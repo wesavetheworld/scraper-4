@@ -93,9 +93,10 @@ class workerCore
 		 $job = array('model'=>'keywords', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
-		 $job = new load('worker', $job);	
+		 $job = new load('worker', $job);
 
-		 return $job->results;
+		 // Finalize job (success/failure)
+		 return $job->complete;
 	}
 
 	// Collect domain pagerank
@@ -133,4 +134,21 @@ class workerCore
 
 		 return $job->results;
 	}	
+
+	// ===========================================================================// 
+	// ! Supporting methods                                                       //
+	// ===========================================================================//	
+
+	// Finalize the job (return success or failure)
+	public function finish($status)
+	{
+		// If job failed
+		if(!$status)
+		{
+
+		}
+
+		// Job was a success
+		return true;
+	}
 }	

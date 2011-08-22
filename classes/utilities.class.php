@@ -151,22 +151,16 @@ class utilities
 				utilities::log($description, $log);			
 			}				
 			
-			// Check if script has exceded max execution time yet
-			if(defined("MAX_EXECUTION_TIME") && !$last && $time - $firstTime >= MAX_EXECUTION_TIME)
-			{     
-				echo MAX_EXECUTION_TIME;
-				// // Send any error notifications
-			 // 	utilities::reportErrors("Scraper max execution time exceeded.");			
-
-				// // Stop the script 
-				//utilities::complete(); 
-				
-				// Log time out
-				utilities::notate('worker timed out');
-
-				// End the script
-				exit();           
-			}  
+			// If a request to check timeout status is found
+			if($description == 'checkTimeOut')
+			{
+				// Check if script has exceded max execution time yet
+				if(defined("MAX_EXECUTION_TIME") && !$last && $time - $firstTime >= MAX_EXECUTION_TIME)
+				{     
+					// Script has exceeded max time
+					return true;       
+				}  
+			}	
 		}
 	}  
 	 

@@ -31,6 +31,9 @@ class worker
 	// Contains the objects for the task
 	private $items;
 
+	// Will be set to true when the job is complete
+	public $complete = false;
+
 	// ===========================================================================// 
 	// ! Dependencies                                                             //
 	// ===========================================================================// 
@@ -65,16 +68,20 @@ class worker
 			// Parse the scraped content
 			$this->parseContent();
 
-			// Check max execution time
-			utilities::benchmark();
+			// If job has run for too long
+			if(utilities::benchmark('checkTimeOut'))
+			{
+				return false;
+			}
 		}
 
 		echo $this->model." updated: ".count($this->items->updated);
 
 		// Update DB with new data
 		$this->updateItems();
-			
-		return "job is complete";
+
+		// Job has been completed
+		$this->complete = TRUE;
 	} 
 	// ===========================================================================// 
 	// ! Core worker functions                                                    //
@@ -395,6 +402,13 @@ class worker
 			$this->items->updateDomains();  			
 		}				
 	}	
+
+	// Compare run time to max execution time
+	private function checkTimeOut()
+	{
+		if()
+		
+	}
 }	    
 
 
