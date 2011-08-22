@@ -152,7 +152,7 @@ class utilities
 			}				
 			
 			// Check if script has exceded max execution time yet
-			if(!$last && $time - $firstTime >= MAX_EXECUTION_TIME)
+			if(defined("MAX_EXECUTION_TIME") && !$last && $time - $firstTime >= MAX_EXECUTION_TIME)
 			{     
 				echo MAX_EXECUTION_TIME;
 				// // Send any error notifications
