@@ -37,7 +37,6 @@ class worker
 	
 	function __construct()
 	{           		
-
 		// Include serp parsing class
 		require_once('classes/parse.class.php');
 
@@ -65,6 +64,9 @@ class worker
 
 			// Parse the scraped content
 			$this->parseContent();
+
+			// Check max execution time
+			utilities::benchmark();
 		}
 
 		echo $this->model." updated: ".count($this->items->updated);

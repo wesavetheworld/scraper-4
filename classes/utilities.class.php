@@ -158,7 +158,13 @@ class utilities
 			 // 	utilities::reportErrors("Scraper max execution time exceeded.");			
 
 				// // Stop the script 
-			 //  	utilities::complete();            
+				//utilities::complete(); 
+				
+				// Log time out
+				utilities::notate('worker timed out');
+				
+				// End the script
+				exit();           
 			}  
 		}
 	}  
