@@ -49,8 +49,8 @@
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
 		sleep(3);	
-		echo "my pid: ".getmypid()."\n";
-		//exec("kill -9 ".getmypid());
+		//echo "my pid: ".getmypid()."\n";
+		exec("kill ".getmypid());
 
 
 		 // return false;
