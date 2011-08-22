@@ -92,7 +92,7 @@ class workerCore
 		 //echo "\nwait\n";
 		 sleep(3);
 		 // return false;
-		 $job->sendFail();
+		// $job->sendFail();
 
 
 		 //return false;
