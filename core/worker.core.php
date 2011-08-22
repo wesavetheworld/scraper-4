@@ -66,13 +66,13 @@ class workerCore
 		// Continuous loop waiting for jobs
 		while($this->gm->work())
 		{   
-			// If job failed
-			if($this->gm->returnCode() != GEARMAN_SUCCESS)
-			{
-				// Log current status
-				utilities::notate("return_code: ".$this->gm->returnCode());
-				break;
-			} 
+			// // If job failed
+			// if($this->gm->returnCode() != GEARMAN_SUCCESS)
+			// {
+			// 	// Log current status
+			// 	utilities::notate("return_code: ".$this->gm->returnCode());
+			// 	break;
+			// } 
 		}
 	}	
 
@@ -91,6 +91,7 @@ class workerCore
 
 		 echo "\nwait\n";
 		 sleep(3);
+		 return false;
 		 $job->sendFail();
 
 
