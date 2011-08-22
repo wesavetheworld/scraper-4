@@ -26,6 +26,8 @@
 	// Continuous loop waiting for jobs
 	while($gm->work())
 	{   
+
+		echo "code: ".$gm->returnCode();
 		// // If job failed
 		// if($this->gm->returnCode() != GEARMAN_SUCCESS)
 		// {
