@@ -28,6 +28,7 @@
 	{   
 
 		echo "code: ".$gm->returnCode();
+		print_r($gm);
 		// // If job failed
 		// if($this->gm->returnCode() != GEARMAN_SUCCESS)
 		// {
