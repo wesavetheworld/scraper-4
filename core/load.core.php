@@ -43,6 +43,9 @@ class load
 	// Load the controllers config file
     private function loadConfig($class)
     {     
+
+    	echo "class: $class";
+    	
 		// The config file name for the controller
 	 	$config = "config/".$class.".config.php"; 
 
