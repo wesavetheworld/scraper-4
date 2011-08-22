@@ -88,10 +88,12 @@ class workerCore
 		 
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
+
+		static $count = 0;
 		echo "\nwait\n";
 		sleep(3);
-		$this->count++
-		if($this->count % 2 == 0)
+		$count++
+		if($count % 2 == 0)
 		{
 			echo "\njob failed";
 			$this->gm->sendFail();
