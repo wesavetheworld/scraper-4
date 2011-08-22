@@ -89,9 +89,9 @@ class workerCore
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
 
-		 echo "\nwait\n";
+		 //echo "\nwait\n";
 		 sleep(3);
-		 return false;
+		 // return false;
 		 $job->sendFail();
 
 
