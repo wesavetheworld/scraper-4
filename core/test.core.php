@@ -47,10 +47,9 @@
 		 
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
-		echo "failing now...\n";
-		exit();		
+		sleep(3);	
 		 // return false;
-		// $job->sendFail();
+		$job->sendFail();
 
 
 		 //return false;
