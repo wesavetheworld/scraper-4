@@ -90,10 +90,14 @@ class workerCore
 	public static function rankings($job)
 	{	
 		 // Build job data array
-		 $job = array('model'=>'keywords', 'jobData'=>$job->workload());
+		// $job = array('model'=>'keywords', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
-		 $job = new load('worker', $job);
+		 //$worker = new load('worker', $job);
+
+		 echo "\nwait\n";
+		 sleep(3);
+		 $job->sendFail();
 
 
 		 //return false;
