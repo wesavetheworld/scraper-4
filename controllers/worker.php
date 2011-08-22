@@ -45,11 +45,7 @@ class worker
 		require_once('classes/scrape.class.php'); 	
 		
 		// Reset benchmarking
-		utilities::benchmark(false, false, false, true);
-
-		// Log status
-		//utilities::notate("Job started", "worker.log");		  		   	 			
-		echo "job here\n";
+		utilities::benchmark(false, false, false, true);		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -58,48 +54,24 @@ class worker
 	
 	public function worker($data)
 	{  	
-		//utilities::notate("started worker", "worker.log");		  		   	 			
-
-		echo "function here\n";
-
 		// Construct job object
 		$this->buildJob($data);	
 		        		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
-		{    
-
-			//utilities::notate("total: ".$this->items->total, $this->task.".log");		  		   	 			
-
-
-			// Check killswitch
-			utilities::checkStatus();		
-
+		{    		
 			// Scrape content for items
 			$this->scrapeContent();
-			
-			// Call processing time
-			//utilities::benchmark('scraping content: ', $this->task.".log");
 
 			// Parse the scraped content
 			$this->parseContent();
-
-			// Call processing time
-			//utilities::benchmark('Parse all content: ', $this->task.".log");  
-			
-			echo "\nkeywords left: ".$this->items->total."\n";
 		}
 
 		echo $this->model." updated: ".count($this->items->updated);
 
 		// Update DB with new data
 		$this->updateItems();
-		
-		// Call processing time
-		///utilities::benchmark('update items: ', $this->task.".log"); 		
-
-		// Retrun total execution time
-		//return utilities::benchmark(' ', $this->task.".log", true, false, true); 		
+			
 		return true;
 	} 
 	// ===========================================================================// 
