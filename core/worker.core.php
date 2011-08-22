@@ -92,7 +92,7 @@ class workerCore
 		static $count = 0;
 		echo "\nwait\n";
 		sleep(3);
-		$count++
+		$count++;
 		if($count % 2 == 0)
 		{
 			echo "\njob failed";
