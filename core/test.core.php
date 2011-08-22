@@ -27,7 +27,7 @@
 	while($gm->work())
 	{   
 
-		echo "code: ".GEARMAN_SUCCESS;
+		echo "code: ".$gm->returnCode();
 		print_r($gm);
 		// // If job failed
 		// if($this->gm->returnCode() != GEARMAN_SUCCESS)
@@ -53,7 +53,7 @@
 		sleep(3);	
 		//exec("kill -9 ".getmypid());
 
-		return $job->sendFail();
+		return 0;
 
 		 // return false;
 		//$job->sendFail();
