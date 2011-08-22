@@ -88,9 +88,9 @@ class workerCore
 		 
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
-
 		 //echo "\nwait\n";
 		 sleep(3);
+		$this->gm->sendFail();
 		 // return false;
 		// $job->sendFail();
 
