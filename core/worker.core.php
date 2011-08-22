@@ -96,7 +96,7 @@ class workerCore
 		if($count % 2 == 0)
 		{
 			echo "\njob failed";
-			$this->gm->sendFail();
+			sendFail();
 		}
 		else
 		{	
