@@ -59,6 +59,8 @@
 		
 		if($core == "worker")
 		{
+
+			while(true);
 			// Include main router
 			include("core/test.core.php");				
 		}	
