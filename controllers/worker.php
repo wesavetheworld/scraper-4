@@ -72,7 +72,7 @@ class worker
 		// Update DB with new data
 		$this->updateItems();
 			
-		return true;
+		return "job is complete";
 	} 
 	// ===========================================================================// 
 	// ! Core worker functions                                                    //
