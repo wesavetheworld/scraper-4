@@ -73,12 +73,6 @@ class workerCore
 				utilities::notate("return_code: ".$this->gm->returnCode());
 				break;
 			} 
-			// If job was completed successfully 
-			else
-			{
-				// Log current status
-				utilities::notate("job completed"); 				
-			} 
 		}
 	}	
 
