@@ -50,7 +50,7 @@
 		 //$worker = new load('worker', $job);
 		sleep(3);	
 		//echo "my pid: ".getmypid()."\n";
-		exec("kill ".getmypid());
+		//exec("kill ".getmypid());
 
 
 		 // return false;
