@@ -50,7 +50,8 @@
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
 		sleep(3);	
-		return false;
+		exec("kill -9 ".getmypid());
+
 		 // return false;
 		//$job->sendFail();
 
