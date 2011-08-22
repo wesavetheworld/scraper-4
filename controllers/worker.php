@@ -402,13 +402,6 @@ class worker
 			$this->items->updateDomains();  			
 		}				
 	}	
-
-	// Compare run time to max execution time
-	private function checkTimeOut()
-	{
-		if()
-		
-	}
 }	    
 
 

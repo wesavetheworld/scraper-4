@@ -21,7 +21,7 @@
    	// ===========================================================================// 
 	// ! General settings                                                         //
 	// ===========================================================================//		 
-	echo "config loaded!";
+
 	// Build array of required arguments
 	$requiredArgs = array('engine'=>ENGINE, 'schedule'=>SCHEDULE, 'keyword amount'=>KEYWORD_AMOUNT);
     
