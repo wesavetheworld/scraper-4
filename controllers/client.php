@@ -126,7 +126,7 @@ class client
 					$data = serialize($data);
 					
 					// Define a new high priority job for current batch
-				   	$gmclient->addTask($task, $data, null, $task."_".$job++."_".time());						  		
+				   	$gmclient->addTaskBackground($task, $data, null, $task."_".$job++."_".time());						  		
 
 					// Create the jobs
 		    		$gmclient->runTasks();					
