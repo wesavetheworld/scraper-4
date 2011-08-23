@@ -90,7 +90,7 @@ class workerCore
 		 //$worker = new load('worker', $job);
 
 echo "failing now...\n";
-exit();		
+//exit();		
 		 // return false;
 		// $job->sendFail();
 
