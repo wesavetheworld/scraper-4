@@ -337,7 +337,6 @@ class scraper
 			// Close out current curl 
 			curl_close($this->ch[$i]);
 		}
-			die();		
 	}
 	
 	// Sort proxy errors into correct arrays for later update
