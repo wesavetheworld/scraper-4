@@ -38,8 +38,8 @@
 	define("SEARCH_DEPTH", 5);	
 	
 	// What ranking to switch scraping from 10/100 results
-	define("NUM_SWITCH_THRESHHOLD", 49);
-	
+	define("NUM_SWITCH_THRESHHOLD", 29);
+		
 	// The amount of sequential calibrations before stopping
 	define("MAX_CALIBRATIONS", 2);	
 	
