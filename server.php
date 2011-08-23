@@ -55,16 +55,8 @@
 		{
 			define("JOB_FUNCTION", $argv[3]);
 		}	
-		
-		
-		if($core == "worker")
-		{
-			// Include main router
-			include("core/test.core.php");				
-		}	
-		else
-		{
-			// Include main router
+
+					// Include main router
 			include("core/$core.core.php");	
 					
 			// Instantiate core
@@ -72,5 +64,22 @@
 
 			// Run the instance daemon daemon
 			$type->daemon();
-		}				
+		
+		
+		// if($core == "worker")
+		// {
+		// 	// Include main router
+		// 	include("core/test.core.php");				
+		// }	
+		// else
+		// {
+		// 	// Include main router
+		// 	include("core/$core.core.php");	
+					
+		// 	// Instantiate core
+		// 	$type = new $class();
+
+		// 	// Run the instance daemon daemon
+		// 	$type->daemon();
+		// }				
 	}	

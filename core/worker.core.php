@@ -88,6 +88,7 @@ class workerCore
 		 
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
+
 echo "failing now...\n";
 exit();		
 		 // return false;
