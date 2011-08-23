@@ -332,6 +332,8 @@ class scraper
 			
 			// Check headers for errors (302,407, blank response)
 			$this->checkHeaders($i);
+
+			die();
 			
 			// Remove current curl handle
 			curl_multi_remove_handle($this->mh, $this->ch[$i]);
@@ -346,9 +348,9 @@ class scraper
 	{   
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
-		
+
 		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-		echo "\nheader: ".$this->results[$i]['httpInfo']['http_code']; 	
+		echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n\n"; 	
 
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
