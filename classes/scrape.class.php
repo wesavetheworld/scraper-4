@@ -311,8 +311,6 @@ class scraper
 			// Attach any cUrl errors to output
 			$this->results[$i]['curlError'] = curl_error($this->ch[$i]);
 
-			echo $this->results[$i]['curlError']."\n";
-
 			// Set the output data
 			$this->results[$i]['output'] = curl_multi_getcontent($this->ch[$i]); 
 						
@@ -349,7 +347,13 @@ class scraper
 		$this->scrapesTotal++;
 
 		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-		echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n\n"; 	
+		echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
+		if($this->results[$i]['curlError'])
+		{
+			echo "error: ".$this->results[$i]['curlError']."\n";
+		}
+		echo "\n";
+
 
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
@@ -378,6 +382,7 @@ class scraper
 			
 			// Increment the amount of failed scrapes
 			$this->scrapesBad++;
+
 			return false;
 		}
 		   	
