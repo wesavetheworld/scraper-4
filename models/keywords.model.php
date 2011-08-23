@@ -481,28 +481,18 @@ class keyword
 	// Determine whether to grab 10 or 100 results per search 
 	public function setResultsCount()
 	{    
-		if($this->lastRank > NUM_SWITCH_THRESHHOLD && $this->engine != 'bing' || $this->lastRank == 0)
-		{
+		// If last ranking was below the 10/100 switch
+		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->engine == 'bing')
+		{  
 			// Search by 10 results
-			$num = 100;		
-		}	
+			$num = 10;
+		}
+		// Last ranking was over threshhold
 		else
 		{
 			// Search by 100 results
-			$num = 10;				
-		}	 
-		// // If last ranking was below the 10/100 switch
-		// if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->engine == 'bing')
-		// {  
-		// 	// Search by 10 results
-		// 	$num = 10;
-		// }
-		// // Last ranking was over threshhold
-		// else
-		// {
-		// 	// Search by 100 results
-		// 	$num = 100;
-		// } 
+			$num = 100;
+		} 
 						 
 		// Set search result total
 		$this->resultCount = $num;
