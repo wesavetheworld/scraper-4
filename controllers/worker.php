@@ -138,6 +138,9 @@ class worker
 								
 		// Execute the scraping
 		$this->scrape->curlExecute();	
+
+		// Update status of proxies uses in scraping
+		$this->updateProxies()		
 	}
 
 	private function parseContent()
@@ -274,7 +277,7 @@ class worker
 	public function getUrls($items)
 	{    
 		// Get proxies
-		$proxies = $this->getProxies(count($items));
+		$this->getProxies(count($items));
 
 		// Loop through each keyword
 		foreach($items as $key => &$item)
@@ -305,10 +308,10 @@ class worker
 					if(!$item->proxy)
 					{
 						// Add keywords proxy to list to be used for scraping	
-						$proxies[$item->searchHash] = current($proxies);	
+						$proxies[$item->searchHash] = current($this->proxies);	
 
 						// Move to next proxy
-						next($proxies);		
+						next($this->proxies);		
 					}		
 					
 					// This is a new search
@@ -324,13 +327,23 @@ class worker
 	public function getProxies($count)
 	{
 		// Instantiate new proxies object
-		$proxies = new proxies($this->engine);
+		$this->proxies = new proxies($this->engine);
 
 		// Select proxies for use
-		$proxies->selectProxies($count);		
+		$this->proxies->selectProxies($count);		
+	}
 
-		// Return the proxy array
-		return $proxies->proxies;
+	public function updateProxies()
+	{
+		// Transfer proxy statuses from scraper class to proxy model
+		$this->proxy->proxiesBlocked = $this->scrape->proxiesBlocked
+		$this->proxy->proxiesDenied = $this->scrape->proxiesDenied
+		$this->proxy->proxiesTimeout = $this->scrape->proxiesTimeout
+		$this->proxy->proxiesDead = $this->scrape->proxiesDead
+		$this->proxy->proxiesGood = $this->scrape->proxiesGood
+
+		// Update proxy database
+		$this->proxy->updateProxies();
 	}
     
 	// Load the correct source for the keyword's search results
