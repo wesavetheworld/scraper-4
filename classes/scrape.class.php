@@ -49,7 +49,7 @@ class scraper
 	public $scrapesBad = 0; 
 	
 	// The amount of scrapes that succeed
-	public $scrapesGood = 0;
+	private $scrapesGood = 0;
 
 	// The total amount of new scrapes performed
 	private $scrapesTotal = 0;	
@@ -328,8 +328,7 @@ class scraper
 	// *****************************************************************************
 	private function curlContentExtract()
 	{
-		$loop = 0;
-		
+	
 	    // Loop through url array and get already scraped content
 		foreach($this->urls as $i => $url)
 		{                                          			
@@ -362,11 +361,11 @@ class scraper
 			if($this->proxy_use)
 			{
 				// Add proxy info to results array
-				$this->results[$i]['proxy_info']['proxy'] = $this->proxies[$loop]['proxy'];
-				$this->results[$i]['proxy_info']['port'] = $this->proxies[$loop]['port'];
-				$this->results[$i]['proxy_info']['username'] = $this->proxies[$loop]['username'];
-				$this->results[$i]['proxy_info']['password'] = $this->proxies[$loop]['password'];
-				$this->results[$i]['proxy_info']['source'] = $this->proxies[$loop]['source'];  
+				$this->results[$i]['proxy_info']['proxy'] = $this->proxies[$i]['proxy'];
+				$this->results[$i]['proxy_info']['port'] = $this->proxies[$i]['port'];
+				$this->results[$i]['proxy_info']['username'] = $this->proxies[$i]['username'];
+				$this->results[$i]['proxy_info']['password'] = $this->proxies[$i]['password'];
+				$this->results[$i]['proxy_info']['source'] = $this->proxies[$i]['source'];  
 			}   
 			
 			// Check headers for errors (302,407, blank response)
@@ -377,9 +376,6 @@ class scraper
 			
 			// Close out current curl 
 			curl_close($this->ch[$i]);
-			
-			// Increment loop counter
-			$loop++;
 		}
 	}
 	
