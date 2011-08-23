@@ -388,6 +388,8 @@ class scraper
 				{
 					// Add proxy to blocked list
 					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
+
+					echo "blocked proxy: ".$this->proxies[$i]['proxy']."\n";
 				}	
 			}  
 			else
