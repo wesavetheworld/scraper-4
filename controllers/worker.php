@@ -129,6 +129,9 @@ class worker
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
+		echo "total: ".$this->total."\n";
+		echo "total: ".$this->items->total."\n";
+
 		print_r($this->items);
 		die();
 
