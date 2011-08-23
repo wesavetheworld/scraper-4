@@ -328,7 +328,6 @@ class scraper
 	// *****************************************************************************
 	private function curlContentExtract()
 	{
-	
 	    // Loop through url array and get already scraped content
 		foreach($this->urls as $i => $url)
 		{                                          			
@@ -357,17 +356,6 @@ class scraper
 				$this->results[$i]['output'] = $this->results[$i]['output'][1];
 			}   
 			
-			// If proxy use on
-			if($this->proxy_use)
-			{
-				// Add proxy info to results array
-				$this->results[$i]['proxy_info']['proxy'] = $this->proxies[$i]['proxy'];
-				$this->results[$i]['proxy_info']['port'] = $this->proxies[$i]['port'];
-				$this->results[$i]['proxy_info']['username'] = $this->proxies[$i]['username'];
-				$this->results[$i]['proxy_info']['password'] = $this->proxies[$i]['password'];
-				$this->results[$i]['proxy_info']['source'] = $this->proxies[$i]['source'];  
-			}   
-			
 			// Check headers for errors (302,407, blank response)
 			$this->checkHeaders($i);
 			
@@ -382,6 +370,8 @@ class scraper
 	// Sort proxy errors into correct arrays for later update
 	private function checkHeaders($i)
 	{   
+		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
+		
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
@@ -397,13 +387,13 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to blocked list
-					$this->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
 				}	
 			}  
 			else
 			{
 				// Add proxy to timeout list
-				$this->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];				
+				$this->proxiesTimeout[] = $this->proxies[$i]['proxy'];				
 			}
 
 			//echo "\nThere was an error: ".$this->results[$i]['curlError']."\n";
@@ -423,7 +413,7 @@ class scraper
 			$this->results[$i]['status'] = 'success';
 			
 			// Add proxy used to good proxy array
-			$this->proxiesGood[] = $this->results[$i]['proxy_info']['proxy'];			
+			$this->proxiesGood[] = $this->proxies[$i]['proxy'];			
 			
 			// Increment the amount of successful scrapes
 			$this->scrapesGood++;						
@@ -441,14 +431,14 @@ class scraper
 					if($this->proxy_use)
 					{			
 						// Add proxy to timeout list
-						$this->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];
+						$this->proxiesTimeout[] = $this->proxies[$i]['proxy'];
 					}	
 				}
 				// Not a timeout response
 				else
 				{
 					// Nothing returned  from proxy, just dead
-					$this->proxiesDead[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesDead[] = $this->proxies[$i]['proxy'];
 				}
 			}			
 			// If error code 302 block encountered
@@ -460,7 +450,7 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to blocked list
-					$this->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
 				}	
 			}  
 			// If error code 407 auth encountered
@@ -470,7 +460,7 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to denied list
-					$this->proxiesDenied[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesDenied[] = $this->proxies[$i]['proxy'];
 				}	
    			}
 			// Not a timeout response
@@ -490,7 +480,7 @@ class scraper
 		 	// Log current state
 			//utilities::notate("\tcode: ".$this->results[$i]['httpInfo']['http_code'], "scrape.log");					
 			//utilities::notate("\tsize: ".$this->results[$i]['httpInfo']['size_download'], "scrape.log");
-			//utilities::notate("\tproxy source: ".$this->results[$i]['proxy_info']['source'], "scrape.log");			 
+			//utilities::notate("\tproxy source: ".$this->proxies[$i]['source'], "scrape.log");			 
 		} 	
 	}
 	
