@@ -58,6 +58,9 @@
 		// Data model to use
 		define("ONLY_USER", $argv[6]);															
 	}
+
+	// What ranking to switch scraping from 10/100 results
+	define("NUM_SWITCH_THRESHHOLD", 29);	
 	
 	// ===========================================================================// 
 	// ! General settings                                                         //
