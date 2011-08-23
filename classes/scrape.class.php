@@ -332,8 +332,6 @@ class scraper
 			
 			// Check headers for errors (302,407, blank response)
 			$this->checkHeaders($i);
-
-			die();
 			
 			// Remove current curl handle
 			curl_multi_remove_handle($this->mh, $this->ch[$i]);
@@ -341,6 +339,7 @@ class scraper
 			// Close out current curl 
 			curl_close($this->ch[$i]);
 		}
+			die();		
 	}
 	
 	// Sort proxy errors into correct arrays for later update
