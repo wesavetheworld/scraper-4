@@ -345,14 +345,14 @@ class scraper
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
-			echo "url: ".$this->urls[$i]."\n";
-			echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-			echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
+			// echo "url: ".$this->urls[$i]."\n";
+			// echo "proxy: ".$this->proxies[$i]['proxy']."\n";
+			// echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
 			if($this->results[$i]['curlError'])
 			{
-				echo "error: ".$this->results[$i]['curlError']."\n";
+				//echo "error: ".$this->results[$i]['curlError']."\n";
 			}
-			echo "\n";
+			//echo "\n";
 
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
@@ -366,7 +366,7 @@ class scraper
 					// Add proxy to blocked list
 					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
 
-					echo "blocked proxy: ".$this->proxies[$i]['proxy']."\n";
+					//echo "blocked proxy: ".$this->proxies[$i]['proxy']."\n";
 				}	
 			}  
 			else
