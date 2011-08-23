@@ -131,6 +131,7 @@ class worker
 		$prepare = $this->getUrls($this->items->{$this->model}); 	
 
 		print_r($prepare);
+		die();
 
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
@@ -329,7 +330,10 @@ class worker
 		$proxies = new proxies($this->engine);
 
 		// Select proxies for use
-		return $proxies->selectProxies($count);		
+		$proxies->selectProxies($count);		
+
+		// Return the proxy array
+		return $proxies->proxies;
 	}
     
 	// Load the correct source for the keyword's search results
