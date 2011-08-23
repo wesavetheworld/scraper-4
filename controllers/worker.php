@@ -311,12 +311,12 @@ class worker
 					{
 						$item->proxy = current($this->proxies->proxies);
 
-						// Add keywords proxy to list to be used for scraping	
-						$proxies[$item->searchHash] = $item->proxy;	
-
 						// Move to next proxy
 						next($this->proxies->proxies);	
-					}		
+					}	
+						
+					// Add keywords proxy to list to be used for scraping	
+					$proxies[$item->searchHash] = $item->proxy;						
 					
 					// This is a new search
 					$item->searchType = "new";

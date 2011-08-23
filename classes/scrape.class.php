@@ -176,14 +176,14 @@ class scraper
 	// **
 	// ** @return		Nothing
 	// *****************************************************************************
-	private function proxySelect()
-	{
-		// Set current proxy
-		$this->proxy = $this->proxies[$this->proxyKey];   
+	// private function proxySelect()
+	// {
+	// 	// Set current proxy
+	// 	$this->proxy = $this->proxies[$this->proxyKey];   
 		
-		// Increment key
-		$this->proxyKey++;
-	}
+	// 	// Increment key
+	// 	$this->proxyKey++;
+	// }
 	
 	// *****************************************************************************
 	// ** curlAgentRandom
@@ -345,15 +345,14 @@ class scraper
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
-		echo "url: ".$this->urls[$i]."\n";
-		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-		echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
-		if($this->results[$i]['curlError'])
-		{
-			echo "error: ".$this->results[$i]['curlError']."\n";
-		}
-		echo "\n";
-
+			echo "url: ".$this->urls[$i]."\n";
+			echo "proxy: ".$this->proxies[$i]['proxy']."\n";
+			echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
+			if($this->results[$i]['curlError'])
+			{
+				echo "error: ".$this->results[$i]['curlError']."\n";
+			}
+			echo "\n";
 
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
