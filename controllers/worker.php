@@ -129,6 +129,9 @@ class worker
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
+		print_r($this->items->{$this->model});
+		die();
+
 		// Build an array of search engine urls to scrape and the proxies needed
 		$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total); 	
 
