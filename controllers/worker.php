@@ -130,7 +130,7 @@ class worker
 		$this->scrape->task = $this->task;
 
 		// Build an array of search engine urls to scrape and the proxies needed
-		$prepare = $this->getUrls($this->items->{$this->model}); 	
+		$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total); 	
 
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
@@ -276,12 +276,12 @@ class worker
 	// ===========================================================================//	
 	
 	// Loop through keywords and return array of urls to scrape
-	public function getUrls($items)
+	public function getUrls($items, $total)
 	{    
 		// Get proxies
 		//$this->getProxies($items->total);
 
-		echo "urls: ".count($items->total)."\n";
+		echo "urls: ".count($total)."\n";
 		print_r($this->proxies->proxies);
 		die();
 
