@@ -129,12 +129,6 @@ class worker
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
-		echo "total: ".$this->total."\n";
-		echo "total: ".$this->items->total."\n";
-
-		//print_r($this->items);
-		die();
-
 		// Build an array of search engine urls to scrape and the proxies needed
 		$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total); 	
 
@@ -285,9 +279,9 @@ class worker
 	public function getUrls($items, $total)
 	{    
 		// Get proxies
-		//$this->getProxies($items->total);
+		$this->getProxies($total);
 
-		echo "urls: ".count($total)."\n";
+		echo "urls: ".$total."\n";
 		print_r($this->proxies->proxies);
 		die();
 
