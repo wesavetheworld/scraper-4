@@ -348,8 +348,6 @@ class worker
 
 		// Update proxy database
 		$this->proxies->updateProxyUse();
-
-		die("\nupdated proxies\n");
 	}
     
 	// Load the correct source for the keyword's search results
