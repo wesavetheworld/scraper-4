@@ -345,6 +345,7 @@ class scraper
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
+		echo "url: ".$this->urls[$i]."\n";
 		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
 		echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
 		if($this->results[$i]['curlError'])
