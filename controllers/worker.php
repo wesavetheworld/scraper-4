@@ -56,6 +56,9 @@ class worker
 	
 	public function worker($data)
 	{  	
+		sleep(30);
+		exit("\nworker timed out\n");
+
 		// Construct job object
 		$this->buildJob($data);	
 		        		        
@@ -71,8 +74,7 @@ class worker
 			// If job has run for too long
 			if(utilities::benchmark('checkTimeOut'))
 			{
-				echo "\nworker timed out\n";
-				return false;
+				exit("\nworker timed out\n");
 			}
 		}
 

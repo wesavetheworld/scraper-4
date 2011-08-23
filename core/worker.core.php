@@ -84,22 +84,13 @@ class workerCore
 	public static function rankings($job)
 	{	
 		 // Build job data array
-		// $job = array('model'=>'keywords', 'jobData'=>$job->workload());
+		$job = array('model'=>'keywords', 'jobData'=>$job->workload());
 		 
 		 // Instantiate new worker	
-		 //$worker = new load('worker', $job);
-
-sleep(30);
-echo "failing now...\n";
-exit();		
-		 // return false;
-		// $job->sendFail();
-
-
-		 //return false;
+		 $worker = new load('worker', $job);
 
 		 // Finalize job (success/failure)
-		 //return $job->complete;
+		 return $job->complete;
 	}
 
 	// Collect domain pagerank
@@ -137,21 +128,4 @@ exit();
 
 		 return $job->results;
 	}	
-
-	// ===========================================================================// 
-	// ! Supporting methods                                                       //
-	// ===========================================================================//	
-
-	// Finalize the job (return success or failure)
-	public function finish($status)
-	{
-		// If job failed
-		if(!$status)
-		{
-
-		}
-
-		// Job was a success
-		return true;
-	}
 }	
