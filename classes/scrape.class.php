@@ -104,7 +104,7 @@ class scraper
 			// $this->proxies = new proxies($this->engine);
 
 			// // Select proxies for use
-			// $this->proxies->selectProxies(count($this->urls));
+			// $this->selectProxies(count($this->urls));
 		}
 		
 		// Reset the proxy array back to the beginning
@@ -161,7 +161,7 @@ class scraper
 		// Update each proxyies status that was uses
 		if($this->engine != "bing")
 		{
-			$this->proxies->updateProxyUse();
+			//HEREHERHRE$this->updateProxyUse();
 		}	
 	}
 	
@@ -176,7 +176,7 @@ class scraper
 	// 	$this->proxies = new proxies($this->engine);
 
 	// 	// Select proxies for use
-	// 	$this->proxies->selectProxies($totalProxies, $blockedProxies);
+	// 	$this->selectProxies($totalProxies, $blockedProxies);
 
 	// } 
 	
@@ -198,7 +198,7 @@ class scraper
 	private function proxySelect()
 	{
 		// Set current proxy
-		$this->proxy = $this->proxies->proxies[$this->proxyKey];   
+		$this->proxy = $this->proxies[$this->proxyKey];   
 		
 		// Increment key
 		$this->proxyKey++;
@@ -362,11 +362,11 @@ class scraper
 			if($this->proxy_use)
 			{
 				// Add proxy info to results array
-				$this->results[$i]['proxy_info']['proxy'] = $this->proxies->proxies[$loop]['proxy'];
-				$this->results[$i]['proxy_info']['port'] = $this->proxies->proxies[$loop]['port'];
-				$this->results[$i]['proxy_info']['username'] = $this->proxies->proxies[$loop]['username'];
-				$this->results[$i]['proxy_info']['password'] = $this->proxies->proxies[$loop]['password'];
-				$this->results[$i]['proxy_info']['source'] = $this->proxies->proxies[$loop]['source'];  
+				$this->results[$i]['proxy_info']['proxy'] = $this->proxies[$loop]['proxy'];
+				$this->results[$i]['proxy_info']['port'] = $this->proxies[$loop]['port'];
+				$this->results[$i]['proxy_info']['username'] = $this->proxies[$loop]['username'];
+				$this->results[$i]['proxy_info']['password'] = $this->proxies[$loop]['password'];
+				$this->results[$i]['proxy_info']['source'] = $this->proxies[$loop]['source'];  
 			}   
 			
 			// Check headers for errors (302,407, blank response)
@@ -401,13 +401,13 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to blocked list
-					$this->proxies->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
 				}	
 			}  
 			else
 			{
 				// Add proxy to timeout list
-				$this->proxies->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];				
+				$this->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];				
 			}
 
 			//echo "\nThere was an error: ".$this->results[$i]['curlError']."\n";
@@ -427,7 +427,7 @@ class scraper
 			$this->results[$i]['status'] = 'success';
 			
 			// Add proxy used to good proxy array
-			$this->proxies->proxiesGood[] = $this->results[$i]['proxy_info']['proxy'];			
+			$this->proxiesGood[] = $this->results[$i]['proxy_info']['proxy'];			
 			
 			// Increment the amount of successful scrapes
 			$this->scrapesGood++;						
@@ -445,14 +445,14 @@ class scraper
 					if($this->proxy_use)
 					{			
 						// Add proxy to timeout list
-						$this->proxies->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];
+						$this->proxiesTimeout[] = $this->results[$i]['proxy_info']['proxy'];
 					}	
 				}
 				// Not a timeout response
 				else
 				{
 					// Nothing returned  from proxy, just dead
-					$this->proxies->proxiesDead[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesDead[] = $this->results[$i]['proxy_info']['proxy'];
 				}
 			}			
 			// If error code 302 block encountered
@@ -464,7 +464,7 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to blocked list
-					$this->proxies->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesBlocked[] = $this->results[$i]['proxy_info']['proxy'];
 				}	
 			}  
 			// If error code 407 auth encountered
@@ -474,7 +474,7 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to denied list
-					$this->proxies->proxiesDenied[] = $this->results[$i]['proxy_info']['proxy'];
+					$this->proxiesDenied[] = $this->results[$i]['proxy_info']['proxy'];
 				}	
    			}
 			// Not a timeout response
