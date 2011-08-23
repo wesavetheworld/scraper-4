@@ -56,9 +56,6 @@ class worker
 	
 	public function worker($data)
 	{  	
-		sleep(30);
-		exit("\nworker timed out\n");
-
 		// Construct job object
 		$this->buildJob($data);	
 		        		        
@@ -77,8 +74,6 @@ class worker
 				exit("\nworker timed out\n");
 			}
 		}
-
-		echo $this->model." updated: ".count($this->items->updated);
 
 		// Update DB with new data
 		$this->updateItems();
