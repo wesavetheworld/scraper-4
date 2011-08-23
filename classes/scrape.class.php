@@ -247,8 +247,6 @@ class scraper
 			{
 				//$this->proxySelect();
 				$this->proxy = $this->proxies[$i];
-				echo "proxy: ".$this->proxy['proxy']."\n\n";
-				die();
 			}
 							
 			$this->ch[$i] = curl_init($url);
