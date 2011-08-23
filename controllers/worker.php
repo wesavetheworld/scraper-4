@@ -281,6 +281,9 @@ class worker
 		// Get proxies
 		$this->getProxies(count($items));
 
+		print_r($this->proxies->proxies);
+		die();
+
 		// Loop through each keyword
 		foreach($items as $key => &$item)
 		{  
