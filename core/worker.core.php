@@ -89,8 +89,9 @@ class workerCore
 		 // Instantiate new worker	
 		 //$worker = new load('worker', $job);
 
+sleep(30);
 echo "failing now...\n";
-//exit();		
+exit();		
 		 // return false;
 		// $job->sendFail();
 
