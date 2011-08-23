@@ -317,7 +317,7 @@ class worker
 						// Move to next proxy
 						next($this->proxies);	
 						
-						echo "proxy added to keyword: ".$	
+						echo "proxy added to keyword: ".$item->proxy."\n";	
 					}		
 					
 					// This is a new search
