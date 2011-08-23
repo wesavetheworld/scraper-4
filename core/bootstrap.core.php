@@ -380,35 +380,35 @@ class bootstrap
 			$supervisord.= "stdout_logfile=/home/ec2-user/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=0\n"; 
+			$supervisord.= "numprocs=8\n"; 
 			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 
-			// // Add workers for ranking updates
-			// $supervisord.= "[program:GoogleNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewGoogle rankings\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=1\n"; 
-			// $supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
+			// Add workers for ranking updates
+			$supervisord.= "[program:GoogleNew]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewGoogle rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 			
-			// // Add workers for ranking updates
-			// $supervisord.= "[program:BingNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewBing rankings\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=1\n"; 
-			// $supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";
+			// Add workers for ranking updates
+			$supervisord.= "[program:BingNew]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewBing rankings\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";
 			
-			// // Check system status 
-			// $supervisord.= "[program:monitorSystem]\n";
-			// $supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem worker\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=1\n"; 
-			// $supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";																							
+			// Check system status 
+			$supervisord.= "[program:monitorSystem]\n";
+			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem worker\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";																
 		}	
 
 		// Write new supervisord config file
