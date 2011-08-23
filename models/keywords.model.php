@@ -481,7 +481,7 @@ class keyword
 	// Determine whether to grab 10 or 100 results per search 
 	public function setResultsCount()
 	{    
-		if($this->lastRank > NUM_SWITCH_THRESHHOLD)
+		if($this->lastRank > NUM_SWITCH_THRESHHOLD && $this->engine != 'bing' || $this->lastRank == 0)
 		{
 			// Search by 10 results
 			$num = 100;		
