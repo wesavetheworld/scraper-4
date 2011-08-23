@@ -34,22 +34,22 @@ class scraper
 	// ===========================================================================//	
 	
  	// Will contain any blocked proxies
-	private $proxiesBlocked = array(); 
+	public $proxiesBlocked = array(); 
 	
 	// Will contain any proxies that returned 407 auth errors
-	private $proxiesDenied = array();  
+	public $proxiesDenied = array();  
 
 	// Will contain any proxies that timeout
-	private $proxiesTimeout = array(); 
+	public $proxiesTimeout = array(); 
 	
 	// Will contain any proxies that timeout
-	private $proxiesDead = array(); 
+	public $proxiesDead = array(); 
 		
 	// The amount of scrapes that fail
-	private $scrapesBad = 0; 
+	public $scrapesBad = 0; 
 	
 	// The amount of scrapes that succeed
-	private $scrapesGood = 0;
+	public $scrapesGood = 0;
 
 	// The total amount of new scrapes performed
 	private $scrapesTotal = 0;	
