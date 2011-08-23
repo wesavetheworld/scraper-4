@@ -130,9 +130,6 @@ class worker
 		// Build an array of search engine urls to scrape and the proxies needed
 		$prepare = $this->getUrls($this->items->{$this->model}); 	
 
-		print_r($prepare);
-		die();
-
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
 		
