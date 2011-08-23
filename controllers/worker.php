@@ -281,6 +281,7 @@ class worker
 		// Get proxies
 		$this->getProxies(count($items));
 
+		echo "urls: ".count($items)."\n";
 		print_r($this->proxies->proxies);
 		die();
 
