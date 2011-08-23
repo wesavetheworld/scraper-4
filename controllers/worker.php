@@ -83,8 +83,6 @@ class worker
 
 		// Job has been completed
 		$this->complete = TRUE;
-
-		die('finished!! :)');
 	} 
 	// ===========================================================================// 
 	// ! Core worker functions                                                    //
