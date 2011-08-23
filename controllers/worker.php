@@ -333,6 +333,9 @@ class worker
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
 
+		// Set the engine to use for blocked status
+		$this->proxies->engine = $this->engine;
+
 		// Select proxies for use
 		$this->proxies->selectProxies($count);		
 	}
