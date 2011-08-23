@@ -493,6 +493,9 @@ class keyword
 			// Search by 100 results
 			$num = 100;
 		} 
+		echo "threshold: ".NUM_SWITCH_THRESHHOLD."\n";
+		echo "engine: ".$this->engine."\n"; 
+		echo "num: ".$num."\n\n";		
 						 
 		// Set search result total
 		$this->resultCount = $num;
