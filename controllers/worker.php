@@ -140,7 +140,7 @@ class worker
 		$this->scrape->curlExecute();	
 
 		// Update status of proxies uses in scraping
-		$this->updateProxies()		
+		$this->updateProxies();		
 	}
 
 	private function parseContent()
