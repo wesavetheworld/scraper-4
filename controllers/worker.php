@@ -343,7 +343,7 @@ class worker
 		$this->proxy->proxiesGood = $this->scrape->proxiesGood;
 
 		// Update proxy database
-		$this->proxy->updateProxies();
+		$this->proxy->updateProxyUse();
 	}
     
 	// Load the correct source for the keyword's search results
