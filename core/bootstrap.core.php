@@ -380,7 +380,7 @@ class bootstrap
 			$supervisord.= "stdout_logfile=/home/ec2-user/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=0\n"; 
+			$supervisord.= "numprocs=10\n"; 
 			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 
 			// // Add workers for ranking updates
