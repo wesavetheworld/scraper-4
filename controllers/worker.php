@@ -336,11 +336,11 @@ class worker
 	public function updateProxies()
 	{
 		// Transfer proxy statuses from scraper class to proxy model
-		$this->proxy->proxiesBlocked = $this->scrape->proxiesBlocked
-		$this->proxy->proxiesDenied = $this->scrape->proxiesDenied
-		$this->proxy->proxiesTimeout = $this->scrape->proxiesTimeout
-		$this->proxy->proxiesDead = $this->scrape->proxiesDead
-		$this->proxy->proxiesGood = $this->scrape->proxiesGood
+		$this->proxy->proxiesBlocked = $this->scrape->proxiesBlocked;
+		$this->proxy->proxiesDenied = $this->scrape->proxiesDenied;
+		$this->proxy->proxiesTimeout = $this->scrape->proxiesTimeout;
+		$this->proxy->proxiesDead = $this->scrape->proxiesDead;
+		$this->proxy->proxiesGood = $this->scrape->proxiesGood;
 
 		// Update proxy database
 		$this->proxy->updateProxies();
