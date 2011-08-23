@@ -309,11 +309,15 @@ class worker
 					// If no proxy set for this keyword/url yet
 					if(!$item->proxy)
 					{
+						$item->proxy = current($this->proxies);
+
 						// Add keywords proxy to list to be used for scraping	
-						$proxies[$item->searchHash] = current($this->proxies);	
+						$proxies[$item->searchHash] = $item->proxy;	
 
 						// Move to next proxy
-						next($this->proxies);		
+						next($this->proxies);	
+						
+						echo "proxy added to keyword: ".$	
 					}		
 					
 					// This is a new search
