@@ -223,14 +223,6 @@ class scraper
 		// Loop through urls and build multi curl request
 		foreach($this->urls as $i => $url)
 		{
-			// Get a fresh proxy
-			if($this->proxy_use)
-			{
-				//$this->proxySelect();
-				$this->proxy = $this->proxies[$i];
-
-				echo "url: $url \nproxy: ".$this->proxy['proxy']."\n\n";
-			}
 							
 			$this->ch[$i] = curl_init($url);
 			
@@ -275,9 +267,9 @@ class scraper
 					curl_setopt($this->ch[$i], CURLOPT_HTTPPROXYTUNNEL, TRUE);
 				}
 		
-				curl_setopt($this->ch[$i], CURLOPT_PROXY, $this->proxy['proxy']);
-				curl_setopt($this->ch[$i], CURLOPT_PROXYPORT, $this->proxy['port']);
-				curl_setopt($this->ch[$i], CURLOPT_PROXYUSERPWD, $this->proxy['username'].":".$this->proxy['password']);
+				curl_setopt($this->ch[$i], CURLOPT_PROXY, $this->proxies[$i]['proxy']);
+				curl_setopt($this->ch[$i], CURLOPT_PROXYPORT, $this->proxies[$i]['port']);
+				curl_setopt($this->ch[$i], CURLOPT_PROXYUSERPWD, $this->proxies[$i]['username'].":".$this->proxies[$i]['password']);
 			}
 			
 			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
@@ -299,10 +291,7 @@ class scraper
 			}
 			
 			curl_multi_add_handle($this->mh, $this->ch[$i]);	
-		}
-
-		die();
-		
+		}		
 	}
 	
 	// *****************************************************************************
@@ -355,12 +344,11 @@ class scraper
 	// Sort proxy errors into correct arrays for later update
 	private function checkHeaders($i)
 	{   
-		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
-
-		 echo "\nheader: ".$this->results[$i]['httpInfo']['http_code']; 	
+		
+		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
+		echo "\nheader: ".$this->results[$i]['httpInfo']['http_code']; 	
 
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
