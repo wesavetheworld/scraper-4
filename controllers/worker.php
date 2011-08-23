@@ -132,7 +132,7 @@ class worker
 		echo "total: ".$this->total."\n";
 		echo "total: ".$this->items->total."\n";
 
-		print_r($this->items);
+		//print_r($this->items);
 		die();
 
 		// Build an array of search engine urls to scrape and the proxies needed
