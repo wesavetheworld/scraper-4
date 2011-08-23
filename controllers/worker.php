@@ -316,8 +316,6 @@ class worker
 
 						// Move to next proxy
 						next($this->proxies->proxies);	
-						
-						echo "proxy added to keyword: ".$item->proxy['proxy']."\n";	
 					}		
 					
 					// This is a new search

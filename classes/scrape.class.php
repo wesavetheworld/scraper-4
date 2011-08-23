@@ -247,7 +247,7 @@ class scraper
 			{
 				//$this->proxySelect();
 				$this->proxy = $this->proxies[$i];
-				echo "proxy: ".$this->proxy."\n\n";
+				echo "proxy: ".$this->proxy['proxy']."\n\n";
 				die();
 			}
 							
