@@ -281,10 +281,6 @@ class worker
 		// Get proxies
 		$this->getProxies($total);
 
-		echo "urls: ".$total."\n";
-		print_r($this->proxies->proxies);
-		die();
-
 		// Loop through each keyword
 		foreach($items as $key => &$item)
 		{  
