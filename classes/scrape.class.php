@@ -96,6 +96,13 @@ class scraper
 			// Don't continue
 			return false;
 		}
+
+		foreach($this->urls as $i => $url)
+		{
+			echo "url: $url \nproxy: ".$this->proxies[$i]."\n\n";
+		}
+
+		die();
 		
 		// If proxy use is turned on
 		if($this->proxy_use)
