@@ -309,13 +309,13 @@ class worker
 					// If no proxy set for this keyword/url yet
 					if(!$item->proxy)
 					{
-						$item->proxy = current($this->proxies);
+						$item->proxy = current($this->proxies->proxies);
 
 						// Add keywords proxy to list to be used for scraping	
 						$proxies[$item->searchHash] = $item->proxy;	
 
 						// Move to next proxy
-						next($this->proxies);	
+						next($this->proxies->proxies);	
 						
 						echo "proxy added to keyword: ".$item->proxy."\n";	
 					}		
