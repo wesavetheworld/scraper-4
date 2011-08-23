@@ -99,7 +99,7 @@ class scraper
 
 		foreach($this->urls as $i => $url)
 		{
-			echo "url: $url \nproxy: ".$this->proxies[$i]."\n\n";
+			echo "url: $url \nproxy: ".$this->proxies[$i]['proxy']."\n\n";
 		}
 
 		die();
