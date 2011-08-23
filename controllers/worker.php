@@ -279,7 +279,7 @@ class worker
 	public function getUrls($items)
 	{    
 		// Get proxies
-		$this->getProxies($items->total);
+		//$this->getProxies($items->total);
 
 		echo "urls: ".count($items->total)."\n";
 		print_r($this->proxies->proxies);
