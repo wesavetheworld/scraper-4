@@ -96,26 +96,6 @@ class scraper
 			// Don't continue
 			return false;
 		}
-
-		foreach($this->urls as $i => $url)
-		{
-			echo "url: $url \nproxy: ".$this->proxies[$i]['proxy']."\n\n";
-		}
-
-		die();
-		
-		// If proxy use is turned on
-		if($this->proxy_use)
-		{
-			// // Instantiate new proxies object
-			// $this->proxies = new proxies($this->engine);
-
-			// // Select proxies for use
-			// $this->selectProxies(count($this->urls));
-		}
-		
-		// Reset the proxy array back to the beginning
-		$this->proxyKey = 0;
 		
 		// Initialize curl
 		$this->mh = curl_multi_init();	
@@ -164,12 +144,6 @@ class scraper
 		
 		// Clean up the curl_multi handle
 		curl_multi_close($this->mh);
-		
-		// Update each proxyies status that was uses
-		if($this->engine != "bing")
-		{
-			//HEREHERHRE$this->updateProxyUse();
-		}	
 	}
 	
 	// ===========================================================================// 
@@ -254,6 +228,8 @@ class scraper
 			{
 				//$this->proxySelect();
 				$this->proxy = $this->proxies[$i];
+
+				echo "url: $url \nproxy: ".$this->proxy['proxy']."\n\n";
 			}
 							
 			$this->ch[$i] = curl_init($url);
@@ -324,6 +300,8 @@ class scraper
 			
 			curl_multi_add_handle($this->mh, $this->ch[$i]);	
 		}
+
+		die();
 		
 	}
 	
