@@ -96,6 +96,8 @@ class proxies
 			$query = "UPDATE proxies SET blocked_".$this->engine." = 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
+			echo $query;
+
 	 		// Log current state
 			utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
 		}
