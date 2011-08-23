@@ -247,6 +247,8 @@ class scraper
 			{
 				//$this->proxySelect();
 				$this->proxy = $this->proxies[$i];
+				echo "proxy: ".$this->proxy;
+				die();
 			}
 							
 			$this->ch[$i] = curl_init($url);
@@ -371,7 +373,7 @@ class scraper
 	private function checkHeaders($i)
 	{   
 		echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-		
+
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
