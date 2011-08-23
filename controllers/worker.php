@@ -45,6 +45,9 @@ class worker
 
 		// Include scraping class
 		require_once('classes/scrape.class.php'); 	
+
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 		
 		
 		// Reset benchmarking
 		utilities::benchmark(false, false, false, true);		  		   	 			
@@ -124,8 +127,16 @@ class worker
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
+		// Build an array of search engine urls to scrape and the proxies needed
+		$prepare = $this->getUrls($this->items->{$this->model}); 	
+
+		print_r($prepare);
+
 		// Build an array of search engine urls to scrape
-		$this->scrape->urls = $this->getUrls($this->items->{$this->model}); 				
+		$this->scrape->urls = $prepare['urls']; 				
+		
+		// Build an array of proxies to use for scraping
+		$this->scrape->proxies = $prepare['proxies']; 				
 								
 		// Execute the scraping
 		$this->scrape->curlExecute();	
@@ -197,6 +208,12 @@ class worker
 				// Increase search results page for next scrape
 				$item->searchPage++; 						
 			} 
+		}
+		// No scraped content returned
+		else
+		{
+			// Remove proxy used for this item
+			unset($item->proxy);
 		}	
 	}
 
@@ -258,6 +275,9 @@ class worker
 	// Loop through keywords and return array of urls to scrape
 	public function getUrls($items)
 	{    
+		// Get proxies
+		$proxies = $this->getProxies(count($items));
+
 		// Loop through each keyword
 		foreach($items as $key => &$item)
 		{  
@@ -269,7 +289,7 @@ class worker
 			{ 			                     	
 				// If keyword's search hash is unique
 				if(!$urls[$item->url])
-				{    				
+				{    		
 					// Add the keyword's search page url to scraping list
 					$urls[$item->url] = $item->url;   
 				}
@@ -280,21 +300,36 @@ class worker
 				// If keyword's search hash is unique
 				if(!$urls[$item->searchHash])
 				{    				
-					// If no saved search or saved search is from another hour
-					// if(!file_exists($item->searchFile) || date("Y-m-d-G", filemtime($item->searchFile)) != date("Y-m-d-G") || filesize($item->searchFile) < 500)
-					// {      
-						// Add the keyword's search page url to scraping list
-						$urls[$item->searchHash] = $item->url; 
-						
-						// This is a new search
-						$item->searchType = "new";
-					//}
+					// Add the keyword's search page url to scraping list
+					$urls[$item->searchHash] = $item->url; 
+
+					// If no proxy set for this keyword/url yet
+					if(!$item->proxy)
+					{
+						// Add keywords proxy to list to be used for scraping	
+						$proxies[$item->searchHash] = current($proxies);	
+
+						// Move to next proxy
+						next($proxies);		
+					}		
+					
+					// This is a new search
+					$item->searchType = "new";
 				} 
 			}	 	
 		} 
 				
-		// Return the url array
-		return $urls;				
+		// Return the url and proxy arrays
+		return array('urls' => $urls, 'proxies'=> $proxies);				
+	}
+
+	public function getProxies($count)
+	{
+		// Instantiate new proxies object
+		$proxies = new proxies($this->engine);
+
+		// Select proxies for use
+		return $proxies->selectProxies($count);		
 	}
     
 	// Load the correct source for the keyword's search results

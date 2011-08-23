@@ -100,11 +100,11 @@ class scraper
 		// If proxy use is turned on
 		if($this->proxy_use)
 		{
-			// Instantiate new proxies object
-			$this->proxies = new proxies($this->engine);
+			// // Instantiate new proxies object
+			// $this->proxies = new proxies($this->engine);
 
-			// Select proxies for use
-			$this->proxies->selectProxies(count($this->urls));
+			// // Select proxies for use
+			// $this->proxies->selectProxies(count($this->urls));
 		}
 		
 		// Reset the proxy array back to the beginning
@@ -245,7 +245,8 @@ class scraper
 			// Get a fresh proxy
 			if($this->proxy_use)
 			{
-				$this->proxySelect();
+				//$this->proxySelect();
+				$this->proxy = $this->proxies[$i];
 			}
 							
 			$this->ch[$i] = curl_init($url);
