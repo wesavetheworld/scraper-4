@@ -407,6 +407,6 @@ class tasks
 		//file_put_contents(SYSTEM_STATUS, $status);	
 		
 		// Log current state
-		//utilities::notate("\tSystem: $status", "tasks.log");			
+		utilities::notate("\tSystem: $status", "tasks.log");			
 	}	
 }	
