@@ -58,6 +58,15 @@ class clientCore
 				$this->hourAll();
 			}
 
+			// Minute 50 of every hour
+			if(date("i") == "50")
+			{
+				// Run all minute fifty tasks
+				$this->minuteFifty();
+			}			
+
+
+
 			// Every 2 minutes
 			if(intval(ltrim(date("i"), "0")) % 2 == 0)
 			{
@@ -113,22 +122,23 @@ class clientCore
 		$this->run("tasks", "keywordCheckIn");	
 
 		// Get current job Queue total
-		$queue = $this->checkJobQueue('rankingsGoogle');
-		
+		$this->googleJobs = $this->checkJobQueue('rankingsGoogle');
+
+		// If the amount of jobs has not changed for the last 10 minutes
+		if($this->googleJobs == $this->googleJobsLast)
+		{
+			// Restart all workers		
+			$this->run("tasks", "system reset_workers");	
+			
+			// Reset so new jobs will be added
+			$this->googleJobs = 0;						
+		}			
+	
 		// If job queue is empty
-		if(!$queue)
+		if(!$this->googleJobs)
 		{				
 			// Update hourly keyword rankings for google
-			$this->run("client", "rankings 100 google hourly");															
-		}	
-		// Jobs have not finished from last hour
-		else
-		{
-			// Notify admin of overlap
-			utilities::reportErrors("Hourly scraping overlap: $queue jobs remaining");	
-			
-			// Log overlap notice				
-			utilities::notate("Job queue overlap. $queue jobs remaining. Skipped updates this hour", "clientd.log");		  		   	
+			$this->run("client", "rankings 100 google hourly");														
 		}	
 		
 		// If bing instances are on
@@ -145,6 +155,13 @@ class clientCore
 				$this->bingStatus = false;																			
 			}	
 		}				
+	}
+	
+	// Taks that should be run at the 50th minute of every hour
+	private function minuteFifty()
+	{
+		// Get current job Queue total (will be checked again at the start of the next hour)
+		$this->googleJobsLast = $this->checkJobQueue('rankingsGoogle');	
 	}	
 	
 	// Tasks that should be run every 2 minutes
