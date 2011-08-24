@@ -313,7 +313,7 @@ class tasks
 								$this->killSupervisord();		
 
 								// Restart the application
-								$this->restartSupervisordd();
+								$this->restartSupervisord();
 							}
 							elseif($action == "reboot")
 							{
