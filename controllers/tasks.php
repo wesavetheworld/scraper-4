@@ -379,7 +379,7 @@ class tasks
 	private function restartSupervisord()
 	{
 		// Restart supervisord and all of its scripts
-		exec('supervisord');
+		//exec('supervisord &');
 				
 		// Log current state
 		utilities::notate("Restarting supervisord", "tasks.log");		
