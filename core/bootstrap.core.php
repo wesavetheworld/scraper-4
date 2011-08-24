@@ -91,6 +91,9 @@ class bootstrap
 				$this->assignIp(WORKER_IP);	
 			}
 		}	
+
+		// Start system monitor and detach from script
+		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &");
 	}
 
 	// ===========================================================================// 
@@ -321,16 +324,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=10\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";
-			
-			// Check system status 
-			$supervisord.= "[program:monitorSystem]\n";
-			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem bing\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";						
+			$supervisord.= "process_name=%(process_num)s\n";					
 		}	
 		// If this instance is for bing
 		elseif($this->instanceType == "domains")
@@ -360,16 +354,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
-			$supervisord.= "process_name=%(process_num)s\n"; 
-			
-			// Check system status 
-			$supervisord.= "[program:monitorSystem]\n";
-			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem domains\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";					
+			$supervisord.= "process_name=%(process_num)s\n"; 				
 		}				
 		// All other instance types
 		elseif($this->instanceType == "worker")
@@ -399,16 +384,7 @@ class bootstrap
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";
-			
-			// Check system status 
-			$supervisord.= "[program:monitorSystem]\n";
-			$supervisord.= "command=php /home/ec2-user/hub.php tasks monitorSystem worker\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";																
+			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n";															
 		}	
 
 		// Write new supervisord config file
