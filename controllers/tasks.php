@@ -308,10 +308,7 @@ class tasks
 						{
 							// If there is a system message
 							if($action == 'reset')
-							{
-								// Kill all scripts
-								$this->killSupervisord();		
-
+							{		
 								// Restart the application
 								$this->restartSupervisord();
 							}
@@ -402,16 +399,19 @@ class tasks
 		// If supervisord is running
 		if(file_exists('/tmp/supervisord.pid'))
 		{
+			// Get supervisord's pid from system file
+			$pid = file_get_contents('/tmp/supervisord.pid');
+
+			// Kill supervisord and all of its processes (client/worker/etc)
+			exec("kill -1 $pid");
+						
 			// Log current state
-			utilities::notate("Supervisord is still running", "tasks.log");	
+			utilities::notate("Supervisord is restarting", "tasks.log");	
 		}
 		else
-		{
-			// Restart supervisord and all of its scripts
-			exec('supervisord &');
-					
+		{			
 			// Log current state
-			utilities::notate("Restarting supervisord", "tasks.log");							
+			utilities::notate("Supervisord is not running", "tasks.log");				
 		}		
 	}
 
