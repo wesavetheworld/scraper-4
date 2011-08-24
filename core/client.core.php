@@ -200,6 +200,10 @@ class clientCore
 		// Get current job Queue total
 		$this->googleJobs = $this->checkJobQueue('rankingsGoogle');
 
+		$this->googleJobsLast = 91;
+
+		echo "jobs: ".$this->googleJobs."\n";
+
 		// If the amount of jobs has not changed for the last 10 minutes or it's the first min of the hour
 		if($this->googleJobs != 0 && $this->googleJobs == $this->googleJobsLast || date("i") == "00")
 		{
