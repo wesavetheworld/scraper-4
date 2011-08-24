@@ -367,17 +367,26 @@ class tasks
 	// Get a list of all current system processes 
 	private function killSupervisord()
 	{
-		// Get supervisord's pid from system file
-		$pid = file_get_contents('/tmp/supervisord.pid');
+		// If supervisord is running
+		if(file_exists('/tmp/supervisord.pid'))
+		{
+			// Get supervisord's pid from system file
+			$pid = file_get_contents('/tmp/supervisord.pid');
 
-		// Kill supervisord and all of its processes (client/worker/etc)
-		exec("kill $pid");
+			// Kill supervisord and all of its processes (client/worker/etc)
+			exec("kill $pid");
 
-		// Sleep long enough to allow all scripts to be killed
-		sleep(20);			
-		
-		// Log current state
-		utilities::notate("Killed supervisord and all sub processes", "tasks.log");
+			// Sleep long enough to allow all scripts to be killed
+			sleep(20);			
+			
+			// Log current state
+			utilities::notate("Killed supervisord and all sub processes", "tasks.log");
+		}	
+		else
+		{
+			// Log current state
+			utilities::notate("Supervisord is not running", "tasks.log");				
+		}
 	}
 
 	// Restart supervisord and all of its processes
@@ -402,18 +411,13 @@ class tasks
 		// Log current state
 		utilities::notate("\tSystem: $status", "tasks.log");			
 	}
+
 	private function testSystem()
 	{
-		// Set the system status + a timestamp
-		$status = $_SERVER['argv'][3]."_".time();
+		// Kill all scripts
+		$this->killSupervisord();		
 
-		echo "should write: ".$status;
-		echo " to: ".SYSTEM_STATUS; 
-
-		// Write status file
-		file_put_contents(SYSTEM_STATUS, $status);	
-		
-		// Log current state
-		utilities::notate("\tSystem: $status", "tasks.log");			
+		// Restart the application
+		$this->restartSupervisord();			
 	}	
 }	
