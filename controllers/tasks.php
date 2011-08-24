@@ -315,6 +315,11 @@ class tasks
 								// Restart the application
 								$this->restartSupervisord();
 							}
+							elseif($action == "stop")
+							{
+								// Kill all scripts
+								$this->killSupervisord();												
+							}							
 							elseif($action == "reboot")
 							{
 								// Kill all scripts
@@ -379,7 +384,7 @@ class tasks
 	private function restartSupervisord()
 	{
 		// Restart supervisord and all of its scripts
-		//exec('supervisord &');
+		exec('supervisord &');
 				
 		// Log current state
 		utilities::notate("Restarting supervisord", "tasks.log");		
