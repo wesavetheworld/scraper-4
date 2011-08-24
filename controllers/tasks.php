@@ -376,8 +376,15 @@ class tasks
 			// Kill supervisord and all of its processes (client/worker/etc)
 			exec("kill $pid");
 
-			// Sleep long enough to allow all scripts to be killed
-			sleep(20);			
+			// While supervisord is still running, wait
+			while(file_exists('/tmp/supervisord.pid'))
+			{
+				// Log current state
+				utilities::notate("Supervisord is still running, waiting...", "tasks.log");		
+
+				// Wait 10 seconds
+				sleep(10);
+			}						
 			
 			// Log current state
 			utilities::notate("Killed supervisord and all sub processes", "tasks.log");
@@ -392,11 +399,20 @@ class tasks
 	// Restart supervisord and all of its processes
 	private function restartSupervisord()
 	{
-		// Restart supervisord and all of its scripts
-		exec('supervisord &');
-				
-		// Log current state
-		utilities::notate("Restarting supervisord", "tasks.log");		
+		// If supervisord is running
+		if(file_exists('/tmp/supervisord.pid'))
+		{
+			// Log current state
+			utilities::notate("Supervisord is still running", "tasks.log");	
+		}
+		else
+		{
+			// Restart supervisord and all of its scripts
+			exec('supervisord &');
+					
+			// Log current state
+			utilities::notate("Restarting supervisord", "tasks.log");							
+		}		
 	}
 
 	// Set a system status message (pause,kill)
