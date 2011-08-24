@@ -203,6 +203,7 @@ class clientCore
 		// If the amount of jobs has not changed for the last 10 minutes or it's the first min of the hour
 		if($this->googleJobs != 0 && $this->googleJobs == $this->googleJobsLast || date("i") == "00")
 		{
+			echo "\nit worked\n";
 			// Restart all workers		
 			$this->run("tasks", "system reset_workers");
 			
@@ -212,6 +213,7 @@ class clientCore
 		// No stale jobs found		
 		else
 		{
+			echo "\ndidn't do anything\n";
 			// Set current job count for future last job count
 			$this->googleJobsLast = $this->googleJobs;						
 		}	
