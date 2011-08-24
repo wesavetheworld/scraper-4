@@ -408,10 +408,14 @@ class tasks
 			// Log current state
 			utilities::notate("Supervisord is restarting", "tasks.log");	
 		}
+		// Supervisord is not running, start it
 		else
-		{			
+		{	
+			// Start supervisord
+			exec("supervisord &");
+					
 			// Log current state
-			utilities::notate("Supervisord is not running", "tasks.log");				
+			utilities::notate("Supervisord is not running, starting....", "tasks.log");				
 		}		
 	}
 
