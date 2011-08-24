@@ -48,6 +48,13 @@ class clientCore
 			// Check system status
 			utilities::checkStatus();
 
+			// Every 10 minutes
+			if(intval(ltrim(date("i"), "0")) % 10 == 0)
+			{
+				// Run all 10 minute tasks
+				$this->minuteEveryTen();
+			}				
+
 			// If first hour of the day
 			if(date("H:i") == "00:00")
 			{
@@ -55,21 +62,12 @@ class clientCore
 				$this->hourOne();			
 			}
 
-			// The first min of every hour but the first
+			// The first min of every hour
 			if(date("i") == "00")
 			{
 				// Run all hourly tasks
 				$this->hourAll();
-			}
-
-			// Minute 50 of every hour
-			if(date("i") == "50")
-			{
-				// Run all minute fifty tasks
-				$this->minuteFifty();
-			}			
-
-
+			}		
 
 			// Every 2 minutes
 			if(intval(ltrim(date("i"), "0")) % 2 == 0)
@@ -125,22 +123,9 @@ class clientCore
 		// Check in any old keywords		
 		$this->run("tasks", "keywordCheckIn");	
 
-		// Get current job Queue total
-		$this->googleJobs = $this->checkJobQueue('rankingsGoogle');
-
-		// If the amount of jobs has not changed for the last 10 minutes
-		if($this->googleJobs == $this->googleJobsLast)
-		{
-			// Restart all workers		
-			$this->run("tasks", "system reset_workers");						
-		}			
-	
-		// If job queue is empty
-		if(!$this->googleJobs)
-		{	
-			// Restart all workers		
-			$this->run("tasks", "system reset_workers");
-								
+		// If job queue has fewer than 10 jobs
+		if($this->googleJobs < 10)
+		{						
 			// Update hourly keyword rankings for google
 			$this->run("client", "rankings 100 google hourly");														
 		}	
@@ -161,11 +146,11 @@ class clientCore
 		}				
 	}
 	
-	// Taks that should be run at the 50th minute of every hour
-	private function minuteFifty()
+	// Taks that should be run every 10 minutes
+	private function minuteEveryTen()
 	{
-		// Get current job Queue total (will be checked again at the start of the next hour)
-		$this->googleJobsLast = $this->checkJobQueue('rankingsGoogle');	
+		// Check the current job queue for changes
+		$this->checkStaleJobs();
 	}	
 	
 	// Tasks that should be run every 2 minutes
@@ -202,6 +187,29 @@ class clientCore
 		
 		// Return specified job type job queue total
 		return $status['operations'][$type]['total'];	
+	}
+
+	// Check if there are any stale jobs
+	private function checkStaleJobs()
+	{
+		// Get current job Queue total
+		$this->googleJobs = $this->checkJobQueue('rankingsGoogle');
+
+		// If the amount of jobs has not changed for the last 10 minutes or it's the first min of the hour
+		if($this->googleJobs && $this->googleJobs == $this->googleJobsLast || date("i") == "00")
+		{
+			// Restart all workers		
+			$this->run("tasks", "system reset_workers");
+			
+			// Reset google job count
+			$this->googleJobsLast = false;						
+		}
+		// No stale jobs found		
+		else
+		{
+			// Set current job count for future last job count
+			$this->googleJobsLast = $this->googleJobs;						
+		}	
 	}
 
 	// Update all domain's stats
