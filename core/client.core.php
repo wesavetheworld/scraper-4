@@ -20,7 +20,11 @@ class clientCore
 {    
 	// Bing instance status
 	private $bingStatus = false;
+
+	private $googleJobs = false;
 	
+	private $googleJobsLast = false;
+
 	// Include dependencies on instantiation
 	function __construct()
 	{
@@ -128,15 +132,15 @@ class clientCore
 		if($this->googleJobs == $this->googleJobsLast)
 		{
 			// Restart all workers		
-			$this->run("tasks", "system reset_workers");	
-			
-			// Reset so new jobs will be added
-			$this->googleJobs = 0;						
+			$this->run("tasks", "system reset_workers");						
 		}			
 	
 		// If job queue is empty
 		if(!$this->googleJobs)
-		{				
+		{	
+			// Restart all workers		
+			$this->run("tasks", "system reset_workers");
+								
 			// Update hourly keyword rankings for google
 			$this->run("client", "rankings 100 google hourly");														
 		}	
