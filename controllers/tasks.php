@@ -397,14 +397,16 @@ class tasks
 		// Log current state
 		utilities::notate("\tSystem: $status", "tasks.log");			
 	}
-	private function test()
+	private function testSystem()
 	{
 		// Set the system status + a timestamp
 		$status = $_SERVER['argv'][3]."_".time();
 
-		echo "write to: ".SYSTEM_STATUS."\n";
+		echo "should write: ".$status;
+		echo " to: ".SYSTEM_STATUS; 
+
 		// Write status file
-		//file_put_contents(SYSTEM_STATUS, $status);	
+		file_put_contents(SYSTEM_STATUS, $status);	
 		
 		// Log current state
 		utilities::notate("\tSystem: $status", "tasks.log");			
