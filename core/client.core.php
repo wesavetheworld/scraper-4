@@ -42,6 +42,11 @@ class clientCore
 		// Loop forever 
 		while(TRUE)
 		{
+			$this->checkStaleJobs();
+
+
+			die('ok done');
+
 			// Log time for current task loop
 			utilities::notate("Actions at: ".date("H:i:s"), "clientd.log");
 						
@@ -196,7 +201,7 @@ class clientCore
 		$this->googleJobs = $this->checkJobQueue('rankingsGoogle');
 
 		// If the amount of jobs has not changed for the last 10 minutes or it's the first min of the hour
-		if($this->googleJobs && $this->googleJobs == $this->googleJobsLast || date("i") == "00")
+		if($this->googleJobs != 0 && $this->googleJobs == $this->googleJobsLast || date("i") == "00")
 		{
 			// Restart all workers		
 			$this->run("tasks", "system reset_workers");
