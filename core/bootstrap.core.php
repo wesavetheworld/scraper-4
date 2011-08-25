@@ -93,7 +93,7 @@ class bootstrap
 		}	
 
 		// Start system monitor and detach from script
-		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &");
+		//exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &");
 	}
 
 	// ===========================================================================// 
@@ -391,7 +391,6 @@ class bootstrap
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
 		// Run supervisord daemon
-		//exec("/usr/bin/supervisord &");
-		exec("supervisord &");
+		exec("/usr/bin/supervisord &");
 	}	
 }			
