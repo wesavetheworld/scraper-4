@@ -392,6 +392,6 @@ class bootstrap
 
 		// Run supervisord daemon
 		//exec("/usr/bin/supervisord &");
-		exec("supervisord");
+		exec("supervisord &");
 	}	
 }			
