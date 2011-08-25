@@ -64,13 +64,13 @@
 	// ===========================================================================//
 	
 	// Database host
-	define("DB_HOST", "dbmaster.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+	define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
 	// Database username
-	define("DB_SERP_USER", "scout");
+	define("DB_SERP_USER", "seserps");
 
 	// Database password
-	define("DB_SERPS_PASS", "tF1xFmMu");
+	define("DB_SERPS_PASS", "234k3k3LSJapBbr");
 
 	// Database name
 	define("DB_NAME_SERPS", "serps"); 	
