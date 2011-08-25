@@ -60,7 +60,7 @@
 	define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 
 
 	// The gluster shared data drive location
-	define('DATA_DIRECTORY', '/home/ec2-user/data'); 	
+	define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 	
 
 	// ===========================================================================// 
 	// ! SERPS Database credentials                                                     //

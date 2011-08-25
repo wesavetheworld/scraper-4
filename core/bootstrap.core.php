@@ -223,30 +223,7 @@ class bootstrap
 		exec("umount ".DATA_DIRECTORY);
 
    		// Mount the shared data drive 
-		exec("mount -t glusterfs ".DATA_SERVER." ".DATA_DIRECTORY);		
-
-		// // While data server is not running
-  //   	while($dataStatus != "mounted")
-  //   	{
-  //   		// Mount the shared data drive (returns false if success)
-		// 	$dataStatus = shell_exec("mount -t glusterfs ".DATA_DIRECTORY.":/gluster-data /home/ec2-user/support/data");
-
-		// 	// If response is not blank (failed)
-		// 	if($dataStatus)
-		// 	{	
-		// 		// Send admin error message
-		// 		utilities::reportErrors("Can't mount data directory", TRUE);
-
-		// 		// Sleep for 1 minute and try again
-		// 		sleep(60);
-		// 	}
-		// 	// Response was blank (success)
-		// 	else
-		// 	{
-		// 		echo "passed";
-		// 		$dataStatus = "mounted";
-		// 	}			
-		// }		
+		exec("mount -t glusterfs ".DATA_SERVER." ".DATA_DIRECTORY);			
 	}
 
 	// Run gearman job server
