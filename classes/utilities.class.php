@@ -132,8 +132,8 @@ class utilities
 
 			$lastTime = $time;
             
-			// If a description is provided
-			if($description)
+			// If a description is provided but it's not a timeout check
+			if($description && $description != 'checkTimeOut')
 			{
 				// If returning data instead of printing it
 				if($return)
