@@ -197,21 +197,7 @@ class bootstrap
 
 	// Update the app to the latest code revision
 	public function updateApp()
-	{		
-	
-		exec("rm -r /home/ec2-user/classes");
-		exec("rm -r /home/ec2-user/config");
-		exec("rm -r /home/ec2-user/controllers");
-		exec("rm -r /home/ec2-user/core");
-		exec("rm -r /home/ec2-user/data");
-		exec("rm -r /home/ec2-user/hub.php");
-		exec("rm -r /home/ec2-user/server.php");
-		exec("rm -r /home/ec2-user/models");
-		exec("rm -r /home/ec2-user/support");
-		exec("rm -r /home/ec2-user/worker.log");
-		exec("sudo svn cleanup");
-		exec("sudo svn update");
-				
+	{			
 		// Updated code to latest revision in repo
 		$changes = shell_exec("svn update /home/ec2-user/");
 
