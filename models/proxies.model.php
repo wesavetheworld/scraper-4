@@ -87,8 +87,6 @@ class proxies
 	// Update poxies' status based on response (blocked, timeout etc)
 	public function updateProxyUse()
 	{  
-		utilities::notate("updating proxy section", "scrape.log");			
-
 		// Update blocked proxies
 		if(count($this->proxiesBlocked) > 0)
 		{
