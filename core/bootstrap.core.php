@@ -93,7 +93,7 @@ class bootstrap
 		}	
 
 		// Start system monitor and detach from script
-		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &");
+		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &> /dev/null &");
 
 		// Bootstrap complete
 		exit();
@@ -208,7 +208,7 @@ class bootstrap
 		if(strpos($changes, "Updated"))
 		{
 			// Create a new bootstrap for new code
-			exec('php /home/ec2-user/server.php bootstrap &');
+			exec('php /home/ec2-user/server.php bootstrap &> /dev/null &');
 
 			// Kill current bootstrap
 			exit('new code. restarting...');
@@ -371,6 +371,6 @@ class bootstrap
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
 		// Run supervisord daemon
-		exec("/usr/bin/supervisord &");
+		exec("/usr/bin/supervisord &> /dev/null &");
 	}	
 }			
