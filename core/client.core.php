@@ -115,7 +115,7 @@ class clientCore
 	private function hourAll()
 	{
 		// Reset proxy stats in db
-		$this->run("tasks", "proxyReset");	
+		//$this->run("tasks", "proxyReset");	
 		
 		// Check that all keywords are following their schedules
 		$this->run("tasks", "checkSchedules");	

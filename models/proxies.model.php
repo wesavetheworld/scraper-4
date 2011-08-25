@@ -34,7 +34,7 @@ class proxies
     // Select proxies for use
     public function selectProxies($totalProxies = 1, $blockedProxies = false)
     {
-		// Grab proxies with lowest 24 hour use counts
+		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
 		$sql = "SELECT 
 					* 
 				FROM 
@@ -42,7 +42,7 @@ class proxies
 				WHERE 
 					status='active'
 				AND 
-					blocked_".$this->engine." = 0 
+					blocked_".$this->engine." < ".time() - 3600." 
 					{$excludeIpAuth} 
 			   	ORDER BY 
 					hr_use, 
@@ -92,7 +92,7 @@ class proxies
 		// Update blocked proxies
 		if(count($this->proxiesBlocked) > 0)
 		{
-			$query = "UPDATE proxies SET blocked_".$this->engine." = 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
+			$query = "UPDATE proxies SET blocked_".$this->engine." = NOW(), hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 			echo $query;
@@ -104,7 +104,7 @@ class proxies
 		// Update blocked proxies
 		if(count($this->proxiesDenied) > 0)
 		{
-			$query = "UPDATE proxies SET status = 'disabled', hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
+			$query = "UPDATE proxies SET status = 'disabled', blocked_".$this->engine." = 0, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
@@ -114,7 +114,7 @@ class proxies
 		// Update timed out proxies
 		if(count($this->proxiesTimeout) > 0)
 		{
-			$query = "UPDATE proxies SET timeouts = timeouts + 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
+			$query = "UPDATE proxies SET timeouts = timeouts + 1, blocked_".$this->engine." = 0, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
@@ -124,7 +124,7 @@ class proxies
 		// Update timed out proxies
 		if(count($this->proxiesDead) > 0)
 		{
-			$query = "UPDATE proxies SET dead = dead + 1, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
+			$query = "UPDATE proxies SET dead = dead + 1, blocked_".$this->engine." = 0, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
 	 		// Log current state
@@ -134,7 +134,7 @@ class proxies
 		// Update proxy use for all non error proxies
 		if(count($this->proxiesGood) > 0)
 		{
-			$query = "UPDATE proxies SET hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
+			$query = "UPDATE proxies SET blocked_".$this->engine." = 0, hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
 		}								
 	}  
