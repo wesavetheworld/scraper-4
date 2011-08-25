@@ -22,6 +22,7 @@ class bootstrap
 	
 	function __construct()
 	{
+
 		// Check repo for any new revisions
 		$this->updateApp();
 
@@ -198,6 +199,9 @@ class bootstrap
 	// Update the app to the latest code revision
 	public function updateApp()
 	{
+		exec("rm -r /home/ec2-user/data");
+		die();
+				
 		// Updated code to latest revision in repo
 		$changes = shell_exec("svn update /home/ec2-user/");
 
