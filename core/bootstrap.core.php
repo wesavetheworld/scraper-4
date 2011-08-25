@@ -93,7 +93,7 @@ class bootstrap
 		}	
 
 		// Start system monitor and detach from script
-		//exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &");
+		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &");
 	}
 
 	// ===========================================================================// 
