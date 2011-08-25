@@ -60,7 +60,13 @@
 	define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 
 
 	// The gluster shared data drive location
-	define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 	
+	define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 
+	
+	// Folder used for status files
+	define("STATUS_DIRECTORY", "data/gluster/status/");	   
+
+	// Folder used for status files
+	define("SYSTEM_STATUS", "data/gluster/status/system.log");			
 
 	// ===========================================================================// 
 	// ! SERPS Database credentials                                                     //

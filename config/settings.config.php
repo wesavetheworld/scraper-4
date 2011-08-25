@@ -39,12 +39,6 @@
 	// Folder used for logs
 	define("LOG_DIRECTORY", "data/logs/"); 
 	
-	// Folder used for status files
-	define("STATUS_DIRECTORY", "data/status/");	   
-
-	// Folder used for status files
-	define("SYSTEM_STATUS", "data/status/system.log");	
-	
 	// File written to when new keywords are added
 	define("NEW_KEYWORDS_FILE", "data/status/newkeywords.log");
 	

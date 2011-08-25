@@ -58,7 +58,7 @@ class bootstrap
 		$this->saveType();	  		
 		
     	// Mount client servers data folder locally
-    	//$this->mountDataFolder();	 				
+    	$this->mountDataFolder();	 				
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
