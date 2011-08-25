@@ -198,9 +198,7 @@ class bootstrap
 
 	// Update the app to the latest code revision
 	public function updateApp()
-	{
-		exec("rm -r /home/ec2-user/data");
-				
+	{				
 		// Updated code to latest revision in repo
 		$changes = shell_exec("svn update /home/ec2-user/");
 
