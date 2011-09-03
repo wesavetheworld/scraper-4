@@ -319,13 +319,13 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
-			// $supervisord.= "[program:backlinks]\n";
-			// $supervisord.= "command=php /home/ec2-user/server.php worker backlinks backlinks\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=5\n"; 
-			// $supervisord.= "process_name=%(process_num)s\n"; 	
+			$supervisord.= "[program:backlinks]\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker backlinks backlinks\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=5\n"; 
+			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:alexa]\n";
