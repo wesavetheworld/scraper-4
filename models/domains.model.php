@@ -337,7 +337,7 @@ class domain
 		if($this->stat == "backlinks")
 		{
 		 	// Build the yahoo backlinks search url
-		 	$this->url = "https://siteexplorer.search.yahoo.com/search?p=".urlencode($this->domain); 
+		 	$this->url = "http://siteexplorer.search.yahoo.com/search?p=".urlencode($this->domain); 
 		}
 		elseif($this->stat == "pr")
 		{   
