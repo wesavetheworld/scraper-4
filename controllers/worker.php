@@ -240,16 +240,31 @@ class worker
 				{    
 					// Set the pagerank for domain
 					$item->pr = $this->parse->pageRank($content); 
-					
-					echo "pr: ".$item->pr."\n";
 				} 
 				elseif($this->task == "alexa")
 				{    
 					// Set the alexa rank for domain
 					$item->alexa = $this->parse->alexa($content); 
-							
-					echo "alexa: ".$item->alexa."\n";						
 				}
+			}
+			// If all bad searches(something must be wrong with the domain)
+			else
+			{
+				if($this->task == "backlinks")
+				{	
+					// Set backlinks for domain
+					$item->backlinks =  0; 
+				}
+				elseif($this->task == "pr")
+				{    
+					// Set the pagerank for domain
+					$item->pr = 0; 
+				} 
+				elseif($this->task == "alexa")
+				{    
+					// Set the alexa rank for domain
+					$item->alexa = 0; 
+				}				
 			}
 
 			// Add keyword to completed list

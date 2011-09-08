@@ -219,7 +219,7 @@ class clientCore
 		$this->run("client", "pr 100 $new");
 		
 		// Update all domain's backlinks			
-		$this->run("client", "backlinks 100 $new");
+		//$this->run("client", "backlinks 100 $new");
 
 		// Update all domain's alexa rankings
 		$this->run("client", "alexa 100 $new");		
