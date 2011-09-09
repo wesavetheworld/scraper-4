@@ -177,6 +177,7 @@ class domains
 		// If no connection to the database yet(worker)
 		if(!$this->db)
 		{
+			echo "no connection found... could be the problem?";
 			$this->dbConnect();
 		}
 
