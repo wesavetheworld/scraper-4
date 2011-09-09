@@ -41,10 +41,10 @@ class worker
 	function __construct()
 	{           		
 		// Include serp parsing class
-///		require_once('classes/parse.class.php');
+		require_once('classes/parse.class.php');
 
 		// Include scraping class
-//		require_once('classes/scrape.class.php'); 	
+		require_once('classes/scrape.class.php'); 	
 
 		// Include proxy data model
 		require_once('models/proxies.model.php'); 		
