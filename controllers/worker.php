@@ -466,7 +466,7 @@ class worker
 		elseif($this->model == "domains")
 		{
 			// Update finished domains in DB
-			$this->items->updateDomains();  			
+			//$this->items->updateDomains();  			
 		}				
 	}	
 }	    
