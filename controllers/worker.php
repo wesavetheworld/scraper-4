@@ -59,6 +59,8 @@ class worker
 	
 	public function worker($data)
 	{  	
+		echo "job done\n";
+		return true;
 		// Construct job object
 		$this->buildJob($data);	
 		        		        
