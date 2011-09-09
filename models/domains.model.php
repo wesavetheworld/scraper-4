@@ -107,7 +107,7 @@ class domains
 		{   
 			// Select data for only a single user
 			$user = "AND user_id = ".ONLY_USER;
-			$data = '';
+			$date = '';
 		} 		
 		
 		// Construct query
