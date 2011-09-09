@@ -93,13 +93,6 @@ class domains
 	// Select the keywords from the database
 	private function selectDomains()
 	{  
-		// If a single user is provided
-		if(ONLY_USER)
-		{   
-			// Select data for only a single user
-			$user = "AND user_id = ".ONLY_USER;
-		} 
-
 		if(ONLY_NEW)
 		{
 			$date = TASK."_status = '0000-00-00'";
@@ -108,6 +101,14 @@ class domains
 		{
 			$date = TASK."_status != '".date("Y-m-d")."'";
 		}
+
+		// If a single user is provided
+		if(ONLY_USER)
+		{   
+			// Select data for only a single user
+			$user = "AND user_id = ".ONLY_USER;
+			$data = '';
+		} 		
 		
 		// Construct query
 		$query =   "SELECT 
