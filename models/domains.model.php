@@ -106,7 +106,7 @@ class domains
 		if(ONLY_USER)
 		{   
 			// Select data for only a single user
-			$user = "AND user_id = ".ONLY_USER;
+			$user = "user_id = ".ONLY_USER;
 			$date = '';
 		} 		
 		
