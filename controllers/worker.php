@@ -50,7 +50,7 @@ class worker
 		require_once('models/proxies.model.php'); 		
 		
 		// Reset benchmarking
-		utilities::benchmark(false, false, false, true);		  		   	 			
+		//utilities::benchmark(false, false, false, true);		  		   	 			
 	}
 	
 	// ===========================================================================// 
@@ -72,10 +72,10 @@ class worker
 			$this->parseContent();
 
 			// If job has run for too long
-			if(utilities::benchmark('checkTimeOut'))
-			{
-				exit("\nworker timed out\n");
-			}
+			// if(utilities::benchmark('checkTimeOut'))
+			// {
+			// 	exit("\nworker timed out\n");
+			// }
 		}
 
 		// Update DB with new data
