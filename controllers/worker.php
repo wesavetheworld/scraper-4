@@ -47,7 +47,7 @@ class worker
 //		require_once('classes/scrape.class.php'); 	
 
 		// Include proxy data model
-//		require_once('models/proxies.model.php'); 		
+		require_once('models/proxies.model.php'); 		
 		
 		// Reset benchmarking
 		//utilities::benchmark(false, false, false, true);		  		   	 			
