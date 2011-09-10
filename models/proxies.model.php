@@ -42,7 +42,11 @@ class proxies
 				WHERE 
 					status='active'
 				AND 
-					blocked_".$this->engine." <= DATE_ADD(NOW(),INTERVAL -1 HOUR) 
+					(
+						blocked_".$this->engine." <= DATE_ADD(NOW(),INTERVAL -1 HOUR) 
+					OR
+						blocked_".$this->engine." = '0000-00-00 00:00:00' 
+					)	
 					{$excludeIpAuth} 
 			   	ORDER BY 
 					hr_use, 
