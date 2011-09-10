@@ -126,7 +126,10 @@ class worker
 		$this->scrape->task = $this->task;
 
 		// Build an array of search engine urls to scrape and the proxies needed
-		$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total); 	
+		$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total); 
+		
+		print_r($prepare['proxies']);
+		die();	
 
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
@@ -349,8 +352,6 @@ class worker
 
 		// Select proxies for use
 		$this->proxies->selectProxies($count);	
-		
-		print_r($this->proxies);	
 	}
 
 	public function updateProxies()
