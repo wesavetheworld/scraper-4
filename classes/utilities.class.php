@@ -192,7 +192,7 @@ class utilities
 		if($logFile)
 		{
 			// Open the log file for writing
-			file_put_contents(LOG_DIRECTORY.$logFile, $data."\n", FILE_APPEND);					
+			//file_put_contents(LOG_DIRECTORY.$logFile, $data."\n", FILE_APPEND);					
 		}	
 	}
 	
