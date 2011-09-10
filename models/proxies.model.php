@@ -53,8 +53,6 @@ class proxies
 					RAND()
 				LIMIT 
 					{$totalProxies}";
-
-					echo $sql;
 					
 		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
 
@@ -70,6 +68,8 @@ class proxies
 				// Proxy array
 				$this->proxies[] = $proxy;
 			}
+
+			print_r($this->proxies);
 		}
     }
 
