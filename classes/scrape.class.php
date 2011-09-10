@@ -350,6 +350,11 @@ class scraper
 				echo "code: ".$this->results[$i]['httpInfo']['http_code'];
 				echo " | error: ".$this->results[$i]['curlError']."\n";
 			}
+			else
+			{
+				echo "code: ".$this->results[$i]['httpInfo']['http_code']."\n";
+				
+			}
 			//echo "\n";
 
 		// If curl returned an error 
