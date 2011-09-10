@@ -61,6 +61,10 @@ class worker
 	{  	
 		// Construct job object
 		$this->buildJob($data);	
+
+		echo "engine: ".$this->engine;
+
+		return true;
 		        		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
