@@ -140,7 +140,7 @@ class proxies
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
 		}	
 		
-		echo $query;							
+		echo "query: ".$query;							
 	}  
 	
 	// Rest all proxy stats
