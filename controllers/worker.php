@@ -203,7 +203,7 @@ class worker
 			}
 			// Domain was not found ranking
 			else
-			{ 
+			{ 				
 				// Increase search results page for next scrape
 				$item->searchPage++; 						
 			} 
@@ -277,6 +277,8 @@ class worker
 		}	
 		else
 		{
+			echo "bad scrape \n";
+
 			$item->bad++;
 		}
 	}
