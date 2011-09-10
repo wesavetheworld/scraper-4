@@ -187,39 +187,39 @@ class client
 	// ! Supporting methods                                                       //
 	// ===========================================================================//	
 	 
-	// Determine the engine to set for the job
-	private function getEngine()
-	{
-		// If no engine set
-		if(ENGINE)
-		{
-			return ENGINE;						
-		}
-		// If task is backlinks
-		elseif(TASK == "backlinks")
-		{
-			return "yahoo";						
-		}					
-		// all other task types
-		else
-		{
-			return "google";
-		}	 	
-	}
+	// // Determine the engine to set for the job
+	// private function getEngine()
+	// {
+	// 	// If no engine set
+	// 	if(ENGINE)
+	// 	{
+	// 		return ENGINE;						
+	// 	}
+	// 	// If task is backlinks
+	// 	elseif(TASK == "backlinks")
+	// 	{
+	// 		return "yahoo";						
+	// 	}					
+	// 	// all other task types
+	// 	else
+	// 	{
+	// 		return "google";
+	// 	}	 	
+	// }
 
 	 // Creat the task name for created jobs
 	 private function getTask()
 	 {
-	 	// If an engine is set (keywords)
-		if(ENGINE)
-		{
-			// Creates format like: taskEngine
-			return TASK.ucfirst(ENGINE);
-		}
-		// No engine present (domains)
-		else
+	 	// If engine matches task (domain stats)
+		if(ENGINE == TASK)
 		{
 			return TASK;	 		
+		}
+		// else its for rankings
+		else
+		{	
+			// Creates format like: taskEngine
+			return TASK.ucfirst(ENGINE);
 		}	 	
 	 }
 
