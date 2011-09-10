@@ -354,6 +354,7 @@ class scraper
 			{
 				echo "code: ".$this->results[$i]['httpInfo']['http_code']."\n";
 				echo "url :".$this->urls[$i]."\n";				
+				echo "proxy :".$this->proxies[$i]."\n";				
 			}
 			//echo "\n";
 
