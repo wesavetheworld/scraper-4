@@ -348,7 +348,9 @@ class worker
 		$this->proxies = new proxies($this->engine);
 
 		// Select proxies for use
-		$this->proxies->selectProxies($count);		
+		$this->proxies->selectProxies($count);	
+		
+		print_r($this->proxies);	
 	}
 
 	public function updateProxies()
