@@ -8,9 +8,6 @@ class scraper
 	
 	// Array of urls to scrape 
 	public $urls = array(); 
-
-	// Which search engine to scrape
-	public $engine;
 	 
 	// Use proxies for scraping?
 	public $proxy_use = PROXY_USE;

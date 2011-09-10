@@ -122,9 +122,6 @@ class worker
 		// Create new scraping instance
 		$this->scrape = new scraper; 
 
-		// Set search engine to scrape
-		$this->scrape->engine = $this->engine;
-
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
@@ -225,7 +222,8 @@ class worker
 		$content = $this->getContent($item, $this->scrape->results[$item->url]);
 
 		// If a valid search results page can be loaded (new scrape or saved file)
-		if($content || $item->bad == 10)
+		//if($content || $item->bad == 10)
+		if($content)
 		{  	
 			if($item->bad != 10)
 			{					
@@ -276,8 +274,6 @@ class worker
 
 			// Decrease total domains remaining
 			$this->items->total--; 
-
-			echo  "\ndomains remaining: ". $this->items->total."\n";
 		}	
 		else
 		{
@@ -346,9 +342,6 @@ class worker
 	{
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
-
-		// Set the engine to use for blocked status
-		$this->proxies->engine = $this->engine;
 
 		// Select proxies for use
 		$this->proxies->selectProxies($count);		

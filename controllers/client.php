@@ -111,7 +111,7 @@ class client
 					$data = array();									
 
 					// Define the engine used for the job (google,bing,yahoo)
-					$data['engine'] = $this->getEngine();						
+					$data['engine'] = ENGINE;						
 
 					// Define the type of job to create
 					$task = $this->getTask();
