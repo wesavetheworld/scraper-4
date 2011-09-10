@@ -37,7 +37,7 @@
 		define("MODEL", "domains");	
 
 		// Data model to use
-		define("ENGINE", "");			
+		define("ENGINE", TASK);			
 
 		define("ONLY_NEW", $argv[4]);	
 															
