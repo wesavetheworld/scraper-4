@@ -68,6 +68,8 @@ class proxies
 				// Proxy array
 				$this->proxies[] = $proxy;
 			}
+
+			print_r($this->proxies);
 		}
     }
 
