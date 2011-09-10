@@ -347,7 +347,8 @@ class scraper
 			// echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
 			if($this->results[$i]['curlError'])
 			{
-				//echo "error: ".$this->results[$i]['curlError']."\n";
+				echo "code: ".$this->results[$i]['httpInfo']['http_code'];
+				echo " | error: ".$this->results[$i]['curlError']."\n";
 			}
 			//echo "\n";
 
