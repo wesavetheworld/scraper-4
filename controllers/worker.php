@@ -225,6 +225,8 @@ class worker
 		//if($content || $item->bad == 10)
 		if($content)
 		{  	
+			echo "good scrape \n";
+
 			if($item->bad != 10)
 			{					
 				if($this->task == "backlinks")
