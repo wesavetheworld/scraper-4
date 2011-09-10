@@ -302,7 +302,16 @@ class worker
 		foreach($items as $key => &$item)
 		{  
 			// Generate the search page url 
-			$item->setSearchUrl();			  		
+			$item->setSearchUrl();	
+			
+			// If no proxy set for this keyword/url yet
+			if(!$item->proxy)
+			{
+				$item->proxy = current($this->proxies->proxies);
+
+				// Move to next proxy
+				next($this->proxies->proxies);	
+			}						  		
 
 			// If getting domain urls
 			if($this->model == "domains")
@@ -311,7 +320,9 @@ class worker
 				if(!$urls[$item->url])
 				{    		
 					// Add the keyword's search page url to scraping list
-					$urls[$item->url] = $item->url;   
+					$urls[$item->url] = $item->url;  
+					
+					$proxies[$item->url] = $item->proxy;											 
 				}
 			}
 			// If getting keyword urls
@@ -322,15 +333,6 @@ class worker
 				{    				
 					// Add the keyword's search page url to scraping list
 					$urls[$item->searchHash] = $item->url; 
-
-					// If no proxy set for this keyword/url yet
-					if(!$item->proxy)
-					{
-						$item->proxy = current($this->proxies->proxies);
-
-						// Move to next proxy
-						next($this->proxies->proxies);	
-					}	
 						
 					// Add keywords proxy to list to be used for scraping	
 					$proxies[$item->searchHash] = $item->proxy;						
