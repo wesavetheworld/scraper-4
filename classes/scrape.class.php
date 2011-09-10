@@ -353,7 +353,7 @@ class scraper
 			else
 			{
 				echo "code: ".$this->results[$i]['httpInfo']['http_code']."\n";
-				
+				echo "url :".$this->urls[$i]."\n";				
 			}
 			//echo "\n";
 
