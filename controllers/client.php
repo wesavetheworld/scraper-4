@@ -159,7 +159,7 @@ class client
 		if($first)
 		{
 			// Get amount of total jobs
-			$jobs = setJobsTotal($items, $itemsPerJob);
+			$jobs = $this->setJobsTotal($items, $itemsPerJob);
 
 			// Get the amount of jobs to create per hour
 			$jobsPerMinute = $this->setJobsPerMin($jobs, $duration);
