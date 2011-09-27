@@ -579,5 +579,23 @@ class keyword
 	{
 		$this->uniqueId = "id_".$this->keyword_id;
 	}		
+
+	// Set notifications for keyword
+	public function setNotification()
+	{
+		// Only test a single keyword right now
+		if($this->keyword_id == 117888)
+		{	
+			// If notifications settings set for keyword
+			if($this->notifications)
+			{
+				// Get notification array
+				$notifications = unserialize($this->notifications);
+
+				// Set notificaton to send for keyword
+				$this->notify = '';
+			}
+		}	
+	}
 	
 }

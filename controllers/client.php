@@ -43,9 +43,6 @@ class client
 
 		// add the default job server
 		$gmclient->addServer(JOB_SERVER_IP);   
-		
-		// Set the function to be used when jobs are complete
-   		//$gmclient->setCompleteCallback("client::jobComplete");
 
    		// Set the class to instantiate
    		$class = MODEL;
@@ -129,7 +126,10 @@ class client
 				   	$gmclient->addTaskBackground($task, $data, null, $task."_".$job++."_".time());						  		
 
 					// Create the jobs
-		    		$gmclient->runTasks();					
+		    		$gmclient->runTasks();	
+		    		
+		    		// Throttle the speed at which jobs are created
+		    		$this->throttle($items->total, JOB_SIZE, 50);				
 				} 			   		
 			}
 		
@@ -143,7 +143,91 @@ class client
 	  	// Finish execution
 		utilities::complete();
 	} 
+
+	// ===========================================================================// 
+	// ! Supporting methods                                                       //
+	// ===========================================================================//	
+
+	// Throttle the job creation based on total jobs across 1 hour(50mins)
+	function throttle($items, $itemsPerJob, $duration)
+	{
+		static $set = 0;
+		static $jobsPerMinute = 0;
+		static $first = true;
+
+		// If the first call of the function
+		if($first)
+		{
+			// Get amount of total jobs
+			$jobs = setJobsTotal($items, $itemsPerJob);
+
+			// Get the amount of jobs to create per hour
+			$jobsPerMinute = $this->setJobsPerMin($jobs, $duration);
+			$first = false;
+		}
+
+		//If enough jobs have been created this minute
+		if($set == $jobsPerMinute)
+		{			
+			// Reset set count
+			$set = 0;
+			
+			// The throttle part
+			sleep(60);	
+		}
+
+		// Increment set count
+		$set++;
+	}
 	
+	// Calculate total jobs required for amount of items
+	function setJobsTotal($items, $itemsPerJob)
+	{
+		// If enough items to divide by batch size
+		if($items > $itemsPerJob)
+		{
+			// Return amount of batches needed for items
+			return round($items / $itemsPerJob);
+		}
+		// Only enough items for one job
+		else
+		{
+			return 1;	
+		}			
+	}	
+
+	// Determine how many jobs to create per minute
+	function setJobsPerMin($jobs, $duration)
+	{
+		// If more jobs than minutes in the duration
+		if($jobs > $duration)
+		{
+			// Divide jobs across the duration
+			return round($jobs / $duration);
+		}
+		// Too few jobs to throttle
+		else
+		{
+			return $jobs;	
+		}	
+	}
+
+	// Creat the task name for created jobs
+	private function getTask()
+	{
+		// If engine matches task (domain stats)
+		if(ENGINE == TASK)
+		{
+			return TASK;	 		
+		}
+		// else its for rankings
+		else
+		{	
+			// Creates format like: taskEngine
+			return TASK.ucfirst(ENGINE);
+		}	 	
+	}
+
 	// ===========================================================================// 
 	// ! Gearman methods                                                          //
 	// ===========================================================================//	
@@ -181,47 +265,7 @@ class client
 	// 	print "\taverage rate: $avg items per hour\n";
 	// 	print "\titems updated so far: $items\n";
 	// 	print "\titems left: $itemsLeft\n";
-	// }
-
-	// ===========================================================================// 
-	// ! Supporting methods                                                       //
-	// ===========================================================================//	
-	 
-	// // Determine the engine to set for the job
-	// private function getEngine()
-	// {
-	// 	// If no engine set
-	// 	if(ENGINE)
-	// 	{
-	// 		return ENGINE;						
-	// 	}
-	// 	// If task is backlinks
-	// 	elseif(TASK == "backlinks")
-	// 	{
-	// 		return "yahoo";						
-	// 	}					
-	// 	// all other task types
-	// 	else
-	// 	{
-	// 		return "google";
-	// 	}	 	
-	// }
-
-	 // Creat the task name for created jobs
-	 private function getTask()
-	 {
-	 	// If engine matches task (domain stats)
-		if(ENGINE == TASK)
-		{
-			return TASK;	 		
-		}
-		// else its for rankings
-		else
-		{	
-			// Creates format like: taskEngine
-			return TASK.ucfirst(ENGINE);
-		}	 	
-	 }
+	// }	
 
 }	    
 

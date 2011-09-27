@@ -188,6 +188,9 @@ class worker
 					// "0" is used for "not found"
 					$item->rank = 0;   
 				}  
+
+				// Set notifications for item
+				$item->setNotification();
 										
 				// Calibrate keyword ranking (10/100 results)
 				$this->calibration($item);   
