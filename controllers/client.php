@@ -129,7 +129,7 @@ class client
 		    		$gmclient->runTasks();	
 		    		
 		    		// Throttle the speed at which jobs are created
-		    		$this->throttle($items->total, JOB_SIZE, 50);				
+		    		//$this->throttle($items->total, JOB_SIZE, 50);				
 				} 			   		
 			}
 		
