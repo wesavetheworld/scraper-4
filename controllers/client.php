@@ -177,7 +177,7 @@ class client
 			echo "waiting...\n";
 			
 			// The throttle part
-			sleep(1);	
+			sleep(60);	
 		}
 
 		// Increment set count
