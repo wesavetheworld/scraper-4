@@ -128,7 +128,7 @@ class client
 					// Create the jobs
 		    		$gmclient->runTasks();	
 
-		    		echo "job ".$job++." created\n";
+		    		echo "job ".$job." created\n";
 		    		
 		    		// Throttle the speed at which jobs are created
 		    		$this->throttle($items->total, JOB_SIZE, 50);				
