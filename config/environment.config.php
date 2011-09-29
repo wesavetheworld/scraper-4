@@ -63,7 +63,7 @@
 	// ! SERPS Database credentials                                                     //
 	// ===========================================================================//
 	
-	// Database host
+	//Database host
 	define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
 	// Database username
@@ -73,7 +73,20 @@
 	define("DB_SERPS_PASS", "234k3k3LSJapBbr");
 
 	// Database name
-	define("DB_NAME_SERPS", "serps"); 	
+	define("DB_NAME_SERPS", "serps"); 
+	
+	//---LOCAL
+	
+	// define("DB_HOST", ":/Applications/MAMP/tmp/mysql/mysql.sock");
+
+	// // Database username
+	// define("DB_SERP_USER", "root");
+
+	// // Database password
+	// define("DB_SERPS_PASS", "root");
+
+	// // Database name
+	// define("DB_NAME_SERPS", "serps"); 		
 
 	// ===========================================================================// 
 	// ! Proxy Database credentials                                               //
