@@ -28,6 +28,7 @@
 	// ! Configure server for use                                                 //
 	// ===========================================================================// 	   	
 
+	// If the first argument is to bootstrap the server
 	if($argv[1] == 'bootstrap') 
 	{
    		// Configure server for use 
@@ -38,6 +39,7 @@
 	// ! Route instance to correct core daemon                                    //
 	// ===========================================================================// 
 
+	// Otherwise get the correct core daemon to run for the server
    	else
    	{
 		// Define core to use
@@ -56,30 +58,12 @@
 			define("JOB_FUNCTION", $argv[3]);
 		}	
 
-					// Include main router
-			include("core/$core.core.php");	
-					
-			// Instantiate core
-			$type = new $class();
+		// Include main router
+		include("core/$core.core.php");	
 
-			// Run the instance daemon daemon
-			$type->daemon();
-		
-		
-		// if($core == "worker")
-		// {
-		// 	// Include main router
-		// 	include("core/test.core.php");				
-		// }	
-		// else
-		// {
-		// 	// Include main router
-		// 	include("core/$core.core.php");	
-					
-		// 	// Instantiate core
-		// 	$type = new $class();
+		// Instantiate core
+		$type = new $class();
 
-		// 	// Run the instance daemon daemon
-		// 	$type->daemon();
-		// }				
+		// Run the instance daemon
+		$type->daemon();				
 	}	

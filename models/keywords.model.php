@@ -578,7 +578,11 @@ class keyword
 	public function uniqueId()
 	{
 		$this->uniqueId = "id_".$this->keyword_id;
-	}		
+	}	
+	
+	// ===========================================================================// 
+	// ! Rank change notifications                                                //
+	// ===========================================================================// 		
 
 	// Set notifications for keyword
 	public function setNotification()
@@ -589,13 +593,132 @@ class keyword
 			// If notifications settings set for keyword
 			if($this->notifications)
 			{
-				// Get notification array
-				$notifications = unserialize($this->notifications);
+				// Check for a rank change
+				$change = $this->rankChange();
+				
+				// If there is a rank change
+				if($change)
+				{
+					// Check if a notification is triggered
+					if($this->triggerNotification($change))
+					{
+						// Build notification array
+						$notify['last'] = $this->lastRank;
+						$notify['current'] =  $this->rank;
+						$nofify['change'] = $change;
 
-				// Set notificaton to send for keyword
-				$this->notify = '';
+						// Set notificaton to send for keyword
+						$this->notify = serialize($notify);						
+					}
+				}	
 			}
 		}	
 	}
-	
+
+	// Determine keyword ranking position change
+	private function rankChange()
+	{
+		$current = $this->noZeros($this->rank, 500);
+		$last = $this->noZeros($this->lastRank, 500);
+
+		// If there was a rank change
+		if($current!= $last)
+		{
+			// Get difference between rankings		
+			$changeAmount = abs($current - $last);
+
+			// Negative change
+			if($current < $last)
+			{
+				// Change to negative int
+				$changeAmount = -$changeAmount;			
+			}
+
+			return $changeAmount;
+		}
+	}
+
+	// If number equals 0 change to max number
+	public function noZeros($num, $max = 500)
+	{		
+		// Unset a 0 ranking
+		if($num == 0)
+		{
+			$num = $max;
+		}	
+		
+		return $num;
+	}		
+
+	// Check if a rank change triggers a notification
+	private function triggerNotification($change)
+	{
+		// Get keywords notification settings
+		$n = unserialize($this->notifications);
+							
+		// If any rank change should should trigger an alert
+		if($n['any_notification'])
+		{
+			return true;	
+		}		
+		
+		// Monitor #1 position
+		if($n['google_1'])
+		{
+			// If the number one ranking position is gained or lost
+			if($this->rank == 1 || $this->rank != 1 && $this->lastRank == 1)
+			{
+				return true;
+			}
+		}
+
+		// Monitor top 10 poistions
+		if($n['google_top_ten'])
+		{
+			// If a top 10 ranking position is gained or lost
+			if($this->rank <= 10 && $this->lastRank > 10 || $this->rank > 10 && $this->lastRank <= 10)
+			{
+				return true;
+			}
+		}	
+		
+		// Monitor predefined change amount
+		if($n['change_amount'])
+		{
+			// If change amount is greater or equal to user defined change amount to watch
+			if($change >= $n['change_amount'])
+			{
+				return true;
+			}
+		}	
+		
+		// Monitor predefined change amount
+		if($n['change_range_1'] && $n['change_range_2'])
+		{
+			// Determine which number 
+			if($n['change_range_1'] > $n['change_range_2'])
+			{
+				// i.e 1
+				$rankHigh = $n['change_range_2'];
+				// i.e 10
+				$rankLow = $n['change_range_1'];
+			}
+			// switch the values
+			else
+			{
+				// i.e 1
+				$rankHigh = $n['change_range_1'];
+				// i.e 10
+				$rankLow = $n['change_range_2'];			
+			}
+
+			if($this->rank >= $rankLow && $this->rank <= $rankHigh)
+			{
+				return true;
+			}
+		}						
+
+
+		
+	}
 }

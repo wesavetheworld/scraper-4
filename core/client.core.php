@@ -121,7 +121,10 @@ class clientCore
 		$this->run("tasks", "checkSchedules");	
 		
 		// Check in any old keywords		
-		$this->run("tasks", "keywordCheckIn");	
+		$this->run("tasks", "keywordCheckIn");
+		
+		// Send notifications for any rank changes last hour
+		$this->run("notifications");	
 
 		// If job queue has fewer than 10 jobs
 		if($this->googleJobs < 10)

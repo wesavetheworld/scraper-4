@@ -189,8 +189,12 @@ class worker
 					$item->rank = 0;   
 				}  
 
-				// Set notifications for item
-				$item->setNotification();
+				// If scraping google
+				if($this->engine == 'google')
+				{
+					// See if a rank change notification should be sent
+					$item->setNotification();
+				}	
 										
 				// Calibrate keyword ranking (10/100 results)
 				$this->calibration($item);   

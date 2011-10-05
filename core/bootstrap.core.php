@@ -144,6 +144,13 @@ class bootstrap
 				// Set current instance name
 				$this->instanceName = $tag->value;				
 			}	
+
+			// Check if this is a development server
+			if($tag->key == 'dev')
+			{
+				// Set as a dev server
+				$this->instanceDev = TRUE;
+			}
 		}	
 	}
 
@@ -262,6 +269,16 @@ class bootstrap
 		$config = "<?php \n\n";
 		$config.= "// This config file is auto generated on boot.\n\n";
 		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'");'."\n";
+
+		// If bootstrapping the development server
+		if($this->instanceDev)
+		{
+			$config.= 'define("DEV", TRUE);'."\n";
+		}	
+		else
+		{
+			$config.= 'define("DEV", FALSE);'."\n";
+		}
 
 		// Write config file to config folder
 		file_put_contents("config/instance.config.php", $config);

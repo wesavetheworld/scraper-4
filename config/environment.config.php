@@ -31,20 +31,42 @@
 	set_time_limit(0);	
 			
 	// ===========================================================================// 
-	// ! Server location settings                                                 //
+	// ! Server location settings DEV                                             //
 	// ===========================================================================//		
 
-	// The AWS elastic ip for the client server
-	define('CLIENT_IP', '50.18.104.82');
+	if(defined("DEV"))
+	{
+		// The AWS elastic ip for the client server
+		define('CLIENT_IP', '');
 
-	// The AWS elastic ip for the job server
-	define('JOB_SERVER_IP', '50.18.187.13');
+		// The AWS elastic ip for the job server
+		define('JOB_SERVER_IP', '');
 
-	// The AWS elastic ip for the worker 1 server
-	define('WORKER_IP', '50.18.180.36');	
+		// The AWS elastic ip for the worker 1 server
+		define('WORKER_IP', '');	
 
-	// The gluster shared data drive location
-	define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 
+		// The gluster shared data drive location
+		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 
+	}	
+
+	// ===========================================================================// 
+	// ! Server location settings LIVE                                            //
+	// ===========================================================================//		
+
+	else
+	{
+		// The AWS elastic ip for the client server
+		define('CLIENT_IP', '50.18.104.82');
+
+		// The AWS elastic ip for the job server
+		define('JOB_SERVER_IP', '50.18.187.13');
+
+		// The AWS elastic ip for the worker 1 server
+		define('WORKER_IP', '50.18.180.36');	
+
+		// The gluster shared data drive location
+		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 	
+	}	
 
 	// ===========================================================================// 
 	// ! Directory settings                                                       //
