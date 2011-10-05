@@ -36,6 +36,7 @@
 
 	if(defined("DEV"))
 	{
+				echo "everything is wrong\n";die();
 		// The AWS elastic ip for the client server
 		define('CLIENT_IP', '');
 
