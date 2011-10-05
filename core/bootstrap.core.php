@@ -277,7 +277,7 @@ class bootstrap
 		}	
 		else
 		{
-			$config.= 'define("DEV", FALSE);'."\n";
+			//$config.= 'define("DEV", FALSE);'."\n";
 		}
 
 		// Write config file to config folder
