@@ -653,6 +653,9 @@ class keyword
 	// Check if a rank change triggers a notification
 	private function triggerNotification($change)
 	{
+
+							echo "checking notifications PT 2\n";
+
 		// Get keywords notification settings
 		$n = unserialize($this->notifications);
 							

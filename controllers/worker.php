@@ -192,6 +192,7 @@ class worker
 				// If scraping google
 				if($this->engine == 'google')
 				{
+					echo "checking notifications PT 1\n";
 					// See if a rank change notification should be sent
 					$item->setNotification();
 				}	
