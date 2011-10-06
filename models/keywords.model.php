@@ -587,31 +587,27 @@ class keyword
 	// Set notifications for keyword
 	public function setNotification()
 	{
-		// Only test a single keyword right now
-		if($this->keyword_id == 117888)
-		{	
-			// If notifications settings set for keyword
-			if($this->notifications)
+		// If notifications settings set for keyword
+		if($this->notifications)
+		{
+			// Check for a rank change
+			$change = $this->rankChange();
+			
+			// If there is a rank change
+			if($change)
 			{
-				// Check for a rank change
-				$change = $this->rankChange();
-				
-				// If there is a rank change
-				if($change)
+				// Check if a notification is triggered
+				if($this->triggerNotification($change))
 				{
-					// Check if a notification is triggered
-					if($this->triggerNotification($change))
-					{
-						// Build notification array
-						$notify['last'] = $this->lastRank;
-						$notify['current'] =  $this->rank;
-						$nofify['change'] = $change;
+					// Build notification array
+					$notify['last'] = $this->lastRank;
+					$notify['current'] =  $this->rank;
+					$nofify['change'] = $change;
 
-						// Set notificaton to send for keyword
-						$this->notify = serialize($notify);						
-					}
-				}	
-			}
+					// Set notificaton to send for keyword
+					$this->notify = serialize($notify);						
+				}
+			}	
 		}	
 	}
 
