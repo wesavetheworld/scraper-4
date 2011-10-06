@@ -604,6 +604,10 @@ class keyword
 					$notify['current'] =  $this->rank;
 					$nofify['change'] = $change;
 
+					$notify['last'] = 1;
+					$notify['current'] =  3;
+					$nofify['change'] = 2;
+
 					// Set notificaton to send for keyword
 					$this->notify = serialize($notify);						
 				}
