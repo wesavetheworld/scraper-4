@@ -195,7 +195,7 @@ class worker
 					echo "checking notifications PT 1\n";
 					// See if a rank change notification should be sent
 					$item->setNotification();
-					echo "notification: ".$item->notify."\n";
+					echo "notification for ".$item->keyword_id." : ".$item->notify."\n";
 				}	
 										
 				// Calibrate keyword ranking (10/100 results)
