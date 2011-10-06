@@ -598,7 +598,7 @@ class keyword
 			$change = $this->rankChange();
 			
 			// If there is a rank change
-			if($change)
+			if(!$change)
 			{
 													echo "checking notifications PT 4\n";
 
