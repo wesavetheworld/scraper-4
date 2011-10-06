@@ -592,15 +592,21 @@ class keyword
 		// If notifications settings set for keyword
 		if($this->notifications)
 		{
+									echo "checking notifications PT 3\n";
+
 			// Check for a rank change
 			$change = $this->rankChange();
 			
 			// If there is a rank change
 			if($change)
 			{
+													echo "checking notifications PT 4\n";
+
 				// Check if a notification is triggered
 				if($this->triggerNotification($change))
 				{
+									echo "checking notifications PT 5\n";
+
 					// Build notification array
 					$notify['last'] = $this->lastRank;
 					$notify['current'] =  $this->rank;
