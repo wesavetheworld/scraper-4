@@ -43,7 +43,7 @@
 		define('JOB_SERVER_IP', '50.18.56.175');
 
 		// The AWS elastic ip for the worker 1 server
-		define('WORKER_IP', '50.18.56.175');	
+		define('WORKER_IP', '184.72.55.252');	
 
 		// The gluster shared data drive location
 		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 
