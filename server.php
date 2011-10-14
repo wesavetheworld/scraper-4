@@ -4,8 +4,9 @@
 
 	// **************************************************************************//
 	//  
-	// ** SERVER - When a server boots up it runs this file to bootstrap itself,
-	// ** and then to run the core daemon associated with it's purpose.
+	// ** SERVER - When a server boots up it runs this file (called from rc.local) 
+	// ** to bootstrap itself, and then again (from supervisord) to run the core 
+	// ** daemon associated with it's purpose.
 	// ** 
 	// ** @author	Joshua Heiland <thezenman@gmail.com>
 	// ** @date	 2011-06-17
