@@ -4,8 +4,8 @@
 
 	// **************************************************************************//
 	//  
-	// ** HUB - The main hub of SEscout data collection. All process requests are 
-	// ** routed through this file 	 
+	// ** SERVER - When a server boots up it runs this file to bootstrap itself,
+	// ** and then to run the core daemon associated with it's purpose.
 	// ** 
 	// ** @author	Joshua Heiland <thezenman@gmail.com>
 	// ** @date	 2011-06-17
@@ -51,12 +51,13 @@
 		if($argv[2])
 		{
 			define("JOB_NAME", $argv[2]);
-		}
 
-		if($argv[3])
-		{
-			define("JOB_FUNCTION", $argv[3]);
-		}	
+
+			if($argv[3])
+			{
+				define("JOB_FUNCTION", $argv[3]);
+			}				
+		}
 
 		// Include main router
 		include("core/$core.core.php");	

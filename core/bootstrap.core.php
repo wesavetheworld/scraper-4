@@ -275,10 +275,6 @@ class bootstrap
 		{
 			$config.= 'define("DEV", TRUE);'."\n";
 		}	
-		else
-		{
-			//$config.= 'define("DEV", FALSE);'."\n";
-		}
 
 		// Write config file to config folder
 		file_put_contents("config/instance.config.php", $config);
