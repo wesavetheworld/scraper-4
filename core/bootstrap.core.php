@@ -61,7 +61,7 @@ class bootstrap
     	$this->mountDataFolder();	 				
 
     	echo "so far so good...\n";
-    	
+
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{	
@@ -132,8 +132,8 @@ class bootstrap
 			{
 				echo "instance id problem.  sleeping...";
 
-				// Wait a minute before trying again.
-				sleep(60);
+				// Wait 10 seconds before trying again.
+				sleep(10);
 			}	
 		}	
 	}
@@ -200,8 +200,8 @@ class bootstrap
 				// Send admin error message
 				utilities::reportErrors("Job server is not online.", TRUE);
 
-				// Sleep for 1 minute and try again
-				sleep(60);
+				// Wait 10 seconds before trying again.
+				sleep(10);
 			}
 		}	
 
@@ -228,8 +228,8 @@ class bootstrap
 			{
 				echo "instance description problem.  sleeping...";
 
-				// Wait a minute then try again
-				sleep(60);				
+				// Wait 10 seconds before trying again.
+				sleep(10);			
 			}
 		}	
 
