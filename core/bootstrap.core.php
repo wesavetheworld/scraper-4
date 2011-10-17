@@ -60,6 +60,8 @@ class bootstrap
     	// Mount client servers data folder locally
     	$this->mountDataFolder();	 				
 
+    	echo "so far so good...\n";
+    	
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{	

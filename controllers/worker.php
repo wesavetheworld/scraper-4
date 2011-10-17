@@ -4,8 +4,7 @@
 
 // ***************************************************************************//
 //  
-// ** RANKINGS - Scrapes search engines for rankings. Required settings can be 
-// ** set in config/rankings.php 
+// ** WORKER - Checks out jobs from the jobServer and performs the work
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
 // ** @date	 2011-06-21
