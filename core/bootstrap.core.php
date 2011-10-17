@@ -20,10 +20,10 @@
 class bootstrap 
 {    
 	// Will contain the ec2 instance id
-	$instanceId = false;
+	private $instanceId = false;
 	
 	// Will contain the ec2 description tags
-	$instanceDescription = false;	
+	private $instanceDescription = false;	
 
 	// Runs on class instantiation
 	function __construct()
