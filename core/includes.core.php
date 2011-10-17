@@ -28,9 +28,6 @@
 
 	// Class for loading controllers
    	include('core/load.core.php');
-
-	// Class for configuring server
-   	include('core/bootstrap.core.php');
 	
 	// Include all utility static functions
    	include('classes/utilities.class.php');	   		

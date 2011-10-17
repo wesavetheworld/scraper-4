@@ -17,13 +17,6 @@
 	// ***************************************************************************//
 
 	// ********************************** START **********************************// 
-
-	// ===========================================================================// 
-	// ! Dependencies and helper classes 	                                      //
-	// ===========================================================================//
-
-	// Include all required core files
-	require_once('core/includes.core.php');
 	
 	// ===========================================================================// 
 	// ! Configure server for use                                                 //
@@ -32,6 +25,9 @@
 	// If the first argument is to bootstrap the server
 	if($argv[1] == 'bootstrap') 
 	{
+		// Class for configuring server
+   		include('core/bootstrap.core.php');
+   			
    		// Configure server for use 
    		new bootstrap();	
    	}	
@@ -43,6 +39,9 @@
 	// Otherwise get the correct core daemon to run for the server
    	else
    	{
+		// Include all required core files (Dependencies and helper classes)
+		require_once('core/includes.core.php');   		
+		
 		// Define core to use
 		$core = $argv[1];
 

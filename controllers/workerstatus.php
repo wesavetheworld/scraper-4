@@ -27,6 +27,9 @@ class workerstatus
 	{           
 		// Include keywords data model
 	 	require_once('classes/gearman.class.php');
+
+	 	// If this is dev
+	 	$this->dev = $_SERVER['argv'][2];
 	}
 	
 	// ===========================================================================// 
@@ -35,11 +38,21 @@ class workerstatus
 	
 	public function workerstatus()
 	{   
-
 		echo "started:";
-		
-		$jobServer = new jobServerStatus(JOB_SERVER_IP);	
 
+		// If this is a dev instance
+		if($this->dev)
+		{
+			// Instantiate new dev gearman call
+			$jobServer = new jobServerStatus(JOB_SERVER_IP_DEV);	
+		}
+		// Then it's production
+		else
+		{
+			// Instantiate new gearman call
+			$jobServer = new jobServerStatus(JOB_SERVER_IP);	
+		}			
+		
 		$status = $jobServer->getStatus();
 
 		print_r($status['operations']);
@@ -52,8 +65,18 @@ class workerstatus
 	{
 		echo "\nQueued $type jobs: ";
 
-		// Instantiate new gearman call
-		$jobServer = new jobServerStatus(JOB_SERVER_IP);	
+		// If this is a dev instance
+		if($this->dev)
+		{
+			// Instantiate new dev gearman call
+			$jobServer = new jobServerStatus(JOB_SERVER_IP_DEV);	
+		}
+		// Then it's production
+		else
+		{
+			// Instantiate new gearman call
+			$jobServer = new jobServerStatus(JOB_SERVER_IP);	
+		}			
 
 		// Retrieve list of current jobs in queue
 		$status = $jobServer->getStatus();	

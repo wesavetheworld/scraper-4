@@ -19,22 +19,16 @@
 
 class bootstrap 
 {    
-	
+	// Runs on class instantiation
 	function __construct()
 	{
 		// Check repo for any new revisions
 		$this->updateApp();
 
-		// Include the amazon SDK
-		require_once('classes/amazon/sdk.class.php');
-
-		// Create a new amazon object
-		$this->ec2 = new AmazonEC2();
-
-		// Set the region to access instances
-		$this->ec2->set_region('us-west-1');	
+		// Create a new amazon connection		
+		$this->amazon();
 		
-		// do it
+		// Configure this server
 		$this->bootstrap();			
 	}
 
@@ -51,11 +45,11 @@ class bootstrap
 		// Load the current instances description (client/worker)
 		$this->getInstanceType();
 
-		// Log status
-		utilities::notate("Instance type: ".$this->instanceType);	
-
 		// Save all server settings to config files
-		$this->saveType();	  		
+		$this->saveType();	 
+		
+		// Include all required core files (Dependencies and helper classes)
+		require_once('core/includes.core.php');    		
 		
     	// Mount client servers data folder locally
     	$this->mountDataFolder();	 				
@@ -63,18 +57,8 @@ class bootstrap
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{	
-			// If this is a dev instance
-			if($this->instanceDev)
-			{
-				// Assign the dev jobServer elastic ip to this instance
-				$this->assignIp(JOB_SERVER_IP_DEV);		
-			}
-			// Then it's production
-			else
-			{
-				// Assign the jobServer elastic ip to this instance
-				$this->assignIp(JOB_SERVER_IP);					
-			}				
+			// Assign the jobServer elastic ip to this instance
+			$this->assignIp(JOB_SERVER_IP);				
 
 			// Run gearman daemon
 			$this->runGearman();
@@ -91,34 +75,14 @@ class bootstrap
 			// If this is a client instance
 			if($this->instanceType == "client")
 			{
-				// If this is a dev instance
-				if($this->instanceDev)
-				{
-					// Assign the dev client elastic ip to this instance
-					$this->assignIp(CLIENT_IP_DEV);			
-				}
-				// Then it's production
-				else
-				{
-					// Assign the client elastic ip to this instance
-					$this->assignIp(CLIENT_IP);						
-				}		
+				// Assign the client elastic ip to this instance
+				$this->assignIp(CLIENT_IP);			
 			}
 			// If this is either production or development worker 1
 			elseif($this->instanceType == "worker")
 			{	
-				// If this is a dev instance
-				if($this->instanceDev)
-				{
-					// Assign the dev worker elastic ip to this instance
-					$this->assignIp(WORKER_IP_DEV);			
-				}
-				// Then it's production
-				else
-				{
-					// Assign the worker elastic ip to this instance
-					$this->assignIp(WORKER_IP);						
-				}					
+				// Assign the worker elastic ip to this instance
+				$this->assignIp(WORKER_IP);					
 			}
 		}	
 
@@ -126,28 +90,42 @@ class bootstrap
 		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &> /dev/null &");
 
 		// Bootstrap complete
-		exit();
+		exit("Server successfully configured");
 	}
 
 	// ===========================================================================// 
 	// ! Instance identification methods                                          //
 	// ===========================================================================//
+
+	// Create a new amazon connection
+	private function amazon()
+	{
+		// Include the amazon SDK
+		require_once('classes/amazon/sdk.class.php');
+
+		// Create a new amazon object
+		$this->ec2 = new AmazonEC2();
+
+		// Set the region to access instances
+		$this->ec2->set_region('us-west-1');			
+	}
 	
 	// Load the current instances id
 	private function getInstanceId()
 	{
-		// Get the instance id of the currently running instance
-		$this->instanceId = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
-
-		// If no instance id
-		if(!$this->instanceId)
+		// Loop until the server's id is known (loop is a failsafe)
+		while(!$this->instaceId)
 		{
-			// Send admin error message
-			utilities::reportErrors("Can't load instance id"); 
-			
-	  		// Finish execution
-			utilities::complete();				
-		}		
+			// Get the instance id of the currently running instance
+			$this->instanceId = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
+
+			// If request failed
+			if(!$this->instanceId)
+			{
+				// Wait a minute before trying again.
+				sleep(60);
+			}	
+		}	
 	}
 
 	// Load the current instances type tag description (worker/client/job)
@@ -224,17 +202,23 @@ class bootstrap
 	// Get list of EC2 instance info
 	private function getInstances($opt)
 	{		
-		// Get info on all worker instances
-		$this->response = $this->ec2->describe_instances($opt);		
-
-		// If request failed
-		if(!$this->response->isOK())
+		// Loop until the server's id is known (loop is a failsafe)
+		while(!$success)
 		{
-			// Send admin error message
-			utilities::reportErrors("Can't load instance data"); 
-			
-	  		// Finish execution
-			utilities::complete();
+			// Get info on all worker instances
+			$this->response = $this->ec2->describe_instances($opt);		
+
+			// If request was successful
+			if($this->response->isOK())
+			{
+				// Instance description returned, don't loop
+				$success = true;
+			}	
+			else
+			{
+				// Wait a minute then try again
+				sleep(60);				
+			}
 		}	
 
 		// Return instance objects

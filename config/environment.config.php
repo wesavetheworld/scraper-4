@@ -31,41 +31,25 @@
 	set_time_limit(0);	
 			
 	// ===========================================================================// 
-	// ! Server location settings DEV                                             //
+	// ! Server IP settings                                                       //
 	// ===========================================================================//	
 
-	// The AWS elastic ip for the client server
-	define('CLIENT_IP_DEV', '184.72.45.180');
-
-	// The AWS elastic ip for the job server
-	define('JOB_SERVER_IP_DEV', '50.18.56.175');
-
-	// The AWS elastic ip for the worker 1 server
-	define('WORKER_IP_DEV', '184.72.55.252');	
-
-	// The gluster shared data drive location
-	define('DATA_SERVER_DEV', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data');	
-		
-	// If dev environment set default constants to dev's
+	// If development environment
 	if(defined("DEV"))
 	{
 		// The AWS elastic ip for the client server
-		define('CLIENT_IP', CLIENT_IP_DEV);
+		define('CLIENT_IP', '184.72.45.180');
 
 		// The AWS elastic ip for the job server
-		define('JOB_SERVER_IP', JOB_SERVER_IP_DEV);
+		define('JOB_SERVER_IP', '50.18.56.175');
 
 		// The AWS elastic ip for the worker 1 server
-		define('WORKER_IP', WORKER_IP_DEV);	
+		define('WORKER_IP', '184.72.55.252');	
 
 		// The gluster shared data drive location
-		define('DATA_SERVER', DATA_SERVER_DEV); 
+		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data');	
 	}	
-
-	// ===========================================================================// 
-	// ! Server location settings LIVE                                            //
-	// ===========================================================================//		
-
+	// else production environment
 	else
 	{
 		// The AWS elastic ip for the client server
@@ -85,57 +69,98 @@
 	// ! Directory settings                                                       //
 	// ===========================================================================//	
 
-	// The gluster shared data drive location
-	define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 
-	
-	// Folder used for status files
-	define("STATUS_DIRECTORY", "data/gluster/status/");	   
+	// If development environment
+	if(defined("DEV"))
+	{
+		// The gluster shared data drive location
+		define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 
+		
+		// Folder used for status files
+		define("STATUS_DIRECTORY", "data/gluster/status/");	   
 
-	// Folder used for status files
-	define("SYSTEM_STATUS", "data/gluster/status/system.log");			
+		// Folder used for status files
+		define("SYSTEM_STATUS", "data/gluster/status/system.log");	
+	}	
+	// else production environment
+	else
+	{
+		// The gluster shared data drive location
+		define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 
+		
+		// Folder used for status files
+		define("STATUS_DIRECTORY", "data/gluster/status/");	   
+
+		// Folder used for status files
+		define("SYSTEM_STATUS", "data/gluster/status/system.log");			
+	}				
 
 	// ===========================================================================// 
 	// ! SERPS Database credentials                                                     //
 	// ===========================================================================//
 	
-	//Database host
-	define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+	// If development environment
+	if(defined("DEV"))
+	{	
+		//Database host
+		define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
-	// Database username
-	define("DB_SERP_USER", "seserps");
+		// Database username
+		define("DB_SERP_USER", "seserps");
 
-	// Database password
-	define("DB_SERPS_PASS", "234k3k3LSJapBbr");
+		// Database password
+		define("DB_SERPS_PASS", "234k3k3LSJapBbr");
 
-	// Database name
-	define("DB_NAME_SERPS", "serps"); 
-	
-	//---LOCAL
-	
-	// define("DB_HOST", ":/Applications/MAMP/tmp/mysql/mysql.sock");
+		// Database name
+		define("DB_NAME_SERPS", "serps"); 
+	}	
+	// else production environment
+	else
+	{
+		//Database host
+		define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
-	// // Database username
-	// define("DB_SERP_USER", "root");
+		// Database username
+		define("DB_SERP_USER", "seserps");
 
-	// // Database password
-	// define("DB_SERPS_PASS", "root");
+		// Database password
+		define("DB_SERPS_PASS", "234k3k3LSJapBbr");
 
-	// // Database name
-	// define("DB_NAME_SERPS", "serps"); 		
+		// Database name
+		define("DB_NAME_SERPS", "serps"); 		
+	}			
 
 	// ===========================================================================// 
 	// ! Proxy Database credentials                                               //
 	// ===========================================================================//          	  
 
-	// Proxy Database host
-	define("PROXY_HOST", "proxies.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+	// If development environment
+	if(defined("DEV"))
+	{	
+		// Proxy Database host
+		define("PROXY_HOST", "proxies.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
-	// Proxy Database username
-	define("PROXY_USER", "seproxies");
+		// Proxy Database username
+		define("PROXY_USER", "seproxies");
 
-	// Proxy Database password
-	define("PROXY_PASS", "lskLPQVksidu34");
+		// Proxy Database password
+		define("PROXY_PASS", "lskLPQVksidu34");
 
-	// Proxy Database name
-	define("PROXY_DB", "proxies"); 		
+		// Proxy Database name
+		define("PROXY_DB", "proxies"); 	
+	}	
+	// else production environment
+	else
+	{
+		// Proxy Database host
+		define("PROXY_HOST", "proxies.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+
+		// Proxy Database username
+		define("PROXY_USER", "seproxies");
+
+		// Proxy Database password
+		define("PROXY_PASS", "lskLPQVksidu34");
+
+		// Proxy Database name
+		define("PROXY_DB", "proxies"); 			
+	}			
 ?>
