@@ -38,21 +38,11 @@ class workerstatus
 	
 	public function workerstatus()
 	{   
-		echo "started:";
-
-		// If this is a dev instance
-		if($this->dev)
-		{
-			// Instantiate new dev gearman call
-			$jobServer = new jobServerStatus(JOB_SERVER_IP_DEV);	
-		}
-		// Then it's production
-		else
-		{
-			// Instantiate new gearman call
-			$jobServer = new jobServerStatus(JOB_SERVER_IP);	
-		}			
+		echo "started: ".JOB_SERVER_IP;		
 		
+		// Instantiate new gearman call
+		$jobServer = new jobServerStatus(JOB_SERVER_IP);
+					
 		$status = $jobServer->getStatus();
 
 		print_r($status['operations']);
@@ -63,20 +53,10 @@ class workerstatus
 	// Check for oustanding jobs stilled queued
 	private function checkJobQueue($type)
 	{
-		echo "\nQueued $type jobs: ";
+		echo "\nQueued $type jobs: ";		
 
-		// If this is a dev instance
-		if($this->dev)
-		{
-			// Instantiate new dev gearman call
-			$jobServer = new jobServerStatus(JOB_SERVER_IP_DEV);	
-		}
-		// Then it's production
-		else
-		{
-			// Instantiate new gearman call
-			$jobServer = new jobServerStatus(JOB_SERVER_IP);	
-		}			
+		// Instantiate new gearman call
+		$jobServer = new jobServerStatus(JOB_SERVER_IP);
 
 		// Retrieve list of current jobs in queue
 		$status = $jobServer->getStatus();	
@@ -84,7 +64,6 @@ class workerstatus
 		// Return specified job type job queue total
 		echo $status['operations'][$type]['total']."\n";	
 	}	
-
 }	    
 
 

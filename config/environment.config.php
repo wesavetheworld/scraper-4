@@ -29,6 +29,12 @@
 
 	// Set php time limit to unlimited
 	set_time_limit(0);	
+
+	// If not a dev instance but the dev command is passed (mainly for workerstatus controller)
+	if(!defined("DEV") && $argv[2] == "dev")
+	{
+		define("DEV", true);
+	}
 			
 	// ===========================================================================// 
 	// ! Server IP settings                                                       //

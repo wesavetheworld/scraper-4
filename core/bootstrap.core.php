@@ -128,6 +128,8 @@ class bootstrap
 			// If request failed
 			if(!$this->instanceId)
 			{
+				echo "instance id problem.  sleeping...";
+
 				// Wait a minute before trying again.
 				sleep(60);
 			}	
@@ -222,6 +224,8 @@ class bootstrap
 			}	
 			else
 			{
+				echo "instance description problem.  sleeping...";
+
 				// Wait a minute then try again
 				sleep(60);				
 			}
