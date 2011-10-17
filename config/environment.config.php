@@ -32,21 +32,34 @@
 			
 	// ===========================================================================// 
 	// ! Server location settings DEV                                             //
-	// ===========================================================================//		
+	// ===========================================================================//	
 
+	// The AWS elastic ip for the client server
+	define('CLIENT_IP_DEV', '184.72.45.180');
+
+	// The AWS elastic ip for the job server
+	define('JOB_SERVER_IP_DEV', '50.18.56.175');
+
+	// The AWS elastic ip for the worker 1 server
+	define('WORKER_IP_DEV', '184.72.55.252');	
+
+	// The gluster shared data drive location
+	define('DATA_SERVER_DEV', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data');	
+		
+	// If dev environment set default constants to dev's
 	if(defined("DEV"))
 	{
 		// The AWS elastic ip for the client server
-		define('CLIENT_IP', '184.72.45.180');
+		define('CLIENT_IP', CLIENT_IP_DEV);
 
 		// The AWS elastic ip for the job server
-		define('JOB_SERVER_IP', '50.18.56.175');
+		define('JOB_SERVER_IP', JOB_SERVER_IP_DEV);
 
 		// The AWS elastic ip for the worker 1 server
-		define('WORKER_IP', '184.72.55.252');	
+		define('WORKER_IP', WORKER_IP_DEV);	
 
 		// The gluster shared data drive location
-		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 
+		define('DATA_SERVER', DATA_SERVER_DEV); 
 	}	
 
 	// ===========================================================================// 

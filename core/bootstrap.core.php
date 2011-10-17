@@ -62,9 +62,19 @@ class bootstrap
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
-		{
-			// Assign the jobServer elastic ip to this instance
-			$this->assignIp(JOB_SERVER_IP);	
+		{	
+			// If this is a dev instance
+			if($this->instanceDev)
+			{
+				// Assign the dev jobServer elastic ip to this instance
+				$this->assignIp(JOB_SERVER_IP_DEV);		
+			}
+			// Then it's production
+			else
+			{
+				// Assign the jobServer elastic ip to this instance
+				$this->assignIp(JOB_SERVER_IP);					
+			}				
 
 			// Run gearman daemon
 			$this->runGearman();
@@ -81,14 +91,34 @@ class bootstrap
 			// If this is a client instance
 			if($this->instanceType == "client")
 			{
-				// Assign the client elastic ip to this instance
-				$this->assignIp(CLIENT_IP);			
+				// If this is a dev instance
+				if($this->instanceDev)
+				{
+					// Assign the dev client elastic ip to this instance
+					$this->assignIp(CLIENT_IP_DEV);			
+				}
+				// Then it's production
+				else
+				{
+					// Assign the client elastic ip to this instance
+					$this->assignIp(CLIENT_IP);						
+				}		
 			}
 			// If this is either production or development worker 1
-			elseif($this->instanceName == "worker1" || $this->instanceName == "worker1Dev")
-			{
-				// Assign the worker elastic ip to this instance
-				$this->assignIp(WORKER_IP);	
+			elseif($this->instanceType == "worker")
+			{	
+				// If this is a dev instance
+				if($this->instanceDev)
+				{
+					// Assign the dev worker elastic ip to this instance
+					$this->assignIp(WORKER_IP_DEV);			
+				}
+				// Then it's production
+				else
+				{
+					// Assign the worker elastic ip to this instance
+					$this->assignIp(WORKER_IP);						
+				}					
 			}
 		}	
 
