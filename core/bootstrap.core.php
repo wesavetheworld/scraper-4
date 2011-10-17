@@ -114,7 +114,7 @@ class bootstrap
 	private function getInstanceId()
 	{
 		// Loop until the server's id is known (loop is a failsafe)
-		while(!$this->instaceId)
+		while(!$this->instanceId)
 		{
 			// Get the instance id of the currently running instance
 			$this->instanceId = exec("wget -q -O - http://169.254.169.254/latest/meta-data/instance-id");
