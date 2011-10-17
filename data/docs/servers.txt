@@ -2,7 +2,8 @@
 
 // ***************************************************************************//
 //  
-// ** SERVERS - Information about the server configuration in place for SEscout
+// ** SERVERS - Information about the server configuration and operations currently
+// ** in place for SEscout
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
 // ** @date	 2011-07-12
@@ -11,9 +12,20 @@
 
 // ********************************** START **********************************//
 
+// ===========================================================================// 
+// ! Operation: Booting up                                                    //
+// ===========================================================================// 
+
+	Each server, at boot, runs the following command from "/etc/rc.local":
+		"php /home/ec2-user/server.php bootstrap"
+	
+	The bootstrapping class will use the amazon SDK to identify the server type
+	of the current server. Based on this information it will:
+		- Create a custom instance.config.php to store server settings
+		- Create a supervisord config file containing which controllers to run
 
 // ===========================================================================// 
-// ! Name: jobServer                                                          //
+// ! Server type: jobServer                                                   //
 // ===========================================================================// 
 
 	purpose: receives jobs from the client server and assigns them to workers
@@ -24,10 +36,11 @@
 		   - Launches at boot from /etc/rc.local 
 
 // ===========================================================================// 
-// ! Name: client                                                             //
+// ! Server type: client                                                      //
 // ===========================================================================// 		   
 
-	purpose: determines what SEscout jobs need to be run each hour
+	purpose: determines what SEscout jobs need to be run each hour. Also manages
+	all cron-like tasks (cleaning, db monitoring etc)
 	
 	files: SEscout scraper app controller->client
 	
@@ -40,7 +53,7 @@
 			-    
 
 // ===========================================================================// 
-// ! Name: worker                                                             //
+// ! Server type: worker                                                      //
 // ===========================================================================// 		   
 
 	purpose: receives jobs from jobServer and performs the actual scraping

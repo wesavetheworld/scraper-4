@@ -1,3 +1,17 @@
+// ******************************* INFORMATION *******************************//
+
+// ***************************************************************************//
+//  
+// ** dbstructure - This is just a brainstorming file and does not represent
+// ** anything currently in production
+// ** 
+// ** @author	Joshua Heiland <thezenman@gmail.com>
+// ** @date	 2011-07-12
+//  	
+// ***************************************************************************//
+
+// ********************************** START **********************************//
+
 app design 
 
 - 2 nodes running mongodb(master/slave)
