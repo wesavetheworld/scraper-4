@@ -19,6 +19,12 @@
 
 class bootstrap 
 {    
+	// Will contain the ec2 instance id
+	$this->instanceId = false;
+	
+	// Will contain the ec2 description tags
+	$this->instanceDescription = false;	
+
 	// Runs on class instantiation
 	function __construct()
 	{
@@ -90,7 +96,7 @@ class bootstrap
 		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &> /dev/null &");
 
 		// Bootstrap complete
-		exit("Server successfully configured");
+		exit("Server successfully configured\n");
 	}
 
 	// ===========================================================================// 
@@ -203,7 +209,7 @@ class bootstrap
 	private function getInstances($opt)
 	{		
 		// Loop until the server's id is known (loop is a failsafe)
-		while(!$success)
+		while(!$this->instanceDescription)
 		{
 			// Get info on all worker instances
 			$this->response = $this->ec2->describe_instances($opt);		
@@ -212,7 +218,7 @@ class bootstrap
 			if($this->response->isOK())
 			{
 				// Instance description returned, don't loop
-				$success = true;
+				$this->instanceDescription = true;
 			}	
 			else
 			{
