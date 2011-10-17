@@ -190,8 +190,18 @@ class bootstrap
     	// While job server is not running
     	while($jobServerStatus != "running")
     	{
-	    	// Get EC2 job server info
-			$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));
+			// If this is a dev instance
+			if($this->instanceDev)
+			{
+	    		// Get EC2 dev job server info
+				$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServerDev'))));		
+			}
+			// Then it's production
+			else
+			{
+	    		// Get EC2 job server info
+				$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));					
+			}	
 
 			// Set the status of the jobServer
 			$jobServerStatus = $jobServer->item->instancesSet->item->instanceState->name;
