@@ -23,7 +23,7 @@ class bootstrap
 	private $instanceId = false;
 	
 	// Will contain the ec2 description tags
-	private $instanceDescription = false;	
+	private $response = false;	
 
 	// Runs on class instantiation
 	function __construct()
@@ -213,20 +213,17 @@ class bootstrap
 	private function getInstances($opt)
 	{		
 		// Loop until the server's id is known (loop is a failsafe)
-		while(!$this->instanceDescription)
+		while(!$this->response)
 		{
 			// Get info on all worker instances
 			$this->response = $this->ec2->describe_instances($opt);		
 
 			// If request was successful
-			if($this->response->isOK())
-			{
-				// Instance description returned, don't loop
-				$this->instanceDescription = true;
-			}	
-			else
+			if(!$this->response->isOK())
 			{
 				echo "instance description problem.  sleeping...";
+				
+				$this->response = false;
 
 				// Wait 10 seconds before trying again.
 				sleep(10);			
