@@ -62,6 +62,8 @@ class bootstrap
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{	
+			echo "this is the job server!\n";
+
 			// Assign the jobServer elastic ip to this instance
 			$this->assignIp(JOB_SERVER_IP);				
 
@@ -71,6 +73,8 @@ class bootstrap
 		// All othere instance types
 		else
 		{
+			echo "this is not the jobserver\n";
+
 			// Set up which core daemon supervisord will controll
 			$this->editSupervisord(); 
 						
