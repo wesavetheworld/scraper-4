@@ -57,7 +57,7 @@ class bootstrap
     	// Mount client servers data folder locally
     	$this->mountDataFolder();	 				
 
-    	echo "so far so good...\n";
+    	echo "so far so good...id:$this->instanceId\n";
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
@@ -292,7 +292,7 @@ class bootstrap
 		if(!$this->response->isOK())
 		{
 			echo "Can't attach elastic ip";
-			
+
 		}			
 	}	
 
