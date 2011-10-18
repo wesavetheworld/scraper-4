@@ -285,7 +285,7 @@ class bootstrap
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
 	{
-		echo "start ip stuff\n"
+		echo "start ip stuff\n";
 		// Attach the elastic ip provided to this instance
 		$this->ec2->associate_address($this->instanceId, $ip);
 
@@ -299,7 +299,7 @@ class bootstrap
 		}
 		else
 		{
-					echo "start ip success\n"
+			echo "start ip success\n";
 
 		}			
 	}	
