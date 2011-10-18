@@ -57,18 +57,12 @@ class bootstrap
     	// Mount client servers data folder locally
     	$this->mountDataFolder();	 				
 
-    	echo "so far so good...id:$this->instanceId\n";
-
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{	
-			echo "this is the job server! IP:".JOB_SERVER_IP."\n";
-
 			// Assign the jobServer elastic ip to this instance
 			$this->assignIp(JOB_SERVER_IP);	
 			
-			echo "IP assigned!...\n";			
-
 			// Run gearman daemon
 			$this->runGearman();
 		}
@@ -199,7 +193,7 @@ class bootstrap
 			if($jobServerStatus != "running")
 			{	
 				// Send admin error message
-				utilities::reportErrors("Job server is not online.", TRUE);
+				echo "Job server is not online.";
 
 				// Wait 10 seconds before trying again.
 				sleep(10);
@@ -285,23 +279,14 @@ class bootstrap
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
 	{
-		echo "start ip stuff\n";
 		// Attach the elastic ip provided to this instance
 		$this->ec2->associate_address($this->instanceId, $ip);
-
-		echo "check ip stuff\n";
 		
 		// If request failed
 		if(!$this->response->isOK())
 		{
-			echo "Can't attach elastic ip";
-
-		}
-		else
-		{
-			echo "start ip success\n";
-
-		}			
+			echo "Can't attach elastic ip\n";
+		}		
 	}	
 
 	// ===========================================================================// 
