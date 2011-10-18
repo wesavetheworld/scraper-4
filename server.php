@@ -22,6 +22,8 @@
 	// ! Server path settings (chdir) and define "HUB"                            //
 	// ===========================================================================//
 
+	echo "here: ".$argv[0]."\n";
+
 	// Variables and functions related to server path
 	require_once($argv[0].'/core/path.config.php');			
 	
