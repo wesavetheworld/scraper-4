@@ -62,7 +62,7 @@ class bootstrap
 		// If this is the job server
 		if($this->instanceType == "jobServer")
 		{	
-			echo "this is the job server!\n";
+			echo "this is the job server! IP:".JOB_SERVER_IP."\n";
 
 			// Assign the jobServer elastic ip to this instance
 			$this->assignIp(JOB_SERVER_IP);				
