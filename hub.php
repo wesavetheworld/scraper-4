@@ -22,7 +22,7 @@
 	// ===========================================================================//
 
 	// Variables and functions related to server path
-	require_once('core/path.config.php');			
+	require_once($argv[0].'/core/path.config.php');			
 
 	// ===========================================================================// 
 	// ! Dependencies and helper classes 	                                      //
