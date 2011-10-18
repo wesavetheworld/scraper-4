@@ -65,7 +65,9 @@ class bootstrap
 			echo "this is the job server! IP:".JOB_SERVER_IP."\n";
 
 			// Assign the jobServer elastic ip to this instance
-			$this->assignIp(JOB_SERVER_IP);				
+			$this->assignIp(JOB_SERVER_IP);	
+			
+			echo "IP assigned!...\n";			
 
 			// Run gearman daemon
 			$this->runGearman();
@@ -73,8 +75,6 @@ class bootstrap
 		// All othere instance types
 		else
 		{
-			echo "this is not the jobserver\n";
-
 			// Set up which core daemon supervisord will controll
 			$this->editSupervisord(); 
 						
@@ -285,13 +285,21 @@ class bootstrap
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
 	{
+		echo "start ip stuff\n"
 		// Attach the elastic ip provided to this instance
 		$this->ec2->associate_address($this->instanceId, $ip);
+
+		echo "check ip stuff\n"
 		
 		// If request failed
 		if(!$this->response->isOK())
 		{
 			echo "Can't attach elastic ip";
+
+		}
+		else
+		{
+					echo "start ip success\n"
 
 		}			
 	}	
