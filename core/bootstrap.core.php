@@ -1,4 +1,4 @@
-<?php  
+<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
 
 // ******************************* INFORMATION ******************************//
 
