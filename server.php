@@ -19,13 +19,17 @@
 	// ********************************** START **********************************// 
 
 	// ===========================================================================// 
-	// ! Server path settings (chdir) and define "HUB"                            //
+	// ! Server path and argument settings	                                      //
 	// ===========================================================================//
+	
+	// Checked for in all othere files to prevent direct access   
+	define('HUB', TRUE);
 
-	echo "here: ".$argv[0]."\n";
+	// Get passed server arguments
+	$argv = $_SERVER['argv'];	
 
-	// Variables and functions related to server path
-	require_once($argv[0].'/core/path.config.php');			
+   	// Set working directory for correct file includes etc 
+	chdir(dirname($argv[0]));		
 	
 	// ===========================================================================// 
 	// ! Configure server for use                                                 //
