@@ -291,11 +291,8 @@ class bootstrap
 		// If request failed
 		if(!$this->response->isOK())
 		{
-			// Send admin error message
-			utilities::reportErrors("Can't attach elastic ip"); 
+			echo "Can't attach elastic ip";
 			
-	  		// Finish execution
-			utilities::complete();
 		}			
 	}	
 
