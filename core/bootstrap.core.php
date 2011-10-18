@@ -289,7 +289,7 @@ class bootstrap
 		// Attach the elastic ip provided to this instance
 		$this->ec2->associate_address($this->instanceId, $ip);
 
-		echo "check ip stuff\n"
+		echo "check ip stuff\n";
 		
 		// If request failed
 		if(!$this->response->isOK())
