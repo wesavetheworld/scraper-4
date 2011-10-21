@@ -316,6 +316,8 @@ class keywords
 					$setNotify = " notify = '".$keyword->notify."',";
 				}
 
+				echo "SAVE NOTIFY for $keyword->keyword_id: $keyword->notify \n";
+
 				// Update keywords table with update time and notifications
 				$query = "	UPDATE 
 								keywords 
