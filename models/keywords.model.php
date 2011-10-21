@@ -598,13 +598,13 @@ class keyword
 			// If there is a rank change
 			if($change)
 			{
-				// Check if a notification is triggered
+				// Check if a notification is triggered based on keyword notification settings
 				if($this->triggerNotification($change))
 				{
 					// Build notification array
 					$notify['last'] = $this->lastRank;
 					$notify['current'] =  $this->rank;
-					$nofify['change'] = $change;
+					$nofify['change'] = 5;
 
 					// Set notificaton to send for keyword
 					$this->notify = serialize($notify);						
