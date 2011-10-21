@@ -77,7 +77,7 @@ class proxies
 		if($total == 0 || $total < $requested)
 		{    
 			// Send any error notifications
-		 	//utilities::reportErrors("Not enough proxies to select");			
+		 	utilities::reportErrors("Not enough proxies to select");			
 
 			// No proxies found, so stop 
 		  	utilities::complete();			
