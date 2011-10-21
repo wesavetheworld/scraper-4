@@ -604,7 +604,7 @@ class keyword
 					// Build notification array
 					$notify['current'] =  intval($this->rank);
 					$notify['last'] = intval($this->lastRank);
-					$notify['change'] = intval($change);
+					$notify['change'] = $change;
 
 					// Set notificaton to send for keyword
 					$this->notify = serialize($notify);					
@@ -630,6 +630,12 @@ class keyword
 			{
 				// Change to negative int
 				$changeAmount = -$changeAmount;			
+			}
+			// Positive change
+			else
+			{
+				// Change to negative int
+				$changeAmount = "+$changeAmount";					
 			}
 
 			return $changeAmount;
