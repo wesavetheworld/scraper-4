@@ -626,7 +626,7 @@ class keyword
 			$changeAmount = abs($current - $last);
 
 			// Negative change
-			if($current < $last)
+			if($current > $last)
 			{
 				// Change to negative int
 				$changeAmount = -$changeAmount;			

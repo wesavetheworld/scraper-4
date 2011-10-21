@@ -34,41 +34,53 @@ class proxies
     // Select proxies for use
     public function selectProxies($totalProxies = 1, $blockedProxies = false)
     {
-		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
-		$sql = "SELECT 
-					* 
-				FROM 
-					proxies 
-				WHERE 
-					status='active'
-				AND 
-					(
-						blocked_".$this->engine." <= DATE_ADD(NOW(),INTERVAL -1 HOUR) 
-					OR
-						blocked_".$this->engine." = '0000-00-00 00:00:00' 
-					)	
-					{$excludeIpAuth} 
-			   	ORDER BY 
-					hr_use, 
-					RAND()
-				LIMIT 
-					{$totalProxies}";
-					
-		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
+    	// Until there are proxies to return
+    	while(!$success)
+    	{
+			// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
+			$sql = "SELECT 
+						* 
+					FROM 
+						proxies 
+					WHERE 
+						status='active'
+					AND 
+						(
+							blocked_".$this->engine." <= DATE_ADD(NOW(),INTERVAL -1 HOUR) 
+						OR
+							blocked_".$this->engine." = '0000-00-00 00:00:00' 
+						)	
+						{$excludeIpAuth} 
+				   	ORDER BY 
+						hr_use, 
+						RAND()
+					LIMIT 
+						{$totalProxies}";
+						
+			$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
 
-		// If enough proxies were selected
-		if($this->minCheck(mysql_num_rows($result), $totalProxies))
-		{	
-			// Build proxy and SQL array
-			while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
-			{
-				// for SQL
-				$this->currentProxies[] = $proxy['proxy'];
+			// If enough proxies were selected
+			if($this->minCheck(mysql_num_rows($result), $totalProxies))
+			{	
+				// Build proxy and SQL array
+				while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
+				{
+					// for SQL
+					$this->currentProxies[] = $proxy['proxy'];
 
-				// Proxy array
-				$this->proxies[] = $proxy;
+					// Proxy array
+					$this->proxies[] = $proxy;
+				}
+
+				// Proxies selected successfully
+				$sucess = TRUE;
 			}
-		}
+			// No proxies to select (db is empty or all proxies are blocked)
+			else
+			{
+				sleep();
+			}
+		}	
     }
 
     // Make sure that the minimum required proxies are returned
@@ -77,7 +89,7 @@ class proxies
 		if($total == 0 || $total < $requested)
 		{    
 			// Send any error notifications
-		 	utilities::reportErrors("Not enough proxies to select");			
+		 	//utilities::reportErrors("Not enough proxies to select");			
 
 			// No proxies found, so stop 
 		  	utilities::complete();			
