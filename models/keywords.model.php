@@ -604,16 +604,10 @@ class keyword
 					// Build notification array
 					$notify['current'] =  intval($this->rank);
 					$notify['last'] = intval($this->lastRank);
-					$nofify['change'] = intval(5);
-					
-					echo "before:\n";
-					print_r($notify);
+					$notify['change'] = intval($change);
 
 					// Set notificaton to send for keyword
-					$this->notify = serialize($notify);	
-	
-					echo "after:\n";
-					echo $this->notify;					
+					$this->notify = serialize($notify);					
 				}
 			}	
 		}	
