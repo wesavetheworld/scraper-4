@@ -39,8 +39,15 @@ class clientCore
 	// The main loop that acts as a daemon
 	public function daemon()
 	{	
+		// If this is the dev client
+		if(defined("DEV"))
+		{
+			// Dont run cron, die please
+			exit("DEV is done!\n");
+		}
+
 		// Loop forever 
-		while(TRUE)
+		while(!defined("DEV") && TRUE)
 		{
 			// Log time for current task loop
 			utilities::notate("Actions at: ".date("H:i:s"), "clientd.log");
