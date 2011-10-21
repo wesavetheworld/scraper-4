@@ -596,7 +596,7 @@ class keyword
 			$change = $this->rankChange();
 			
 			// If there is a rank change
-			if(!$change)
+			if($change)
 			{
 				// Check if a notification is triggered
 				if($this->triggerNotification($change))
@@ -651,6 +651,7 @@ class keyword
 	// Check if a rank change triggers a notification
 	private function triggerNotification($change)
 	{
+		echo "testing trigger for: $this->keyword_id \n";
 		// Get keywords notification settings
 		$n = unserialize($this->notifications);
 							
@@ -658,7 +659,8 @@ class keyword
 		if($n['any_notification'])
 		{
 			return true;	
-		}		
+		}	
+		echo "failed any check\n";	
 		
 		// Monitor #1 position
 		if($n['google_1'])
