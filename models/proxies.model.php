@@ -73,7 +73,7 @@ class proxies
 				}
 
 				// Proxies selected successfully
-				$sucess = TRUE;
+				$success = TRUE;
 			}
 			// No proxies to select (db is empty or all proxies are blocked)
 			else
