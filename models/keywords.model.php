@@ -309,8 +309,8 @@ class keywords
 			// If keyword's tracking data was updated successfully
 			if($this->updateRanking($keyword))
 			{
-				// If updating google
-				if($keyword->engine == "google" && $keyword->keyword_id == 155888)
+				// If updating google and the keyword
+				if($keyword->engine == "google")
 				{
 					// Save any notifications for keyword
 					$setNotify = " notify = '".$keyword->notify."',";
@@ -589,34 +589,22 @@ class keyword
 	// Set notifications for keyword
 	public function setNotification()
 	{
-									echo "checking notifications PT 2\n";
-
 		// If notifications settings set for keyword
 		if($this->notifications)
 		{
-									echo "checking notifications PT 3\n";
-
 			// Check for a rank change
 			$change = $this->rankChange();
 			
 			// If there is a rank change
 			if(!$change)
 			{
-													echo "checking notifications PT 4\n";
-
 				// Check if a notification is triggered
 				if($this->triggerNotification($change))
 				{
-									echo "checking notifications PT 5\n";
-
 					// Build notification array
 					$notify['last'] = $this->lastRank;
 					$notify['current'] =  $this->rank;
 					$nofify['change'] = $change;
-
-					$notify['last'] = 1;
-					$notify['current'] =  3;
-					$nofify['change'] = 2;
 
 					// Set notificaton to send for keyword
 					$this->notify = serialize($notify);						
