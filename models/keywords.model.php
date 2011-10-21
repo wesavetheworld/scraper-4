@@ -602,7 +602,7 @@ class keyword
 				if($this->triggerNotification($change))
 				{
 					// Build notification array
-					$notify['last'] = $this->lastRank;
+					$notify['last'] = 'penis';
 					$notify['current'] =  $this->rank;
 					$nofify['change'] = 5;
 
