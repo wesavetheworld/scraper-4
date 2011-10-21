@@ -1,0 +1,54 @@
+command: client pr 100 new @ 21:02:01
+command: client backlinks 100 new @ 21:02:01
+command: client alexa 100 new @ 21:02:01
+command: client rankingsNew 100 google @ 21:02:01
+command: client rankingsNew 100 bing @ 21:02:01
+command: client pr 100 new @ 21:04:00
+command: client backlinks 100 new @ 21:04:00
+command: client alexa 100 new @ 21:04:00
+command: client rankingsNew 100 google @ 21:04:00
+command: client rankingsNew 100 bing @ 21:04:00
+command: client pr 100 new @ 21:06:00
+command: client backlinks 100 new @ 21:06:00
+command: client alexa 100 new @ 21:06:00
+command: client rankingsNew 100 google @ 21:06:00
+command: client rankingsNew 100 bing @ 21:06:00
+command: client pr 100 new @ 21:08:00
+command: client backlinks 100 new @ 21:08:00
+command: client alexa 100 new @ 21:08:00
+command: client rankingsNew 100 google @ 21:08:00
+command: client rankingsNew 100 bing @ 21:08:00
+command: client pr 100 new @ 21:10:00
+command: client backlinks 100 new @ 21:10:00
+command: client alexa 100 new @ 21:10:00
+command: client rankingsNew 100 google @ 21:10:00
+command: client rankingsNew 100 bing @ 21:10:00
+ 
+command: client pr 100 new @ 21:12:00
+command: client backlinks 100 new @ 21:12:00
+command: client alexa 100 new @ 21:12:00
+command: client rankingsNew 100 google @ 21:12:00
+command: client rankingsNew 100 bing @ 21:12:00
+ 
+ 
+Actions at: 21:13:12
+Actions at: 21:14:00
+command: client pr 100 new
+command: client backlinks 100 new
+command: client alexa 100 new
+command: client rankingsNew 100 google
+command: client rankingsNew 100 bing
+Actions at: 21:15:00
+Actions at: 21:16:00
+command: client pr 100 new
+command: client backlinks 100 new
+command: client alexa 100 new
+command: client rankingsNew 100 google
+command: client rankingsNew 100 bing
+Actions at: 21:17:00
+Actions at: 21:18:00
+command: client pr 100 new
+command: client backlinks 100 new
+command: client alexa 100 new
+command: client rankingsNew 100 google
+command: client rankingsNew 100 bing

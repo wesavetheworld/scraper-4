@@ -310,7 +310,7 @@ class keywords
 			if($this->updateRanking($keyword))
 			{
 				// If updating google
-				if($keyword->engine == "google")
+				if($keyword->engine == "google" && $keyword->keyword_id == 155888)
 				{
 					// Save any notifications for keyword
 					$setNotify = " notify = '".$keyword->notify."',";
