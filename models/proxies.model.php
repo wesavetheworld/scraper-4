@@ -78,7 +78,8 @@ class proxies
 			// No proxies to select (db is empty or all proxies are blocked)
 			else
 			{
-				sleep();
+				echo "sleeping...\n";
+				sleep(120);
 			}
 		}	
     }
