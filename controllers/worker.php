@@ -81,6 +81,8 @@ class worker
 		// Update DB with new data
 		$this->updateItems();
 
+		echo "job complete\n";
+
 		// Job has been completed
 		$this->complete = TRUE;
 	} 

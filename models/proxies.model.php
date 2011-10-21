@@ -97,8 +97,6 @@ class proxies
 			$query = "UPDATE proxies SET blocked_".$this->engine." = NOW(), hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
 
-			echo $query;
-
 	 		// Log current state
 			utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
 		}
@@ -138,9 +136,7 @@ class proxies
 		{
 			$query = "UPDATE proxies SET blocked_".$this->engine." = '0000-00-00 00:00:00', hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
-		}	
-		
-		echo "query: ".$query;							
+		}							
 	}  
 	
 	// Rest all proxy stats
