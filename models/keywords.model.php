@@ -602,12 +602,18 @@ class keyword
 				if($this->triggerNotification($change))
 				{
 					// Build notification array
-					$notify['last'] = 'penis';
-					$notify['current'] =  $this->rank;
-					$nofify['change'] = 5;
+					$notify['current'] =  intval($this->rank);
+					$notify['last'] = intval($this->lastRank);
+					$nofify['change'] = intval(5);
+					
+					echo "before:\n";
+					print_r($notify);
 
 					// Set notificaton to send for keyword
-					$this->notify = serialize($notify);						
+					$this->notify = serialize($notify);	
+	
+					echo "after:\n";
+					echo $this->notify;					
 				}
 			}	
 		}	
