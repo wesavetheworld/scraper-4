@@ -82,7 +82,7 @@ class bootstrap
 				$this->assignIp(CLIENT_IP);			
 			}
 			// If this is either production or development worker 1
-			elseif($this->instanceType == "worker1")
+			elseif($this->instanceName == "worker1")
 			{	
 				// Assign the worker elastic ip to this instance
 				$this->assignIp(WORKER_IP);					
