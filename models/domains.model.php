@@ -227,7 +227,8 @@ class domains
 	// Update existing row in tracking table with new rankings
 	private function updateStat($domain)
 	{	 		     	
-		$domain->stat = 3;
+		$domain->{$domain->stat} = 3;
+
 		// Build update query
 		$query = "	INSERT INTO 
 						domain_stats 
