@@ -57,8 +57,6 @@ class proxies
 					LIMIT 
 						{$totalProxies}";
 
-						echo $sql;
-						
 			$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());
 
 			// If enough proxies were selected
@@ -151,7 +149,10 @@ class proxies
 		{
 			$query = "UPDATE proxies SET blocked_".$this->engine." = '0000-00-00 00:00:00', hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
-		}							
+		}	
+		
+						echo $query;
+								
 	}  
 	
 	// Rest all proxy stats
