@@ -130,8 +130,12 @@ class client
 
 		    		echo "job ".$job." created\n";
 		    		
-		    		// Throttle the speed at which jobs are created
-		    		$this->throttle($items->total, JOB_SIZE, 50);				
+		    		// Don't throttle domain stats
+					if(MODEL != "domains")
+					{
+		    			// Throttle the speed at which jobs are created
+		    			$this->throttle($items->total, JOB_SIZE, 50);	
+		    		}				
 				} 			   		
 			}
 		
