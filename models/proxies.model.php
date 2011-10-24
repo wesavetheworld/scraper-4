@@ -93,7 +93,7 @@ class proxies
 		 	//utilities::reportErrors("Not enough proxies to select");			
 
 			// No proxies found, so stop 
-		  	utilities::complete();			
+		  	//utilities::complete();			
 		}   
 		else
 		{
