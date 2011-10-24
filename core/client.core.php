@@ -47,7 +47,7 @@ class clientCore
 		// }
 
 		// Loop forever 
-		while(!defined("DEV") && TRUE)
+		while(TRUE)
 		{
 			// Log time for current task loop
 			utilities::notate("Actions at: ".date("H:i:s"), "clientd.log");
