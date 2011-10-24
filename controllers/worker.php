@@ -293,6 +293,9 @@ class worker
 		{
 			echo "bad scrape \n";
 
+			// Remove proxy used for this item
+			unset($item->proxy);			
+
 			$item->bad++;
 		}
 	}
@@ -331,7 +334,7 @@ class worker
 					// Add the keyword's search page url to scraping list
 					$urls[$item->url] = $item->url;  
 					
-					$proxies[$item->url] = $item->proxy;											 
+					$proxies[$item->url] = $item->proxy;	
 				}
 			}
 			// If getting keyword urls
