@@ -344,7 +344,7 @@ class domain
 		elseif($this->stat == "pr")
 		{   
 			// Build the google pagerank url
-	   		$this->url = "http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=".$this->CheckHash($this->HashURL($this->domain)). "&features=Rank&q=info:".urlencode($this->domain); 
+	   		$this->url = "http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=".$this->CheckHash($this->HashURL($this->domain)). "&features=Rank&q=info:".$this->domain; 
 		}
 		elseif($this->stat == "alexa")
 		{   

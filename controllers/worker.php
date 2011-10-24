@@ -266,17 +266,17 @@ class worker
 				if($this->task == "backlinks")
 				{	
 					// Set backlinks for domain
-					$item->backlinks =  0; 
+					$item->backlinks =  NULL; 
 				}
 				elseif($this->task == "pr")
 				{    
 					// Set the pagerank for domain
-					$item->pr = 0; 
+					$item->pr = NULL; 
 				} 
 				elseif($this->task == "alexa")
 				{    
 					// Set the alexa rank for domain
-					$item->alexa = 0; 
+					$item->alexa = NULL; 
 				}				
 			}
 
@@ -296,7 +296,7 @@ class worker
 			// Remove proxy used for this item
 			unset($item->proxy);			
 
-			//$item->bad++;
+			$item->bad++;
 		}
 	}
 
