@@ -296,7 +296,7 @@ class worker
 			// Remove proxy used for this item
 			unset($item->proxy);			
 
-			$item->bad++;
+			//$item->bad++;
 		}
 	}
 
