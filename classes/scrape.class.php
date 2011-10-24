@@ -430,6 +430,7 @@ class scraper
 			// If error code 302 block encountered
 			elseif($this->results[$i]['httpInfo']['http_code'] == 302
 					|| $this->results[$i]['httpInfo']['http_code'] == 503 
+					|| $this->results[$i]['httpInfo']['http_code'] == 403 
 					|| $this->results[$i]['httpInfo']['http_code'] == 200 && $this->results[$i]['httpInfo']['size_download'] < 500)
 			{   
 				// If proxy use on
