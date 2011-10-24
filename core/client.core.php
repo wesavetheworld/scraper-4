@@ -254,7 +254,7 @@ class clientCore
 		file_put_contents("data/clientCore.log", "\tcommand: $controller $options \n", FILE_APPEND);		
 
 		// Mimic live server exec command
-		sleep(rand(1, 110));
+		sleep(rand(1, 6));
 
 		// Log current command
 		utilities::notate("command: $controller $options", "clientd.log");		  		   	 				
