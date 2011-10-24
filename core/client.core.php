@@ -40,11 +40,11 @@ class clientCore
 	public function daemon()
 	{	
 		// If this is the dev client
-		if(defined("DEV"))
-		{
-			// Dont run cron, die please
-			exit("DEV is done!\n");
-		}
+		// if(defined("DEV"))
+		// {
+		// 	// Dont run cron, die please
+		// 	exit("DEV is done!\n");
+		// }
 
 		// Loop forever 
 		while(!defined("DEV") && TRUE)
