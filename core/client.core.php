@@ -51,6 +51,9 @@ class clientCore
 		{
 			// Log time for current task loop
 			utilities::notate("Actions at: ".date("H:i:s"), "clientd.log");
+
+			file_put_contents("data/clientCore.log", "Loop at ".date("r")."\n", FILE_APPEND);		
+
 						
 			// Check system status
 			utilities::checkStatus();
@@ -248,7 +251,7 @@ class clientCore
 		// Execute command given
 		//exec($command);
 
-		file_put_contents("data/clientCore.log", "command: $controller $options ".date("r")."\n", FILE_APPEND);		
+		file_put_contents("data/clientCore.log", "\tcommand: $controller $options \n", FILE_APPEND);		
 
 		// Mimic live server exec command
 		sleep(rand(1, 110));
