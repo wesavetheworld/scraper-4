@@ -246,7 +246,10 @@ class clientCore
 		$command = "php hub.php $controller $options > /dev/null 2>/dev/null &";
 
 		// Execute command given
-		exec($command);
+		//exec($command);
+
+		// Mimic live server exec command
+		sleep(rand(1, 55));
 
 		file_put_contents("data/clientCore.log", "command: $controller $options ".date("r")."\n");		
 
