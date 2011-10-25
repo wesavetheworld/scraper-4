@@ -48,19 +48,13 @@ class proxies
 
 		// Set the connection variables
 		$server = array(
-		    'host'     => '50.18.170.228',
-		    'port'     => 4730,
-		    'database' => 0
+		    'host'     => REDIS_PROXY_IP,
+		    'port'     => REDIS_PROXY_PORT,
+		    'database' => REDIS_PROXY_DB
 		);
 
 		// Create the Redis connection object
 		$this->redis = new Predis\Client($server);
-
-		print $this->redis->get("milk");
-
-		die("\n done");
-	
-
 	}
     
     // Select proxies for use

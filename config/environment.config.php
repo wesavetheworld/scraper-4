@@ -101,13 +101,13 @@
 	}				
 
 	// ===========================================================================// 
-	// ! SERPS Database credentials                                                     //
+	// ! SERPS Database credentials                                               //
 	// ===========================================================================//
 	
 	// If development environment
 	if(defined("DEV"))
 	{	
-		//Database host
+		// Database host
 		define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
 		// Database username
@@ -122,7 +122,7 @@
 	// else production environment
 	else
 	{
-		//Database host
+		// Database host
 		define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
 		// Database username
@@ -138,6 +138,15 @@
 	// ===========================================================================// 
 	// ! Proxy Database credentials                                               //
 	// ===========================================================================//          	  
+
+	// Ip of the redis database instance 
+	define("REDIS_PROXY_IP", "50.18.170.228");
+
+	// Redis listening port
+	define("REDIS_PROXY_PORT", 4730);
+
+	// Redis Proxy database number
+	define("REDIS_PROXY_DB", 0);	
 
 	// If development environment
 	if(defined("DEV"))
