@@ -41,7 +41,7 @@ class proxies
 	private function redisConnect()
 	{
 		// Include predis
-		require __DIR__.'/classes/predis/lib/Predis/Autoloader.php';
+		require 'classes/predis/lib/Predis/Autoloader.php';
 
 		// Setup the autoloader
 		Predis\Autoloader::register();
