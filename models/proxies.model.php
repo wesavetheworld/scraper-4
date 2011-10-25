@@ -49,7 +49,7 @@ class proxies
 		// Set the connection variables
 		$server = array(
 		    'host'     => '50.18.170.228',
-		    'port'     => 6379,
+		    'port'     => 4730,
 		    'database' => 0
 		);
 
