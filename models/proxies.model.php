@@ -65,20 +65,25 @@ class proxies
 
 		$totalProxies = 1;
 
+		// Options for redis transaction
+  		$options = array('cas' => true, 'watch' => "proxiesGoogle", 'retry' => 3);		
+
 		// Start a redis transaction block
-		$this->multi();
+		$this->multiExec($options, function($tx){
+			
+		});  		
 
-		// If there are enough proxies to match
-		if($this->redis->scard("proxiesGoogle") >= $totalProxies)
-		{
-			echo "enough\n";
-		}
-		else
-		{
-			echo "not enough\n";
-		}
+		// // If there are enough proxies to match
+		// if($this->redis->scard("proxiesGoogle") >= $totalProxies)
+		// {
+		// 	echo "enough\n";
+		// }
+		// else
+		// {
+		// 	echo "not enough\n";
+		// }
 
-		$this->exec();
+		// $this->exec();
 
 		exit("done\n");
 
