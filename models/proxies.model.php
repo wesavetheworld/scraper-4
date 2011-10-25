@@ -98,7 +98,7 @@ class proxies
 			}
 			else
 			{
-				echo "not enough\n";
+				echo "not enough (need $totalProxies)\n";
 			}
 
 			
