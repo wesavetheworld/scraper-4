@@ -74,6 +74,18 @@ class proxies
 			if($tx->scard("proxiesGoogle") >= $totalProxies)
 			{
 				echo "enough\n";
+
+				// Count down through proxy total
+				while($totalProxies != 0)
+				{
+					// Grab a proxy
+					$this->proxies[] = $tx->spop("proxiesGoogle");
+
+					// Decrease proxy count
+					$totalProxies--;
+				}
+
+				print_r($this->proxies);
 			}
 			else
 			{
@@ -82,18 +94,6 @@ class proxies
 
 			
 		});  		
-
-		// If there are enough proxies to match
-		if($this->redis->scard("proxiesGoogle") >= $totalProxies)
-		{
-			echo "enough\n";
-		}
-		else
-		{
-			echo "not enough\n";
-		}
-
-		// $this->exec();
 
 		exit("done\n");
 
