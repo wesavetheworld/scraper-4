@@ -49,7 +49,7 @@ class worker
 		require_once('models/proxies.model.php'); 		
 		
 		// Reset benchmarking
-		utilities::benchmark(false, false, false, true);		  		   	 			
+		//utilities::benchmark(false, false, false, true);		  		   	 			
 	}
 	
 	// ===========================================================================// 

@@ -29,7 +29,39 @@ class proxies
 
 		// Establish DB connection
 		$this->db = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
+
+		if(defined("DEV"))
+		{
+			// use redis
+			$this->redisConnect();
+		}	
 	} 
+
+	// Establish connection to Redis server
+	private function redisConnect()
+	{
+		// Include predis
+		require __DIR__.'/classes/predis/lib/Predis/Autoloader.php';
+
+		// Setup the autoloader
+		Predis\Autoloader::register();
+
+		// Set the connection variables
+		$server = array(
+		    'host'     => '50.18.170.228',
+		    'port'     => 6379,
+		    'database' => 0
+		);
+
+		// Create the Redis connection object
+		$this->redis = new Predis\Client($server);
+
+		print $this->redis->get("milk");
+
+		die("\n done");
+	
+
+	}
     
     // Select proxies for use
     public function selectProxies($totalProxies = 1, $blockedProxies = false)
@@ -149,10 +181,7 @@ class proxies
 		{
 			$query = "UPDATE proxies SET blocked_".$this->engine." = '0000-00-00 00:00:00', hr_use = hr_use + 1 WHERE proxy IN('".implode("','", $this->proxiesGood)."')";
 			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());				
-		}	
-		
-						echo "update proxies: $query \n";
-								
+		}									
 	}  
 	
 	// Rest all proxy stats
