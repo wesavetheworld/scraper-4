@@ -79,13 +79,13 @@ class proxies
 				while($totalProxies != 0)
 				{
 					// Grab a proxy
-					$this->proxies[] = $tx->spop("proxiesGoogle");
+					$proxies[] = $tx->spop("proxiesGoogle");
 
 					// Decrease proxy count
 					$totalProxies--;
 				}
 
-				print_r($this->proxies);
+				print_r($proxies);
 			}
 			else
 			{
