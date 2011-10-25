@@ -58,26 +58,26 @@ class proxies
 	}
 
 	// Select proxies from redis
-	public function select($totalProxies = 1, $blockedProxies = false)
+	public function select($totalProxies = 1)
 	{
 		// $this->redis->get("milk");
 		// $this->redis->spop("proxiesGoogle");
 
-		$totalProxies = 1;
+		//$totalProxies = 1;
+
+		$key = "proxiesGoogle";
 
 		// Options for redis transaction
-  		$options = array('cas' => true, 'watch' => "proxiesGoogle", 'retry' => 3);		
+  		$options = array('cas' => true, 'watch' => $key, 'retry' => 3);			
 
 		// Start a redis transaction block
-		$this->redis->multiExec($options, function($tx)
+		$this->redis->multiExec($options, function($tx) use ($key, $totalProxies)
 		{
 
 			$tx->multi();
-			
-			$totalProxies = 2;
 
 			// If there are enough proxies to match
-			if($tx->scard("proxiesGoogle") >= $totalProxies)
+			if($tx->scard($key) >= $totalProxies)
 			{
 				echo "enough\n";
 
@@ -87,7 +87,7 @@ class proxies
 				while($totalProxies != 0)
 				{
 					// Grab a proxy
-					$proxies[] = $tx->spop("proxiesGoogle");
+					$proxies[] = $tx->spop($key);
 
 					// Decrease proxy count
 					$totalProxies--;
