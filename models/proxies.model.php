@@ -63,6 +63,8 @@ class proxies
 		// $this->redis->get("milk");
 		// $this->redis->spop("proxiesGoogle");
 
+		$totalProxies = 1;
+
 		// If there are enough proxies to match
 		if($this->redis->scard("proxiesGoogle") >= $totalProxies)
 		{
