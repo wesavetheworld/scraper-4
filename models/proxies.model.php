@@ -55,19 +55,41 @@ class proxies
 
 		// Create the Redis connection object
 		$this->redis = new Predis\Client($server);
+	}
 
-		print $this->redis->get("milk");
+	// Select proxies from redis
+	public function select($totalProxies = 1, $blockedProxies = false)
+	{
+		// $this->redis->get("milk");
+		// $this->redis->spop("proxiesGoogle");
 
-		die("\n done");
-	
+		// If there are enough proxies to match
+		if($this->redis->scard("proxiesGoogle") >= $totalProxies)
+		{
+			echo "enough\n";
+		}
+		else
+		{
+			echo "not enough\n";
+		}
 
+		exit("done\n");
+
+		
 	}
     
     // Select proxies for use
     public function selectProxies($totalProxies = 1, $blockedProxies = false)
     {
+
+    	if(defined("DEV"))
+    	{
+    		// Use Redis instead
+    		$this->select($totalProxies, $blockedProxies);
+    	}
+
     	// Until there are proxies to return
-    	while(!$success)
+    	while(!$success && !defined("DEV"))
     	{
 			// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
 			$sql = "SELECT 
