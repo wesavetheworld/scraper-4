@@ -71,6 +71,9 @@ class proxies
 		// Start a redis transaction block
 		$this->redis->multiExec($options, function($tx)
 		{
+
+			$tx->multi();
+			
 			$totalProxies = 2;
 
 			// If there are enough proxies to match
