@@ -72,11 +72,13 @@ class proxies
 		$this->redis->multiExec($options, function($tx)
 		{
 			$totalProxies = 2;
-			
+
 			// If there are enough proxies to match
 			if($tx->scard("proxiesGoogle") >= $totalProxies)
 			{
 				echo "enough\n";
+
+				sleep(5);
 
 				// Count down through proxy total
 				while($totalProxies != 0)
