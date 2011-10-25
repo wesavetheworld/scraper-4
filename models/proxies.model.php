@@ -69,7 +69,7 @@ class proxies
   		$options = array('cas' => true, 'watch' => "proxiesGoogle", 'retry' => 3);		
 
 		// Start a redis transaction block
-		$this->multiExec($options, function($tx){
+		$this->redis->multiExec($options, function($tx){
 			
 		});  		
 
