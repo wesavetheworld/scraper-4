@@ -65,6 +65,9 @@ class proxies
 
 		$totalProxies = 1;
 
+		// Start a redis transaction block
+		$this->multi();
+
 		// If there are enough proxies to match
 		if($this->redis->scard("proxiesGoogle") >= $totalProxies)
 		{
@@ -74,6 +77,8 @@ class proxies
 		{
 			echo "not enough\n";
 		}
+
+		$this->exec();
 
 		exit("done\n");
 
