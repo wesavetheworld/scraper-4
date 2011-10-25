@@ -55,6 +55,12 @@ class proxies
 
 		// Create the Redis connection object
 		$this->redis = new Predis\Client($server);
+
+		print $this->redis->get("milk");
+
+		die("\n done");
+	
+
 	}
     
     // Select proxies for use
