@@ -70,6 +70,8 @@ class proxies
 
 		// Start a redis transaction block
 		$this->redis->multiExec($options, function($tx){
+			echo $tx->get("milk");
+			$tx->set("milk","fuck");
 			
 		});  		
 
