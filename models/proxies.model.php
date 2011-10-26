@@ -62,7 +62,7 @@ class proxies
 	 		//$this->redis->watch($key);
 
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($key, 0, microtime()) >= $totalProxies)
+	 		if($this->redis->zCount($key, 0, floatval(microtime())) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			//$this->redis->multi();
