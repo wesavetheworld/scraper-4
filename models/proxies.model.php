@@ -68,6 +68,10 @@ class proxies
 	 		// If there are enough proxies to select for the job
 	 		if($this->redis->scard($key) >= $totalProxies)
 	 		{
+	 			echo "do it now!\n";
+
+	 			sleep(5);
+	 			
 	 			// Start a redis transaction
 				$this->redis->multi();
 				
