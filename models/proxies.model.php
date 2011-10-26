@@ -279,7 +279,9 @@ class proxies
 		else
 		{
 			echo "zADD failed!\n";
-		}			
+		}		
+		
+		die("stop here\n");	
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
