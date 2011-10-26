@@ -279,8 +279,8 @@ class proxies
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{			
 			// Calculate member score (current time minus an hour)
-			$score = time() - (60 * 60);
-			$score = microtime();
+			//$score = time() - (60 * 60);
+			$score = microtime(true);
 
 			// Add proxy to redis set		
 			$this->redis->zadd('proxiesGoogle', $score, $proxy['proxy']);	
