@@ -71,7 +71,7 @@ class proxies
 	 			//$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
-				$this->proxies = $this->redis->ZRANGE($key, 1, $totalProxies);
+				$this->proxies = $this->redis->ZRANGE($key, 0, $totalProxies - 1);
 
 
 		 		echo "proxies: ";
