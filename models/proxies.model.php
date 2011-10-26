@@ -280,8 +280,8 @@ class proxies
 		{
 			echo "zADD failed!\n";
 		}		
-		
-		die("stop here\n");	
+		echo "kill it at this point!\n";
+		sleep(5);
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
