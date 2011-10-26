@@ -101,6 +101,8 @@ class proxies
 
 	 	echo "\nafter: ".print_r($this->proxies);
 
+	 	die();
+
 	}
     
     // Select proxies for use
