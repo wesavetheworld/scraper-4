@@ -67,6 +67,10 @@ class proxies
 
 				// Select a range of proxies ordered by last block 
 				$this->proxies = $this->redis->ZRANGEBYSCORE($key, 0, microtime(), false, array(0, $totalProxies));
+
+		 		echo "proxies: ";
+		 		print_r($this->proxies);
+		 		die();				
 				
 				// Checkout the top proxies from the set (proxies with oldest last used time)
 				//$this->redis->ZREMRANGEBYSCORE($key, 0, microtime(), false, array(0, $totalProxies));
@@ -84,10 +88,6 @@ class proxies
 
 	 		// Stop monitoring proxy list for changes
 	 		$this->redis->unwatch($key);	
-
-	 		echo "proxies: ";
-	 		print_r($this->proxies);
-	 		die();
 	 	}	
 
 	 	// Loop through each proxy json data
