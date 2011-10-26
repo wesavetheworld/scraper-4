@@ -48,6 +48,9 @@ class proxies
 
 		$this->select();
 
+		echo "proxies: ";
+		print_r($this->proxies);
+
 		die('done');		
 
 	}
@@ -85,7 +88,7 @@ class proxies
 	 		else
 	 		{
 	 			// Wait and try again
-	 			echo "not enough, sleeping for 10\n";
+	 			echo "not enough, sleeping for 5\n";
 				sleep(5);	 			
 	 		}
 
