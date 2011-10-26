@@ -86,7 +86,7 @@ class proxies
 	 		{
 	 			// Wait and try again
 	 			echo "not enough, sleeping for 10\n";
-				sleep(10);	 			
+				sleep(5);	 			
 	 		}
 
 	 		// Stop monitoring proxy list for changes
