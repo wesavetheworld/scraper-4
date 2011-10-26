@@ -59,7 +59,7 @@ class proxies
 			echo "proxy select loop:\n";
 
 			// Monitor proxy set for changes during selection
-	 		$this->redis->watch($key);
+	 		//$this->redis->watch($key);
 
 	 		$available = $this->redis->zcount($key, '0', microtime());
 
@@ -93,7 +93,7 @@ class proxies
 	 		}
 
 	 		// Stop monitoring proxy list for changes
-	 		$this->redis->unwatch($key);	
+	 		//$this->redis->unwatch($key);	
 	 	}	
 
 	 	// Loop through each proxy json data
