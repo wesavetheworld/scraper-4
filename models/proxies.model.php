@@ -35,7 +35,7 @@ class proxies
 			// use redis
 			$this->redisConnect();
 
-			//$this->migrateToRedis();
+			$this->migrateToRedis();die();
 		}	
 	} 
 
@@ -280,7 +280,7 @@ class proxies
 			//$this->redis->sadd('proxiesGoogle', json_encode($proxy));	
 			
 			// Add proxy to redis set		
-			$this->redis->sadd('proxiesGoogle', $proxy['proxy']);	
+			$this->redis->zadd('proxiesGoogle', 0, $proxy['proxy']);	
 			
 			// Create proxy hash		
 			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
