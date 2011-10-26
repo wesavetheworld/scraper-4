@@ -208,7 +208,9 @@ class proxies
 			}	
 
 			// Add proxy to redis set		
-			$this->redis->zadd('proxiesGoogle', $score, $proxy);	
+			$this->redis->zadd('proxiesGoogle', $score, $proxy);
+			
+			echo "zadd proxiesGoogle $score $proxy\n";	
 		}
 
 		// Execute the queued commands
