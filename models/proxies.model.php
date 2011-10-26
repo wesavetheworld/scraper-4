@@ -65,13 +65,13 @@ class proxies
 	 		$score = microtime(true);
 
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($key, 1, $score) >= $totalProxies)
+	 		if($this->redis->zCount($key, 0, $score) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			//$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
-				$this->proxies = $this->redis->ZRANGE($key, 0, $totalProxies);
+				$this->proxies = $this->redis->ZRANGE($key, 1, $totalProxies);
 
 
 		 		echo "proxies: ";
