@@ -35,8 +35,7 @@ class proxies
 			// use redis
 			$this->redisConnect();
 
-			$this->migrateToRedis();
-			die('done');
+			//$this->migrateToRedis();
 		}	
 	} 
 
@@ -98,8 +97,12 @@ class proxies
 	 	foreach($this->proxies as &$proxy)
 	 	{
 	 		// Create array from json data
-	 		$proxy = json_decode($proxy);
+	 		$proxy = $this->redis->hgetall("p:".$proxy)
 	 	}
+
+	 	print_r($this->proxies);
+
+	 	die("\ndone\n");
 	}
     
     // Select proxies for use
