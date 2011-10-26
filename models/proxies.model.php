@@ -99,10 +99,6 @@ class proxies
 	 		// Create array from json data
 	 		$proxy = $this->redis->hgetall("p:".$proxy);
 	 	}
-
-	 	print_r($this->proxies);
-
-	 	die("\ndone\n");
 	}
     
     // Select proxies for use
