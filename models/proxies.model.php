@@ -61,7 +61,7 @@ class proxies
 			// Monitor proxy set for changes during selection
 	 		//$this->redis->watch($key);
 
-	 		$available = $this->redis->zcount($key, '0', microtime());
+	 		$available = $this->redis->zCount($key, '0', microtime());
 
 	 		echo "available: $available \n";
 
