@@ -49,22 +49,29 @@ class proxies
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
 	}
 
+	// Reduce a number unless it's irreducible
+	public function irreducible($num, $subtract)
+	{
+		// If number isn't the same to subtract (irreducible)
+		if($num != $subtract)
+		{
+			// Reduce the number
+			$num = $num - $subtract;
+		}	
+
+		return $num;
+	}
+
 	public function select($totalProxies = 2, $key = "proxiesGoogle")
 	{ 		
 		$totalProxies = 1;
 
-		// If proxies requested isn't 1
-		if($totalProxies != 1)
-		{
-			// Subtract one to account for redis 0 index
-			$totalProxies = $totalProxies - 1;
-		}
+		// Reduce total by 1 to account for redis 0 index
+		$totalProxies = irreducible($totalProxies, 1);
 
 		// Loop until proxies are returned
 		while(!$response)
 		{
-			echo "proxy select loop:\n";
-
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
@@ -80,9 +87,6 @@ class proxies
 				// Select a range of proxies ordered by last block 
 				$this->redis->ZRANGE($key, 0, $totalProxies);
 
-				echo "now!\n";
-				sleep(5);
-
 				// Remove all proxies just selected
 				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);	
 				
@@ -93,7 +97,6 @@ class proxies
 	 		else
 	 		{
 	 			// Wait and try again
-	 			echo "not enough, sleeping for 5\n";
 				sleep(5);	 			
 	 		}
 
@@ -101,19 +104,12 @@ class proxies
 	 		$this->redis->unwatch($key);	
 	 	}	 	
 
-		// Set proxies from redis multi exec returned data
-		$this->proxies = $response[0];
-
-	 	// Loop through each proxy json data
-	 	foreach($this->proxies as &$proxy)
+	 	// Loop through each proxy in the redis response
+	 	foreach($response[0] as $proxy)
 	 	{
 	 		// Create array from json data
-	 		$proxy = $this->redis->hgetall("p:".$proxy);
-	 	}
-
- 		echo "proxies: ";
- 		print_r($this->proxies);
- 		die();			 	
+	 		$this->proxies = $this->redis->hgetall("p:".$proxy);
+	 	}		 	
 	}
     
     // Select proxies for use
@@ -192,11 +188,82 @@ class proxies
 			return true;
 		} 	
     }
+
+    public function addSortedSetMembers($array, $block = false)
+    {
+		// Start a redis transaction			
+		$this->redis->multi();
+
+		// Loop through items to be added
+		foreach($array as $proxy)
+		{
+			// If these are blocked proxies
+			if($block)
+			{
+				// Micro time in one hour (when the proxy can be used next) 
+				$score = microtime(true) + (60 * 60);
+			}
+			else
+			{	
+				// Current micro time
+				$score = microtime(true);
+			}	
+
+			// Add proxy to redis set		
+			$this->redis->zadd('proxiesGoogle', $score, $proxy);	
+		}
+
+		// Execute the queued commands
+		$this->redis->exec();    	
+    }
 	
 	// Add proxies back to redis sets based on status
     public function update()
     {
-    	
+		// Update blocked proxies
+		if(count($this->proxiesBlocked) > 0)
+		{	
+			echo "proxies blocked: ".count($this->proxiesBlocked)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->proxiesBlocked, TRUE);		
+		}    	
+		
+		// Update blocked proxies
+		if(count($this->proxiesDenied) > 0)
+		{
+			echo "proxies denied: ".count($this->proxiesDenied)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->proxiesBlocked, FALSE);				
+		}
+		
+		// Update timed out proxies
+		if(count($this->proxiesTimeout) > 0)
+		{
+			echo "proxies timedout: ".count($this->proxiesTimeout)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->proxiesBlocked, FALSE);			
+		}	
+		
+		// Update timed out proxies
+		if(count($this->proxiesDead) > 0)
+		{
+			echo "proxies dead: ".count($this->proxiesDead)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->proxiesBlocked, TRUE);			
+		}	
+		
+		// Update proxy use for all non error proxies
+		if(count($this->proxiesGood) > 0)
+		{
+			echo "proxies good: ".count($this->proxiesGood)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->proxiesBlocked, FALSE);			
+		}		
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
