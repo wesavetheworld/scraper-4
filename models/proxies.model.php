@@ -91,18 +91,12 @@ class proxies
 	 		$this->redis->unwatch($key);	
 	 	}	
 
-	 	echo "before: ".print_r($this->proxies);
-
+	 	// Loop through each proxy json data
 	 	foreach($this->proxies as &$proxy)
 	 	{
 	 		// Create array from json data
 	 		$proxy = json_decode($proxy);
 	 	}
-
-	 	echo "\nafter: ".print_r($this->proxies);
-
-	 	die();
-
 	}
     
     // Select proxies for use
@@ -181,10 +175,22 @@ class proxies
 			return true;
 		} 	
     }
+	
+	// Add proxies back to redis sets based on status
+    public function update()
+    {
+    	
+    }
 
 	// Update poxies' status based on response (blocked, timeout etc)
 	public function updateProxyUse()
 	{  
+    	if(defined("DEV"))
+    	{
+    		// Use Redis instead
+    		$this->update();
+    	}
+    			
 		// Update blocked proxies
 		if(count($this->proxiesBlocked) > 0)
 		{
@@ -269,7 +275,13 @@ class proxies
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{
 			// Add proxy to redis set
-			$this->redis->sadd('proxiesGoogle', json_encode($proxy));			
+			//$this->redis->sadd('proxiesGoogle', json_encode($proxy));	
+			
+			// Add proxy to redis set		
+			$this->redis->sadd('proxiesGoogle', $proxy['proxy']);	
+			
+			// Create proxy hash		
+			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
 		}			
 		
 	}
