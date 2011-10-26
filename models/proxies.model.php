@@ -96,10 +96,15 @@ class proxies
 			sleep(5);	
 			
 			echo "before exec: ";
-			print_r($proxies);		 		
+			print_r($proxies);		
+			
+			$exec = $this->redis->exec(); 
+			
+			echo "\nexec: ";
+			print_r($exec);		
 
 			// If transaction queue processed successfully
-	 		if($this->redis->exec())
+	 		if($exec)
 	 		{
 	 			echo "success!\n";
 				echo "after exec: ";
