@@ -370,8 +370,16 @@ class worker
 		$this->proxies->proxiesDead = $this->scrape->proxiesDead;
 		$this->proxies->proxiesGood = $this->scrape->proxiesGood;
 
-		// Update proxy database
-		$this->proxies->updateProxyUse();
+		if(defined("DEV"))
+    	{
+    		// Use Redis instead
+    		$this->proxies->update();
+    	}
+    	else
+    	{
+			// Update proxy database
+			$this->proxies->updateProxyUse();    		
+    	}
 	}
     
 	// Load the correct source for the keyword's search results

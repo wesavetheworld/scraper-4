@@ -235,7 +235,7 @@ class proxies
 			echo "proxies denied: ".count($this->proxiesDenied)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesBlocked, FALSE);				
+			$this->addSortedSetMembers($this->proxiesDenied, FALSE);				
 		}
 		
 		// Update timed out proxies
@@ -244,7 +244,7 @@ class proxies
 			echo "proxies timedout: ".count($this->proxiesTimeout)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesBlocked, FALSE);			
+			$this->addSortedSetMembers($this->proxiesTimeout, FALSE);			
 		}	
 		
 		// Update timed out proxies
@@ -253,7 +253,7 @@ class proxies
 			echo "proxies dead: ".count($this->proxiesDead)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesBlocked, TRUE);			
+			$this->addSortedSetMembers($this->proxiesDead, TRUE);			
 		}	
 		
 		// Update proxy use for all non error proxies
@@ -262,19 +262,13 @@ class proxies
 			echo "proxies good: ".count($this->proxiesGood)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesBlocked, FALSE);			
+			$this->addSortedSetMembers($this->proxiesGood, FALSE);			
 		}		
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
 	public function updateProxyUse()
-	{  
-    	if(defined("DEV"))
-    	{
-    		// Use Redis instead
-    		$this->update();
-    	}
-    			
+	{  		
 		// Update blocked proxies
 		if(count($this->proxiesBlocked) > 0)
 		{
