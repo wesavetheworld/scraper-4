@@ -77,6 +77,8 @@ class proxies
 		// Monitor proxy set for changes
  		$this->redis->watch($key);
 
+ 		echo "now!\n";
+
  		// If there are enough proxies to select for the job
  		if($this->redis->scard($key) >= $totalProxies)
  		{
@@ -87,24 +89,18 @@ class proxies
 			while($totalProxies != 0)
 			{
 				// Grab a proxy
-				$proxies[] = $this->redis->spop($key);
+				$this->redis->spop($key);
 
 				// Decrease proxy count
 				$totalProxies--;
 			}	
 			
 			sleep(5);	
-			
-			echo "before exec: ";
-			print_r($proxies);		
-			
-			$exec = $this->redis->exec(); 
-			
-			echo "\nexec: ";
-			print_r($exec);		
+
+			$proxies = $this->redis->exec(); 	
 
 			// If transaction queue processed successfully
-	 		if($exec)
+	 		if($proxies)
 	 		{
 	 			echo "success!\n";
 				echo "after exec: ";
