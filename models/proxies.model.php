@@ -65,24 +65,27 @@ class proxies
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
+	 		// Use the total proxies needed as a reference to count down
+	 		$count = $totalProxies;
+
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->scard($key) >= $totalProxies)
+	 		if($this->redis->scard($key) >= $count)
 	 		{
 	 			echo "do it now!\n";
 
 	 			sleep(5);
-	 			
+
 	 			// Start a redis transaction
 				$this->redis->multi();
 				
 				// Count down through proxy total
-				while($totalProxies != 0)
+				while($count != 0)
 				{
 					// Grab a proxy
 					$this->redis->spop($key);
 
 					// Decrease proxy count
-					$totalProxies--;
+					$count--;
 				}	
 			
 				// Set proxies from redis multi exec returned data
