@@ -189,9 +189,6 @@ class proxies
 
     public function addSortedSetMembers($array, $block = false)
     {
-		// Start a redis transaction			
-		$this->redis->multi();
-
 		// Loop through items to be added
 		foreach($array as $proxy)
 		{
@@ -212,14 +209,14 @@ class proxies
 			
 			echo "zadd proxiesGoogle $score $proxy\n";	
 		}
-
-		// Execute the queued commands
-		$this->redis->exec();    	
     }
 	
 	// Add proxies back to redis sets based on status
     public function update()
     {
+		// Start a redis transaction			
+		$this->redis->multi();
+		    	
 		// Update blocked proxies
 		if(count($this->proxiesBlocked) > 0)
 		{	
@@ -263,7 +260,17 @@ class proxies
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->proxiesGood, FALSE);			
-		}		
+		}	
+		
+		// Execute the queued commands
+		if($this->redis->exec())
+		{
+			echo "zADD success!\n";	
+		}    	
+		else
+		{
+			echo "zADD failed!\n";
+		}			
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
