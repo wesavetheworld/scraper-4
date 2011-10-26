@@ -60,17 +60,15 @@ class proxies
 
 			// Monitor proxy set for changes during selection
 	 		//$this->redis->watch($key);
-	 		$micro = microtime(true);
-	 		echo "microtime: $micro\n";
-
+	 		
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($key, 0, $micro) >= $totalProxies)
+	 		if($this->redis->zCount($key, 0, microtime(true)) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			//$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
-				$this->proxies = $this->redis->ZRANGEBYSCORE($key, 0, microtime(), false, array(0, $totalProxies));
+				$this->proxies = $this->redis->ZRANGEBYSCORE($key, 0, microtime(true), false, array(0, $totalProxies));
 
 		 		echo "proxies: ";
 		 		print_r($this->proxies);
