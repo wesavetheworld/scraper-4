@@ -86,6 +86,8 @@ class redis
 		$command = '*'.count($args)."\r\n";
 		foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";
 
+		echo "\ncommand sent: $command \n";
+
 		$w = fwrite($this->connection, $command);
 		if (!$w) return $this->ReportError('command was not sent', __LINE__);
 		return $this->read_reply();
