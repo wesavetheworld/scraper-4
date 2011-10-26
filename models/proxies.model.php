@@ -35,7 +35,7 @@ class proxies
 			// use redis
 			$this->redisConnect();
 
-			$this->migrateToRedis();die();
+			//$this->migrateToRedis();die();
 		}	
 	} 
 
@@ -62,7 +62,7 @@ class proxies
 		return $num;
 	}
 
-	public function select($totalProxies = 2, $key = "proxiesGoogle")
+	public function select($totalProxies = 1, $key = "proxiesGoogle")
 	{ 		
 		// Reduce total by 1 to account for redis 0 index
 		$totalProxies = $this->irreducible($totalProxies, 1);
@@ -119,6 +119,10 @@ class proxies
     		// Use Redis instead
     		$this->select($totalProxies);
     	}
+
+    	print_r($this->proxies);
+
+    	die();
 
     	// Until there are proxies to return
     	while(!$success && !defined("DEV"))
