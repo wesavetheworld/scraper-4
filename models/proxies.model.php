@@ -35,7 +35,7 @@ class proxies
 			// use redis
 			$this->redisConnect();
 
-			$this->migrateToRedis();die();
+			//$this->migrateToRedis();die();
 		}	
 	} 
 
@@ -59,27 +59,20 @@ class proxies
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
-	 		// Use the total proxies needed as a reference to count down
-	 		$count = $totalProxies;
-
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->scard($key) >= $count)
+	 		if($this->redis->zcount($key, 0, microtime()) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
-				$this->redis->multi();
-				
-				// Count down through proxy total
-				while($count != 0)
-				{
-					// Grab a proxy
-					$this->redis->spop($key);
+	 			//$this->redis->multi();
 
-					// Decrease proxy count
-					$count--;
-				}	
-			
+				// Select a range of proxies ordered by last block 
+				$this->proxies = $this->redis->ZRANGEBYSCORE($key, 0, microtime(), false, array(0, $totalProxies));
+				
+				// Checkout the top proxies from the set (proxies with oldest last used time)
+				//$this->redis->ZREMRANGEBYSCORE($key, 0, microtime(), false, array(0, $totalProxies));
+
 				// Set proxies from redis multi exec returned data
-				$this->proxies = $this->redis->exec(); 				
+				//$this->proxies = $this->redis->exec(); 				
 	 		}
 	 		// Not enough proxies to select
 	 		else
@@ -91,6 +84,10 @@ class proxies
 
 	 		// Stop monitoring proxy list for changes
 	 		$this->redis->unwatch($key);	
+
+	 		echo "proxies: ";
+	 		print_r($this->proxies);
+	 		die();
 	 	}	
 
 	 	// Loop through each proxy json data
