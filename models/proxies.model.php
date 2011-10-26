@@ -108,6 +108,8 @@ class proxies
  		}
  		else
  		{
+ 			$this->redis->discard();	
+
  			echo "not enough\n";
  		}
 
