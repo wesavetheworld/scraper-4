@@ -23,8 +23,10 @@ $mkv = array(
 
 $client = new Predis\Client($single_server);
 
-$client->get("milk");
+$client->mset($mkv);
+$retval = $client->mget(array_keys($mkv));
 
+print_r($retval);
 
 /* OUTPUT:
 Array

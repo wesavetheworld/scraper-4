@@ -275,13 +275,14 @@ class proxies
 
 		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
 		
-		$count = 0;
-
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{			
+			// Calculate member score (current time minus an hour)
+			$score = time() - (60 * 60);
+
 			// Add proxy to redis set		
-			$this->redis->zadd('proxiesGoogle', $count++, $proxy['proxy']);	
+			$this->redis->zadd('proxiesGoogle', $score, $proxy['proxy']);	
 			
 			// Create proxy hash		
 			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
