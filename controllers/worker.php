@@ -69,13 +69,6 @@ class worker
 
 			// Parse the scraped content
 			$this->parseContent();
-
-			// If job has run for too long
-			// if(utilities::benchmark('checkTimeOut'))
-			// {
-			// 	file_put_contents('./timeout.txt', 'it was the time out error');
-			// 	exit("\nworker timed out\n");
-			// }
 		}
 
 		// Update DB with new data

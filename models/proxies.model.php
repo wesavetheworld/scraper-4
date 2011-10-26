@@ -33,32 +33,12 @@ class proxies
 		if(defined("DEV"))
 		{
 			// use redis
-			//$this->redisConnect();
-			$this->redisConnect2();
+			$this->redisConnect();
 		}	
 	} 
 
 	// Establish connection to Redis server
 	private function redisConnect()
-	{
-		// Include predis
-		require 'classes/predis/lib/Predis/Autoloader.php';
-
-		// Setup the autoloader
-		Predis\Autoloader::register();
-
-		// Set the connection variables
-		$server = array(
-		    'host'     => REDIS_PROXY_IP,
-		    'port'     => REDIS_PROXY_PORT,
-		    'database' => REDIS_PROXY_DB
-		);
-
-		// Create the Redis connection object
-		$this->redis = new Predis\Client($server);
-	}
-
-	private function redisConnect2()
 	{
 		// Include redis class
 		require_once('classes/redis.php');
@@ -72,130 +52,44 @@ class proxies
 
 	}
 
-	public function select2($totalProxies = 2, $key = "proxiesGoogle")
+	public function select($totalProxies = 2, $key = "proxiesGoogle")
 	{ 		
-		// Monitor proxy set for changes
- 		$this->redis->watch($key);
+		// Loop until proxies are returned
+		while(!$this->proxies)
+		{
+			// Monitor proxy set for changes during selection
+	 		$this->redis->watch($key);
 
- 		// If there are enough proxies to select for the job
- 		if($this->redis->scard($key) >= $totalProxies)
- 		{
- 			// Start a redis transaction
-			$this->redis->multi();
-
-	 		echo "now!\n";
-			
-			// Count down through proxy total
-			while($totalProxies != 0)
-			{
-				// Grab a proxy
-				$this->redis->spop($key);
-
-				// Decrease proxy count
-				$totalProxies--;
-			}	
-			
-			sleep(5);	
-
-			$proxies = $this->redis->exec(); 	
-
-			// If transaction queue processed successfully
-	 		if($proxies)
+	 		// If there are enough proxies to select for the job
+	 		if($this->redis->scard($key) >= $totalProxies)
 	 		{
-	 			echo "success!\n";
-				print_r($proxies);		 			
+	 			// Start a redis transaction
+				$this->redis->multi();
+				
+				// Count down through proxy total
+				while($totalProxies != 0)
+				{
+					// Grab a proxy
+					$this->redis->spop($key);
+
+					// Decrease proxy count
+					$totalProxies--;
+				}	
+			
+				// Set proxies from redis multi exec returned data
+				$this->proxies = $this->redis->exec(); 				
 	 		}
-	 		// A change occurred to the list before execution, rollback set state
+	 		// Not enough proxies to select
 	 		else
 	 		{
-	 			echo "failed!\n";
-				print_r($proxies);		 				 			
-	 		} 			
- 		}
- 		// Not enough proxies to select
- 		else
- 		{
- 			echo "not enough\n";
- 		}
+	 			// Wait and try again
+	 			echo "not enough, sleeping for 10\n";
+				sleep(10);	 			
+	 		}
 
- 		// Stop monitoring proxy list for changes
- 		$this->redis->unwatch($key);	
-	}
-
-	// Select proxies from redis
-	public function select($totalProxies = 1)
-	{
-		// $this->redis->get("milk");
-		// $this->redis->spop("proxiesGoogle");
-
-		// JUST FOR TESTING
-		$totalProxies = 10;
-
-		$key = "proxiesGoogle";
-
-		// Options for redis transaction
-  		$options = array('cas' => true, 'watch' => $key);			
-
-		// Start a redis transaction block
-		$this->redis->multiExec($options, function($tx) use ($key, $totalProxies)
-		{
-			// Activate redis watch
-			$tx->multi();
-
-			// Count down through proxy total
-			while($totalProxies != 0)
-			{
-				// Grab a proxy
-				$proxy = $tx->spop($key);
-
-				// If proxy is not blank
-				if($proxy)
-				{
-					$proxies[] = $proxy;
-				}
-				else
-				{
-
-				}	
-
-				// Decrease proxy count
-				$totalProxies--;
-			}	
-			
-			echo "\nproxies: ";
-			print_r($proxies);					
-
-			// // If there are enough proxies to match
-			// if($tx->scard($key) >= $totalProxies)
-			// {
-			// 	echo "enough\n";
-
-			// 	sleep(5);
-
-			// 	// Count down through proxy total
-			// 	while($totalProxies != 0)
-			// 	{
-			// 		// Grab a proxy
-			// 		$proxies[] = $tx->spop($key);
-
-			// 		// Decrease proxy count
-			// 		$totalProxies--;
-			// 	}
-
-			// 	echo "\nproxies: ";
-			// 	print_r($proxies);
-			// }
-			// else
-			// {
-			// 	echo "not enough (need $totalProxies)\n";
-			// }
-
-			
-		});  		
-
-		exit("done\n");
-
-		
+	 		// Stop monitoring proxy list for changes
+	 		$this->redis->unwatch($key);	
+	 	}	
 	}
     
     // Select proxies for use
@@ -205,8 +99,7 @@ class proxies
     	if(defined("DEV"))
     	{
     		// Use Redis instead
-    		//$this->select($totalProxies);
-    		$this->select2($totalProxies);
+    		$this->select($totalProxies);
     	}
 
     	// Until there are proxies to return
