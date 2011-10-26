@@ -92,11 +92,7 @@ class proxies
 
 	 		// Stop monitoring proxy list for changes
 	 		$this->redis->unwatch($key);	
-	 	}	
-
- 		echo "proxies: ";
- 		print_r($this->proxies);
- 		die();		 	
+	 	}	 	
 
 	 	// Loop through each proxy json data
 	 	foreach($this->proxies as &$proxy)
@@ -104,6 +100,10 @@ class proxies
 	 		// Create array from json data
 	 		$proxy = $this->redis->hgetall("p:".$proxy);
 	 	}
+
+ 		echo "proxies: ";
+ 		print_r($this->proxies);
+ 		die();			 	
 	}
     
     // Select proxies for use
