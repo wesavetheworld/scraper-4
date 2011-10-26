@@ -106,7 +106,7 @@ class proxies
 	 	foreach($response[0] as $proxy)
 	 	{
 	 		// Create array from json data
-	 		$this->proxies = $this->redis->hgetall("p:".$proxy);
+	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
 	 	}		 	
 	}
     
