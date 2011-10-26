@@ -72,32 +72,40 @@ class proxies
 
 	}
 
-	public function select2($totalProxies = 1)
-	{
- 
- 		$key = "milk";
- 		
- 		echo "before: ".$this->redis->get($key)."\n";
-
+	public function select2($totalProxies = 2, $key = "proxiesGoogle")
+	{ 		
  		$this->redis->watch($key);
 
- 		sleep(5);
- 		
-		$this->redis->multi(); 		
-
- 		$this->redis->set($key, "new");
-
- 		if($this->redis->exec())
+ 		if($this->redis->scard($key) >= $totalProxies)
  		{
- 			echo "success!\n";
- 		}
- 		else
- 		{
- 			echo "failed!\n";
+			$this->redis->multi();
+			
+			// Count down through proxy total
+			while($totalProxies != 0)
+			{
+				// Grab a proxy
+				$proxies[] = $this->redis->spop($key);
+
+				// Decrease proxy count
+				$totalProxies--;
+			}		
+			
+			echo "before exec: ";
+			print_r($proxies);		 		
+
+	 		if($this->redis->exec())
+	 		{
+	 			echo "success!\n";
+				echo "after exec: ";
+				print_r($proxies);		 			
+	 		}
+	 		else
+	 		{
+	 			echo "failed!\n";
+	 		} 			
  		}
 
- 		echo "after: ".$this->redis->get($key)."\n";
-		
+ 		$this->redis->unwatch($key);	
 	}
 
 	// Select proxies from redis
