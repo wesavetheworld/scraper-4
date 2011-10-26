@@ -90,7 +90,7 @@ class proxies
 				}
 				else
 				{
-					$tx->discard();
+					//$tx->discard();
 				}	
 
 				// Decrease proxy count
