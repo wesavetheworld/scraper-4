@@ -269,18 +269,19 @@ class proxies
 					password,
 					tunnel
 				FROM 
-					proxies";
+					proxies
+				ORDER BY 
+					RAND()";
 
 		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
 		
+		$count = 0;
+
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
-		{
-			// Add proxy to redis set
-			//$this->redis->sadd('proxiesGoogle', json_encode($proxy));	
-			
+		{			
 			// Add proxy to redis set		
-			$this->redis->zadd('proxiesGoogle', 0, $proxy['proxy']);	
+			$this->redis->zadd('proxiesGoogle', $count++, $proxy['proxy']);	
 			
 			// Create proxy hash		
 			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
