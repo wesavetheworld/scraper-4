@@ -88,7 +88,9 @@ class proxies
 
 				// Decrease proxy count
 				$totalProxies--;
-			}		
+			}	
+			
+			sleep(5);	
 			
 			echo "before exec: ";
 			print_r($proxies);		 		
