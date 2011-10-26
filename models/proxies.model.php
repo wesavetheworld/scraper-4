@@ -46,10 +46,7 @@ class proxies
 		// Instantiate new redis object
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);
 
-		$this->select();
-
-		echo "proxies: ";
-		print_r($this->proxies);
+		$this->migrateToRedis();
 
 		die('done');		
 
@@ -71,10 +68,6 @@ class proxies
 	 		// If there are enough proxies to select for the job
 	 		if($this->redis->scard($key) >= $count)
 	 		{
-	 			echo "do it now!\n";
-
-	 			sleep(5);
-
 	 			// Start a redis transaction
 				$this->redis->multi();
 				
@@ -246,6 +239,39 @@ class proxies
 						dead = '0',
 						hr_use = '0'";
 						
-		mysql_query($query, $this->db)  or utilities::reportErrors("ERROR ON PROXY RESET: ".mysql_error());
-	}	   
+		mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON PROXY RESET: ".mysql_error());
+	}	
+	
+	// Import proxies from MySQL into redis
+	public function setAdd($key, $proxy)  
+	{
+		// Add proxy to set
+		$this->redis->sadd($key, $proxy);
+	} 
+
+	public function migrateToRedis()
+	{
+		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
+		$sql = "SELECT 
+					proxy,
+					port,
+					username,
+					password,
+					tunnel
+				FROM 
+					proxies";
+
+		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
+		
+		// Build proxy and SQL array
+		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
+		{
+			// Proxy array
+			$proxies .= json_encode($proxy)." ";  
+
+			// Add proxy to set
+			$this->redis->sadd('proxiesGoogle', $proxies);			
+		}			
+		
+	}
 }	
