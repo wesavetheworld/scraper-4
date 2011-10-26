@@ -64,7 +64,7 @@ class proxies
 		// $this->redis->spop("proxiesGoogle");
 
 		// JUST FOR TESTING
-		$totalProxies = 2;
+		$totalProxies = 10;
 
 		$key = "proxiesGoogle";
 
