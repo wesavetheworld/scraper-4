@@ -90,7 +90,7 @@ class proxies
 	 			// Wait and try again
 	 			echo "not enough, subscribing to proxy channel\n";
 				
-				$this->redis->subscribe();
+				$this->redis->subscribe('proxiesGoogleChange');
 				echo "just subscribed\n";	 			
 	 		}
 
