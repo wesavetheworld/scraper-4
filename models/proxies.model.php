@@ -51,6 +51,8 @@ class proxies
 
 	public function select($totalProxies = 2, $key = "proxiesGoogle")
 	{ 		
+		$totalProxies = 2;
+
 		// Loop until proxies are returned
 		while(!$this->proxies)
 		{
