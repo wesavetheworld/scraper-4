@@ -266,11 +266,9 @@ class proxies
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{
-			// Proxy array
-			$proxies .= json_encode($proxy)." ";  		
+			// Add proxy to set
+			$this->redis->sadd('proxiesGoogle', json_encode($proxy));			
 		}			
 		
-		// Add proxy to set
-		$this->redis->sadd('proxiesGoogle', $proxies);			
 	}
 }	
