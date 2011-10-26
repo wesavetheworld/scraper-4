@@ -51,7 +51,7 @@ class proxies
 
 	public function select($totalProxies = 2, $key = "proxiesGoogle")
 	{ 		
-		$totalProxies = 4;
+		$totalProxies = 1;
 
 		// Loop until proxies are returned
 		while(!$this->proxies)
@@ -68,10 +68,13 @@ class proxies
 	 		if($this->redis->zCount($key, 0, $score) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
-	 			//$this->redis->multi();
+	 			$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
 				$this->proxies = $this->redis->ZRANGE($key, 0, $totalProxies - 1);
+
+				// Remove all proxies just selected
+				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies - 1);				
 
 
 		 		echo "proxies: ";
