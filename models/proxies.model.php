@@ -120,10 +120,6 @@ class proxies
     		$this->select($totalProxies);
     	}
 
-    	print_r($this->proxies);
-
-    	die();
-
     	// Until there are proxies to return
     	while(!$success && !defined("DEV"))
     	{
