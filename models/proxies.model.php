@@ -63,6 +63,8 @@ class proxies
 
 	 		$available = $this->redis->zcount($key, '0', microtime());
 
+	 		echo "available: $available \n";
+
 	 		// If there are enough proxies to select for the job
 	 		if($available >= $totalProxies)
 	 		{
