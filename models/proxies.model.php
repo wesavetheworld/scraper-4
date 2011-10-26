@@ -77,30 +77,43 @@ class proxies
 			// Activate redis watch
 			$tx->multi();
 
-			// If there are enough proxies to match
-			if($tx->scard($key) >= $totalProxies)
+			// Count down through proxy total
+			while($totalProxies != 0)
 			{
-				echo "enough\n";
+				// Grab a proxy
+				$proxies[] = $tx->spop($key);
 
-				sleep(5);
+				// Decrease proxy count
+				$totalProxies--;
+			}	
+			
+			echo "\nproxies: ";
+			print_r($proxies);					
 
-				// Count down through proxy total
-				while($totalProxies != 0)
-				{
-					// Grab a proxy
-					$proxies[] = $tx->spop($key);
+			// // If there are enough proxies to match
+			// if($tx->scard($key) >= $totalProxies)
+			// {
+			// 	echo "enough\n";
 
-					// Decrease proxy count
-					$totalProxies--;
-				}
+			// 	sleep(5);
 
-				echo "\nproxies: ";
-				print_r($proxies);
-			}
-			else
-			{
-				echo "not enough (need $totalProxies)\n";
-			}
+			// 	// Count down through proxy total
+			// 	while($totalProxies != 0)
+			// 	{
+			// 		// Grab a proxy
+			// 		$proxies[] = $tx->spop($key);
+
+			// 		// Decrease proxy count
+			// 		$totalProxies--;
+			// 	}
+
+			// 	echo "\nproxies: ";
+			// 	print_r($proxies);
+			// }
+			// else
+			// {
+			// 	echo "not enough (need $totalProxies)\n";
+			// }
 
 			
 		});  		
