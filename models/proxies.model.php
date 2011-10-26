@@ -104,6 +104,10 @@ class proxies
 	 			echo "failed!\n";
 	 		} 			
  		}
+ 		else
+ 		{
+ 			echo "not enough\n";
+ 		}
 
  		$this->redis->unwatch($key);	
 	}
