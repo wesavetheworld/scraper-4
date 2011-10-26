@@ -75,7 +75,26 @@ class proxies
 	public function select2($totalProxies = 1)
 	{
  
-		echo $this->redis->get('milk')."\n";
+ 		$key = "milk";
+ 		
+ 		echo "before: ".$this->redis->get($key)."\n";
+
+ 		$this->redis->watch($key);
+
+ 		sleep(5);
+
+ 		$this->redis->set($key, "new");
+
+ 		if($this->redis->exec($key))
+ 		{
+ 			echo "success!\n";
+ 		}
+ 		else
+ 		{
+ 			echo "failed!\n";
+ 		}
+
+ 		echo "after: ".$this->redis->get($key)."\n";
 		
 	}
 
