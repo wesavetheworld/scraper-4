@@ -80,7 +80,7 @@ class proxies
 				// Select a range of proxies ordered by last block 
 				$this->redis->ZRANGE($key, 0, $totalProxies);
 
-				slee(5); echo "now!\n";
+				sleep(5); echo "now!\n";
 
 				// Remove all proxies just selected
 				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);				
