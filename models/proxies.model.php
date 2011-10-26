@@ -280,6 +280,7 @@ class proxies
 		{			
 			// Calculate member score (current time minus an hour)
 			$score = time() - (60 * 60);
+			$score = microtime();
 
 			// Add proxy to redis set		
 			$this->redis->zadd('proxiesGoogle', $score, $proxy['proxy']);	
