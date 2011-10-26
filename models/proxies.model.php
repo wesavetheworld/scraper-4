@@ -88,13 +88,8 @@ class proxies
 	 		else
 	 		{
 	 			// Wait and try again
-	 			echo "not enough, subscribing to proxy channel\n";
-				
-				$channel = $this->redis->subscribe('proxiesGoogleChange');
-
-				print_r($channel);
-				
-				echo "just subscribed\n";	 			
+	 			echo "not enough, sleeping for 5\n";
+				sleep(5);	 			
 	 		}
 
 	 		// Stop monitoring proxy list for changes
