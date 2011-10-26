@@ -81,7 +81,17 @@ class proxies
 			while($totalProxies != 0)
 			{
 				// Grab a proxy
-				$proxies[] = $tx->spop($key);
+				$proxy = $tx->spop($key);
+
+				// If proxy is not blank
+				if($proxy)
+				{
+					$proxies[] = $proxy;
+				}
+				else
+				{
+					$tx->discard();
+				}	
 
 				// Decrease proxy count
 				$totalProxies--;
