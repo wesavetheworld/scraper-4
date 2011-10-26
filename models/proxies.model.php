@@ -69,7 +69,7 @@ class proxies
 		$key = "proxiesGoogle";
 
 		// Options for redis transaction
-  		$options = array('cas' => true, 'watch' => $key);			
+  		$options = array('cas' => false, 'watch' => $key);			
 
 		// Start a redis transaction block
 		$this->redis->multiExec($options, function($tx) use ($key, $totalProxies)
@@ -90,7 +90,7 @@ class proxies
 				}
 				else
 				{
-					//$tx->discard();
+					$tx->discard();
 				}	
 
 				// Decrease proxy count
