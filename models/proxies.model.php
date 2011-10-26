@@ -53,6 +53,13 @@ class proxies
 	{ 		
 		$totalProxies = 1;
 
+		// If proxies requested isn't 1
+		if($totalProxies != 1)
+		{
+			// Subtract one to account for redis 0 index
+			$totalProxies = $totalProxies - 1;
+		}
+
 		// Loop until proxies are returned
 		while(!$response)
 		{
@@ -71,10 +78,10 @@ class proxies
 	 			$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
-				$this->redis->ZRANGE($key, 0, $totalProxies - 1);
+				$this->redis->ZRANGE($key, 0, $totalProxies);
 
 				// Remove all proxies just selected
-				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies - 1);				
+				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);				
 
 				// Get response from redis
 				$response = $this->redis->exec(); 								
