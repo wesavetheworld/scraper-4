@@ -44,12 +44,7 @@ class proxies
 		require_once('classes/redis.php');
 
 		// Instantiate new redis object
-		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);
-
-		$this->migrateToRedis();
-
-		die('done');		
-
+		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
 	}
 
 	public function select($totalProxies = 2, $key = "proxiesGoogle")
@@ -95,6 +90,17 @@ class proxies
 	 		// Stop monitoring proxy list for changes
 	 		$this->redis->unwatch($key);	
 	 	}	
+
+	 	echo "before: ".print_r($this->proxies);
+
+	 	foreach($this->proxies as &$proxy)
+	 	{
+	 		// Create array from json data
+	 		$proxy = json_decode($proxy);
+	 	}
+
+	 	echo "\nafter: ".print_r($this->proxies);
+
 	}
     
     // Select proxies for use
@@ -242,13 +248,7 @@ class proxies
 		mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON PROXY RESET: ".mysql_error());
 	}	
 	
-	// Import proxies from MySQL into redis
-	public function setAdd($key, $proxy)  
-	{
-		// Add proxy to set
-		$this->redis->sadd($key, $proxy);
-	} 
-
+	// Select all proxies in the MySQL database and add them to a redis set
 	public function migrateToRedis()
 	{
 		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
@@ -266,7 +266,7 @@ class proxies
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{
-			// Add proxy to set
+			// Add proxy to redis set
 			$this->redis->sadd('proxiesGoogle', json_encode($proxy));			
 		}			
 		
