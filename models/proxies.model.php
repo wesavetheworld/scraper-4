@@ -61,8 +61,10 @@ class proxies
 			// Monitor proxy set for changes during selection
 	 		//$this->redis->watch($key);
 
+	 		$micro = microtime();
+
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($key, 0, floatval(microtime())) >= $totalProxies)
+	 		if($this->redis->zCount($key, "0", "$micro") >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			//$this->redis->multi();
