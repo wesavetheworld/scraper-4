@@ -57,6 +57,8 @@ class proxies
 		// Loop until proxies are returned
 		while(!$this->proxies)
 		{
+			echo "proxy select loop:\n";
+			
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
