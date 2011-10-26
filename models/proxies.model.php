@@ -109,7 +109,6 @@ class proxies
 	 		else
 	 		{
 	 			echo "failed!\n";
- 				$this->redis->discard();	
 	 		} 			
  		}
  		// Not enough proxies to select
