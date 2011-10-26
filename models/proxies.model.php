@@ -33,7 +33,8 @@ class proxies
 		if(defined("DEV"))
 		{
 			// use redis
-			$this->redisConnect();
+			//$this->redisConnect();
+			$this->redisConnect2();
 		}	
 	} 
 
@@ -55,6 +56,24 @@ class proxies
 
 		// Create the Redis connection object
 		$this->redis = new Predis\Client($server);
+	}
+
+	private function redisConnect2()
+	{
+		// Include redis class
+		require_once('classes/redis.php');
+
+		// Instantiate new redis object
+		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);
+
+		echo $this->redis->get('milk');
+
+		die('done');
+	}
+
+	public function select2($totalProxies = 1)
+	{
+		
 	}
 
 	// Select proxies from redis
@@ -140,7 +159,8 @@ class proxies
     	if(defined("DEV"))
     	{
     		// Use Redis instead
-    		$this->select($totalProxies, $blockedProxies);
+    		//$this->select($totalProxies);
+    		$this->select2($totalProxies);
     	}
 
     	// Until there are proxies to return
