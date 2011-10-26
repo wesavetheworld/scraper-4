@@ -71,21 +71,16 @@ class proxies
 	 			$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
-				$this->proxies = $this->redis->ZRANGE($key, 0, $totalProxies - 1);
+				$this->redis->ZRANGE($key, 0, $totalProxies - 1);
 
 				// Remove all proxies just selected
 				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies - 1);				
 
-
-			
-				
+				// Get response from redis
+				$response = $this->redis->exec(); 	
 
 				// Set proxies from redis multi exec returned data
-				$this->proxies = $this->redis->exec(); 	
-				
-		 		echo "proxies: ";
-		 		print_r($this->proxies);
-		 		die();								
+				$this->proxies = $response[0];							
 	 		}
 	 		// Not enough proxies to select
 	 		else
@@ -96,8 +91,12 @@ class proxies
 	 		}
 
 	 		// Stop monitoring proxy list for changes
-	 		//$this->redis->unwatch($key);	
+	 		$this->redis->unwatch($key);	
 	 	}	
+
+ 		echo "proxies: ";
+ 		print_r($this->proxies);
+ 		die();		 	
 
 	 	// Loop through each proxy json data
 	 	foreach($this->proxies as &$proxy)
