@@ -77,13 +77,15 @@ class proxies
 				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies - 1);				
 
 
-		 		echo "proxies: ";
-		 		print_r($this->proxies);
-		 		die();				
+			
 				
 
 				// Set proxies from redis multi exec returned data
-				//$this->proxies = $this->redis->exec(); 				
+				$this->proxies = $this->redis->exec(); 	
+				
+		 		echo "proxies: ";
+		 		print_r($this->proxies);
+		 		die();								
 	 		}
 	 		// Not enough proxies to select
 	 		else
