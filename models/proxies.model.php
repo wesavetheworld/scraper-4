@@ -82,10 +82,12 @@ class proxies
  		$this->redis->watch($key);
 
  		sleep(5);
+ 		
+		$this->redis->multi(); 		
 
  		$this->redis->set($key, "new");
 
- 		if($this->redis->exec($key))
+ 		if($this->redis->exec())
  		{
  			echo "success!\n";
  		}
