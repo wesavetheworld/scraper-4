@@ -88,8 +88,10 @@ class proxies
 	 		else
 	 		{
 	 			// Wait and try again
-	 			echo "not enough, sleeping for 5\n";
-				sleep(5);	 			
+	 			echo "not enough, subscribing to proxy channel\n";
+				
+				$this->redis->subscribe();
+				echo "just subscribed\n";	 			
 	 		}
 
 	 		// Stop monitoring proxy list for changes
