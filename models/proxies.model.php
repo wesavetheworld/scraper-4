@@ -107,13 +107,7 @@ class proxies
 	 	{
 	 		// Create array from json data
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
-		 	$this->proxiesGood[] = $proxy;
-
-	 	}
-	 	
-	 	$this->update();	
-	 	
-	 	die("finished\n");	 	
+	 	} 	
 	}
     
     // Select proxies for use
@@ -256,8 +250,17 @@ class proxies
 			echo "proxies dead: ".count($this->proxiesDead)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesDead, TRUE);			
+			$this->addSortedSetMembers($this->proxiesDead, FALSE);			
 		}	
+
+		// Update proxy use for all non error proxies
+		if(count($this->proxiesOther) > 0)
+		{
+			echo "proxies good: ".count($this->proxiesOther)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->proxiesOther, FALSE);			
+		}		
 		
 		// Update proxy use for all non error proxies
 		if(count($this->proxiesGood) > 0)

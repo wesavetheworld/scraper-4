@@ -41,6 +41,9 @@ class scraper
 	
 	// Will contain any proxies that timeout
 	public $proxiesDead = array(); 
+
+	// Will contain any proxies that have unknown errors
+	public $proxiesOther = array(); 	
 		
 	// The amount of scrapes that fail
 	public $scrapesBad = 0; 
@@ -453,6 +456,9 @@ class scraper
 			// Not a timeout response
 			else
 			{
+				// Add proxy to other problem list
+				$this->proxiesOther[] = $this->proxies[$i]['proxy'];
+
 				// Nothing returned  from proxy, just dead
 				//utilities::notate("\tsome other error", "scrape.log");					
 

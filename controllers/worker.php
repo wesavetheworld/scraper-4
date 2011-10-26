@@ -368,6 +368,7 @@ class worker
 		$this->proxies->proxiesDenied = $this->scrape->proxiesDenied;
 		$this->proxies->proxiesTimeout = $this->scrape->proxiesTimeout;
 		$this->proxies->proxiesDead = $this->scrape->proxiesDead;
+		$this->proxies->proxiesOther = $this->scrape->proxiesOther;
 		$this->proxies->proxiesGood = $this->scrape->proxiesGood;
 
 		if(defined("DEV"))
