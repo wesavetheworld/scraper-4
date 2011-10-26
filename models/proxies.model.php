@@ -107,7 +107,13 @@ class proxies
 	 	{
 	 		// Create array from json data
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
-	 	}		 	
+		 	$this->proxiesGood[] = $proxy;
+
+	 	}
+	 	
+	 	$this->update();	
+	 	
+	 	die("finished\n");	 	
 	}
     
     // Select proxies for use
