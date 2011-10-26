@@ -69,12 +69,12 @@ class proxies
 		$key = "proxiesGoogle";
 
 		// Options for redis transaction
-  		$options = array('cas' => true, 'watch' => $key, 'retry' => 3);			
+  		$options = array('cas' => true, 'watch' => $key);			
 
 		// Start a redis transaction block
 		$this->redis->multiExec($options, function($tx) use ($key, $totalProxies)
 		{
-
+			// Activate redis watch
 			$tx->multi();
 
 			// If there are enough proxies to match
