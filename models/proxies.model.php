@@ -66,13 +66,16 @@ class proxies
 		// Instantiate new redis object
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);
 
-		echo $this->redis->get('milk');
+		$this->select2();
 
-		die('done');
+		die('done');		
+
 	}
 
 	public function select2($totalProxies = 1)
 	{
+ 
+		echo $this->redis->get('milk')."\n";
 		
 	}
 
