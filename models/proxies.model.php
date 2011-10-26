@@ -74,10 +74,13 @@ class proxies
 
 	public function select2($totalProxies = 2, $key = "proxiesGoogle")
 	{ 		
+		// Monitor proxy set for changes
  		$this->redis->watch($key);
 
+ 		// If there are enough proxies to select for the job
  		if($this->redis->scard($key) >= $totalProxies)
  		{
+ 			// Start a redis transaction
 			$this->redis->multi();
 			
 			// Count down through proxy total
@@ -95,24 +98,27 @@ class proxies
 			echo "before exec: ";
 			print_r($proxies);		 		
 
+			// If transaction queue processed successfully
 	 		if($this->redis->exec())
 	 		{
 	 			echo "success!\n";
 				echo "after exec: ";
 				print_r($proxies);		 			
 	 		}
+	 		// A change occurred to the list before execution, rollback set state
 	 		else
 	 		{
 	 			echo "failed!\n";
+ 				$this->redis->discard();	
 	 		} 			
  		}
+ 		// Not enough proxies to select
  		else
  		{
- 			$this->redis->discard();	
-
  			echo "not enough\n";
  		}
 
+ 		// Stop monitoring proxy list for changes
  		$this->redis->unwatch($key);	
 	}
 
