@@ -54,7 +54,7 @@ class proxies
 		$totalProxies = 1;
 
 		// Loop until proxies are returned
-		while(!$this->proxies)
+		while(!$response)
 		{
 			echo "proxy select loop:\n";
 
@@ -77,10 +77,7 @@ class proxies
 				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies - 1);				
 
 				// Get response from redis
-				$response = $this->redis->exec(); 	
-
-				// Set proxies from redis multi exec returned data
-				$this->proxies = $response[0];							
+				$response = $this->redis->exec(); 								
 	 		}
 	 		// Not enough proxies to select
 	 		else
@@ -93,6 +90,9 @@ class proxies
 	 		// Stop monitoring proxy list for changes
 	 		$this->redis->unwatch($key);	
 	 	}	 	
+
+		// Set proxies from redis multi exec returned data
+		$this->proxies = $response[0];
 
 	 	// Loop through each proxy json data
 	 	foreach($this->proxies as &$proxy)
