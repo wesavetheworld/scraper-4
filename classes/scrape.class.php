@@ -456,6 +456,7 @@ class scraper
 			// Not a timeout response
 			else
 			{
+				echo "OTHER ERROR!!!!\n";
 				// Add proxy to other problem list
 				$this->proxiesOther[] = $this->proxies[$i]['proxy'];
 
