@@ -60,7 +60,7 @@ class proxies
 
 			// Monitor proxy set for changes during selection
 	 		//$this->redis->watch($key);
-	 		$micro = microtime();
+	 		$micro = microtime(true);
 	 		echo "microtime: $micro\n";
 
 	 		// If there are enough proxies to select for the job
