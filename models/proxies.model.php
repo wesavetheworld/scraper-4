@@ -77,13 +77,13 @@ class proxies
 		// Monitor proxy set for changes
  		$this->redis->watch($key);
 
- 		echo "now!\n";
-
  		// If there are enough proxies to select for the job
  		if($this->redis->scard($key) >= $totalProxies)
  		{
  			// Start a redis transaction
 			$this->redis->multi();
+
+	 		echo "now!\n";
 			
 			// Count down through proxy total
 			while($totalProxies != 0)
@@ -103,13 +103,13 @@ class proxies
 	 		if($proxies)
 	 		{
 	 			echo "success!\n";
-				echo "after exec: ";
 				print_r($proxies);		 			
 	 		}
 	 		// A change occurred to the list before execution, rollback set state
 	 		else
 	 		{
 	 			echo "failed!\n";
+				print_r($proxies);		 				 			
 	 		} 			
  		}
  		// Not enough proxies to select
