@@ -46,7 +46,7 @@ class proxies
 		// Instantiate new redis object
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);
 
-		$this->select2();
+		$this->select();
 
 		die('done');		
 
@@ -58,7 +58,7 @@ class proxies
 		while(!$this->proxies)
 		{
 			echo "proxy select loop:\n";
-			
+
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
