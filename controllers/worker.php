@@ -129,6 +129,14 @@ class worker
 		echo "proxies: ". count($this->scrape->proxies)."\n";
 		print_r($this->scrape->urls);
 		print_r($this->scrape->proxies);
+
+		echo "\n... and just to make sure: \n"
+
+		foreach($this->items->{$this->model} as $item)
+		{
+			echo "keyword: $item->keyword | proxy: $item->proxy\n";
+		}
+
 		die("all done\n");			
 								
 		// Execute the scraping
@@ -355,22 +363,13 @@ class worker
 				if(!$urls[$item->searchHash])
 				{    				
 					// If no proxy set for this keyword/url yet
-					// if(!$item->proxy)
-					// {
-					// 	$item->proxy = $this->proxies->selectSingle();
-					// }
-
-					// If no proxy set for this keyword/url yet
 					if($item->proxy)
 					{
     					$this->proxyList[$item->searchHash] = $item->proxy;
 					}						
 								
 					// Add the keyword's search page url to scraping list
-					$urls[$item->searchHash] = $item->url; 
-						
-					// Add keywords proxy to list to be used for scraping	
-					//$proxies[$item->searchHash] = $item->proxy;						
+					$urls[$item->searchHash] = $item->url; 					
 					
 					// This is a new search
 					$item->searchType = "new";
