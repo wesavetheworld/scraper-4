@@ -443,6 +443,13 @@ class worker
 			$this->proxies->dead = $this->scrape->proxiesDead;
 			$this->proxies->other = $this->scrape->proxiesOther;
 			$this->proxies->good = $this->scrape->proxiesGood;
+
+			echo "proxies blocked: ".count($this->proxies->blocked)." | scraper blocked: ".count($this->scrape->proxiesBlocked)."\n"
+			echo "proxies denied: ".count($this->proxies->denied)." | scraper denied: ".count($this->scrape->proxiesDenied)."\n"
+			echo "proxies timeout: ".count($this->proxies->timeout)." | scraper timeout: ".count($this->scrape->proxiesTimeout)."\n"
+			echo "proxies dead: ".count($this->proxies->dead)." | scraper dead: ".count($this->scrape->proxiesDead)."\n"
+			echo "proxies other: ".count($this->proxies->other)." | scraper other: ".count($this->scrape->proxiesOther)."\n"
+			echo "proxies good: ".count($this->proxies->good)." | scraper good: ".count($this->scrape->proxiesGood)."\n"
 		    		
     		// Use Redis instead
     		$this->proxies->update();
