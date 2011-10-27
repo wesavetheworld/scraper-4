@@ -390,20 +390,23 @@ class worker
 		$need = count($urls) - count($this->proxyList);
 			
 		echo "total: $need\n";
-				
-		// Select proxies for urls with no proxies attached yet
-		$this->proxies->select($need);		
 
-		// Loop through urls
-		foreach($items as $key => &$item)
-		{
-			// If url has no proxy
-			if(!$this->proxyList[$item->searchHash])
+		if($need != 0)
+		{		
+			// Select proxies for urls with no proxies attached yet
+			$this->proxies->select($need);		
+
+			// Loop through urls
+			foreach($items as $key => &$item)
 			{
-				$item->proxy = array_pop($this->proxies->proxies);
-				$this->proxyList[$item->searchHash] = $item->proxy;
+				// If url has no proxy
+				if(!$this->proxyList[$item->searchHash])
+				{
+					$item->proxy = array_pop($this->proxies->proxies);
+					$this->proxyList[$item->searchHash] = $item->proxy;
+				}
 			}
-		}
+		}	
 		
 		// Returned the proxy array
 		return $this->proxyList;		
