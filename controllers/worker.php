@@ -359,9 +359,9 @@ class worker
 					$item->searchType = "new";
 				} 
 			}	 
-			
-			echo "worker selected: $this->selectedProxies\n";	
 		} 
+
+		echo "worker selected: $this->selectedProxies\n";	
 				
 		// Return the url and proxy arrays
 		return array('urls' => $urls, 'proxies'=> $proxies);				
