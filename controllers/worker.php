@@ -130,10 +130,6 @@ class worker
 			$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total);     		
     	}
 
-    	print_r($prepare);
-
-    	die("done \n");
-
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
 		
@@ -326,7 +322,7 @@ class worker
 			{
 				$item->proxy = $this->proxies->selectSingle();
 			}
-			
+
 			// If getting domain urls
 			if($this->model == "domains")
 			{ 			                     	
