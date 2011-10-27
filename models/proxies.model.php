@@ -109,6 +109,7 @@ class proxies
 	 		$this->redis->unwatch($key);	
 	 	}	 	
 
+	 	echo "actually selected: ".count($response[0])."\n";
 	 	// Loop through each proxy in the redis response
 	 	foreach($response[0] as $proxy)
 	 	{
