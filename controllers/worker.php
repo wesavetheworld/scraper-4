@@ -314,9 +314,6 @@ class worker
 	{    
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
-
-		echo "so far so proxy...\n";
-
 				
 		// Loop through each keyword
 		foreach($items as $key => &$item)
@@ -328,7 +325,10 @@ class worker
 			if(!$item->proxy)
 			{
 				$item->proxy = $this->proxies->selectSingle();
-			}						  		
+			}
+			echo $item->proxy;
+			echo "so far so proxy gotten...\n";
+									  		
 
 			// If getting domain urls
 			if($this->model == "domains")
