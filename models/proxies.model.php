@@ -341,13 +341,18 @@ class proxies
 			echo "zADD failed!\n";
 		}	
 		
-		$returned = count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
+		$this->returned += count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
+
+		if($final)
+		{
+			$this->returned += count($this->good);
+		}
 
 		// Empty proxy status arrays
 		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->other);			
 
 		echo "Total selected: $this->selected\n";
-		echo "Returned: $returned\n";	
+		echo "Returned: $this->returned\n";	
 		echo "kill it at this point!\n";
 		sleep(5);
 
