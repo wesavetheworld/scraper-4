@@ -321,7 +321,7 @@ class worker
 	public function getUrlsRedis($items, $total)
 	{    	
 		// Reset proxy list from any previous loops
-		$this->proxyList = 0;
+		$this->proxyList = array();
 
 		// Loop through each keyword
 		foreach($items as $key => &$item)
