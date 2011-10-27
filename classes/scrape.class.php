@@ -344,10 +344,6 @@ class scraper
 	// Sort proxy errors into correct arrays for later update
 	private function checkHeaders($i)
 	{   
-
-		// JUST FOR TESTING
-		$this->proxiesAll[] = $this->proxies[$i]['proxy'];
-
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 

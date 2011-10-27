@@ -270,37 +270,37 @@ class proxies
 		}
     }
 	
-	public function update($final = false)
-	{
-		// Start a redis transaction			
-		$this->redis->multi();
+	// public function update($final = false)
+	// {
+	// 	// Start a redis transaction			
+	// 	$this->redis->multi();
 
-		// Update blocked proxies
-		if(count($this->all) > 0)
-		{	
-			echo "\tproxies all: ".count($this->all)."\n";
+	// 	// Update blocked proxies
+	// 	if(count($this->all) > 0)
+	// 	{	
+	// 		echo "\tproxies all: ".count($this->all)."\n";
 
-			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->all, false);		
-		}  		
+	// 		// Add proxies back to sorted set
+	// 		$this->addSortedSetMembers($this->all, false);		
+	// 	}  		
 		
-		// Execute the queued commands
-		$returned = array_sum($this->redis->exec());
+	// 	// Execute the queued commands
+	// 	$returned = array_sum($this->redis->exec());
 
-		$this->returned += $returned;		
+	// 	$this->returned += $returned;		
 
-		//echo "Total selected: $this->selected\n";
-		echo "Returned: $returned ($this->returned)\n";	
+	// 	//echo "Total selected: $this->selected\n";
+	// 	echo "Returned: $returned ($this->returned)\n";	
 
-		if($final)
-		{
-			echo "Total selected: $this->selected\n";
-			echo "Total returned: $this->returned\n";
-		}			
-	}
+	// 	if($final)
+	// 	{
+	// 		echo "Total selected: $this->selected\n";
+	// 		echo "Total returned: $this->returned\n";
+	// 	}			
+	// }
 
 	// Add proxies back to redis sets based on status
-    public function updateOld($final = false)
+    public function update($final = false)
     {
 		// Start a redis transaction			
 		$this->redis->multi();
