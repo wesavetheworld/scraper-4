@@ -25,6 +25,9 @@ class proxies
 	// The amount of proxies selected, total
 	public $selected = 0;
 
+	// Set to true when finished
+	public $finished = false;
+
 	function __construct($engine = false)
 	{  	
 		// Set the engine for proxies
@@ -41,6 +44,12 @@ class proxies
 			//$this->migrateToRedis();die();
 		}	
 	} 
+
+	function __destruct()
+	{
+		$this->update();
+		
+	}
 
 	// Establish connection to Redis server
 	private function redisConnect()
@@ -269,7 +278,7 @@ class proxies
     }
 	
 	// Add proxies back to redis sets based on status
-    public function update()
+    public function update($final = false)
     {
 		// Start a redis transaction			
 		$this->redis->multi();
@@ -316,11 +325,14 @@ class proxies
 			echo "proxies good: ".count($this->other)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->other, FALSE);			
+			$this->addSortedSetMembers($this->other, FALSE);	
 		}		
-		
+
+		// Empty proxy status arrays
+		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->dead)		
+
 		// Update proxy use for all non error proxies
-		if(count($this->good) > 0)
+		if(count($this->good) > 0 && $final)
 		{
 			echo "proxies good: ".count($this->good)."\n";
 
@@ -338,7 +350,7 @@ class proxies
 			echo "zADD failed!\n";
 		}	
 		
-		$returned = count($this->good) + count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
+		$returned = count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
 
 		echo "Total selected: $this->selected\n";
 		echo "Returned: $returned\n";	

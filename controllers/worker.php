@@ -60,6 +60,9 @@ class worker
 	{  	
 		// Construct job object
 		$this->buildJob($data);	
+
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);		
 		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
@@ -307,10 +310,7 @@ class worker
 	
 	// Loop through keywords and return array of urls to scrape
 	public function getUrlsRedis($items, $total)
-	{    
-		// Instantiate new proxies object
-		$this->proxies = new proxies($this->engine);
-				
+	{    	
 		// Loop through each keyword
 		foreach($items as $key => &$item)
 		{  
