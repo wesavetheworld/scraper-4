@@ -47,7 +47,7 @@ class proxies
 
 	function __destruct()
 	{
-		$this->update();
+		$this->update(true);
 		
 	}
 
@@ -329,7 +329,7 @@ class proxies
 		}		
 
 		// Empty proxy status arrays
-		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->dead)		
+		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->other);		
 
 		// Update proxy use for all non error proxies
 		if(count($this->good) > 0 && $final)
