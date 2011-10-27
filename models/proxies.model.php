@@ -74,7 +74,7 @@ class proxies
 		return $num;
 	}
 
-	public function selectSingle($totalProxies = 1, $key = "proxiesGoogle")
+	public function selectSingle($totalProxies = 0, $key = "proxiesGoogle")
 	{ 		
 		// Loop until proxies are returned
 		while(!$response)
