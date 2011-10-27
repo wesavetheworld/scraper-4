@@ -22,6 +22,9 @@ class proxies
 	// The engine used for the proxies
 	public $engine;
 
+	// The amount of proxies selected, total
+	public $selected = 0;
+
 	function __construct($engine = false)
 	{  	
 		// Set the engine for proxies
@@ -106,6 +109,8 @@ class proxies
 	 	// Loop through each proxy in the redis response
 	 	foreach($response[0] as $proxy)
 	 	{
+	 		$this->selected++;
+
 	 		// Create array from json data
 	 		return $this->redis->hgetall("p:".$proxy);
 	 	} 	
@@ -331,7 +336,12 @@ class proxies
 		else
 		{
 			echo "zADD failed!\n";
-		}		
+		}	
+		
+		$returned = count($this->good) + count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
+
+		echo "Total selected: $this->selected\n";
+		echo "Returned: $returned\n";	
 		echo "kill it at this point!\n";
 		sleep(5);
     }
