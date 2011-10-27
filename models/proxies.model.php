@@ -43,12 +43,6 @@ class proxies
 
 			//$this->migrateToRedis();die();
 		}	
-	} 
-
-	function __destruct()
-	{
-		$this->update(true);
-		
 	}
 
 	// Establish connection to Redis server
