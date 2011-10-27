@@ -131,8 +131,8 @@ class worker
     	}
 
     	print_r($prepare);
-    	
-    	die("done \n")''
+
+    	die("done \n");
 
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
