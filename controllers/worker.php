@@ -387,7 +387,9 @@ class worker
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
 			
-		echo "total: ".count($urls) - count($this->proxyList)."\n";
+		$need = count($urls) - count($this->proxyList);
+			
+		echo "total: $need\n";
 
 		die("WTF?!\n");
 				
