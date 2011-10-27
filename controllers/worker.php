@@ -406,6 +406,8 @@ class worker
 					$this->proxyList[$item->searchHash] = $item->proxy;
 				}
 			}
+
+			echo "done popping, none should be left: ".count($this->proxies->proxies)."\n";
 		}	
 		
 		// Returned the proxy array
