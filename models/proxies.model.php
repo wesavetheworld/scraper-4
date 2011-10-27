@@ -330,14 +330,7 @@ class proxies
 		}	
 		
 		// Execute the queued commands
-		if($this->redis->exec())
-		{
-			echo "zADD success!\n";	
-		}    	
-		else
-		{
-			echo "zADD failed!\n";
-		}	
+		$this->redis->exec();
 		
 		$this->returned += count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
 
