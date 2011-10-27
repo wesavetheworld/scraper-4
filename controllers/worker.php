@@ -222,7 +222,7 @@ class worker
 		// No scraped content returned
 		else
 		{
-			// Remove proxy used for this item
+			// Remove proxy used for this item so that a new one will be selected for in the next loop
 			unset($item->proxy);
 		}	
 	}
@@ -423,21 +423,30 @@ class worker
 
 	public function updateProxies()
 	{
-		// Transfer proxy statuses from scraper class to proxy model
-		$this->proxies->proxiesBlocked = $this->scrape->proxiesBlocked;
-		$this->proxies->proxiesDenied = $this->scrape->proxiesDenied;
-		$this->proxies->proxiesTimeout = $this->scrape->proxiesTimeout;
-		$this->proxies->proxiesDead = $this->scrape->proxiesDead;
-		$this->proxies->proxiesOther = $this->scrape->proxiesOther;
-		$this->proxies->proxiesGood = $this->scrape->proxiesGood;
 
 		if(defined("DEV"))
     	{
+			// Transfer proxy statuses from scraper class to proxy model
+			$this->proxies->blocked = $this->scrape->proxiesBlocked;
+			$this->proxies->denied = $this->scrape->proxiesDenied;
+			$this->proxies->timeout = $this->scrape->proxiesTimeout;
+			$this->proxies->dead = $this->scrape->proxiesDead;
+			$this->proxies->other = $this->scrape->proxiesOther;
+			$this->proxies->good = $this->scrape->proxiesGood;
+		    		
     		// Use Redis instead
     		$this->proxies->update();
     	}
     	else
     	{
+			// Transfer proxy statuses from scraper class to proxy model
+			$this->proxies->proxiesBlocked = $this->scrape->proxiesBlocked;
+			$this->proxies->proxiesDenied = $this->scrape->proxiesDenied;
+			$this->proxies->proxiesTimeout = $this->scrape->proxiesTimeout;
+			$this->proxies->proxiesDead = $this->scrape->proxiesDead;
+			$this->proxies->proxiesOther = $this->scrape->proxiesOther;
+			$this->proxies->proxiesGood = $this->scrape->proxiesGood;
+		    		
 			// Update proxy database
 			$this->proxies->updateProxyUse();    		
     	}

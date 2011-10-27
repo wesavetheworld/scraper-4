@@ -246,17 +246,20 @@ class proxies
 			{
 				// Micro time in one hour (when the proxy can be used next) 
 				$score = microtime(true) + (60 * 60);
+				$type = "future: ";
 			}
 			else
 			{	
 				// Current micro time
 				$score = microtime(true);
+				$type = "now: ";
+
 			}	
 
 			// Add proxy to redis set		
 			$this->redis->zadd('proxiesGoogle', $score, $proxy);
 			
-			echo "zadd proxiesGoogle $score $proxy\n";	
+			echo "zadd proxiesGoogle $type $score $proxy\n";	
 		}
     }
 	
@@ -267,57 +270,57 @@ class proxies
 		$this->redis->multi();
 		    	
 		// Update blocked proxies
-		if(count($this->proxiesBlocked) > 0)
+		if(count($this->blocked) > 0)
 		{	
-			echo "proxies blocked: ".count($this->proxiesBlocked)."\n";
+			echo "proxies blocked: ".count($this->blocked)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesBlocked, TRUE);		
+			$this->addSortedSetMembers($this->blocked, TRUE);		
 		}    	
 		
 		// Update blocked proxies
-		if(count($this->proxiesDenied) > 0)
+		if(count($this->denied) > 0)
 		{
-			echo "proxies denied: ".count($this->proxiesDenied)."\n";
+			echo "proxies denied: ".count($this->denied)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesDenied, FALSE);				
+			$this->addSortedSetMembers($this->denied, FALSE);				
 		}
 		
 		// Update timed out proxies
-		if(count($this->proxiesTimeout) > 0)
+		if(count($this->timeout) > 0)
 		{
-			echo "proxies timedout: ".count($this->proxiesTimeout)."\n";
+			echo "proxies timedout: ".count($this->timeout)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesTimeout, FALSE);			
+			$this->addSortedSetMembers($this->timeout, FALSE);			
 		}	
 		
 		// Update timed out proxies
-		if(count($this->proxiesDead) > 0)
+		if(count($this->dead) > 0)
 		{
-			echo "proxies dead: ".count($this->proxiesDead)."\n";
+			echo "proxies dead: ".count($this->dead)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesDead, FALSE);			
+			$this->addSortedSetMembers($this->dead, FALSE);			
 		}	
 
 		// Update proxy use for all non error proxies
-		if(count($this->proxiesOther) > 0)
+		if(count($this->other) > 0)
 		{
-			echo "proxies good: ".count($this->proxiesOther)."\n";
+			echo "proxies good: ".count($this->other)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesOther, FALSE);			
+			$this->addSortedSetMembers($this->other, FALSE);			
 		}		
 		
 		// Update proxy use for all non error proxies
-		if(count($this->proxiesGood) > 0)
+		if(count($this->good) > 0)
 		{
-			echo "proxies good: ".count($this->proxiesGood)."\n";
+			echo "proxies good: ".count($this->good)."\n";
 
 			// Add proxies back to sorted set
-			$this->addSortedSetMembers($this->proxiesGood, FALSE);			
+			$this->addSortedSetMembers($this->good, FALSE);			
 		}	
 		
 		// Execute the queued commands
@@ -329,8 +332,6 @@ class proxies
 		{
 			echo "zADD failed!\n";
 		}		
-		echo "kill it at this point!\n";
-		sleep(5);
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
