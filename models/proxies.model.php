@@ -62,7 +62,7 @@ class proxies
 		return $num;
 	}
 
-	public function selectSingle($totalProxies = 1)
+	public function selectSingle($totalProxies = 1, $key = "proxiesGoogle")
 	{ 		
 		echo "selecting...\n";
 
@@ -70,7 +70,7 @@ class proxies
 		while(!$response)
 		{
 			echo "loop:\n";
-			
+
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
@@ -94,6 +94,7 @@ class proxies
 	 		// Not enough proxies to select
 	 		else
 	 		{
+	 			echo "not enough proxies";
 	 			// Wait and try again
 				sleep(5);	 			
 	 		}
