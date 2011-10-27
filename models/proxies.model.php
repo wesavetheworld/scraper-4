@@ -291,7 +291,14 @@ class proxies
 		$this->returned += $returned;		
 
 		//echo "Total selected: $this->selected\n";
-		echo "Returned: $returned ($this->returned)\n";		
+		echo "Returned: $returned ($this->returned)\n";	
+		
+
+		if($final)
+		{
+			echo "Total selected: $this->selected\n";
+			echo "Total returned: $this->returned\n";
+		}			
 	}
 
 	// Add proxies back to redis sets based on status
