@@ -225,7 +225,8 @@ class worker
 		// No scraped content returned
 		else
 		{
-			echo "proxy unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
+			$this->unset++;
+			echo "proxy unset #$this->unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
 			// Remove proxy used for this item so that a new one will be selected for in the next loop
 			unset($item->proxy);
 		}	
