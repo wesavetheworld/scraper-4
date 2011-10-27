@@ -344,8 +344,6 @@ class proxies
 
 		echo "Total selected: $this->selected\n";
 		echo "Returned: $this->returned\n";	
-		echo "kill it at this point!\n";
-		sleep(5);
 
     }
 
