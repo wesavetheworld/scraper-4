@@ -345,6 +345,8 @@ class worker
 					if(!$item->proxy)
 					{
 						$item->proxy = $this->proxies->selectSingle();
+
+						$this->selectedProxies++;
 					}
 								
 					// Add the keyword's search page url to scraping list
@@ -356,7 +358,9 @@ class worker
 					// This is a new search
 					$item->searchType = "new";
 				} 
-			}	 	
+			}	 
+			
+			echo "worker selected: $this->selectedProxies\n";	
 		} 
 				
 		// Return the url and proxy arrays
