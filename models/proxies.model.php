@@ -284,9 +284,12 @@ class proxies
 		}  		
 		
 		// Execute the queued commands
-		$this->redis->exec();
+		$returned = $this->redis->exec();
 
-		$returned = count($this->all);
+		echo "start \n";
+		print_r($returned);
+		echo "stop \n";
+
 
 		$this->returned += $returned;		
 
