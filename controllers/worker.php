@@ -374,10 +374,6 @@ class worker
 					// This is a new search
 					$item->searchType = "new";
 				}
-				else
-				{
-					echo "keyword skipped\n";
-				} 
 			}	 
 		} 
 								
@@ -390,6 +386,7 @@ class worker
 	{  					
 		$need = count($urls) - count($this->proxyList);
 			
+		echo "urls to scrape: ".count($urls)." | keywords with proxies already: ".count($this->proxyList)."\n";	
 		echo "total: $need\n";
 
 		if($need != 0)
@@ -398,7 +395,9 @@ class worker
 			$this->proxies = new proxies($this->engine);
 					
 			// Select proxies for urls with no proxies attached yet
-			$this->proxies->select($need);		
+			$this->proxies->select($need);	
+			
+			echo "proxies selected: ".count($this->proxies->proxies)."\n";	
 
 			// Loop through urls
 			foreach($items as $key => &$item)
