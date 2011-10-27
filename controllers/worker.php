@@ -390,11 +390,9 @@ class worker
 		$need = count($urls) - count($this->proxyList);
 			
 		echo "total: $need\n";
-
-		die("WTF?!\n");
 				
 		// Select proxies for urls with no proxies attached yet
-		$this->proxies->select(count($urls) - count($this->proxyList));		
+		$this->proxies->select($need);		
 
 		// Loop through urls
 		foreach($items as $key => &$item)
