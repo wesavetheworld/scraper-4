@@ -76,21 +76,15 @@ class proxies
 
 	public function selectSingle($totalProxies = 1, $key = "proxiesGoogle")
 	{ 		
-		echo "selecting...\n";
-
 		// Loop until proxies are returned
 		while(!$response)
 		{
-			echo "loop:\n";
-
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
 	 		// If there are enough proxies to select for the job
 	 		if($this->redis->zCount($key, 0, microtime(true)) >= $totalProxies)
 	 		{
-	 			echo "there is a proxy\n";
-
 	 			// Start a redis transaction
 	 			$this->redis->multi();
 

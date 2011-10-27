@@ -423,7 +423,6 @@ class worker
 
 	public function updateProxies()
 	{
-
 		if(defined("DEV"))
     	{
 			// Transfer proxy statuses from scraper class to proxy model

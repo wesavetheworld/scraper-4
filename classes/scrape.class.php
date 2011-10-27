@@ -350,17 +350,17 @@ class scraper
 			// echo "url: ".$this->urls[$i]."\n";
 			// echo "proxy: ".$this->proxies[$i]['proxy']."\n";
 			// echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
-			if($this->results[$i]['curlError'])
-			{
-				echo "code: ".$this->results[$i]['httpInfo']['http_code'];
-				echo " | error: ".$this->results[$i]['curlError']."\n";
-			}
-			else
-			{
-				echo "code: ".$this->results[$i]['httpInfo']['http_code']."\n";
-				echo "url :".$this->urls[$i]."\n";				
-				echo "proxy :".$this->proxies[$i]."\n";				
-			}
+			// if($this->results[$i]['curlError'])
+			// {
+			// 	echo "code: ".$this->results[$i]['httpInfo']['http_code'];
+			// 	echo " | error: ".$this->results[$i]['curlError']."\n";
+			// }
+			// else
+			// {
+			// 	echo "code: ".$this->results[$i]['httpInfo']['http_code']."\n";
+			// 	echo "url :".$this->urls[$i]."\n";				
+			// 	echo "proxy :".$this->proxies[$i]."\n";				
+			// }
 			//echo "\n";
 
 		// If curl returned an error 
