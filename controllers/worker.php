@@ -59,10 +59,7 @@ class worker
 	public function worker($data)
 	{  	
 		// Construct job object
-		$this->buildJob($data);	
-
-		// Instantiate new proxies object
-		$this->proxies = new proxies($this->engine);		
+		$this->buildJob($data);			
 		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
@@ -116,17 +113,6 @@ class worker
 
 	private function scrapeContent()
 	{
-		if(defined("DEV"))
-    	{
-			// Build an array of search engine urls to scrape and the proxies needed
-			$prepare = $this->getUrlsRedis($this->items->{$this->model}, $this->items->total);  
-    	}
-    	else
-    	{
-			// Build an array of search engine urls to scrape and the proxies needed
-			$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total);     		
-    	}
-
 		// Create new scraping instance
 		$this->scrape = new scraper; 
 
@@ -134,10 +120,16 @@ class worker
 		$this->scrape->task = $this->task;    	
 
 		// Build an array of search engine urls to scrape
-		$this->scrape->urls = $prepare['urls']; 				
+		$this->scrape->urls = $this->getUrlsRedis($this->items->{$this->model}, $this->items->total); 				
 		
 		// Build an array of proxies to use for scraping
-		$this->scrape->proxies = $prepare['proxies']; 				
+		$this->scrape->proxies = $this->getProxiesRedis($this->scrape->urls, $this->items->{$this->model});	
+		
+		echo "urls: ". count($this->scrape->urls)." | ";
+		echo "proxies: ". count($this->scrape->proxies)."\n";
+		print_r($this->scrape->urls);
+		print_r($this->scrape->proxies);
+		die("all done\n");			
 								
 		// Execute the scraping
 		$this->scrape->curlExecute();	
@@ -328,6 +320,9 @@ class worker
 	// Loop through keywords and return array of urls to scrape
 	public function getUrlsRedis($items, $total)
 	{    	
+		// Reset proxy list from any previous loops
+		$this->proxyList = 0;
+
 		// Loop through each keyword
 		foreach($items as $key => &$item)
 		{  
@@ -342,8 +337,8 @@ class worker
 				{    		
 					// If no proxy set for this keyword/url yet
 					if(!$item->proxy)
-					{
-						$item->proxy = $this->proxies->selectSingle();
+    					//$item->proxy = $this->proxies->selectSingle();
+    					//$this->proxies[''] = $item->proxy
 					}
 
 					// Add the keyword's search page url to scraping list
@@ -359,29 +354,56 @@ class worker
 				if(!$urls[$item->searchHash])
 				{    				
 					// If no proxy set for this keyword/url yet
-					if(!$item->proxy)
+					// if(!$item->proxy)
+					// {
+					// 	$item->proxy = $this->proxies->selectSingle();
+					// }
+
+					// If no proxy set for this keyword/url yet
+					if($item->proxy)
 					{
-						$item->proxy = $this->proxies->selectSingle();
-						$select++;
-					}
+    					$this->proxyList[$item->searchHash] = $item->proxy;
+					}						
 								
 					// Add the keyword's search page url to scraping list
 					$urls[$item->searchHash] = $item->url; 
 						
 					// Add keywords proxy to list to be used for scraping	
-					$proxies[$item->searchHash] = $item->proxy;						
+					//$proxies[$item->searchHash] = $item->proxy;						
 					
 					// This is a new search
 					$item->searchType = "new";
 				} 
 			}	 
 		} 
+								
+		// Return the url array
+		return $urls;				
+	}	
+	
+	// Loop through keywords and return array of urls to scrape
+	public function getProxiesRedis($urls, &$items)
+	{  		
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);
 				
-		echo "selected: $select\n";
-				
-		// Return the url and proxy arrays
-		return array('urls' => $urls, 'proxies'=> $proxies);				
-	}		
+		// Select proxies for urls with no proxies attached yet
+		$this->proxies->select(count($urls) - count($this->proxyList));		
+
+		// Loop through urls
+		foreach($items as $key => &$item)
+		{
+			// If url has no proxy
+			if(!$this->proxyList[$item->searchHash])
+			{
+				$item->proxy = array_pop($this->proxies->proxies);
+				$this->proxyList[$item->searchHash] = $item->proxy;
+			}
+		}
+		
+		// Returned the proxy array
+		return $this->proxyList;		
+	}	
 	
 	// Loop through keywords and return array of urls to scrape
 	public function getUrls($items, $total)
