@@ -373,6 +373,10 @@ class worker
 					
 					// This is a new search
 					$item->searchType = "new";
+				}
+				else
+				{
+					echo "keyword skipped\n";
 				} 
 			}	 
 		} 
@@ -383,16 +387,16 @@ class worker
 	
 	// Loop through keywords and return array of urls to scrape
 	public function getProxiesRedis($urls, &$items)
-	{  		
-		// Instantiate new proxies object
-		$this->proxies = new proxies($this->engine);
-			
+	{  					
 		$need = count($urls) - count($this->proxyList);
 			
 		echo "total: $need\n";
 
 		if($need != 0)
 		{		
+			// Instantiate new proxies object
+			$this->proxies = new proxies($this->engine);
+					
 			// Select proxies for urls with no proxies attached yet
 			$this->proxies->select($need);		
 
