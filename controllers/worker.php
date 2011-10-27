@@ -386,6 +386,8 @@ class worker
 	{  		
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
+			
+			echo "total: ".count($urls) - count($this->proxyList)."\n";
 				
 		// Select proxies for urls with no proxies attached yet
 		$this->proxies->select(count($urls) - count($this->proxyList));		
