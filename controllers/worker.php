@@ -134,7 +134,7 @@ class worker
 
 		foreach($this->items->{$this->model} as $item)
 		{
-			echo "keyword: $item->keyword | proxy: $item->proxy\n";
+			echo "keyword: $item->keyword | proxy: {$item->proxy['proxy']}\n";
 		}
 
 		die("all done\n");			
