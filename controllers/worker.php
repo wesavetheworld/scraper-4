@@ -443,6 +443,7 @@ class worker
 			$this->proxies->dead = $this->scrape->proxiesDead;
 			$this->proxies->other = $this->scrape->proxiesOther;
 			$this->proxies->good = $this->scrape->proxiesGood;
+			$this->proxies->all = $this->scrape->proxiesAll;
 		    		
     		// Use Redis instead
     		$this->proxies->update();

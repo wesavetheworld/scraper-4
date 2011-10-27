@@ -269,12 +269,37 @@ class proxies
 		}
     }
 	
+	public function update($final = false)
+	{
+		// Start a redis transaction			
+		$this->redis->multi();
+
+		// Update blocked proxies
+		if(count($this->all) > 0)
+		{	
+			echo "\tproxies all: ".count($this->all)."\n";
+
+			// Add proxies back to sorted set
+			$this->addSortedSetMembers($this->all, false);		
+		}  		
+		
+		// Execute the queued commands
+		$this->redis->exec();
+
+		$returned = count($this->all);
+
+		$this->returned += $returned;		
+
+		//echo "Total selected: $this->selected\n";
+		echo "Returned: $returned ($this->returned)\n";		
+	}
+
 	// Add proxies back to redis sets based on status
-    public function update($final = false)
+    public function updateOld($final = false)
     {
 		// Start a redis transaction			
 		$this->redis->multi();
-		    	
+	
 		// Update blocked proxies
 		if(count($this->blocked) > 0)
 		{	
