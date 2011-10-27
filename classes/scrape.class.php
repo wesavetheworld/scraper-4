@@ -271,7 +271,7 @@ class scraper
 				curl_setopt($this->ch[$i], CURLOPT_PROXYPORT, $this->proxies[$i]['port']);
 				curl_setopt($this->ch[$i], CURLOPT_PROXYUSERPWD, $this->proxies[$i]['username'].":".$this->proxies[$i]['password']);
 
-				echo "proxy used: ".$this->proxies[$i]['proxy']."\n";
+				//echo "proxy used: ".$this->proxies[$i]['proxy']."\n";
 			}
 			
 			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
