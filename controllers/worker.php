@@ -337,6 +337,7 @@ class worker
 				{    		
 					// If no proxy set for this keyword/url yet
 					if(!$item->proxy)
+					{
     					//$item->proxy = $this->proxies->selectSingle();
     					//$this->proxies[''] = $item->proxy
 					}
