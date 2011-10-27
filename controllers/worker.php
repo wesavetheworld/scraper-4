@@ -197,10 +197,10 @@ class worker
 				// If scraping google
 				if($this->engine == 'google')
 				{
-					echo "checking notifications PT 1\n";
+					//echo "checking notifications PT 1\n";
 					// See if a rank change notification should be sent
 					$item->setNotification();
-					echo "notification for ".$item->keyword_id." : ".$item->notify."\n";
+					//echo "notification for ".$item->keyword_id." : ".$item->notify."\n";
 				}	
 										
 				// Calibrate keyword ranking (10/100 results)
@@ -345,8 +345,6 @@ class worker
 					if(!$item->proxy)
 					{
 						$item->proxy = $this->proxies->selectSingle();
-
-						$this->selectedProxies++;
 					}
 								
 					// Add the keyword's search page url to scraping list
@@ -360,8 +358,6 @@ class worker
 				} 
 			}	 
 		} 
-
-		echo "worker selected: $this->selectedProxies\n";	
 				
 		// Return the url and proxy arrays
 		return array('urls' => $urls, 'proxies'=> $proxies);				

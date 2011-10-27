@@ -266,8 +266,6 @@ class proxies
 
 			// Add proxy to redis set		
 			$this->redis->zadd('proxiesGoogle', $score, $proxy);
-			
-			echo "zadd proxiesGoogle $type $score $proxy\n";	
 		}
     }
 	
