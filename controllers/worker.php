@@ -316,12 +316,6 @@ class worker
 		{  
 			// Generate the search page url 
 			$item->setSearchUrl();	
-			
-			// If no proxy set for this keyword/url yet
-			if(!$item->proxy)
-			{
-				$item->proxy = $this->proxies->selectSingle();
-			}
 
 			// If getting domain urls
 			if($this->model == "domains")
@@ -329,6 +323,12 @@ class worker
 				// If keyword's search hash is unique
 				if(!$urls[$item->url])
 				{    		
+					// If no proxy set for this keyword/url yet
+					if(!$item->proxy)
+					{
+						$item->proxy = $this->proxies->selectSingle();
+					}
+
 					// Add the keyword's search page url to scraping list
 					$urls[$item->url] = $item->url;  
 					
@@ -341,6 +341,12 @@ class worker
 				// If keyword's search hash is unique
 				if(!$urls[$item->searchHash])
 				{    				
+					// If no proxy set for this keyword/url yet
+					if(!$item->proxy)
+					{
+						$item->proxy = $this->proxies->selectSingle();
+					}
+								
 					// Add the keyword's search page url to scraping list
 					$urls[$item->searchHash] = $item->url; 
 						
