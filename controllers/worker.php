@@ -130,7 +130,7 @@ class worker
 		print_r($this->scrape->urls);
 		print_r($this->scrape->proxies);
 
-		echo "\n... and just to make sure: \n"
+		echo "\n... and just to make sure: \n";
 
 		foreach($this->items->{$this->model} as $item)
 		{
