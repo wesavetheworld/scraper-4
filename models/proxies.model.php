@@ -114,7 +114,7 @@ class proxies
 	 	} 	
 	}	
 
-	public function select($totalProxies = 1, $key = "proxiesGoogle")
+	public function select($totalProxies = 1, $key = "proxiesGoogle2")
 	{ 		
 		// Reduce total by 1 to account for redis 0 index
 		$totalProxies = $this->irreducible($totalProxies, 1);
