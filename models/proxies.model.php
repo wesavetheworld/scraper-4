@@ -286,16 +286,10 @@ class proxies
 		// Execute the queued commands
 		$returned = array_sum($this->redis->exec());
 
-		echo "start \n";
-		echo($returned);
-		echo "stop \n";
-
-
 		$this->returned += $returned;		
 
 		//echo "Total selected: $this->selected\n";
 		echo "Returned: $returned ($this->returned)\n";	
-		
 
 		if($final)
 		{
