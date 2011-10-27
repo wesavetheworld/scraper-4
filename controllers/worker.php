@@ -410,7 +410,10 @@ class worker
 				}
 			}
 
-			echo "done popping, none should be left: ".count($this->proxies->proxies)."\n";
+			if(count($this->proxies->proxies) > 0)
+			{
+				echo "FUCK! popping left: ".count($this->proxies->proxies)."\n";
+			}
 		}	
 		
 		// Returned the proxy array
