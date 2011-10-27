@@ -332,7 +332,7 @@ class proxies
 		// Execute the queued commands
 		$this->redis->exec();
 		
-		$this->returned += count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
+		$returned += count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
 
 		if($final)
 		{
@@ -342,8 +342,8 @@ class proxies
 		// Empty proxy status arrays
 		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->other);			
 
-		echo "Total selected: $this->selected\n";
-		echo "Returned: $this->returned\n";	
+		//echo "Total selected: $this->selected\n";
+		echo "Returned: $returned ($this->returned)\n";	
 
     }
 

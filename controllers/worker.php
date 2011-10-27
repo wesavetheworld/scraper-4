@@ -347,6 +347,7 @@ class worker
 					if(!$item->proxy)
 					{
 						$item->proxy = $this->proxies->selectSingle();
+						$select++;
 					}
 								
 					// Add the keyword's search page url to scraping list
@@ -360,6 +361,8 @@ class worker
 				} 
 			}	 
 		} 
+				
+		echo "selected: $select\n";
 				
 		// Return the url and proxy arrays
 		return array('urls' => $urls, 'proxies'=> $proxies);				
