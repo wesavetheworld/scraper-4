@@ -119,8 +119,20 @@ class worker
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
-		// Build an array of search engine urls to scrape and the proxies needed
-		$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total); 
+		if(defined("DEV"))
+    	{
+			// Build an array of search engine urls to scrape and the proxies needed
+			$prepare = $this->getUrlsRedis($this->items->{$this->model}, $this->items->total);  
+    	}
+    	else
+    	{
+			// Build an array of search engine urls to scrape and the proxies needed
+			$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total);     		
+    	}
+
+    	print_r($prepare);
+    	
+    	die("done \n")''
 
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
@@ -295,7 +307,59 @@ class worker
 
 	// ===========================================================================// 
 	// ! Supporting methods                                                       //
-	// ===========================================================================//	
+	// ===========================================================================//
+	
+	// Loop through keywords and return array of urls to scrape
+	public function getUrlsRedis($items, $total)
+	{    
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);
+				
+		// Loop through each keyword
+		foreach($items as $key => &$item)
+		{  
+			// Generate the search page url 
+			$item->setSearchUrl();	
+			
+			// If no proxy set for this keyword/url yet
+			if(!$item->proxy)
+			{
+				$item->proxy = $this->proxies->selectSingle();
+			}						  		
+
+			// If getting domain urls
+			if($this->model == "domains")
+			{ 			                     	
+				// If keyword's search hash is unique
+				if(!$urls[$item->url])
+				{    		
+					// Add the keyword's search page url to scraping list
+					$urls[$item->url] = $item->url;  
+					
+					$proxies[$item->url] = $item->proxy;						
+				}
+			}
+			// If getting keyword urls
+			else
+			{	    			                     			
+				// If keyword's search hash is unique
+				if(!$urls[$item->searchHash])
+				{    				
+					// Add the keyword's search page url to scraping list
+					$urls[$item->searchHash] = $item->url; 
+						
+					// Add keywords proxy to list to be used for scraping	
+					$proxies[$item->searchHash] = $item->proxy;						
+					
+					// This is a new search
+					$item->searchType = "new";
+				} 
+			}	 	
+		} 
+				
+		// Return the url and proxy arrays
+		return array('urls' => $urls, 'proxies'=> $proxies);				
+	}		
 	
 	// Loop through keywords and return array of urls to scrape
 	public function getUrls($items, $total)

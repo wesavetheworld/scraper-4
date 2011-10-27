@@ -62,6 +62,51 @@ class proxies
 		return $num;
 	}
 
+	public function selectSingle($totalProxies = 1)
+	{ 		
+		// Loop until proxies are returned
+		while(!$response)
+		{
+			// Monitor proxy set for changes during selection
+	 		$this->redis->watch($key);
+
+	 		// Set microtime here to avoid discrepancies in the next few redis calls
+	 		$score = microtime(true);
+
+	 		// If there are enough proxies to select for the job
+	 		if($this->redis->zCount($key, 0, $score) >= $totalProxies)
+	 		{
+	 			// Start a redis transaction
+	 			$this->redis->multi();
+
+				// Select a range of proxies ordered by last block 
+				$this->redis->ZRANGE($key, 0, $totalProxies);
+
+				// Remove all proxies just selected
+				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);	
+				
+				// Get response from redis
+				$response = $this->redis->exec(); 
+	 		}
+	 		// Not enough proxies to select
+	 		else
+	 		{
+	 			// Wait and try again
+				sleep(5);	 			
+	 		}
+
+	 		// Stop monitoring proxy list for changes
+	 		$this->redis->unwatch($key);	
+	 	}	 	
+
+	 	// Loop through each proxy in the redis response
+	 	foreach($response[0] as $proxy)
+	 	{
+	 		// Create array from json data
+	 		return $this->redis->hgetall("p:".$proxy);
+	 	} 	
+	}	
+
 	public function select($totalProxies = 1, $key = "proxiesGoogle")
 	{ 		
 		// Reduce total by 1 to account for redis 0 index
