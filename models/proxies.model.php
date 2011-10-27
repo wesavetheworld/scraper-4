@@ -326,10 +326,7 @@ class proxies
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->other, FALSE);	
-		}		
-
-		// Empty proxy status arrays
-		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->other);		
+		}			
 
 		// Update proxy use for all non error proxies
 		if(count($this->good) > 0 && $final)
@@ -352,10 +349,14 @@ class proxies
 		
 		$returned = count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
 
+		// Empty proxy status arrays
+		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->other);			
+
 		echo "Total selected: $this->selected\n";
 		echo "Returned: $returned\n";	
 		echo "kill it at this point!\n";
 		sleep(5);
+
     }
 
 	// Update poxies' status based on response (blocked, timeout etc)
