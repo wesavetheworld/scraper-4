@@ -117,7 +117,10 @@ class proxies
 	public function select($totalProxies = 1, $key = "proxiesGoogle")
 	{ 		
 		// Reduce total by 1 to account for redis 0 index
-		$totalProxies = $this->irreducible($totalProxies, 1);
+		//$totalProxies = $this->irreducible($totalProxies, 1);
+
+		// Reduce total by 1 to account for redis 0 index
+		$totalProxies = $totalProxies - 1;
 
 		// Loop until proxies are returned
 		while(!$response)
