@@ -114,7 +114,7 @@ class proxies
 	 	} 	
 	}	
 
-	public function select($totalProxies = 1, $key = "proxiesGoogle2")
+	public function select($totalProxies = 1, $key = "proxiesGoogle")
 	{ 		
 		// Reduce total by 1 to account for redis 0 index
 		$totalProxies = $this->irreducible($totalProxies, 1);
@@ -146,7 +146,7 @@ class proxies
 	 		// Not enough proxies to select
 	 		else
 	 		{
-	 			echo "not enough\n";
+	 			echo "not enough proxies...\n";
 	 			// Wait and try again
 				sleep(5);	 			
 	 		}
