@@ -119,8 +119,6 @@ class worker
 		// If a domain stats connection
 		$this->scrape->task = $this->task;
 
-		echo "so far so good...\n";
-
 		if(defined("DEV"))
     	{
 			// Build an array of search engine urls to scrape and the proxies needed
@@ -316,6 +314,9 @@ class worker
 	{    
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
+
+		echo "so far so proxy...\n";
+
 				
 		// Loop through each keyword
 		foreach($items as $key => &$item)
