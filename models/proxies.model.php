@@ -278,7 +278,7 @@ class proxies
 		// Update blocked proxies
 		if(count($this->blocked) > 0)
 		{	
-			echo "proxies blocked: ".count($this->blocked)."\n";
+			echo "\tproxies blocked: ".count($this->blocked)."\n";
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->blocked, TRUE);		
@@ -287,7 +287,7 @@ class proxies
 		// Update blocked proxies
 		if(count($this->denied) > 0)
 		{
-			echo "proxies denied: ".count($this->denied)."\n";
+			echo "\tproxies denied: ".count($this->denied)."\n";
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->denied, FALSE);				
@@ -296,7 +296,7 @@ class proxies
 		// Update timed out proxies
 		if(count($this->timeout) > 0)
 		{
-			echo "proxies timedout: ".count($this->timeout)."\n";
+			echo "\tproxies timedout: ".count($this->timeout)."\n";
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->timeout, FALSE);			
@@ -305,7 +305,7 @@ class proxies
 		// Update timed out proxies
 		if(count($this->dead) > 0)
 		{
-			echo "proxies dead: ".count($this->dead)."\n";
+			echo "\tproxies dead: ".count($this->dead)."\n";
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->dead, FALSE);			
@@ -314,7 +314,7 @@ class proxies
 		// Update proxy use for all non error proxies
 		if(count($this->other) > 0)
 		{
-			echo "proxies good: ".count($this->other)."\n";
+			echo "\tproxies good: ".count($this->other)."\n";
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->other, FALSE);	
@@ -323,7 +323,7 @@ class proxies
 		// Update proxy use for all non error proxies
 		if(count($this->good) > 0 && $final)
 		{
-			echo "proxies good: ".count($this->good)."\n";
+			echo "\tproxies good: ".count($this->good)."\n";
 
 			// Add proxies back to sorted set
 			$this->addSortedSetMembers($this->good, FALSE);			
@@ -348,7 +348,7 @@ class proxies
 		{
 			echo "Total selected: $this->selected\n";
 		}
-		
+
 		//echo "Total selected: $this->selected\n";
 		echo "Returned: $returned ($this->returned)\n";	
 

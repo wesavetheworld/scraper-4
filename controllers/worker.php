@@ -77,7 +77,7 @@ class worker
 		// Update DB with new data
 		$this->updateItems();
 
-		echo "job complete\n";
+		echo "\njob complete\n";
 
 		// Job has been completed
 		$this->complete = TRUE;
@@ -226,7 +226,7 @@ class worker
 		else
 		{
 			$this->unset++;
-			echo "proxy unset #$this->unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
+			echo "\tproxy unset #$this->unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
 			// Remove proxy used for this item so that a new one will be selected for in the next loop
 			unset($item->proxy);
 		}	
