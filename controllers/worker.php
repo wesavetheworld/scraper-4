@@ -326,10 +326,7 @@ class worker
 			{
 				$item->proxy = $this->proxies->selectSingle();
 			}
-			echo $item->proxy;
-			echo "so far so proxy gotten...\n";
-									  		
-
+			
 			// If getting domain urls
 			if($this->model == "domains")
 			{ 			                     	
