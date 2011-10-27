@@ -146,6 +146,7 @@ class proxies
 	 		// Not enough proxies to select
 	 		else
 	 		{
+	 			echo "not enough\n";
 	 			// Wait and try again
 				sleep(5);	 			
 	 		}
