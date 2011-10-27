@@ -332,12 +332,14 @@ class proxies
 		// Execute the queued commands
 		$this->redis->exec();
 		
-		$returned += count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
+		$returned = count($this->other) + count($this->dead) + count($this->timeout) + count($this->denied) + count($this->blocked);
 
 		if($final)
 		{
-			$this->returned += count($this->good);
+			$returned += count($this->good);
 		}
+
+		$this->returned += $returned;
 
 		// Empty proxy status arrays
 		unset($this->blocked, $this->denied, $this->timeout, $this->dead, $this->other);			
