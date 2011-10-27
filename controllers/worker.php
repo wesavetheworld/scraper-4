@@ -116,12 +116,6 @@ class worker
 
 	private function scrapeContent()
 	{
-		// Create new scraping instance
-		$this->scrape = new scraper; 
-
-		// If a domain stats connection
-		$this->scrape->task = $this->task;
-
 		if(defined("DEV"))
     	{
 			// Build an array of search engine urls to scrape and the proxies needed
@@ -133,6 +127,12 @@ class worker
 			$prepare = $this->getUrls($this->items->{$this->model}, $this->items->total);     		
     	}
 
+		// Create new scraping instance
+		$this->scrape = new scraper; 
+
+		// If a domain stats connection
+		$this->scrape->task = $this->task;    	
+
 		// Build an array of search engine urls to scrape
 		$this->scrape->urls = $prepare['urls']; 				
 		
@@ -143,7 +143,7 @@ class worker
 		$this->scrape->curlExecute();	
 
 		// Update status of proxies uses in scraping
-		$this->updateProxies();		
+		//$this->updateProxies();		
 	}
 
 	private function parseContent()
@@ -209,6 +209,13 @@ class worker
 				// Add keyword to completed list
 				$this->items->updated[$key] = $item;
 
+				// If this item has it's own proxy
+				if($item->proxy)
+				{
+					// Check proxy back in.
+					$this->proxies->update(false, $item->proxy['proxy']);
+				}	
+
 				// Remove keyword from keyword id array
 				unset($this->items->{$this->model}->$key);  
 			    
@@ -225,10 +232,18 @@ class worker
 		// No scraped content returned
 		else
 		{
-			$this->unset++;
-			echo "\tproxy unset #$this->unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
-			// Remove proxy used for this item so that a new one will be selected for in the next loop
-			unset($item->proxy);
+			// If this item has it's own proxy
+			if($item->proxy)
+			{			
+				$this->unset++;
+				echo "\tproxy unset #$this->unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
+				
+				// Check proxy back in.
+				$this->proxies->update(true, $item->proxy['proxy']);
+
+				// Remove proxy used for this item so that a new one will be selected for in the next loop
+				unset($item->proxy);
+			}	
 		}	
 	}
 

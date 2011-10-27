@@ -299,8 +299,25 @@ class proxies
 	// 	}			
 	// }
 
+	public function update($blocked = false, $proxy)
+	{
+		// If these are blocked proxies
+		if($blocked)
+		{
+			// Micro time in one hour (when the proxy can be used next) 
+			$score = microtime(true) + (60 * 60);
+		}
+		else
+		{	
+			// Current micro time
+			$score = microtime(true);
+		}			
+
+		$this->redis->zadd('proxiesGoogle', $score, $proxy);
+	}
+
 	// Add proxies back to redis sets based on status
-    public function update($final = false)
+    public function updateOLD($final = false)
     {
 		// Start a redis transaction			
 		$this->redis->multi();
