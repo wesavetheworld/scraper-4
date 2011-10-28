@@ -386,7 +386,7 @@ class worker
 	{  					
 		$need = count($urls) - count($this->proxyList);
 			
-		echo "urls to scrape: ".count($urls)." | keywords with proxies already: ".count($this->proxyList)."\n";	
+		echo "keywords:".$this->items->total." | urls to scrape: ".count($urls)." | keywords with proxies already: ".count($this->proxyList)."\n";	
 		echo "total: $need\n";
 
 		if($need != 0)
