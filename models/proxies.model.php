@@ -162,10 +162,10 @@ class proxies
 		return $this->blocked;
 	}
 	
-	public function checkInUse($key = "proxies:google")
+	public function checkInUse()
 	{
-		$this->inUse = $this->total - $this->working - $this->blocked;
-		
+		$this->inUse = $this->total - ($this->working - $this->blocked);
+
 		return $this->inUse;		
 	}				
 
