@@ -110,7 +110,7 @@ class proxies
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
 	 	} 	
 
-	 	file_put_contents('proxyTest.txt',  $save, FILE_APPEND);
+	 	//file_put_contents('proxyTest.txt',  $save, FILE_APPEND);
 	}	
 
 	// Add proxies back into sorted set with new timestamp score (1 hour for blocked, now for non blocked)
