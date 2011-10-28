@@ -139,7 +139,7 @@ class proxies
 		return $this->total;
 	}
 
-	public function checkWorking($key = "proxies:google")
+	public function checkAvailable($key = "proxies:google")
 	{
 	 	$score = microtime(true);
 
