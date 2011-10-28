@@ -104,9 +104,13 @@ class proxies
 	 	// Loop through each proxy in the redis response
 	 	foreach($response[0] as $proxy)
 	 	{
+	 		$save .= $proxy['proxy']."\n";
+
 	 		// Create array from json data
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
 	 	} 	
+
+	 	file_put_contents('proxyTest.txt',  $save, FILE_APPEND);
 	}	
 
 	// Add proxies back into sorted set with new timestamp score (1 hour for blocked, now for non blocked)
