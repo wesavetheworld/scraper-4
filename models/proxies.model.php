@@ -132,6 +132,31 @@ class proxies
 	}
 
 	// ===========================================================================// 
+	// ! Redis proxy DB stats                                                     //
+	// ===========================================================================//	
+
+	public function checkTotal($key = "proxies:google")
+	{
+		return $this->redis->zCard($key);		
+	}
+
+	public function checkWorking($key = "proxies:google")
+	{
+	 	$score = microtime(true);
+
+		return $this->redis->zCount($key, 0, $score);		
+	}
+	
+	public function checkBlocked($key = "proxies:google")
+	{
+	 	$now = microtime(true);
+
+	 	$future = microtime(true) + (60 * 60);
+
+		return $this->redis->zCount($key,  $score, $future);		
+	}		
+
+	// ===========================================================================// 
 	// ! Legacy MySQL related stuff                                               //
 	// ===========================================================================//	
 

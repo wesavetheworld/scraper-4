@@ -18,11 +18,24 @@ class geckoboard
 {  
 	function __construct()
 	{
-
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 				
 	}
 
 	public function geckoboard()
 	{
-		
+		$this->proxyStats();
 	}
+
+	public function proxyStats()
+	{
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);
+		
+		echo "Total proxies: ".$this->proxies->checkTotal();		
+		echo "Working proxies: ".$this->proxies->checkWorking();		
+		echo "Blocked proxies: ".$this->proxies->checkBlocked();		
+
+	}
+
 }	
