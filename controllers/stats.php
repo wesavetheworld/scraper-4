@@ -28,6 +28,9 @@ class workerstatus
 		// Include keywords data model
 	 	require_once('classes/gearman.class.php');
 
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 		 	
+
 	 	// If this is dev
 	 	$this->dev = $_SERVER['argv'][2];
 	}
@@ -63,6 +66,21 @@ class workerstatus
 		
 		// Return specified job type job queue total
 		echo $status['operations'][$type]['total']."\n";	
+	}	
+
+	// Check the status of the proxies
+	public function proxyStats()
+	{
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);
+		
+		echo "Total proxies: ".$this->proxies->checkTotal('master')."\n";		
+		echo "\tAvailable proxies: ".$this->proxies->checkAvailable('google')."\n";		
+		echo "\tResting proxies: ".$this->proxies->checkResting('google')."\n";		
+		echo "\tBlocked proxies: ".$this->proxies->checkBlocked('google')."\n";		
+		echo "\tIn use proxies: ".$this->proxies->checkInUse('google')."\n";		
+
+		echo "\tAll proxies unblocked at: ".$this->proxies->checkBlockTime('google')."\n";
 	}	
 }	    
 
