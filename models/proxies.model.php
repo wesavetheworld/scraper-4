@@ -158,7 +158,7 @@ class proxies
 
 	public function checkBlockTime($key = "proxies:google")
 	{
-		$last = $this->redis->zRange($key, 0 , 0, TRUE);
+		$last = $this->redis->zrevRange($key, 0 , 0, TRUE);
 
 		return date("r", $last[1]);
 	}
