@@ -137,14 +137,18 @@ class proxies
 
 	public function checkTotal($key = "proxies:master")
 	{
-		return $this->redis->zCard($key);		
+		$this->total = $this->redis->zCard($key);		
+
+		return $this->total;
 	}
 
 	public function checkWorking($key = "proxies:google")
 	{
 	 	$score = microtime(true);
 
-		return $this->redis->zCount($key, 0, $score);		
+		$this->working = $this->redis->zCount($key, 0, $score);		
+
+		return $this->working;
 	}
 	
 	public function checkBlocked($key = "proxies:google")
@@ -153,8 +157,17 @@ class proxies
 
 	 	$future = microtime(true) + (60 * 60);
 
-		return $this->redis->zCount($key,  $now, $future);		
-	}		
+		$this->blocked = $this->redis->zCount($key,  $now, $future);		
+
+		return $this->blocked;
+	}
+	
+	public function checkInUse($key = "proxies:google")
+	{
+		$this->inUse = $this->total - $this->working - $this->blocked;
+		
+		return $this->inUse;		
+	}				
 
 	public function checkBlockTime($key = "proxies:google")
 	{
