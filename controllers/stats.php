@@ -39,7 +39,7 @@ class stats
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	
 	
-	public function workerstatus()
+	public function stats()
 	{   
 		echo "started: ".JOB_SERVER_IP;		
 		
@@ -51,6 +51,8 @@ class stats
 		print_r($status['operations']);
 
 		$this->checkJobQueue('rankings');
+
+		$this->proxyStats();
 	}
 
 	// Check for oustanding jobs stilled queued

@@ -104,6 +104,15 @@
 	// ! SERPS Database credentials                                               //
 	// ===========================================================================//
 	
+	// Ip of the redis database instance 
+	define("REDIS_SERPS_IP", "50.18.170.228");
+
+	// Redis listening port
+	define("REDIS_SERPS_PORT", 4730);
+
+	// Redis Proxy database number
+	define("REDIS_SERPS_DB", 0);
+
 	// If development environment
 	if(defined("DEV"))
 	{	
