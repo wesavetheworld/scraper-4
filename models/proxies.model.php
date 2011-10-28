@@ -153,7 +153,7 @@ class proxies
 
 	 	$future = microtime(true) + (60 * 60);
 
-		return $this->redis->zCount($key,  $score, $future);		
+		return $this->redis->zCount($key,  $now, $future);		
 	}		
 
 	// ===========================================================================// 
