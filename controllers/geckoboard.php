@@ -24,7 +24,7 @@ class geckoboard
 
 	public function geckoboard()
 	{
-		echo date("r")."\n\n";
+		echo "\n".date("r")."\n\n";
 
 		$this->proxyStats();
 	}
@@ -38,7 +38,7 @@ class geckoboard
 		echo "\tWorking proxies: ".$this->proxies->checkWorking()."\n";		
 		echo "\tBlocked proxies: ".$this->proxies->checkBlocked()."\n";		
 
-		echo "All proxies will be work next at: ".$this->proxies->checkBlockTime()."\n";
+		echo "\tAll proxies unblocked at: ".$this->proxies->checkBlockTime()."\n";
 	}
 
 }	

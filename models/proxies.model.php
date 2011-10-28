@@ -160,7 +160,7 @@ class proxies
 	{
 		$last = $this->redis->zrevRange($key, 0 , 0, TRUE);
 
-		return date("r", $last[1]);
+		return date("h:i", $last[1]);
 	}
 
 	// ===========================================================================// 
