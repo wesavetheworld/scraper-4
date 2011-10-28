@@ -36,7 +36,7 @@ class proxies
 		// use redis
 		$this->redisConnect();
 
-		$this->migrateToRedis();die();
+		//$this->migrateToRedis();die();
 	}
 
 	// Set the correct engine (used for proxy key)
