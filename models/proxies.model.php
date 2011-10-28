@@ -150,7 +150,7 @@ class proxies
 	
 	public function checkBlocked($engine = "google")
 	{
-	 	$now = microtime(true);
+	 	$now = microtime(true) + PROXY_USE_WAIT;
 
 	 	$future = microtime(true) + PROXY_BLOCKED_WAIT;
 
