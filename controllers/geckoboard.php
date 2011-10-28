@@ -24,6 +24,8 @@ class geckoboard
 
 	public function geckoboard()
 	{
+		echo date("r")."\n\n";
+
 		$this->proxyStats();
 	}
 
