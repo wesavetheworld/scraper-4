@@ -68,7 +68,23 @@ class tasks
 	
 	// ===========================================================================// 
 	// ! Clen up type methods                                                     //
-	// ===========================================================================//	   
+	// ===========================================================================//	
+	
+	// Transfer proxies from MySQL to redis
+	private function migrateProxies()
+	{
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 
+
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);
+
+		// Copy proxies from MySQL to redis
+		$this->proxies->migrate();
+
+		// Log current state
+		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
+	}   
 	
 	// Resets all stats for proxies (use/blocked/status)
 	private function proxyReset()
