@@ -104,7 +104,7 @@ class proxies
 	 	// Loop through each proxy in the redis response
 	 	foreach($response[0] as $proxy)
 	 	{
-	 		$save .= $proxy['proxy']."\n";
+	 		$save .= $proxy."\n";
 
 	 		// Create array from json data
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
