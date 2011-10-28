@@ -301,6 +301,13 @@ class worker
 			// Add keyword to completed list
 			$this->items->updated[$key] = $item;
 
+			// If this item has it's own proxy
+			if($item->proxy)
+			{
+				// Check proxy back in.
+				$this->proxies->update(false, $item->proxy['proxy']);
+			}				
+
 			// Remove keyword from keyword id array
 			unset($this->items->{$this->model}->$key); 						
 
@@ -309,8 +316,6 @@ class worker
 		}	
 		else
 		{
-			echo "bad scrape \n";
-
 			// If this item has it's own proxy
 			if($item->proxy)
 			{			
@@ -320,6 +325,8 @@ class worker
 				// Remove proxy used for this item so that a new one will be selected for in the next loop
 				unset($item->proxy);
 			}	
+
+			echo "bad scrape \n";
 
 			$item->bad++;			
 		}
