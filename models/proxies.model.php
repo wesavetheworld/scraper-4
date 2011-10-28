@@ -36,7 +36,7 @@ class proxies
 		// use redis
 		$this->redisConnect();
 
-		//$this->migrateToRedis();die();
+		$this->migrateToRedis();die();
 	}
 
 	// Set the correct engine (used for proxy key)
@@ -157,7 +157,10 @@ class proxies
 		
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
-		{			
+		{	
+			// Add proxy to redis master set (to compare to others for missing proxies)
+			$this->redis->zadd('proxies:master', microtime(true), $proxy['proxy']);	
+						
 			// Add proxy to redis google set		
 			$this->redis->zadd('proxies:google', microtime(true), $proxy['proxy']);	
 
