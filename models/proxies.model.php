@@ -33,10 +33,12 @@ class proxies
 		// Set the engine for proxies
 		$this->engine = $engine;
 
+		echo "engine: ".$this->engine."\n";
+
 		// use redis
 		$this->redisConnect();
 
-		//$this->migrateToRedis();die();
+		$this->migrateToRedis();die();
 	}
 
 	// Establish connection to Redis server
@@ -50,7 +52,7 @@ class proxies
 	}	
 
 	// Select the requested amount of proxies from redis
-	public function select($totalProxies = 1, $key = "proxiesGoogle")
+	public function select($totalProxies = 1, $key = "proxies:google")
 	{ 		
 		// Reduce total by 1 to account for redis 0 index
 		$totalProxies = $totalProxies - 1;
@@ -115,7 +117,7 @@ class proxies
 		}			
 
 		// Add proxy back into sorted set with new score (timestamp)
-		$this->redis->zadd('proxiesGoogle', $score, $proxy);
+		$this->redis->zadd('proxies:google', $score, $proxy);
 	}
 
 	// ===========================================================================// 
@@ -145,12 +147,20 @@ class proxies
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{			
-			// Add proxy to redis set		
-			$this->redis->zadd('proxiesGoogle', microtime(true), $proxy['proxy']);	
+			// Add proxy to redis google set		
+			$this->redis->zadd('proxies:google', microtime(true), $proxy['proxy']);	
+
+			// Add proxy to redis google set		
+			$this->redis->zadd('proxies:bing', microtime(true), $proxy['proxy']);	
+			
+			// Add proxy to redis google set		
+			$this->redis->zadd('proxies:alexa', microtime(true), $proxy['proxy']);	
+			
+			// Add proxy to redis google set		
+			$this->redis->zadd('proxies:backlinks', microtime(true), $proxy['proxy']);								
 			
 			// Create proxy hash		
 			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
 		}			
-		
 	}
 }	
