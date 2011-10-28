@@ -80,7 +80,7 @@ class tasks
 		$this->proxies = new proxies($this->engine);
 
 		// Copy proxies from MySQL to redis
-		$this->proxies->migrate();
+		$this->proxies->migrateToRedis();
 
 		// Log current state
 		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
