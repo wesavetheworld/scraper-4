@@ -39,13 +39,6 @@ class clientCore
 	// The main loop that acts as a daemon
 	public function daemon()
 	{	
-		// If this is the dev client
-		// if(defined("DEV"))
-		// {
-		// 	// Dont run cron, die please
-		// 	exit("DEV is done!\n");
-		// }
-
 		// Loop forever 
 		while(TRUE)
 		{
@@ -249,12 +242,12 @@ class clientCore
 		$command = "php hub.php $controller $options > /dev/null 2>/dev/null &";
 
 		// Execute command given
-		//exec($command);
+		exec($command);
 
-		// Mimic live server exec command
-		sleep(rand(1, 6));
+		// // Mimic live server exec command
+		// sleep(rand(1, 6));
 
-		file_put_contents("data/clientCore.log", "\tcommand: $controller $options at ".date("i:s")."\n", FILE_APPEND);		
+		// file_put_contents("data/clientCore.log", "\tcommand: $controller $options at ".date("i:s")."\n", FILE_APPEND);		
 
 		// Log current command
 		utilities::notate("command: $controller $options", "clientd.log");		  		   	 				
@@ -266,7 +259,7 @@ class clientCore
 		// Get remaining seconds in current minute
 		$sleep = intval(60 - intval(ltrim(date("s"), "0")));
 
-		file_put_contents("data/clientCore.log", "\tmeditate for: $sleep\n\n", FILE_APPEND);		
+		//file_put_contents("data/clientCore.log", "\tmeditate for: $sleep\n\n", FILE_APPEND);		
 
 		
 		// Sleep until next minute
