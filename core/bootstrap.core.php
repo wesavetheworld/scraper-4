@@ -340,18 +340,6 @@ class bootstrap
 			$supervisord.= "numprocs=1\n"; 
 			$supervisord.= "process_name=clientCore\n"; 						
 		}
-		// All other instance types
-		elseif($this->instanceType == "jobServer")
-		{	
-			// Add instance specific daemon info
-			$supervisord = "[program:theApp]\n";
-			$supervisord.= "command=/usr/local/sbin/gearmand -d\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n\n"; 										
-		}
 		// If this instance is for bing
 		elseif($this->instanceType == "bing")
 		{
