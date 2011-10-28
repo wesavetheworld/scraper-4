@@ -135,7 +135,7 @@ class proxies
 	// ! Redis proxy DB stats                                                     //
 	// ===========================================================================//	
 
-	public function checkTotal($key = "proxies:google")
+	public function checkTotal($key = "proxies:master")
 	{
 		return $this->redis->zCard($key);		
 	}
