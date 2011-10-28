@@ -66,6 +66,15 @@ class bootstrap
 			// Run gearman daemon
 			$this->runGearman();
 		}
+		// If this is the redis proxy server
+		elseif($this->instanceType == "redis")
+		{	
+			// Assign the jobServer elastic ip to this instance
+			$this->assignIp(REDIS_PROXY_IP);	
+			
+			// Run redis database
+			$this->runRedis();
+		}		
 		// All othere instance types
 		else
 		{
@@ -275,6 +284,12 @@ class bootstrap
 	{
 		exec("/usr/local/sbin/gearmand -d");
 	}
+
+	// Run redis database
+	private function runRedis()
+	{
+		exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/redis/redis.conf");
+	}	
 
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
