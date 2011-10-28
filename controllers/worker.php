@@ -235,9 +235,6 @@ class worker
 			// If this item has it's own proxy
 			if($item->proxy)
 			{			
-				$this->unset++;
-				echo "\tproxy unset #$this->unset: ".$this->scrape->results[$item->searchHash]['httpInfo']['http_code']."\n";
-				
 				// Check proxy back in.
 				$this->proxies->update(true, $item->proxy['proxy']);
 
@@ -314,10 +311,17 @@ class worker
 		{
 			echo "bad scrape \n";
 
-			// Remove proxy used for this item
-			unset($item->proxy);			
+			// If this item has it's own proxy
+			if($item->proxy)
+			{			
+				// Check proxy back in.
+				$this->proxies->update(true, $item->proxy['proxy']);
 
-			$item->bad++;
+				// Remove proxy used for this item so that a new one will be selected for in the next loop
+				unset($item->proxy);
+			}	
+
+			$item->bad++;			
 		}
 	}
 
@@ -343,13 +347,12 @@ class worker
 				// If keyword's search hash is unique
 				if(!$urls[$item->url])
 				{    		
-					// If no proxy set for this keyword/url yet
-					if(!$item->proxy)
+					// If proxy set for this domain/url already
+					if($item->proxy)
 					{
-    					//$item->proxy = $this->proxies->selectSingle();
-    					//$this->proxies[''] = $item->proxy
-					}
-
+    					$this->proxyList[$item->url] = $item->proxy;
+					}						
+						
 					// Add the keyword's search page url to scraping list
 					$urls[$item->url] = $item->url;  
 					
@@ -362,7 +365,7 @@ class worker
 				// If keyword's search hash is unique
 				if(!$urls[$item->searchHash])
 				{    				
-					// If no proxy set for this keyword/url yet
+					// If proxy set for this keyword/url already
 					if($item->proxy)
 					{
     					$this->proxyList[$item->searchHash] = $item->proxy;
@@ -402,12 +405,26 @@ class worker
 			// Loop through urls
 			foreach($items as $key => &$item)
 			{
-				// If url has no proxy
-				if(!$this->proxyList[$item->searchHash])
-				{
-					$item->proxy = array_pop($this->proxies->proxies);
-					$this->proxyList[$item->searchHash] = $item->proxy;
+				// If getting domain urls
+				if($this->model == "domains")
+				{ 		
+					// If url has no proxy
+					if(!$this->proxyList[$item->url])
+					{
+						$item->proxy = array_pop($this->proxies->proxies);
+						$this->proxyList[$item->url] = $item->proxy;
+					}
 				}
+				else
+				{
+					// If url has no proxy
+					if(!$this->proxyList[$item->searchHash])
+					{
+						$item->proxy = array_pop($this->proxies->proxies);
+						$this->proxyList[$item->searchHash] = $item->proxy;
+					}					
+					
+				}	
 			}
 
 			if(count($this->proxies->proxies) > 0)
