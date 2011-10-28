@@ -132,40 +132,40 @@ class proxies
 	// ! Redis proxy DB stats                                                     //
 	// ===========================================================================//	
 
-	public function checkTotal($key = "proxies:master")
+	public function checkTotal($engine = "master")
 	{
-		$this->total = $this->redis->zCard($key);		
+		$this->total = $this->redis->zCard("proxies:".$engine);		
 
 		return $this->total;
 	}
 
-	public function checkAvailable($key = "proxies:google")
+	public function checkAvailable($engine = "google")
 	{
 	 	$score = microtime(true);
 
-		$this->working = $this->redis->zCount($key, 0, $score);		
+		$this->working = $this->redis->zCount("proxies:".$engine, 0, $score);		
 
 		return $this->working;
 	}
 	
-	public function checkBlocked($key = "proxies:google")
+	public function checkBlocked($engine = "google")
 	{
 	 	$now = microtime(true);
 
 	 	$future = microtime(true) + PROXY_BLOCKED_WAIT;
 
-		$this->blocked = $this->redis->zCount($key,  $now, $future);		
+		$this->blocked = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
 		return $this->blocked;
 	}
 
-	public function checkResting($key = "proxies:google")
+	public function checkResting($engine = "google")
 	{
 	 	$now = microtime(true);
 
 	 	$future = microtime(true) + PROXY_USE_WAIT;
 
-		$this->resting = $this->redis->zCount($key,  $now, $future);		
+		$this->resting = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
 		return $this->resting;
 	}	
@@ -177,9 +177,9 @@ class proxies
 		return $this->inUse;		
 	}				
 
-	public function checkBlockTime($key = "proxies:google")
+	public function checkBlockTime($engine = "google")
 	{
-		$last = $this->redis->zrevRange($key, 0 , 0, TRUE);
+		$last = $this->redis->zrevRange("proxies:".$engine, 0 , 0, TRUE);
 
 		return date("h:i", $last[1]);
 	}

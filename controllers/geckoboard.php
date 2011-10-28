@@ -34,13 +34,13 @@ class geckoboard
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
 		
-		echo "Total proxies: ".$this->proxies->checkTotal()."\n";		
-		echo "\tAvailable proxies: ".$this->proxies->checkAvailable()."\n";		
-		echo "\tResting proxies: ".$this->proxies->checkResting()."\n";		
-		echo "\tBlocked proxies: ".$this->proxies->checkBlocked()."\n";		
-		echo "\tIn use proxies: ".$this->proxies->checkInUse()."\n";		
+		echo "Total proxies: ".$this->proxies->checkTotal('master')."\n";		
+		echo "\tAvailable proxies: ".$this->proxies->checkAvailable('google')."\n";		
+		echo "\tResting proxies: ".$this->proxies->checkResting('google')."\n";		
+		echo "\tBlocked proxies: ".$this->proxies->checkBlocked('google')."\n";		
+		echo "\tIn use proxies: ".$this->proxies->checkInUse('google')."\n";		
 
-		echo "\tAll proxies unblocked at: ".$this->proxies->checkBlockTime()."\n";
+		echo "\tAll proxies unblocked at: ".$this->proxies->checkBlockTime('google')."\n";
 	}
 
 }	
