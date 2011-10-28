@@ -172,7 +172,7 @@ class proxies
 	
 	public function checkInUse()
 	{
-		$this->inUse = $this->total - ($this->working + $this->blocked);
+		$this->inUse = $this->total - ($this->working + $this->blocked + $this->resting);
 
 		return $this->inUse;		
 	}				
