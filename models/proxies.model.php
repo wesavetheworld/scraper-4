@@ -41,7 +41,7 @@ class proxies
 			// use redis
 			$this->redisConnect();
 
-			//$this->migrateToRedis();die();
+			$this->migrateToRedis();die();
 		}	
 	}
 
