@@ -156,6 +156,11 @@ class proxies
 		return $this->redis->zCount($key,  $now, $future);		
 	}		
 
+	public function checkBlockTime($key = "proxies:google")
+	{
+		return $this->redis->zRange($key, 0 , 0, TRUE);
+	}
+
 	// ===========================================================================// 
 	// ! Legacy MySQL related stuff                                               //
 	// ===========================================================================//	

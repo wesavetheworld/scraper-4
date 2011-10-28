@@ -35,6 +35,8 @@ class geckoboard
 		echo "Total proxies: ".$this->proxies->checkTotal()."\n";		
 		echo "\tWorking proxies: ".$this->proxies->checkWorking()."\n";		
 		echo "\tBlocked proxies: ".$this->proxies->checkBlocked()."\n";		
+
+		echo "All proxies will be work next at: ".$this->proxies->checkBlockTime()."\n";
 	}
 
 }	
