@@ -74,11 +74,8 @@ class proxies
 			// Monitor proxy set for changes during selection
 	 		$this->redis->watch($key);
 
-	 		// Set microtime here to avoid discrepancies in the next few redis calls
-	 		$score = microtime(true);
-
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($key, 0, $score) >= $totalProxies)
+	 		if($this->redis->zCount($key, 0, microtime(true)) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			$this->redis->multi();
@@ -119,12 +116,12 @@ class proxies
 		if($blocked)
 		{
 			// Micro time in one hour (when the proxy can be used next) 
-			$score = microtime(true) + (60 * 60);
+			$score = microtime(true) + PROXY_BLOCKED_WAIT;
 		}
 		else
 		{	
-			// Current micro time
-			$score = microtime(true);
+			// Time in 1 minute (when the proxy can be used next)
+			$score = microtime(true) + PROXY_USE_WAIT;
 		}			
 
 		// Add proxy back into sorted set with new score (timestamp)
@@ -155,12 +152,23 @@ class proxies
 	{
 	 	$now = microtime(true);
 
-	 	$future = microtime(true) + (60 * 60);
+	 	$future = microtime(true) + PROXY_BLOCKED_WAIT;
 
 		$this->blocked = $this->redis->zCount($key,  $now, $future);		
 
 		return $this->blocked;
 	}
+
+	public function checkResting($key = "proxies:google")
+	{
+	 	$now = microtime(true);
+
+	 	$future = microtime(true) + PROXY_USE_WAIT;
+
+		$this->resting = $this->redis->zCount($key,  $now, $future);		
+
+		return $this->resting;
+	}	
 	
 	public function checkInUse()
 	{

@@ -130,12 +130,12 @@ class client
 
 		    		echo "job ".$job." created\n";
 		    		
-		    		// Don't throttle domain stats
-					if(MODEL != "domains")
-					{
-		    			// Throttle the speed at which jobs are created
-		    			$this->throttle($items->total, JOB_SIZE, 50);	
-		    		}				
+		   //  		// Don't throttle domain stats
+					// if(MODEL != "domains")
+					// {
+		   //  			// Throttle the speed at which jobs are created
+		   //  			$this->throttle($items->total, JOB_SIZE, 50);	
+		   //  		}				
 				} 			   		
 			}
 		
@@ -154,39 +154,39 @@ class client
 	// ! Supporting methods                                                       //
 	// ===========================================================================//	
 
-	// Throttle the job creation based on total jobs across 1 hour(50mins)
-	function throttle($items, $itemsPerJob, $duration)
-	{
-		static $set = 0;
-		static $jobsPerMinute = 0;
-		static $first = true;
+	// // Throttle the job creation based on total jobs across 1 hour(50mins)
+	// function throttle($items, $itemsPerJob, $duration)
+	// {
+	// 	static $set = 0;
+	// 	static $jobsPerMinute = 0;
+	// 	static $first = true;
 
-		// If the first call of the function
-		if($first)
-		{
-			// Get amount of total jobs
-			$jobs = $this->setJobsTotal($items, $itemsPerJob);
+	// 	// If the first call of the function
+	// 	if($first)
+	// 	{
+	// 		// Get amount of total jobs
+	// 		$jobs = $this->setJobsTotal($items, $itemsPerJob);
 
-			// Get the amount of jobs to create per hour
-			$jobsPerMinute = $this->setJobsPerMin($jobs, $duration);
-			$first = false;
-		}
+	// 		// Get the amount of jobs to create per hour
+	// 		$jobsPerMinute = $this->setJobsPerMin($jobs, $duration);
+	// 		$first = false;
+	// 	}
 
-		//If enough jobs have been created this minute
-		if($set == $jobsPerMinute)
-		{			
-			// Reset set count
-			$set = 0;
+	// 	//If enough jobs have been created this minute
+	// 	if($set == $jobsPerMinute)
+	// 	{			
+	// 		// Reset set count
+	// 		$set = 0;
 						
-			echo "waiting...\n";
+	// 		echo "waiting...\n";
 			
-			// The throttle part
-			sleep(60);	
-		}
+	// 		// The throttle part
+	// 		sleep(60);	
+	// 	}
 
-		// Increment set count
-		$set++;
-	}
+	// 	// Increment set count
+	// 	$set++;
+	// }
 	
 	// Calculate total jobs required for amount of items
 	function setJobsTotal($items, $itemsPerJob)

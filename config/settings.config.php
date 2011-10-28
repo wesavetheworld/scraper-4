@@ -33,9 +33,6 @@
 	// Display helpful notation in output of script
 	define('NOTATION', TRUE);  
 	
-	// cURL connection timout limit
-	define('CURL_TIMEOUT', 5);  
-	
 	// Folder used for logs
 	define("LOG_DIRECTORY", "data/logs/"); 
 	
@@ -43,7 +40,20 @@
 	define("NEW_KEYWORDS_FILE", "data/status/newkeywords.log");
 	
 	// File written to when new domains are added
-	define("NEW_DOMAINS_FILE", "data/status/newdomains.log");		 	
+	define("NEW_DOMAINS_FILE", "data/status/newdomains.log");
+	
+	// ===========================================================================// 
+	// ! Scraping settings                                                        //
+	// ===========================================================================//	
+	
+	// cURL connection timout limit
+	define('CURL_TIMEOUT', 5);  
+	
+	// Amount of time to rest a proxy when it gets blocked (in seconds)
+	define('PROXY_BLOCKED_WAIT', 60 * 60);			 	
+	
+	// Amount of time to rest before using a proxy again (in seconds)
+	define('PROXY_USE_WAIT', 60);			 	
 	
 	// ===========================================================================// 
 	// ! Time and Date constants                                                  //
