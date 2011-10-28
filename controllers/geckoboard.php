@@ -32,10 +32,9 @@ class geckoboard
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
 		
-		echo "\nTotal proxies: ".$this->proxies->checkTotal();		
-		echo "\nWorking proxies: ".$this->proxies->checkWorking();		
-		echo "\nBlocked proxies: ".$this->proxies->checkBlocked();		
-
+		echo "Total proxies: ".$this->proxies->checkTotal()."\n";		
+		echo "Working proxies: ".$this->proxies->checkWorking()."\n";		
+		echo "Blocked proxies: ".$this->proxies->checkBlocked()."\n";		
 	}
 
 }	
