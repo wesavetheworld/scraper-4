@@ -31,7 +31,7 @@ class proxies
 	function __construct($engine = false)
 	{  	
 		// Set the engine for proxies
-		$this->engine = $engine;
+		$this->engine = $this->setEngine($engine);
 
 		echo "engine: ".$this->engine."\n";
 
@@ -39,6 +39,19 @@ class proxies
 		$this->redisConnect();
 
 		$this->migrateToRedis();die();
+	}
+
+	// Set the correct engine (used for proxy key)
+	private function setEngine($engine)
+	{
+		if($engine == "pr")
+		{
+			return "google";
+		}
+		else
+		{
+			return $engine;
+		}
 	}
 
 	// Establish connection to Redis server
