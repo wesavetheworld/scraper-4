@@ -1484,7 +1484,7 @@ class redis
 	 */
 	public function zRevRange($key, $start, $stop, $withscores = false)
 	{
-		if ($withscores) return $this->send_command('zRevRange', $key, $start, $stop, self::WITHSCORES);
+		if ($withscores) return $this->send_command('zRevRange', $key, $start, $stop, 'WITHSCORES');
 		else return $this->send_command('zRevRange', $key, $start, $stop);
 	}
 
