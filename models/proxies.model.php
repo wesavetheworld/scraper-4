@@ -33,12 +33,10 @@ class proxies
 		// Set the engine for proxies
 		$this->engine = $this->setEngine($engine);
 
-		echo "engine: ".$this->engine."\n";
-
 		// use redis
 		$this->redisConnect();
 
-		$this->migrateToRedis();die();
+		//$this->migrateToRedis();die();
 	}
 
 	// Set the correct engine (used for proxy key)
