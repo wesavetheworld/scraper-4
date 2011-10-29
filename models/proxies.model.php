@@ -120,12 +120,12 @@ class proxies
 		if($blocked)
 		{
 			// Micro time in one hour (when the proxy can be used next) 
-			$score = microtime(true) + PROXY_BLOCKED_WAIT;
+			$score = microtime(true) + PROXY_WAIT_BLOCKED;
 		}
 		else
 		{	
 			// Time in 1 minute (when the proxy can be used next)
-			$score = microtime(true) + PROXY_USE_WAIT;
+			$score = microtime(true) + PROXY_WAIT_USE;
 		}			
 
 		// Add proxy back into sorted set with new score (timestamp)
@@ -154,9 +154,9 @@ class proxies
 	
 	public function checkBlocked($engine = "google")
 	{
-	 	$now = microtime(true) + PROXY_USE_WAIT;
+	 	$now = microtime(true) + PROXY_WAIT_USE;
 
-	 	$future = microtime(true) + PROXY_BLOCKED_WAIT;
+	 	$future = microtime(true) + PROXY_WAIT_BLOCKED;
 
 		$this->blocked = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
@@ -167,7 +167,7 @@ class proxies
 	{
 	 	$now = microtime(true);
 
-	 	$future = microtime(true) + PROXY_USE_WAIT;
+	 	$future = microtime(true) + PROXY_WAIT_USE;
 
 		$this->resting = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
