@@ -50,10 +50,10 @@
 	define('CURL_TIMEOUT', 5);  
 	
 	// Amount of time to rest a proxy when it gets blocked (in seconds)
-	define('PROXY_BLOCKED_WAIT', 60 * 30);			 	
+	define('PROXY_BLOCKED_WAIT', 60 * 15);			 	
 	
 	// Amount of time to rest before using a proxy again (in seconds)
-	define('PROXY_USE_WAIT', 60);			 	
+	define('PROXY_USE_WAIT', 90);			 	
 	
 	// ===========================================================================// 
 	// ! Time and Date constants                                                  //
