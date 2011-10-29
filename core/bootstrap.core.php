@@ -21,6 +21,9 @@ class bootstrap
 {    
 	// Will contain the ec2 instance id
 	private $instanceId = false;
+	
+	// Will be set to true for development instances
+	private $instanceId = false;
 
 	// Runs on class instantiation
 	function __construct()
