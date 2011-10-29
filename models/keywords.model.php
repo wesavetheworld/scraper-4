@@ -68,7 +68,7 @@ class keywords
 	// ! Redis stuff here                                                         //
 	// ===========================================================================//		
 	
-	public function migrateToRedis();
+	public function migrateToRedis()
 	{
 
 
