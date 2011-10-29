@@ -106,7 +106,7 @@
 	// ===========================================================================//
 	
 	// Ip of the redis database instance 
-	define("REDIS_SERPS_IP", "50.18.170.228");
+	define("REDIS_SERPS_IP", "50.18.172.44");
 
 	// Redis listening port
 	define("REDIS_SERPS_PORT", 4730);
