@@ -67,11 +67,19 @@ class bootstrap
 			$this->runGearman();
 		}
 		// If this is the redis proxy server
-		elseif($this->instanceType == "redis")
+		elseif($this->instanceType == "redisSerps")
 		{	
-			// Assign the jobServer elastic ip to this instance
-			$this->assignIp(REDIS_PROXY_IP);	
-			
+			if($this->instanceName == 'redisProxy')
+			{
+				// Assign the serps elastic ip to this instance
+				$this->assignIp(REDIS_SERPS_IP);	
+			}
+			elseif($this->instanceName == 'redisProxies')
+			{
+				// Assign the proxy elastic ip to this instance
+				$this->assignIp(REDIS_PROXY_IP);					
+			}
+
 			// Run redis database
 			$this->runRedis();
 		}		

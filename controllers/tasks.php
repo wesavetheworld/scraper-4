@@ -85,6 +85,19 @@ class tasks
 		// Log current state
 		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
 	}   
+
+	// Transfer keywords from MySQL to redis
+	private function migrateSerps(TRUE, TRUE)
+	{
+		// Include keywords data model
+	 	require_once('models/keywords.model.php'); 	
+	 	
+	 	// Select all items from db to update
+		$keywords = new keywords(); 		
+		
+
+	}
+
 	
 	// Resets all stats for proxies (use/blocked/status)
 	private function proxyReset()

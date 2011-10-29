@@ -63,7 +63,18 @@ class keywords
 		// Establish DB connection
 		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
 	}  
+
+	// ===========================================================================// 
+	// ! Redis stuff here                                                         //
+	// ===========================================================================//		
 	
+	public function migrateToRedis();
+	{
+
+
+	}
+
+
 	// ===========================================================================// 
 	// ! Functions for creating keyword objects                                   //
 	// ===========================================================================//	
