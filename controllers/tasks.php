@@ -87,7 +87,7 @@ class tasks
 	}   
 
 	// Transfer keywords from MySQL to redis
-	private function migrateSerps(TRUE, TRUE)
+	private function migrateSerps()
 	{
 		// Include keywords data model
 	 	require_once('models/keywords.model.php'); 	
