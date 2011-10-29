@@ -23,7 +23,7 @@ class bootstrap
 	private $instanceId = false;
 	
 	// Will be set to true for development instances
-	private $instanceId = false;
+	private $instanceDev = false;
 
 	// Runs on class instantiation
 	function __construct()
