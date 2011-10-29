@@ -77,7 +77,7 @@ class tasks
 		require_once('models/proxies.model.php'); 
 
 		// Instantiate new proxies object
-		$this->proxies = new proxies($this->engine);
+		$this->proxies = new proxies();
 
 		// Copy proxies from MySQL to redis
 		$this->proxies->migrateToRedis();
