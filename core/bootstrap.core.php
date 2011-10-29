@@ -70,7 +70,7 @@ class bootstrap
 			$this->runGearman();
 		}
 		// If this is the redis proxy server
-		elseif($this->instanceType == "redisSerps")
+		elseif($this->instanceType == "redis")
 		{	
 			if($this->instanceName == 'redisProxy')
 			{
