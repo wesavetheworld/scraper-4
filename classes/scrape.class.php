@@ -372,6 +372,9 @@ class scraper
 				// If proxy use on
 				if($this->proxy_use)
 				{
+					// For updating the redis proxy
+					$this->results[$i]['blocked'] = true;
+
 					// Add proxy to blocked list
 					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
 
@@ -439,6 +442,9 @@ class scraper
 				// If proxy use on
 				if($this->proxy_use)
 				{
+					// For updating the redis proxy
+					$this->results[$i]['blocked'] = true;
+										
 					// Add proxy to blocked list
 					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
 				}	
