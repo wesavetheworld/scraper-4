@@ -87,16 +87,16 @@ class tasks
 	}   
 
 	// Transfer keywords from MySQL to redis
-	private function migrateSerps()
-	{
-		// Include keywords data model
-	 	require_once('models/keywords.model.php'); 	
+	// private function migrateSerps()
+	// {
+	// 	// Include keywords data model
+	//  	require_once('models/keywords.model.php'); 	
 	 	
-	 	// Select all items from db to update
-		$keywords = new keywords(); 		
+	//  	// Select all items from db to update
+	// 	$keywords = new keywords(); 		
 		
 
-	}
+	// }
 
 	
 	// Resets all stats for proxies (use/blocked/status)
