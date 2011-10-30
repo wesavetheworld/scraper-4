@@ -215,7 +215,7 @@ class keywords
 						 	domains.user_id"; 
 		}  
 		
-		if(defined("MIGRATION") == 'migration')
+		if(defined("MIGRATION") == true)
 		{
 			// Construct query
 			$query =   "SELECT
