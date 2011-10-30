@@ -86,17 +86,26 @@ class tasks
 		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
 	}   
 
-	// Transfer keywords from MySQL to redis
-	// private function migrateSerps()
-	// {
-	// 	// Include keywords data model
-	//  	require_once('models/keywords.model.php'); 	
+	//Transfer keywords from MySQL to redis
+	private function migrateSerps()
+	{
+		// Include keywords data model
+	 	require_once('models/keywords.model.php'); 	
 	 	
-	//  	// Select all items from db to update
-	// 	$keywords = new keywords(); 		
-		
+	 	// Set constants needed for keyword model
+	 	define('ENGINE', 'bing');
+	 	define('MIGRATION', TRUE);
 
-	// }
+
+	 	// Select all items from db to update
+		$keywords = new keywords(); 		
+		
+		// Migrate keywords from MySQL to redis
+		$keywords->migrateToRedis();
+
+		// Log current state
+		utilities::notate("\tMigration complete", "tasks.log"); 		
+	}
 
 	
 	// Resets all stats for proxies (use/blocked/status)

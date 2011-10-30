@@ -75,14 +75,20 @@ class stats
 	{
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);
-		
-		echo "Total proxies: ".$this->proxies->checkTotal('master')."\n";		
-		echo "\tAvailable proxies: ".$this->proxies->checkAvailable('google')."\n";		
-		echo "\tResting proxies: ".$this->proxies->checkResting('google')."\n";		
-		echo "\tBlocked proxies: ".$this->proxies->checkBlocked('google')."\n";		
-		echo "\tIn use proxies: ".$this->proxies->checkInUse('google')."\n";		
 
-		echo "\tAll proxies unblocked at: ".$this->proxies->checkBlockTime('google')."\n";
+		echo "Total proxies: ".$this->proxies->checkTotal('master')."\n";		
+
+		// Array of sources 
+		$sources = array('google', 'bing', 'alexa', 'backlinks');
+
+		foreach($sources as $source)
+		{
+			echo "\t$source Available: ".$this->proxies->checkAvailable($source);		
+			echo " | Resting : ".$this->proxies->checkResting($source);		
+			echo " | Blocked : ".$this->proxies->checkBlocked($source);		
+			echo " | In use: ".$this->proxies->checkInUse($source);		
+			echo " | All unblocked at: ".$this->proxies->checkBlockTime($source)."\n";
+		}	
 	}	
 }	    
 

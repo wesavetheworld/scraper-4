@@ -70,8 +70,22 @@ class keywords
 	
 	public function migrateToRedis()
 	{
+		// Include redis class
+		require_once('classes/redis.php');
 
+		// Instantiate new redis object
+		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		
+		// Loop through keywords
+		foreach($this->keywords as $keyword)
+		{	
+			
+			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword['keyword_id']);	
+	
+			// Create proxy hash		
+			$this->redis->hmset('k:'.$keyword['keyword_id'], $keyword);			
 
+		}				
 	}
 
 
@@ -279,18 +293,43 @@ class keywords
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
 		{   
-			// If there is a row for today
-			if($row->date == date("Y-m-d"))
-			{ 
-				// Add ranking object to rankings array
-				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
-			} 
-			// If there was no rank for today and there is one for yesterday
-			elseif(!$lastRank)
+			if(defined('MIGRATION'))
 			{
-			 	// Add ranking object to rankings array
-				$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
-			} 
+				// If there is a row for today
+				if($row->date == date("Y-m-d"))
+				{ 
+					// Add ranking object to rankings array
+					$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
+					$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
+				} 
+				// If there was no rank for today and there is one for yesterday
+				elseif(!$lastRankGoogle)
+				{
+				 	// Add ranking object to rankings array
+					$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
+				} 
+				elseif(!$lastRankBing)
+				{
+				 	// Add ranking object to rankings array
+					$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
+				} 								
+				
+			}
+			else
+			{
+				// If there is a row for today
+				if($row->date == date("Y-m-d"))
+				{ 
+					// Add ranking object to rankings array
+					$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
+				} 
+				// If there was no rank for today and there is one for yesterday
+				elseif(!$lastRank)
+				{
+				 	// Add ranking object to rankings array
+					$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
+				} 
+			}	
 		}
 	}                                          
 	
