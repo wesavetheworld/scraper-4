@@ -238,7 +238,9 @@ class keywords
 						JOIN 
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE
-							keywords.status !='suspended'";
+							keywords.status !='suspended'
+						ORDER BY
+							keywords.keyword";
 		}		 			
 																								
 		// Execute query and return results			

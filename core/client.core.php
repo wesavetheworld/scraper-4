@@ -202,7 +202,7 @@ class clientCore
 		if($this->googleJobs && $this->googleJobs == $this->googleJobsLast || date("i") == "00")
 		{
 			// Restart all workers		
-			$this->run("tasks", "system reset_worker");
+			//$this->run("tasks", "system reset_worker");
 			
 			// Reset google job count
 			$this->googleJobsLast = false;						
