@@ -79,6 +79,7 @@ class keywords
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
 		{	
+			echo "keyword: $keyword->keyword_id.\n";
 
 			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword->keyword_id);	
 	
