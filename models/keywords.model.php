@@ -219,6 +219,7 @@ class keywords
 		{
 			// Construct query
 			$query =   "SELECT
+							keywords.user_id,
 							keywords.keyword_id,
 							keywords.keyword,
 							keywords.g_country,
