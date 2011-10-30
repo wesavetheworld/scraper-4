@@ -95,6 +95,9 @@ class tasks
 	 	// Set constants needed for keyword model
 	 	define('ENGINE', 'bing');
 	 	define('MIGRATION', TRUE);
+	 	define('ONLY_USER', false);
+	 	define('TASK', false);
+	 	define('SCHEDULE', false);
 
 
 	 	// Select all items from db to update
