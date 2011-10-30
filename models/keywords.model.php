@@ -79,7 +79,7 @@ class keywords
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
 		{	
-			echo "keyword: $keyword->keyword_id.\n";
+			echo "keyword: $keyword->keyword_id\n";
 
 			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword->keyword_id);	
 	
@@ -132,6 +132,11 @@ class keywords
 	// Select the keywords from the database
 	private function selectKeywords()
 	{  
+		if(ENGINE == 'migration')
+		{
+			$schedule = "'hourly','daily'";
+		}
+
 		// If updating daily keywords
        	if(SCHEDULE == "daily" || ENGINE == 'bing')
 		{   
