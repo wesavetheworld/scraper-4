@@ -79,13 +79,19 @@ class keywords
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
 		{	
-			echo "keyword: $keyword->keyword_id\n";
-
 			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword->keyword_id);	
 	
+			$hash['keyword_id'] = $keyword->keyword_id;
+			$hash['keyword'] = $keyword->keyword;
+			$hash['domain_id'] = $keyword->domain_id;
+			$hash['domain'] = $keyword->domain;
+			$hash['country'] = $keyword->g_country;
+			$hash['lastRankGoogle'] = $keyword->lastRankGoogle;
+			$hash['lastRankBing'] = $keyword->lastRankBing;
+			$hash['notifications'] = $keyword->notifications;
+			
 			// Create proxy hash		
 			$this->redis->hmset('k:'.$keyword->keyword_id, $keyword);			
-
 		}				
 	}
 
@@ -222,6 +228,7 @@ class keywords
 							keywords.user_id,
 							keywords.keyword_id,
 							keywords.keyword,
+							keywords.schedule,
 							keywords.g_country,
 							keywords.notifications,
 							domains.domain_id,
@@ -245,8 +252,7 @@ class keywords
 			{   
 				// Test keyword for all required fields
 				if($keyword->keywordTest())
-				{				echo "good: $keyword->keyword_id\n";
-
+				{				
 					// Make the keyword save to be used in the url	
 					$keyword->urlSafeKeyword();				     				
 
