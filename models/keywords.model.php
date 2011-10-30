@@ -33,6 +33,7 @@ class keywords
 		// If a db connection is requested
 		if(!$empty || $dbConnect)
 		{
+			echo "should connect\n";
 			// Connect to database
 			$this->dbConnect();	
 		}
@@ -40,6 +41,7 @@ class keywords
 		// If a keyword object should be built		
 		if(!$empty)
 		{
+			echo "should selecte\n";
 		    // Select keywords
 			$this->getKeywords();   
 		}	
@@ -79,7 +81,7 @@ class keywords
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
 		{	
-			
+
 			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword['keyword_id']);	
 	
 			// Create proxy hash		
