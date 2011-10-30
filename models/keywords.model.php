@@ -91,7 +91,7 @@ class keywords
 			$hash['notifications'] = $keyword->notifications;
 			
 			// Create proxy hash		
-			$this->redis->hmset('k:'.$keyword->keyword_id, $keyword);			
+			$this->redis->hmset('k:'.$keyword->keyword_id, $hash);			
 		}				
 	}
 
