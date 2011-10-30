@@ -80,10 +80,10 @@ class keywords
 		foreach($this->keywords as $keyword)
 		{	
 
-			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword['keyword_id']);	
+			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword->keyword_id);	
 	
 			// Create proxy hash		
-			$this->redis->hmset('k:'.$keyword['keyword_id'], $keyword);			
+			$this->redis->hmset('k:'.$keyword->keyword_id, $keyword);			
 
 		}				
 	}
