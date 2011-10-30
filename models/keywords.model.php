@@ -242,10 +242,10 @@ class keywords
 			// Loop through results
 			while($keyword = mysql_fetch_object($result, 'keyword'))
 			{   
-				echo "good: $keyword->keyword_id\n";
 				// Test keyword for all required fields
 				if($keyword->keywordTest())
-				{
+				{				echo "good: $keyword->keyword_id\n";
+
 					// Make the keyword save to be used in the url	
 					$keyword->urlSafeKeyword();				     				
 
