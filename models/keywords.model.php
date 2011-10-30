@@ -217,7 +217,6 @@ class keywords
 		
 		if(defined("MIGRATION") == true)
 		{
-			echo "CORRECT SQL\N";
 			// Construct query
 			$query =   "SELECT
 							keywords.keyword_id,
@@ -243,6 +242,7 @@ class keywords
 			// Loop through results
 			while($keyword = mysql_fetch_object($result, 'keyword'))
 			{   
+				echo "good: $keyword->keyword_id\n";
 				// Test keyword for all required fields
 				if($keyword->keywordTest())
 				{
