@@ -132,11 +132,6 @@ class keywords
 	// Select the keywords from the database
 	private function selectKeywords()
 	{  
-		if(ENGINE == 'migration')
-		{
-			$schedule = "'hourly','daily'";
-		}
-
 		// If updating daily keywords
        	if(SCHEDULE == "daily" || ENGINE == 'bing')
 		{   
@@ -218,7 +213,25 @@ class keywords
 							keywords.".ENGINE."_status DESC,
 							keywords.keyword,
 						 	domains.user_id"; 
-		}   			
+		}  
+		
+		if(defined("MIGRATION") == 'migration')
+		{
+			// Construct query
+			$query =   "SELECT
+							keywords.keyword_id,
+							keywords.keyword,
+							keywords.g_country,
+							keywords.notifications,
+							domains.domain_id,
+							domains.domain	
+						FROM 
+							keywords
+						JOIN 
+							domains ON keywords.domain_id = domains.domain_id 
+						WHERE
+							keywords.status !='suspended'";
+		}		 			
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
