@@ -98,7 +98,7 @@ class tasks
 
 
 	 	// Select all items from db to update
-		$keywords = new keywords(true, true); 		
+		$keywords = new keywords(false, true); 		
 		
 		// Migrate keywords from MySQL to redis
 		$keywords->migrateToRedis();
