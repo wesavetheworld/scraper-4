@@ -217,6 +217,7 @@ class keywords
 		
 		if(defined("MIGRATION") == true)
 		{
+			echo "CORRECT SQL\N";
 			// Construct query
 			$query =   "SELECT
 							keywords.keyword_id,
