@@ -409,7 +409,8 @@ class bootstrap
 
 			// Add workers for ranking updates
 			$supervisord.= "[program:GoogleNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewGoogle rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker keywords google all new\n";
+			//$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -418,7 +419,8 @@ class bootstrap
 			
 			// Add workers for ranking updates
 			$supervisord.= "[program:BingNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewBing rankings\n";
+			$supervisord.= "command=php /home/ec2-user/server.php worker keywords bing all new\n";
+			//$supervisord.= "command=php /home/ec2-user/server.php worker rankingsNewBing rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
