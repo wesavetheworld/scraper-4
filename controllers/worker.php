@@ -214,7 +214,7 @@ class worker
 				if($item->proxy)
 				{
 					// Check proxy back in.
-					$this->proxies->update(false, $item->proxy['proxy']);
+					$this->proxies->update($item->proxy['proxy']);
 				}	
 
 				// Remove keyword from keyword id array
@@ -237,7 +237,7 @@ class worker
 			if($item->proxy)
 			{		
 				// Check proxy back in. Set status to block if scraper code says
-				$this->proxies->update($this->scrape->results[$item->searchHash]['blocked'], $item->proxy['proxy']);
+				$this->proxies->update($item->proxy['proxy'], $this->scrape->results[$item->searchHash]['blocked']);
 
 				// Remove proxy used for this item so that a new one will be selected for in the next loop
 				unset($item->proxy);
@@ -306,7 +306,7 @@ class worker
 			if($item->proxy)
 			{
 				// Check proxy back in.
-				$this->proxies->update(false, $item->proxy['proxy']);
+				$this->proxies->update($item->proxy['proxy']);
 			}				
 
 			// Remove keyword from keyword id array
@@ -321,7 +321,7 @@ class worker
 			if($item->proxy)
 			{			
 				// Check proxy back in. Set status to block if scraper code says
-				$this->proxies->update($this->scrape->results[$item->url]['blocked'], $item->proxy['proxy']);				
+				$this->proxies->update($item->proxy['proxy'], $this->scrape->results[$item->url]['blocked']);				
 
 				// Remove proxy used for this item so that a new one will be selected for in the next loop
 				unset($item->proxy);

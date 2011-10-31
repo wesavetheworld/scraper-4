@@ -1,4 +1,4 @@
-<?php  if(!defined('HUB')) exit('No direct script access keywordsowed\n');
+<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
  
 // ******************************* INFORMATION *******************************//
 
@@ -79,7 +79,24 @@ class keywords
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
 		{	
-			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $keyword->keyword_id);	
+
+			if($keyword->keyword == $last)
+			{
+				// Get score for keyword
+				$member = $this->redis->zscore('keywords:'.$keyword->schedule, $keyword->keyword_id);
+
+				// Add new keyword to previous keyword
+				$member = "$member,$keyword->keyword_id";				
+			}
+			else
+			{
+				$member = $keyword->keyword_id;				
+			}
+
+			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $member);	
+			
+			$last = $keyword->keyword;		
+
 	
 			$hash['keyword_id'] = $keyword->keyword_id;
 			$hash['keyword'] = $keyword->keyword;
@@ -89,7 +106,7 @@ class keywords
 			$hash['lastRankGoogle'] = $keyword->lastRankGoogle;
 			$hash['lastRankBing'] = $keyword->lastRankBing;
 			$hash['notifications'] = $keyword->notifications;
-			
+
 			// Create proxy hash		
 			$this->redis->hmset('k:'.$keyword->keyword_id, $hash);			
 		}				

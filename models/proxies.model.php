@@ -1,14 +1,14 @@
-<?php  if(!defined('HUB')) exit('No direct script access keywordsowed\n');
+<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
  
 // ******************************* INFORMATION *******************************//
 
 // ***************************************************************************//
 //  
-// ** KEYWORDS - Selects keywords from db and creates an object of individiual 
-// ** keyword objects.
+// ** PROXIES - Manage the use of proxies for the application
+// ** 
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
-// ** @date	 2011-06-22
+// ** @date	 2011-10-30
 // ** @access	private
 // ** @param	
 // ** @return	constants for application 
@@ -22,19 +22,42 @@ class proxies
 	// The engine used for the proxies
 	public $engine;
 
-	// The amount of proxies selected, total
-	public $selected = 0;
-
 	// Set to true when finished
 	public $finished = false;
 
+	// Will contain all proxies selected
+	public $selected = array();
+
+	// ===========================================================================// 
+	// ! Opening and closing functions                                            //
+	// ===========================================================================//
+
+	// Run on class instantiation
 	function __construct($engine = false)
 	{  	
+		// Include redis class
+		require_once('classes/redis.php');
+
+		// Instantiate new redis object
+		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
+				
 		// Set the engine for proxies
 		$this->engine = $this->setEngine($engine);
+	}
 
-		// use redis
-		$this->redisConnect();
+	// Run when script ends
+	function __destruct()
+	{
+		// If any unreturned proxies at the end of execution 
+		if(count($this->selected) > 0)
+		{
+			// Loop through unreturned proxies
+			foreach($this->selected as $proxy)
+			{ 
+				// Update proxy
+				$this->update($proxy);
+			}
+		}				
 	}
 
 	// Set the correct engine (used for proxy key)
@@ -50,15 +73,9 @@ class proxies
 		}
 	}
 
-	// Establish connection to Redis server
-	private function redisConnect()
-	{
-		// Include redis class
-		require_once('classes/redis.php');
-
-		// Instantiate new redis object
-		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
-	}	
+	// ===========================================================================// 
+	// ! Redis proxy select and update                                            //
+	// ===========================================================================//
 
 	// Select the requested amount of proxies from redis
 	public function select($totalProxies = 1, $key = "proxies:google")
@@ -106,13 +123,14 @@ class proxies
 
 	 		// Create array from json data
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
-	 	} 	
 
-	 	//file_put_contents('proxyTest.txt',  $save, FILE_APPEND);
+	 		// Keep track of proxies checked out out of database (final check on desctruct)
+	 		$this->selected[$proxy] = $proxy;
+	 	} 	
 	}	
 
 	// Add proxies back into sorted set with new timestamp score (1 hour for blocked, now for non blocked)
-	public function update($blocked = false, $proxy)
+	public function update($proxy, $blocked = false)
 	{
 		// If these are blocked proxies
 		if($blocked)
@@ -127,13 +145,17 @@ class proxies
 		}			
 
 		// Add proxy back into sorted set with new score (timestamp)
-		$this->redis->zadd('proxies:google', $score, $proxy);
+		$this->redis->zadd('proxies:'.$this->engine, $score, $proxy);
+
+		// Remove proxy from selected array
+		unset($this->selected[$proxy]);
 	}
 
 	// ===========================================================================// 
 	// ! Redis proxy DB stats                                                     //
 	// ===========================================================================//	
 
+	// Select total number of proxies in db
 	public function checkTotal($engine = "master")
 	{
 		$this->total = $this->redis->zCard("proxies:".$engine);		
@@ -141,6 +163,7 @@ class proxies
 		return $this->total;
 	}
 
+	// Count proxies currently available for use
 	public function checkAvailable($engine = "google")
 	{
 	 	$score = microtime(true);
@@ -150,6 +173,7 @@ class proxies
 		return $this->working;
 	}
 	
+	// Count proxies currently blocked 
 	public function checkBlocked($engine = "google")
 	{
 	 	$now = microtime(true) + PROXY_WAIT_USE;
@@ -161,6 +185,7 @@ class proxies
 		return $this->blocked;
 	}
 
+	// Count proxies currently resting(forced delay between uses)
 	public function checkResting($engine = "google")
 	{
 	 	$now = microtime(true);
@@ -172,6 +197,7 @@ class proxies
 		return $this->resting;
 	}	
 	
+	// Count proxies currently checked out
 	public function checkInUse()
 	{
 		$this->inUse = $this->total - ($this->working + $this->blocked + $this->resting);
@@ -179,6 +205,7 @@ class proxies
 		return $this->inUse;		
 	}				
 
+	// Check the unblock time on the newest blocked proxy to determine whan all proxies will be unblocked
 	public function checkBlockTime($engine = "google")
 	{
 		$last = $this->redis->zrevRange("proxies:".$engine, 0 , 0, TRUE);
@@ -210,23 +237,18 @@ class proxies
 
 		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
 		
+		// All proxy sources needed to be set
+		$sources = array('master', 'google', 'bing', 'alexa', 'backlinks');
+
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{	
-			// Add proxy to redis master set (to compare to others for missing proxies)
-			$this->redis->zadd('proxies:master', microtime(true), $proxy['proxy']);	
-						
-			// Add proxy to redis google set		
-			$this->redis->zadd('proxies:google', microtime(true), $proxy['proxy']);	
-
-			// Add proxy to redis google set		
-			$this->redis->zadd('proxies:bing', microtime(true), $proxy['proxy']);	
-			
-			// Add proxy to redis google set		
-			$this->redis->zadd('proxies:alexa', microtime(true), $proxy['proxy']);	
-			
-			// Add proxy to redis google set		
-			$this->redis->zadd('proxies:backlinks', microtime(true), $proxy['proxy']);								
+			// Loop through sources
+			foreach($sources as $source)
+			{
+				// Add proxy to redis set (once for each source to keep track of blocks and use)
+				$this->redis->zadd('proxies:'.$source, microtime(true), $proxy['proxy']);	
+			}								
 			
 			// Create proxy hash		
 			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
