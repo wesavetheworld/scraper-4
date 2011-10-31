@@ -78,15 +78,9 @@
 
 			if($argv[4])
 			{
-				// Set the job type
+				// Set the schedule (hourly,daily,new)
 				define("SCHEDULE", $argv[4]);
-			}							
-
-			if($argv[5])
-			{
-				// Set the job type
-				define("NEW", $argv[5]);
-			}				
+			}											
 		}
 
 		// Include main router

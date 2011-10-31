@@ -51,7 +51,7 @@ class workerCore
 	private function registerJobs()
 	{
 		// Set the job type for this worker
-		$jobName = $this->setJobName();	
+		$jobName = SOURCE."-".SCHEDULE;
 
 		// Register job function with jobServer (600 is max execution in seconds before timeout)
 		$this->gm->addFunction($jobName, "workerCore::work"); 				
@@ -73,19 +73,6 @@ class workerCore
 	// ===========================================================================// 
 	// ! Worker job functions                                                     //
 	// ===========================================================================//
-	
-	// Set the job name for the worker from the cli arugments provided 
-	private function setJobName()
-	{
-		$jobName = SOURCE."-".SCHEDULE;
-
-		if(defined("NEW"))
-		{
-			$jobName = "$jobName-new";
-		}
-
-		return $jobName;
-	}	
 
 	// The function to be registered with gearman
 	public static function work($job)
