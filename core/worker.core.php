@@ -51,7 +51,7 @@ class workerCore
 	private function registerJobs()
 	{
 		// Set the job type for this worker
-		$jobName = SOURCE."-".SCHEDULE;
+		$jobName = SOURCE.":".SCHEDULE;
 
 		// Register job function with jobServer (600 is max execution in seconds before timeout)
 		$this->gm->addFunction($jobName, "workerCore::work"); 				

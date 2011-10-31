@@ -45,14 +45,18 @@ class clientCore
 	// The main loop that acts as a daemon
 	public function daemon()
 	{	
-		// Declare job types explicitly to avoid issues where workers are ofline (link bing)
-		$types = array('rankingsGoogle', 
-					   'rankingsBing',	
-					   'rankingsNewGoogle', 
-					   'rankingsNewBing', 
-					   'pr', 
-					   'alexa', 
-					   'backlinks');
+		// Declare job types explicitly to avoid issues where workers are off line (like bing)
+		$types = array('google-hourly',
+					   'google-daily',
+					   'google-new', 
+					   'bing-daily',	
+					   'bing-new', 
+					   'pr-daily', 
+					   'pr-new', 
+					   'alexa-daily', 
+					   'alexa-new', 
+					   'backlinks-daily', 
+					   'backlinks-new');
 
 		// Loop forever if not development client
 		while(TRUE && !defined("DEV"))
@@ -89,7 +93,7 @@ class clientCore
 	private function checkForJobs($type, $model, $schedule)
 	{
 		// Select a range of proxies ordered by last block 
-		$items = $this->redis->ZRANGEBYSCORE("keyword, 0, $totalProxies);
+		$items = $this->redis->ZRANGEBYSCORE("$model:$schedule, 0, $totalProxies);
 
 		// Remove all proxies just selected
 		$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);

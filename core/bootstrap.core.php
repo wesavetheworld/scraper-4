@@ -432,7 +432,7 @@ class bootstrap
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "numprocs=5\n"; 
 			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 			
 			// Add workers for domain pagerank
