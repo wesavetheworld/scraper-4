@@ -388,7 +388,7 @@ class bootstrap
 		elseif($this->instanceType == "domains")
 		{
 			// Add workers for domain pagerank
-			$supervisord = "[program:pageRank]\n";
+			$supervisord = "[program:prDaily]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker domains pr daily\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -397,7 +397,7 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
-			$supervisord.= "[program:backlinks]\n";
+			$supervisord.= "[program:backlinksDaily]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker domains backlinks daily\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -406,7 +406,7 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
-			$supervisord.= "[program:alexa]\n";
+			$supervisord.= "[program:alexaDaily]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker domains alexa daily\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -418,7 +418,7 @@ class bootstrap
 		elseif($this->instanceType == "new")
 		{	
 			// Add workers for hourly google updates
-			$supervisord = "[program:Google]\n";
+			$supervisord = "[program:GoogleNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker keywords google new\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -427,7 +427,7 @@ class bootstrap
 			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 
 			// Add workers for daily google updates
-			$supervisord = "[program:Google]\n";
+			$supervisord = "[program:BingNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker keywords bing new\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -436,7 +436,7 @@ class bootstrap
 			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 			
 			// Add workers for domain pagerank
-			$supervisord = "[program:pageRank]\n";
+			$supervisord = "[program:prNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker domains pr new\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -445,7 +445,7 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
-			$supervisord.= "[program:backlinks]\n";
+			$supervisord.= "[program:backlinksNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker domains backlinks new\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
@@ -454,7 +454,7 @@ class bootstrap
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
-			$supervisord.= "[program:alexa]\n";
+			$supervisord.= "[program:alexaNew]\n";
 			$supervisord.= "command=php /home/ec2-user/server.php worker domains alexa new\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
