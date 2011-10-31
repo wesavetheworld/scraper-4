@@ -93,10 +93,10 @@ class keywords
 				$member = $keyword->keyword_id;				
 			}
 
-			$this->redis->zadd('keywords:'.$keyword->schedule, microtime(true), $member);	
+			$this->redis->zadd('keywords:google'.$keyword->schedule, microtime(true), $member);	
+			$this->redis->zadd('keywords:bing:daily', microtime(true), $member);	
 			
 			$last = $keyword->keyword;		
-
 	
 			$hash['keyword_id'] = $keyword->keyword_id;
 			$hash['keyword'] = $keyword->keyword;

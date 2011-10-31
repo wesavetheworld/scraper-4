@@ -398,7 +398,9 @@ class bootstrap
 		{	
 			// Add workers for ranking updates
 			$supervisord = "[program:Google]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker rankingsGoogle rankings\n";
+			// NEW EXAMPLE OF JOB ARGUMENTS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			$supervisord.= "command=php /home/ec2-user/server.php worker keywords google hourly\n";
+			//$supervisord.= "command=php /home/ec2-user/server.php worker rankingsGoogle rankings\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";

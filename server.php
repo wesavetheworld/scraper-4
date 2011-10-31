@@ -61,14 +61,31 @@
 		// Define core class
 		$class = $core."Core";
 
-		if($argv[2])
+		// If this is a worker instance
+		if($core == "worker")
 		{
-			define("JOB_NAME", $argv[2]);
-
+			if($argv[2])
+			{			
+				// Set the data model to be used	
+				define("MODEL", $argv[2]);
+			}
 
 			if($argv[3])
 			{
-				define("JOB_FUNCTION", $argv[3]);
+				// Set the job type
+				define("SOURCE", $argv[3]);
+			}	
+
+			if($argv[4])
+			{
+				// Set the job type
+				define("SCHEDULE", $argv[4]);
+			}							
+
+			if($argv[5])
+			{
+				// Set the job type
+				define("NEW", $argv[5]);
 			}				
 		}
 

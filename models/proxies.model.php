@@ -22,11 +22,11 @@ class proxies
 	// The engine used for the proxies
 	public $engine;
 
-	// Set to true when finished
-	public $finished = false;
-
-	// Will contain all proxies selected
+	// Contains all proxies selected
 	public $selected = array();
+
+	// Contains the detailed proxy arrays
+	public $proxies = array();
 
 	// ===========================================================================// 
 	// ! Opening and closing functions                                            //

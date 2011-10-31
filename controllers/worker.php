@@ -124,27 +124,10 @@ class worker
 		$this->scrape->urls = $this->getUrlsRedis($this->items->{$this->model}, $this->items->total); 				
 		
 		// Build an array of proxies to use for scraping
-		$this->scrape->proxies = $this->getProxiesRedis($this->scrape->urls, $this->items->{$this->model});	
-		
-		// echo "urls: ". count($this->scrape->urls)." | ";
-		// echo "proxies: ". count($this->scrape->proxies)."\n";
-		// print_r($this->scrape->urls);
-		// print_r($this->scrape->proxies);
-
-		// echo "\n... and just to make sure: \n";
-
-		// foreach($this->items->{$this->model} as $item)
-		// {
-		// 	echo "keyword: $item->keyword | proxy: {$item->proxy['proxy']}\n";
-		// }
-
-		// die("all done\n");			
+		$this->scrape->proxies = $this->getProxiesRedis($this->scrape->urls, $this->items->{$this->model});			
 								
 		// Execute the scraping
-		$this->scrape->curlExecute();	
-
-		// Update status of proxies uses in scraping
-		//$this->updateProxies();		
+		$this->scrape->curlExecute();		
 	}
 
 	private function parseContent()
