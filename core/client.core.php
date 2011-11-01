@@ -59,7 +59,7 @@ class clientCore
 					   'backlinks:new');
 
 		// Loop forever if not development client
-		while(TRUE && !defined("DEV"))
+		while(TRUE && defined("DEV"))
 		{
 			echo "loop\n";
 
