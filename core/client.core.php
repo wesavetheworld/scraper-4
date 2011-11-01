@@ -80,7 +80,7 @@ class clientCore
 					{
 
 						echo "$job items found: \n";
-						print_r($items);
+						count($items);
 						
 						// Create new jobs
 						//$this->createJobs($items);
@@ -119,7 +119,7 @@ class clientCore
 		if($items)
 		{
 			// Remove all proxies just selected
-			$this->redis->ZREMRANGEBYRANK($key, 0, $scoreLimit);
+			//$this->redis->ZREMRANGEBYRANK($key, 0, $scoreLimit);
 	
 			return $items;
 		}	
@@ -130,7 +130,6 @@ class clientCore
 		// If it's an hourly key
 		if(strpos($key, "hourly"))
 		{
-			echo " hourly ";
 			// Timestamp for the last second of last hour			
 			$endRange = new DateTime('last hour'); 
 			$endRange = strtotime($endRange->format('Y-m-d h').":59:59"); 			

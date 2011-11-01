@@ -97,8 +97,6 @@ class keywords
 
 			$this->redis->zadd('google:'.$keyword->schedule, microtime(true) - (60 * 60), $member);	
 			$this->redis->zadd('bing:daily', microtime(true), $member);	
-
-			echo 'google:'.$keyword->schedule."\n";
 			
 			$last = $keyword->keyword;		
 	
