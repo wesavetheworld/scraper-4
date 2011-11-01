@@ -20,7 +20,7 @@
 	// ===========================================================================// 
 	// ! Server path and argument settings	                                      //
 	// ===========================================================================//
-	
+	//GOOD
 	// Checked for in all othere files to prevent direct access   
 	define('HUB', TRUE);
 
