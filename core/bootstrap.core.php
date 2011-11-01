@@ -263,7 +263,11 @@ class bootstrap
 	public function updateApp()
 	{			
 		// Updated code to latest revision in repo
-		$changes = shell_exec("svn update /home/ec2-user/");
+		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git");
+
+		file_put_contents("test.log", $changes);
+
+		die('the end');
 
 		// If new revision downloaded
 		if(strpos($changes, "Updated"))
