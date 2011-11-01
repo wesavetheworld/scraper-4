@@ -80,21 +80,25 @@ class keywords
 		foreach($this->keywords as $keyword)
 		{	
 
-			if($keyword->keyword == $last)
-			{
-				// Get score for keyword
-				$member = $this->redis->zscore('keywords:'.$keyword->schedule, $keyword->keyword_id);
+			// if($keyword->keyword == $last)
+			// {
+			// 	// Get score for keyword
+			// 	$member = $this->redis->zscore('keywords:'.$keyword->schedule, $keyword->keyword_id);
 
-				// Add new keyword to previous keyword
-				$member = "$member,$keyword->keyword_id";				
-			}
-			else
-			{
-				$member = $keyword->keyword_id;				
-			}
+			// 	// Add new keyword to previous keyword
+			// 	$member = "$member,$keyword->keyword_id";				
+			// }
+			// else
+			// {
+			// 	$member = $keyword->keyword_id;				
+			// }
+
+			$member = $keyword->keyword_id;				
 
 			$this->redis->zadd('google:'.$keyword->schedule, microtime(true) - (60 * 60), $member);	
-			$this->redis->zadd('keywords:bing:daily', microtime(true), $member);	
+			$this->redis->zadd('bing:daily', microtime(true), $member);	
+
+			echo 'google:'.$keyword->schedule."\n";
 			
 			$last = $keyword->keyword;		
 	

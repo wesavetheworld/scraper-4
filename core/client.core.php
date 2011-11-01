@@ -130,6 +130,7 @@ class clientCore
 		// If it's an hourly key
 		if(strpos($key, "hourly"))
 		{
+			echo " hourly ";
 			// Timestamp for the last second of last hour			
 			$endRange = new DateTime('last hour'); 
 			$endRange = strtotime($endRange->format('Y-m-d h').":59:59"); 			
