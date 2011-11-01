@@ -46,37 +46,54 @@ class clientCore
 	public function daemon()
 	{	
 		// Declare job types explicitly to avoid issues where workers are off line (like bing)
-		$types = array('google-hourly',
-					   'google-daily',
-					   'google-new', 
-					   'bing-daily',	
-					   'bing-new', 
-					   'pr-daily', 
-					   'pr-new', 
-					   'alexa-daily', 
-					   'alexa-new', 
-					   'backlinks-daily', 
-					   'backlinks-new');
+		$jobs = array( 'google:hourly',
+					   'google:daily',
+					   'google:new', 
+					   'bing:daily',	
+					   'bing:new', 
+					   'pr:daily', 
+					   'pr:new', 
+					   'alexa:daily', 
+					   'alexa:new', 
+					   'backlinks:daily', 
+					   'backlinks:new');
 
 		// Loop forever if not development client
 		while(TRUE && !defined("DEV"))
 		{
+			echo "loop\n";
+
 			// Get the current job queue list
 			$this->checkJobQueue();
 
 			// Loop through each job type
-			foreach($types as $type)
+			foreach($jobs as $job)
 			{			
 			 	// If job not registered with gearman or fewer jobs than workers
-				if(!$this->status[$type] || $this->status[$type]['total'] <= $this->status[$type]['connectedWorkers'])
+				if(!$this->status[$job] || $this->status[$job]['total'] <= $this->status[$job]['connectedWorkers'])
 				{
 					// Check for potential jobs
-					$this->checkForJobs($type, $model, $schedule);
+					$items = $this->checkForJobs($job);
+
+					// If items are found that need updating
+					if($items)
+					{
+
+						echo "$job items found: \n";
+						print_r($items);
+						
+						// Create new jobs
+						//$this->createJobs($items);
+					}
+					else
+					{
+						echo "nothing to update for $job\n";
+					}
 				}
 			}
 
 			// Wait a minute then start over
-			sleep(60);
+			sleep(5);
 		}		
 	}
 
@@ -90,14 +107,43 @@ class clientCore
 		$this->status = $this->status['operations'];	
 	}
 	
-	private function checkForJobs($type, $model, $schedule)
+	private function checkForJobs($key)
 	{
+		// Get the score range to search based on key name
+		$scoreLimit = $this->getScoreRange($key);
+
 		// Select a range of proxies ordered by last block 
-		$items = $this->redis->ZRANGEBYSCORE("$model:$schedule, 0, $totalProxies);
+		$items = $this->redis->ZRANGEBYSCORE($key, 0, $scoreLimit);
 
-		// Remove all proxies just selected
-		$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);
+		// If items were found in the db that need updating
+		if($items)
+		{
+			// Remove all proxies just selected
+			$this->redis->ZREMRANGEBYRANK($key, 0, $scoreLimit);
+	
+			return $items;
+		}	
+	}
 
+	private function getScoreRange($key)
+	{
+		// If it's an hourly key
+		if(strpos($key, "hourly"))
+		{
+			// Timestamp for the last second of last hour			
+			$endRange = new DateTime('last hour'); 
+			$endRange = strtotime($endRange->format('Y-m-d h').":59:59"); 			
+		}
+		// Else it's a daily key
+		else
+		{
+			// Timestamp for the last second of yesterday
+			$endRange = new DateTime('yesterday'); 
+			$endRange = strtotime($endRange->format('Y-m-d')." 23:59:59");   	
+		}
+		
+		// Search for scores between 0 and the last minute of last hour
+		return $endRange;
 	}
 
 	private function createJobs()
