@@ -45,6 +45,12 @@ class clientCore
 	// The main loop that acts as a daemon
 	public function daemon()
 	{	
+
+		while(true)
+		{
+			
+		}
+		
 		// Declare job types explicitly to avoid issues where workers are off line (like bing)
 		$jobs = array( 'google:hourly',
 					   'google:daily',
