@@ -24,7 +24,6 @@
 	
 	// Checked for in all othere files to prevent direct access   
 	define('HUB', TRUE);
-	define('DEV', TRUE);
 
 	// Get passed server arguments
 	$argv = $_SERVER['argv'];	

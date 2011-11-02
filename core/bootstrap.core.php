@@ -22,6 +22,9 @@ class bootstrap
 	// Will contain the ec2 instance id
 	private $instanceId = false;
 	
+	// Will contain the ec2 instance name
+	private $instanceName = false;
+	
 	// Will be set to true for development instances
 	private $instanceDev = false;
 
@@ -30,12 +33,12 @@ class bootstrap
 	{
 		// Check repo for any new revisions
 		$this->updateApp();
-
+		
 		// Create a new amazon connection		
 		$this->amazon();
 		
 		// Configure this server
-		$this->bootstrap();			
+		$this->bootstrap();		
 	}
 
 	// ===========================================================================// 
@@ -57,8 +60,8 @@ class bootstrap
 		// Include all required core files (Dependencies and helper classes)
 		require_once('core/includes.core.php');    		
 		
-    	// Mount client servers data folder locally
-    	//$this->mountDataFolder();	 				
+		// Mount client servers data folder locally
+		//$this->mountDataFolder();	 				
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
@@ -91,10 +94,10 @@ class bootstrap
 		{
 			// Set up which core daemon supervisord will controll
 			$this->editSupervisord(); 
-						
+			
 			// Check for jobServer before continuing 
 			//$this->getJobServer();
-					
+			
 			// If this is a client instance
 			if($this->instanceType == "client")
 			{
@@ -188,21 +191,21 @@ class bootstrap
 	}
 
 	// Get the local ip of the jobServer
-    private function getJobServer()
-    {
-    	// While job server is not running
-    	while($jobServerStatus != "running")
-    	{
+	private function getJobServer()
+	{
+		// While job server is not running
+		while($jobServerStatus != "running")
+		{
 			// If this is a dev instance
 			if($this->instanceDev)
 			{
-	    		// Get EC2 dev job server info
+				// Get EC2 dev job server info
 				$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServerDev'))));		
 			}
 			// Then it's production
 			else
 			{
-	    		// Get EC2 job server info
+				// Get EC2 job server info
 				$jobServer = $this->getInstances(array('Filter' => array(array('Name' => 'tag-value', 'Value' => 'jobServer'))));					
 			}	
 
@@ -222,7 +225,7 @@ class bootstrap
 
 		// Set the jobServer ip constant for use in client and worker
 		define('JOB_SERVER', $jobServer->item->instancesSet->item->privateIpAddress);		
-    }
+	}
 
 	// Get list of EC2 instance info
 	private function getInstances($opt)
@@ -275,7 +278,7 @@ class bootstrap
 			exit('new code. restarting...');
 		}
 	}
-    
+	
 	// ===========================================================================// 
 	// ! Boot methods                                                             //
 	// ===========================================================================//    		
@@ -286,7 +289,7 @@ class bootstrap
 		// Incase already mounted, unmount first
 		exec("umount ".DATA_DIRECTORY);
 
-   		// Mount the shared data drive 
+		// Mount the shared data drive 
 		exec("mount -t glusterfs ".DATA_SERVER." ".DATA_DIRECTORY);			
 	}
 
@@ -337,7 +340,7 @@ class bootstrap
 		file_put_contents("config/instance.config.php", $config);
 	}	
 
-    // Modify supervisord for this specific instance
+	// Modify supervisord for this specific instance
 	private function editSupervisord()
 	{
 		// If this is a worker instance
@@ -415,7 +418,7 @@ class bootstrap
 			$supervisord.= "numprocs=5\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 				
 		}	
-				// All other instance types
+		// All other instance types
 		elseif($this->instanceType == "new")
 		{	
 			// Add workers for hourly google updates
