@@ -28,6 +28,8 @@ class bootstrap
 	// Runs on class instantiation
 	function __construct()
 	{
+		file_put_contents("test.log", "loaded successfully\n", FILE_APPEND);
+
 		// Check repo for any new revisions
 		$this->updateApp();
 
@@ -263,9 +265,9 @@ class bootstrap
 	public function updateApp()
 	{			
 		// Updated code to latest revision in repo
-		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git");
+		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
 
-		file_put_contents("test.log", $changes);
+		file_put_contents("test.log", $changes, FILE_APPEND);
 
 		die('the end');
 
