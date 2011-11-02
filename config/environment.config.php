@@ -80,7 +80,7 @@
 	if(defined("DEV"))
 	{
 		// The gluster shared data drive location
-		define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 
+		define('DATA_DIRECTORY', '/home/ec2-user/scraper/data/gluster'); 
 		
 		// Folder used for status files
 		define("STATUS_DIRECTORY", "data/gluster/status/");	   
@@ -92,7 +92,7 @@
 	else
 	{
 		// The gluster shared data drive location
-		define('DATA_DIRECTORY', '/home/ec2-user/data/gluster'); 
+		define('DATA_DIRECTORY', '/home/ec2-user/scraper/data/gluster'); 
 		
 		// Folder used for status files
 		define("STATUS_DIRECTORY", "data/gluster/status/");	   

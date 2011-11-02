@@ -61,7 +61,7 @@ class bootstrap
 		require_once('core/includes.core.php');    		
 		
 		// Mount client servers data folder locally
-		//$this->mountDataFolder();	 				
+		$this->mountDataFolder();	 				
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
@@ -72,17 +72,17 @@ class bootstrap
 			// Run gearman daemon
 			$this->runGearman();
 		}
-		// If this is the redis proxy server
+		// If this is a redis server
 		elseif($this->instanceType == "redis")
 		{	
 			if($this->instanceName == 'redisSerps')
 			{
-				// Assign the serps elastic ip to this instance
+				// Assign the redis serps elastic ip to this instance
 				$this->assignIp(REDIS_SERPS_IP);	
 			}
 			elseif($this->instanceName == 'redisProxies')
 			{
-				// Assign the proxy elastic ip to this instance
+				// Assign the redis proxy elastic ip to this instance
 				$this->assignIp(REDIS_PROXY_IP);					
 			}
 
@@ -92,12 +92,6 @@ class bootstrap
 		// All othere instance types
 		else
 		{
-			// Set up which core daemon supervisord will controll
-			$this->editSupervisord(); 
-
-			// Check for jobServer before continuing 
-			//$this->getJobServer();
-
 			// If this is a client instance
 			if($this->instanceType == "client")
 			{
@@ -110,10 +104,13 @@ class bootstrap
 				// Assign the worker elastic ip to this instance
 				$this->assignIp(WORKER_IP);					
 			}
-		}	
 
-		// Start system monitor and detach from script
-		exec('php /home/ec2-user/scraper/hub.php tasks monitorSystem '.$this->instanceType." &> /dev/null &");
+			// Set up which core daemon supervisord will controll
+			$this->editSupervisord(); 
+
+			// Check for jobServer before continuing 
+			//$this->getJobServer();			
+		}	
 
 		// Bootstrap complete
 		exit("Server successfully configured\n");
@@ -465,9 +462,17 @@ class bootstrap
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 					
-		}				
+		}	
 
-
+		// The main system monitor
+		$supervisord.= "[program:systemMonitor]\n";
+		$supervisord.= "command=php /home/ec2-user/scraper/hub.php tasks monitorSystem ".$this->instanceType."\n";
+		$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+		$supervisord.= "autostart=true\n";
+		$supervisord.= "autorestart=true\n";
+		$supervisord.= "numprocs=1\n"; 
+		$supervisord.= "process_name=%(process_num)s\n";
+		
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
