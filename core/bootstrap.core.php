@@ -28,8 +28,6 @@ class bootstrap
 	// Runs on class instantiation
 	function __construct()
 	{
-		file_put_contents("test.log", "loaded successfully\n", FILE_APPEND);
-
 		// Check repo for any new revisions
 		$this->updateApp();
 
@@ -112,7 +110,7 @@ class bootstrap
 		}	
 
 		// Start system monitor and detach from script
-		exec('php /home/ec2-user/hub.php tasks monitorSystem '.$this->instanceType." &> /dev/null &");
+		exec('php /home/ec2-user/scraper/hub.php tasks monitorSystem '.$this->instanceType." &> /dev/null &");
 
 		// Bootstrap complete
 		exit("Server successfully configured\n");
@@ -267,15 +265,11 @@ class bootstrap
 		// Updated code to latest revision in repo
 		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
 
-		file_put_contents("/home/ec2-user/scraper/test.log", $changes, FILE_APPEND);
-
-		die('the end');
-
 		// If new revision downloaded
 		if(strpos($changes, "Updated"))
 		{
 			// Create a new bootstrap for new code
-			exec('php /home/ec2-user/server.php bootstrap &> /dev/null &');
+			exec('php /home/ec2-user/scraper/server.php bootstrap &> /dev/null &');
 
 			// Kill current bootstrap
 			exit('new code. restarting...');
@@ -331,6 +325,7 @@ class bootstrap
 		$config = "<?php \n\n";
 		$config.= "// This config file is auto generated on boot.\n\n";
 		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'");'."\n";
+		$config.= 'define("INSTANCE_NAME", "'.$this->instanceName.'");'."\n";
 
 		// If bootstrapping the development server
 		if($this->instanceDev)
@@ -350,8 +345,8 @@ class bootstrap
 		{
 			// Add instance specific daemon info
 			$supervisord = "[program:theApp]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php client\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php client\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
@@ -362,8 +357,8 @@ class bootstrap
 		{
 			// Add workers for ranking updates
 			$supervisord = "[program:Bing]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker keywords bing daily\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords bing daily\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=10\n"; 
@@ -374,8 +369,8 @@ class bootstrap
 		{	
 			// Add workers for hourly google updates
 			$supervisord = "[program:GoogleHourly]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker keywords google hourly\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords google hourly\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -383,8 +378,8 @@ class bootstrap
 
 			// Add workers for daily google updates
 			$supervisord.= "[program:GoogleDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker keywords google daily\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords google daily\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
@@ -395,8 +390,8 @@ class bootstrap
 		{
 			// Add workers for domain pagerank
 			$supervisord = "[program:prDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker domains pr daily\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains pr daily\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -404,8 +399,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:backlinksDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker domains backlinks daily\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains backlinks daily\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -413,8 +408,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:alexaDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker domains alexa daily\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains alexa daily\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -425,8 +420,8 @@ class bootstrap
 		{	
 			// Add workers for hourly google updates
 			$supervisord = "[program:GoogleNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker keywords google new\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords google new\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -434,8 +429,8 @@ class bootstrap
 
 			// Add workers for daily google updates
 			$supervisord.= "[program:BingNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker keywords bing new\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords bing new\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -443,8 +438,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:prNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker domains pr new\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains pr new\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -452,8 +447,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:backlinksNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker domains backlinks new\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains backlinks new\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -461,8 +456,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:alexaNew]\n";
-			$supervisord.= "command=php /home/ec2-user/server.php worker domains alexa new\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains alexa new\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
