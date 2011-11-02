@@ -267,7 +267,7 @@ class bootstrap
 		// Updated code to latest revision in repo
 		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
 
-		file_put_contents("test.log", $changes, FILE_APPEND);
+		file_put_contents("/home/ec2-user/scraper/test.log", $changes, FILE_APPEND);
 
 		die('the end');
 
