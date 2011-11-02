@@ -58,7 +58,7 @@ class bootstrap
 		require_once('core/includes.core.php');    		
 		
     	// Mount client servers data folder locally
-    	$this->mountDataFolder();	 				
+    	//$this->mountDataFolder();	 				
 
 		// If this is the job server
 		if($this->instanceType == "jobServer")
@@ -93,7 +93,7 @@ class bootstrap
 			$this->editSupervisord(); 
 						
 			// Check for jobServer before continuing 
-			$this->getJobServer();
+			//$this->getJobServer();
 					
 			// If this is a client instance
 			if($this->instanceType == "client")
