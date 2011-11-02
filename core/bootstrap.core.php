@@ -33,7 +33,7 @@ class bootstrap
 	{
 		// Check repo for any new revisions
 		$this->updateApp();
-		
+
 		// Create a new amazon connection		
 		$this->amazon();
 		
@@ -94,10 +94,10 @@ class bootstrap
 		{
 			// Set up which core daemon supervisord will controll
 			$this->editSupervisord(); 
-			
+
 			// Check for jobServer before continuing 
 			//$this->getJobServer();
-			
+
 			// If this is a client instance
 			if($this->instanceType == "client")
 			{
@@ -264,7 +264,7 @@ class bootstrap
 
 	// Update the app to the latest code revision
 	public function updateApp()
-	{			
+	{		
 		// Updated code to latest revision in repo
 		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
 
@@ -278,7 +278,7 @@ class bootstrap
 			exit('new code. restarting...');
 		}
 	}
-	
+
 	// ===========================================================================// 
 	// ! Boot methods                                                             //
 	// ===========================================================================//    		
