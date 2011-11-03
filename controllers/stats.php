@@ -30,9 +30,6 @@ class stats
 
 		// Include proxy data model
 		require_once('models/proxies.model.php'); 		 	
-
-	 	// If this is dev
-	 	$this->dev = $_SERVER['argv'][2];
 	}
 	
 	// ===========================================================================// 
@@ -78,10 +75,7 @@ class stats
 
 		echo "Total proxies: ".$this->proxies->checkTotal('master')."\n";		
 
-		// Array of sources 
-		$sources = array('google', 'bing', 'alexa', 'backlinks');
-
-		foreach($sources as $source)
+		foreach($this->proxies->sources as $source)
 		{
 			echo "\t$source Available: ".$this->proxies->checkAvailable($source);		
 			echo " | Resting : ".$this->proxies->checkResting($source);		

@@ -34,16 +34,37 @@ class redis
 	protected $last_err;
 	protected $err_log;
 
+	protected $host;
+	protected $port;
+
 	public function __construct($host = 'localhost', $port = '6379')
 	{
-		$this->connection = $this->connect($host, $port);
+		// Set connection constants
+		$this->host = $host;
+		$this->port = $port;
+
+		// Establish a connection with redis
+		$this->connect();	
 	}
 
-	public function connect($host, $port)
+	// Connect to the redis server
+	public function connect()
 	{
-		$socket = fsockopen($host, $port, $errno, $errstr);
-		if (!$socket) return $this->ReportError('Connection error: '.$errno.':'.$errstr, __LINE__);
-		return $socket;
+		// Loop until a connection to redis can be established
+		while(!$socket)
+		{		
+			$socket = fsockopen($this->host, $this->port, $errno, $errstr);
+			//if (!$socket) return $this->ReportError('Connection error: '.$errno.':'.$errstr, __LINE__);
+			
+			// If the connection was not established
+			if(!$socket)
+			{
+				echo "\nCan't connect to redis. Trying again in 3 seconds...\n";
+				sleep(3);				
+			}	
+		}	
+
+		$this->connection = $socket;
 	}
 
 	public function getLastErr()
@@ -55,6 +76,7 @@ class redis
 
 	public function ReportError($msg, $line)
 	{
+		echo "ERROR!!\n";
 		$this->last_err = $line.': '.$msg;
 		$this->err_log[] = $line.': '.$msg;
 		return false;
@@ -83,12 +105,28 @@ class redis
 
 	protected function _send($args)
 	{
-		$command = '*'.count($args)."\r\n";
-		foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";
+		while(!$w)
+		{
+			$command = '*'.count($args)."\r\n";
+			foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";
 
-		$w = fwrite($this->connection, $command);
-		if (!$w) return $this->ReportError('command was not sent', __LINE__);
-		return $this->read_reply();
+			$w = fwrite($this->connection, $command);
+
+			//if (!$w) return $this->ReportError('command was not sent', __LINE__);
+
+			$reply = $this->read_reply();
+
+			if(!$w)
+			{
+				echo "redis command failed. Trying again in 3 seconds...\n";
+				sleep(3);
+				
+				// Establish a connection with redis
+				$this->connect();				
+			}
+		}
+					
+		return $reply;
 	}
 
 	/* If some command is not wrapped... */
@@ -1322,6 +1360,15 @@ class redis
 		return $this->send_command('zAdd', $key, $score, $member);
 	}
 
+	// Josh was here!  Allows for bulk sorted set adding
+	public function zAddBulk($key, $scoresAndMembers)
+	{
+		// Build argument array
+		array_unshift($scoresAndMembers, 'zAdd', $key);
+
+		return $this->_send($scoresAndMembers);
+	}	
+
 	/**
 	 * Get the number of members in a sorted set
 	 * @param string $key
@@ -1410,7 +1457,7 @@ class redis
 	public function zRangeByScore($key, $min, $max, $withscores = false, array $limit = null)
 	{
 		$args = array($key, $min, $max);
-		if ($withscores) $args[] = self::WITHSCORES;
+		if ($withscores) $args[] = 'WITHSCORES';
 		if (!empty($limit))
 		{
 			$args[] = 'LIMIT';
@@ -1504,7 +1551,7 @@ class redis
 	public function zRevRangeByScore($key, $max, $min, $withscores = false, array $limit = null)
 	{
 		$args = array($key, $max, $min);
-		if ($withscores) $args[] = self::WITHSCORES;
+		if ($withscores) $args[] = 'WITHSCORES';
 		if (!empty($limit))
 		{
 			$args[] = 'LIMIT';

@@ -17,7 +17,10 @@
    	include('core/load.core.php');
 	
 	// Include all utility static functions
-   	include('classes/utilities.class.php');	   		
+   	include('classes/utilities.class.php');
+   	
+	// Include redis class
+	include('classes/redis.php'); 	   		
     
 	// If notifo notifications are turned on
 	if(NOTIFO)

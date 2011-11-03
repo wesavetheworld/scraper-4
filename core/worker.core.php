@@ -1,89 +1,125 @@
 <?php 
 
-	// ******************************* INFORMATION ******************************//
-	// **************************************************************************//
-	//  
-	// ** CLIENT - Acts like cron. Fires off actions based on the current time.
-	// ** 
-	// ** @author	Joshua Heiland <thezenman@gmail.com>
-	// ** @date	 2011-07-12
-	// ** @access	private
-	// ** @param	
-	// ** @return	Loops indefinitely and executes new processes when needed     
-	//  	
-	// ***************************************************************************//
-	// ********************************** START **********************************// 
+// ******************************* INFORMATION ******************************//
+// **************************************************************************//
+//  
+// ** CLIENT - Acts like cron. Fires off actions based on the current time.
+// ** 
+// ** @author	Joshua Heiland <thezenman@gmail.com>
+// ** @date	 2011-07-12
+// ** @access	private
+// ** @param	
+// ** @return	Loops indefinitely and executes new processes when needed     
+//  	
+// ***************************************************************************//
+// ********************************** START **********************************// 
 
 class workerCore 
 {    
+	// The redis key for worker types
+	public $key;
+
+	// The name of the current worker
+	public $name;
+
+	// The channel to listen to work on
+	public $channel;
 	
+	// When script starts
 	function __construct()
 	{
-		// Checkin with gearman jobServer
-		$this->checkin();
+		include('controllers/worker.php');
 
-		// Register job types with jobServer
-		$this->registerJobs();
+		// Connect to redis
+		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+
+		// Set the current worker's name
+		$this->name = INSTANCE_NAME;	
+
+		// Set the channel to listen to jobs on
+		$this->channel = "workers:".INSTANCE_NAME;
+	
+		// Set redis worker type key
+		$this->key = 'workers:'.SOURCE;
+
+		// Notify redis that this worker is alive
+		$this->status('0');		
+
+		// Subscribe to job channel and wait for work
+		$this->listen();
 	}
 	
 	// When script is ended
 	function __destruct() 
 	{
-		// Unregister job types with jobServer
-		$this->gm->unregisterAll();
+		// Give up and go home
+		$this->status('quit');
 	}	
 
 	// ===========================================================================// 
-	// ! Gearman worker checkin and job type descriptions                         //
-	// ===========================================================================//	
-	
-	// Checkin with gearman job server
-	private function checkin()
-	{
-		// Create gearmn worker object.
-		$this->gm = new GearmanWorker();
-
-		// Add jobServer's ip for checking in
-		$this->gm->addServer(JOB_SERVER_IP); 		
-	}
+	// ! Wait for work to be published                                            //
+	// ===========================================================================//		
 	
 	// Register types of jobs available
-	private function registerJobs()
-	{
-		// Set the job type for this worker
-		$jobName = SOURCE.":".SCHEDULE;
+	private function listen()
+	{			
+		// Daemonize it
+		while(TRUE)
+		{
+			echo "ready...\n";	
+			
+			$this->redis->subscribe($this->channel);
 
-		// Register job function with jobServer (600 is max execution in seconds before timeout)
-		$this->gm->addFunction($jobName, "workerCore::work"); 				
-	}		
-	
+			echo "subscribed!\n";
+
+			// Wait for a job to be published
+			$job = $this->redis->read_reply();
+
+			// Redis commands are ignored if still subscribed to a channel
+			$this->redis->unsubscribe($this->channel);				
+
+			// If a job was received (read_reply only waits for so long then the loop repeats)
+			if($job)
+			{
+				// Perform the task
+				$this->work($job[2]);
+
+				// Notify redis that this worker is alive
+				$this->status('0');	
+			}	
+		}		
+	}	
+
 	// ===========================================================================// 
-	// ! Infinite daemon loop                                                     //
-	// ===========================================================================//		
-
-	public function daemon()
-	{
-		// Log current status
-		utilities::notate("Waiting for jobs..."); 
-
-		// Continuous loop waiting for jobs
-		while($this->gm->work()){ }
+	// ! Manage the worker stats (available, busy, quit)                          //
+	// ===========================================================================//	
+	
+	// Set worker status (0 = ready, 1 = working, quit = offline)
+	private function status($status)
+	{	
+		// If worker is shutting down
+		if($status == "quit")
+		{
+			// Remove this worker from the worker list
+			$this->redis->zRem($this->key, "$this->name");
+		}
+		else
+		{
+			// Update the worker's status
+			$this->redis->zAdd($this->key, $status, "$this->name") ."\n";	
+		}	
 	}	
 
 	// ===========================================================================// 
 	// ! Worker job functions                                                     //
 	// ===========================================================================//
 
-	// The function to be registered with gearman
-	public static function work($job)
+	private function work($job)
 	{
-		 // Build job data array
-		$job = array('model'=>MODEL, 'jobData'=>$job->workload());
-		 
-		 // Instantiate new worker	
-		 $worker = new load('worker', $job);
+		// Instantiate new worker	
+		$worker = new worker();
 
-		 // Finalize job (success/failure)
-		 return $job->complete;		
+		// Do the work!
+		$worker->work($job);
 	}	
 }	

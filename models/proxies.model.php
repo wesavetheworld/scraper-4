@@ -22,8 +22,11 @@ class proxies
 	// The engine used for the proxies
 	public $engine;
 
-	// Contains all proxies selected
-	public $selected = array();
+	// The proxy queue key
+	public $key;
+
+	// All sources the proxies are used for
+	public $sources = array('google', 'bing', 'pr', 'alexa', 'backlinks');
 
 	// Contains the detailed proxy arrays
 	public $proxies = array();
@@ -42,35 +45,16 @@ class proxies
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
 				
 		// Set the engine for proxies
-		$this->engine = $this->setEngine($engine);
+		$this->engine = $engine;
+
+		// Set redis proxy queue key
+		$this->key = "proxies:".$this->engine;		
 	}
 
 	// Run when script ends
 	function __destruct()
 	{
-		// If any unreturned proxies at the end of execution 
-		if(count($this->selected) > 0)
-		{
-			// Loop through unreturned proxies
-			foreach($this->selected as $proxy)
-			{ 
-				// Update proxy
-				$this->update($proxy);
-			}
-		}				
-	}
-
-	// Set the correct engine (used for proxy key)
-	private function setEngine($engine)
-	{
-		if($engine == "pr")
-		{
-			return "google";
-		}
-		else
-		{
-			return $engine;
-		}
+			
 	}
 
 	// ===========================================================================// 
@@ -78,8 +62,21 @@ class proxies
 	// ===========================================================================//
 
 	// Select the requested amount of proxies from redis
-	public function select($totalProxies = 1, $key = "proxies:google")
-	{ 		
+	public function select($totalProxies = 1)
+	{ 		 	
+		// Checkout keywords
+		$this->checkOut($totalProxies);	
+
+	 	// Add proxies back in with new use time (score)
+	 	$this->update($this->checkedOut);		
+
+		// Select the credentials for each of the proxies checked out
+		$this->credentials();
+	}	
+
+	// Checkout proxies to use
+	private function checkOut($totalProxies)
+	{
 		// Reduce total by 1 to account for redis 0 index
 		$totalProxies = $totalProxies - 1;
 
@@ -87,22 +84,22 @@ class proxies
 		while(!$response)
 		{
 			// Monitor proxy set for changes during selection
-	 		$this->redis->watch($key);
+	 		$this->redis->watch($this->key);
 
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($key, 0, microtime(true)) >= $totalProxies)
+	 		if($this->redis->zCount($this->key, 0, microtime(true)) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			$this->redis->multi();
 
 				// Select a range of proxies ordered by last block 
-				$this->redis->ZRANGE($key, 0, $totalProxies);
+				$this->redis->ZRANGE($this->key, 0, $totalProxies);
 
 				// Remove all proxies just selected
-				$this->redis->ZREMRANGEBYRANK($key, 0, $totalProxies);	
+				$this->redis->ZREMRANGEBYRANK($this->key, 0, $totalProxies);	
 				
 				// Get response from redis
-				$response = $this->redis->exec(); 
+				$$this->chedresponse = $this->redis->exec(); 
 	 		}
 	 		// Not enough proxies to select
 	 		else
@@ -113,21 +110,23 @@ class proxies
 	 		}
 
 	 		// Stop monitoring proxy list for changes
-	 		$this->redis->unwatch($key);	
-	 	}	 	
+	 		$this->redis->unwatch($this->key);	
+	 	}	
 
+	 	// Set checked out proxies
+	 	$this->checkedOut = $response[0];	
+	}
+
+	// Select the full proxy array from redis
+	private function credentials()
+	{
 	 	// Loop through each proxy in the redis response
-	 	foreach($response[0] as $proxy)
+	 	foreach($this->checkedOut as $proxy)
 	 	{
-	 		$save .= $proxy."\n";
-
 	 		// Create array from json data
 	 		$this->proxies[] = $this->redis->hgetall("p:".$proxy);
-
-	 		// Keep track of proxies checked out out of database (final check on desctruct)
-	 		$this->selected[$proxy] = $proxy;
-	 	} 	
-	}	
+	 	} 			
+	}
 
 	// Add proxies back into sorted set with new timestamp score (1 hour for blocked, now for non blocked)
 	public function update($proxy, $blocked = false)
@@ -142,13 +141,28 @@ class proxies
 		{	
 			// Time in 1 minute (when the proxy can be used next)
 			$score = microtime(true) + PROXY_WAIT_USE;
-		}			
+		}	
+		
+		// If an array of proxies was provided
+		if(is_array($proxy))
+		{
+		 	// Loop through each proxy to be updated
+		 	foreach($proxy as $p)
+		 	{
+		 		// Build array for bulk sorted set update
+		 		$update[] = $score;
+		 		$update[] = $p;
+		 	} 
 
-		// Add proxy back into sorted set with new score (timestamp)
-		$this->redis->zadd('proxies:'.$this->engine, $score, $proxy);
-
-		// Remove proxy from selected array
-		unset($this->selected[$proxy]);
+	 		// Add proxies back with new score
+			$this->redis->zAddBulk($this->key, $update);			
+		}
+		// Just a single proxy was provided
+		else
+		{
+			// Add proxy back into sorted set with new score (timestamp)
+			$this->redis->zadd($this->key, $score, $proxy);			
+		}		
 	}
 
 	// ===========================================================================// 
@@ -238,7 +252,7 @@ class proxies
 		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
 		
 		// All proxy sources needed to be set
-		$sources = array('master', 'google', 'bing', 'alexa', 'backlinks');
+		$sources = array('master', 'google', 'bing', 'pr', 'alexa', 'backlinks');
 
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))

@@ -344,13 +344,22 @@ class bootstrap
 		if($this->instanceType == "client")
 		{
 			// Add instance specific daemon info
-			$supervisord = "[program:theApp]\n";
+			$supervisord = "[program:Client]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/server.php client\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=clientCore\n"; 						
+			$supervisord.= "process_name=%(process_num)s\n";					
+			
+			// Add instance specific daemon info
+			$supervisord.= "[program:Cron]\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php cron\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";					
 		}
 		// If this instance is for bing
 		elseif($this->instanceType == "bing")
