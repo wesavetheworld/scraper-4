@@ -328,11 +328,11 @@ class tasks
 			echo "listening...\n";
 
 			// Subscribe to all worker channels
-			$this->redis->subscribe("workers:all");
+			$this->redis->subscribe("monitor:all");
 			// Subscribe to only worker type channel
-			$this->redis->subscribe("workers:".INSTANCE_TYPE);
+			$this->redis->subscribe("monitor:".INSTANCE_TYPE);
 			// Subscribe to specific worker channel
-			$this->redis->subscribe("workers:".INSTANCE_NAME);
+			$this->redis->subscribe("monitor:".INSTANCE_NAME);
 
 			// Wait for instructions
 			$instructions = $this->redis->read_reply();		
