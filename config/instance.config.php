@@ -3,7 +3,7 @@
 		
 	
 	define("DEV", true);
-	define("INSTANCE_TYPE", "worker");
-	define("INSTANCE_NAME", "worker1");
+	define("INSTANCE_TYPE", "google");
+	define("INSTANCE_NAME", "google1");
 
 ?>

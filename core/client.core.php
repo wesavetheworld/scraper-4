@@ -40,21 +40,19 @@ class clientCore
 	public function daemon()
 	{	
 		// Declare job types explicitly to avoid issues where workers are off line (like bing)
-		$workerTypes = array('google' => 'workers:google',
-					   		 'bing'   => 'workers:bing');
+		$workerTypes = array('google', 'bing', 'pr', 'backlinks', 'alexa');
 
 		// Loop forever if not development client
 		while(TRUE)
 		{	
 			// Loop through each worker type		
-			foreach($workerTypes as $source => $type)
+			foreach($workerTypes as $source)
 			{
 				// Loop for as long as this type of worker is available and there are jobs
-				while(($worker = $this->hire($type)) && ($job = $this->checkForJobs($source)))
+				while(($worker = $this->hire($source)) && ($job = $this->checkForJobs($source)))
 				{
-					echo "$worker : $job\n";
 					// Assign the job to the worker
-					$this->assignWork($type, $worker, $job);
+					$this->assignWork($source, $worker, $job);
 				}	
 			}
 
@@ -64,9 +62,9 @@ class clientCore
 	}
 
 	// Select a worker if available
-	private function hire($type)
+	private function hire($source)
 	{
-		$worker = $this->redis->zRangeByScore($type, 0, 0, false, array(0,1));
+		$worker = $this->redis->zRangeByScore("workers:$source", 0, 0, false, array(0,1));
 
 		return $worker[0];
 	}
@@ -90,11 +88,12 @@ class clientCore
 			// If items were found in the db that need updating
 			if($items)
 			{
+				// Build job array
 				$job['key'] = $key;
 				$job['source'] = $source;
 				$job['schedule'] = $schedule;
 				$job['items'] =  $items;
-		
+
 				return $job;
 			}	
 		}	
@@ -124,7 +123,7 @@ class clientCore
 	private function getSchedules($source)
 	{
 		// If source is google
-		if(strpos($source, "google") !== FALSE)
+		if($source == "google")
 		{	
 			return array("hourly", "daily");
 		}
@@ -136,18 +135,30 @@ class clientCore
 	}
 
 	// Send work to a worker
-	private function assignWork($type, $worker, $job)
+	private function assignWork($source, $worker, $job)
 	{
-		// Push the job to the worker
-		if($this->redis->publish("workers:$worker", json_encode($job)))
+		// If the worker received the job successfully 
+		if($this->redis->publish("worker:$worker", json_encode($job)))
 		{
 			// Worker received work, change worker status to busy 
-			$this->redis->zAdd($type, 1, "$worker") ."\n";
+			$this->redis->zAdd("workers:$source", 1, "$worker") ."\n";
 			
+			// Update the scores of the items in the job sent
 			$this->checkOutItems($job);	
+
+			echo "sent job to $worker\n";
+		}
+		// Worker didn't receive job (it could have died unexpectedly)
+		else
+		{
+			// Remove worker from worker list as it's MIA
+			$this->redis->zRem("workers:$source", "$worker");
+
+			echo "$worker is MIA, removed\n";
 		}
 	}
 
+	// Update the scores (timestamps) of the items sent in the job
 	private function checkOutItems($job)
 	{
 		foreach($job['items'] as $item)

@@ -38,10 +38,10 @@ class workerCore
 		$this->name = INSTANCE_NAME;	
 
 		// Set the channel to listen to jobs on
-		$this->channel = "workers:".INSTANCE_NAME;
+		$this->channel = "worker:".INSTANCE_NAME;
 	
 		// Set redis worker type key
-		$this->key = 'workers:'.SOURCE;
+		$this->workerList = 'workers:'.SOURCE;
 
 		// Notify redis that this worker is alive
 		$this->status('0');		
@@ -71,7 +71,7 @@ class workerCore
 			
 			$this->redis->subscribe($this->channel);
 
-			echo "subscribed!\n";
+			echo "subscribed to $this->channel!\n";
 
 			// Wait for a job to be published
 			$job = $this->redis->read_reply();
@@ -102,12 +102,12 @@ class workerCore
 		if($status == "quit")
 		{
 			// Remove this worker from the worker list
-			$this->redis->zRem($this->key, "$this->name");
+			$this->redis->zRem($this->workerList, "$this->name");
 		}
 		else
 		{
 			// Update the worker's status
-			$this->redis->zAdd($this->key, $status, "$this->name") ."\n";	
+			$this->redis->zAdd($this->workerList, $status, "$this->name") ."\n";	
 		}	
 	}	
 

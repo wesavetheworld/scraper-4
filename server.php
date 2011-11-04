@@ -67,19 +67,7 @@
 			if($argv[2])
 			{			
 				// Set the data model to be used	
-				define("MODEL", $argv[2]);
-			}
-
-			if($argv[3])
-			{
-				// Set the job type
-				define("SOURCE", $argv[3]);
-			}	
-
-			if($argv[4])
-			{
-				// Set the schedule (hourly,daily,new)
-				define("SCHEDULE", $argv[4]);
+				define("SOURCE", $argv[2]);
 			}											
 		}
 
