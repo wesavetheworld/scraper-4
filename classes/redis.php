@@ -120,8 +120,6 @@ class redis
 
 			//if (!$w) return $this->ReportError('command was not sent', __LINE__);
 
-			$reply = $this->read_reply();
-
 			if(!$w)
 			{
 				echo "redis command failed. Trying again in 3 seconds...\n";
@@ -132,7 +130,7 @@ class redis
 			}
 		}
 					
-		return $reply;
+		return $this->read_reply();
 	}
 
 	/* If some command is not wrapped... */

@@ -63,17 +63,8 @@ class bootstrap
 		// Mount client servers data folder locally
 		$this->mountDataFolder();	 				
 
-		// If this is the job server
-		if($this->instanceType == "jobServer")
-		{	
-			// Assign the jobServer elastic ip to this instance
-			$this->assignIp(JOB_SERVER_IP);	
-			
-			// Run gearman daemon
-			$this->runGearman();
-		}
 		// If this is a redis server
-		elseif($this->instanceType == "redis")
+		if($this->instanceType == "redis")
 		{	
 			if($this->instanceName == 'redisSerps')
 			{
@@ -106,11 +97,11 @@ class bootstrap
 			}
 
 			// Set up which core daemon supervisord will controll
-			$this->editSupervisord(); 
-
-			// Check for jobServer before continuing 
-			//$this->getJobServer();			
+			$this->editSupervisord(); 		
 		}	
+
+		 // Start system monitor and detach from script
+   		 exec("php /home/ec2-user/scraper/hub.php tasks monitor &> /dev/null &");
 
 		// Bootstrap complete
 		exit("Server successfully configured\n");
@@ -472,15 +463,6 @@ class bootstrap
 			$supervisord.= "numprocs=5\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 					
 		}	
-
-		// The main system monitor
-		$supervisord.= "[program:systemMonitor]\n";
-		$supervisord.= "command=php /home/ec2-user/scraper/hub.php tasks monitorSystem ".$this->instanceType."\n";
-		$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
-		$supervisord.= "autostart=true\n";
-		$supervisord.= "autorestart=true\n";
-		$supervisord.= "numprocs=1\n"; 
-		$supervisord.= "process_name=%(process_num)s\n";
 		
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);

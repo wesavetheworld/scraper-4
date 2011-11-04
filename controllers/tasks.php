@@ -317,90 +317,155 @@ class tasks
 	// ! System monitoring methods                                                //
 	// ===========================================================================//	
 
-	// Check the system for actions to take
-	private function monitorSystem()
+	// Subscribe to the worker channel and listen for instructions
+	private function monitor()
 	{
-		// What type of isntance is running
-		$instanceType = $_SERVER['argv'][3];
-
-		// Infinite loop
+		// Connect to redis
+		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);
+		
 		while(TRUE)
 		{
-			// Check if the system status file exists
-			if(file_exists(SYSTEM_STATUS))
+			echo "listening...\n";
+
+			// Subscribe to all worker channels
+			$this->redis->subscribe("workers:all");
+			// Subscribe to only worker type channel
+			$this->redis->subscribe("workers:".INSTANCE_TYPE);
+			// Subscribe to specific worker channel
+			$this->redis->subscribe("workers:".INSTANCE_NAME);
+
+			// Wait for instructions
+			$instructions = $this->redis->read_reply();		
+
+			// If instructions received
+			if($instructions)
 			{
-				// Open the system status file
-				$system = file_get_contents(SYSTEM_STATUS);
-
-				// If there is a system command
-				if($system)
-				{
-					// Get each part of the system message
-					$system = explode("_", $system);
-					$action = $system[0];
-					$who = $system[1];
-					$time = $system[2];
-
-					// If the command timestamp is not older than 40 seconds
-					if($time > (time() - 40))
-					{
-						// If system command applies to this instance
-						if(in_array($who, array($instanceType, 'all')))
-						{
-							// If there is a system message
-							if($action == 'reset')
-							{		
-								// Restart the application
-								$this->restartSupervisord();
-							}
-							elseif($action == "stop")
-							{
-								// Kill all scripts
-								$this->killSupervisord();												
-							}							
-							elseif($action == "reboot")
-							{
-								// Kill all scripts
-								$this->killSupervisord();												
-								
-								// Shutdown the server
-								exec("reboot");
-							}					
-							elseif($action == "shutdown")
-							{
-								// Kill all scripts
-								$this->killSupervisord();													
-								
-								// Shutdown the server
-								exec("shutdown now");
-							}
-
-							echo "some command has been run";
-						}
-						else
-						{
-							echo "not for me";
-						}
-					}
-					else
-					{
-						echo "command is old.";
-					}	
-				}
-				else
-				{
-					echo "no commands to run";
-				}		
-			} 
-			else
-			{
-				echo "file does not exist";
+				// Follow the instructions received
+				$this->obey($instructions[2]);
 			}
 
-			// Wait 30 seconds and check again
-			sleep(30);
 		}	
 	}
+
+	// Obey the instructions received from monitor()
+	private function obey($instruction)
+	{
+		if($instruction == 'reset')
+		{		
+			// Restart the application
+			$this->restartSupervisord();
+		}
+		elseif($instruction == "stop")
+		{
+			// Kill all scripts
+			$this->killSupervisord();												
+		}							
+		elseif($instruction == "reboot")
+		{
+			// Kill all scripts
+			$this->killSupervisord();												
+			
+			// Shutdown the server
+			exec("reboot");
+		}					
+		elseif($instruction == "shutdown")
+		{
+			// Kill all scripts
+			$this->killSupervisord();													
+			
+			// Shutdown the server
+			exec("shutdown now");
+		}	
+		else
+		{
+			echo "no actions found for that\n";
+		}	
+	} 
+
+	// // Check the system for actions to take
+	// private function monitorSystem()
+	// {
+	// 	// What type of isntance is running
+	// 	$instanceType = $_SERVER['argv'][3];
+
+	// 	// Infinite loop
+	// 	while(TRUE)
+	// 	{
+	// 		// Check if the system status file exists
+	// 		if(file_exists(SYSTEM_STATUS))
+	// 		{
+	// 			// Open the system status file
+	// 			$system = file_get_contents(SYSTEM_STATUS);
+
+	// 			// If there is a system command
+	// 			if($system)
+	// 			{
+	// 				// Get each part of the system message
+	// 				$system = explode("_", $system);
+	// 				$action = $system[0];
+	// 				$who = $system[1];
+	// 				$time = $system[2];
+
+	// 				// If the command timestamp is not older than 40 seconds
+	// 				if($time > (time() - 40))
+	// 				{
+	// 					// If system command applies to this instance
+	// 					if(in_array($who, array($instanceType, 'all')))
+	// 					{
+	// 						// If there is a system message
+	// 						if($action == 'reset')
+	// 						{		
+	// 							// Restart the application
+	// 							$this->restartSupervisord();
+	// 						}
+	// 						elseif($action == "stop")
+	// 						{
+	// 							// Kill all scripts
+	// 							$this->killSupervisord();												
+	// 						}							
+	// 						elseif($action == "reboot")
+	// 						{
+	// 							// Kill all scripts
+	// 							$this->killSupervisord();												
+								
+	// 							// Shutdown the server
+	// 							exec("reboot");
+	// 						}					
+	// 						elseif($action == "shutdown")
+	// 						{
+	// 							// Kill all scripts
+	// 							$this->killSupervisord();													
+								
+	// 							// Shutdown the server
+	// 							exec("shutdown now");
+	// 						}
+
+	// 						echo "some command has been run";
+	// 					}
+	// 					else
+	// 					{
+	// 						echo "not for me";
+	// 					}
+	// 				}
+	// 				else
+	// 				{
+	// 					echo "command is old.";
+	// 				}	
+	// 			}
+	// 			else
+	// 			{
+	// 				echo "no commands to run";
+	// 			}		
+	// 		} 
+	// 		else
+	// 		{
+	// 			echo "file does not exist";
+	// 		}
+
+	// 		// Wait 30 seconds and check again
+	// 		sleep(30);
+	// 	}	
+	// }
 
 	// Get a list of all current system processes 
 	private function killSupervisord()
