@@ -90,7 +90,7 @@ class bootstrap
 				$this->assignIp(CLIENT_IP);			
 			}
 			// If this is either production or development worker 1
-			elseif($this->instanceName == "worker1" || $this->instanceName == "worker1Dev")
+			elseif($this->instanceName == "google1" || $this->instanceName == "google1Dev")
 			{	
 				// Assign the worker elastic ip to this instance
 				$this->assignIp(WORKER_IP);					
@@ -100,8 +100,8 @@ class bootstrap
 			$this->editSupervisord(); 		
 		}	
 
-		 // Start system monitor and detach from script
-   		 exec("php /home/ec2-user/scraper/hub.php tasks monitor &> /dev/null &");
+		// Start system monitor and detach from script
+		exec("php /home/ec2-user/scraper/hub.php tasks monitor &> /dev/null &");
 
 		// Bootstrap complete
 		exit("Server successfully configured\n");
