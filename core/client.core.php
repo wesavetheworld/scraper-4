@@ -85,12 +85,14 @@ class clientCore
 			$scoreLimit = $this->getScoreRange($key);
 
 			// Select a range of proxies ordered by last block 
-			$items = $this->redis->zRangeByScore($key, 0, $scoreLimit, TRUE, array(0, 100));
+			$items = $this->redis->zRangeByScore($key, 0, $scoreLimit, false, array(0, 100));
 
 			// If items were found in the db that need updating
 			if($items)
 			{
 				$job['key'] = $key;
+				$job['source'] = $source;
+				$job['schedule'] = $schedule;
 				$job['items'] =  $items;
 		
 				return $job;

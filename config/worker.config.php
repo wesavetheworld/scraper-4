@@ -70,7 +70,7 @@
 	// ===========================================================================//	  
 	
 	// The regular expression for parsing google rankings
-	define("PARSE_PATTERN_GOOGLE","(<h3 class=\"r\"><a href=\"(.*)\".* class=l>(.*)</a></h3>)siU");	
+	define("PARSE_PATTERN_GOOGLE","(<h3 class=\"r\"><a href=\"(.*)\".*>(.*)</a></h3>)siU");	
 	
 	// ===========================================================================// 
 	// ! Bing constants                                                           //

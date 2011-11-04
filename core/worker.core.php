@@ -29,6 +29,7 @@ class workerCore
 	function __construct()
 	{
 		include('controllers/worker.php');
+		include('config/worker.config.php');
 
 		// Connect to redis
 		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	

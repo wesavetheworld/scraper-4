@@ -99,7 +99,7 @@ class proxies
 				$this->redis->ZREMRANGEBYRANK($this->key, 0, $totalProxies);	
 				
 				// Get response from redis
-				$$this->chedresponse = $this->redis->exec(); 
+				$response = $this->redis->exec(); 
 	 		}
 	 		// Not enough proxies to select
 	 		else

@@ -53,14 +53,10 @@ class worker
 	// ! Main rankings method                                                     //
 	// ===========================================================================//	 
 	
-	public function work($data)
+	public function work($job)
 	{  	
-		echo "\data: $data\n";
-
-		return;
-
 		// Construct job object
-		$this->buildJob($data);			
+		$this->buildJobNew($job);			
 		        
 		// Loop for as long as there are keywords left
 		while($this->items->total > 0)
@@ -73,7 +69,7 @@ class worker
 		}
 
 		// Update DB with new data
-		$this->updateItems();
+		//$this->updateItems();
 
 		echo "\njob complete\n\n\n";
 
@@ -84,33 +80,41 @@ class worker
 	// ===========================================================================// 
 	// ! Core worker functions                                                    //
 	// ===========================================================================//
-	
-	// Construct job object
-	private function buildJob(&$data)
-	{
+
+	private function buildJobNew($job)
+	{				
+		// Decode json array				
+		$job = json_decode($job);
+
 		// Get the items model
-		$this->model = $data['model'];	
+		$this->model = $this->setModel($job->source);
+
+		// Items parent class
+		$class = $this->model;		
+
+		// Source being scraped
+		$this->source = $job->source;						
 		
-   		// Remove "s" from object for singular item class
-		$this->class = substr($this->model, 0, -1); 
-		
+		// Source schedule (hourly, daily)
+		$this->schedule = $job->schedule;						
+
 		// Include items data model
-	 	require_once("models/".$this->model.".model.php"); 
-	 					
-		// Get the keywords from the job data				
-		$jobData = unserialize($data['jobData']);						
-		
-		// Task is this worker performing
-		$this->task = $jobData['task'];
-		
-		// Search engine used (for proxy use)
-		$this->engine = $jobData['engine'];					
+	 	require_once("models/$class.model.php"); 
+	 	
+		// Instantiate new object
+		$this->items = new $class($job->items);	 			
+	}
 
-		// Get the items from the job data				
-		$this->items = $jobData[$this->model];
-
-		// Set the task for the data model
-		$this->items->task = $this->task;		
+	private function setModel($source)
+	{
+		if(in_array($source, array("google", "bing")))
+		{
+			return "keywords";
+		}
+		else
+		{
+			return "domains";
+		}
 	}
 
 	private function scrapeContent()
@@ -119,13 +123,24 @@ class worker
 		$this->scrape = new scraper; 
 
 		// If a domain stats connection
-		$this->scrape->task = $this->task;    	
+		$this->scrape->task = $this->source;    	
 
 		// Build an array of search engine urls to scrape
-		$this->scrape->urls = $this->getUrlsRedis($this->items->{$this->model}, $this->items->total); 				
+		$this->scrape->urls = $this->getUrls($this->items->{$this->model}, $this->items->total); 				
 		
 		// Build an array of proxies to use for scraping
-		$this->scrape->proxies = $this->getProxiesRedis($this->scrape->urls, $this->items->{$this->model});			
+		$this->scrape->proxies = $this->getProxies($this->scrape->urls, $this->items->{$this->model});
+		
+		// echo "urls: \n";
+		// print_r($this->scrape->urls);
+		// echo "\n";
+
+		// echo "urls: \n";
+		// print_r($this->scrape->proxies);
+		// echo "\n";
+		
+		// die();		
+					
 								
 		// Execute the scraping
 		$this->scrape->curlExecute();		
@@ -156,7 +171,9 @@ class worker
 	{
 		// If a valid search results page can be loaded (new scrape or saved file)
 		if($content = $this->getContent($item, $this->scrape->results[$item->searchHash]))
-		{  							
+		{  		
+					echo "good scrape!\n";
+				
 			// Find the keyword's domain in one of the ranking urls
 			$this->parse->findElements($this->parsePattern(), $content)->findInElements($item->domain);			 
 						   				
@@ -180,7 +197,7 @@ class worker
 				}  
 
 				// If scraping google
-				if($this->engine == 'google')
+				if($this->source == 'google')
 				{
 					//echo "checking notifications PT 1\n";
 					// See if a rank change notification should be sent
@@ -192,7 +209,7 @@ class worker
 				$this->calibration($item);   
 
 				// Add keyword to completed list
-				$this->items->updated[$key] = $item;
+				//$this->items->updated[$key] = $item;
 
 				// If this item has it's own proxy
 				if($item->proxy)
@@ -200,6 +217,9 @@ class worker
 					// Check proxy back in.
 					$this->proxies->update($item->proxy['proxy']);
 				}	
+
+				// Update and checkin keyword to redis
+				$this->items->update($item->keyword_id, "$this->source:$this->schedule");
 
 				// Remove keyword from keyword id array
 				unset($this->items->{$this->model}->$key);  
@@ -209,7 +229,8 @@ class worker
 			}
 			// Domain was not found ranking
 			else
-			{ 				
+			{ 		
+					
 				// Increase search results page for next scrape
 				$item->searchPage++; 						
 			} 
@@ -217,6 +238,8 @@ class worker
 		// No scraped content returned
 		else
 		{
+			echo "bad scrape!\n";
+
 			// If this item has it's own proxy
 			if($item->proxy)
 			{		
@@ -242,7 +265,7 @@ class worker
 
 			if($item->bad != 10)
 			{					
-				if($this->task == "backlinks")
+				if($this->source == "backlinks")
 				{
 					// Find the keyword's domain in one of the ranking urls
 					$this->parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
@@ -250,14 +273,14 @@ class worker
 					// Set backlinks for domain
 					$item->backlinks =  str_replace(",","",$this->parse->elements[0]); 
 				}
-				elseif($this->task == "pr")
+				elseif($this->source == "pr")
 				{    
 					// Set the pagerank for domain
 					$item->pr = $this->parse->pageRank($content); 
 
 					echo "pr:$item->pr\n";
 				} 
-				elseif($this->task == "alexa")
+				elseif($this->source == "alexa")
 				{    
 					// Set the alexa rank for domain
 					$item->alexa = $this->parse->alexa($content); 
@@ -266,17 +289,17 @@ class worker
 			// If all bad searches(something must be wrong with the domain)
 			else
 			{
-				if($this->task == "backlinks")
+				if($this->source == "backlinks")
 				{	
 					// Set backlinks for domain
 					$item->backlinks =  NULL; 
 				}
-				elseif($this->task == "pr")
+				elseif($this->source == "pr")
 				{    
 					// Set the pagerank for domain
 					$item->pr = NULL; 
 				} 
-				elseif($this->task == "alexa")
+				elseif($this->source == "alexa")
 				{    
 					// Set the alexa rank for domain
 					$item->alexa = NULL; 
@@ -322,7 +345,7 @@ class worker
 	// ===========================================================================//
 	
 	// Loop through keywords and return array of urls to scrape
-	public function getUrlsRedis($items, $total)
+	public function getUrls(&$items, $total)
 	{    	
 		// Reset proxy list from any previous loops
 		$this->proxyList = array();
@@ -331,7 +354,10 @@ class worker
 		foreach($items as $key => &$item)
 		{  
 			// Generate the search page url 
-			$item->setSearchUrl();	
+			$item->setSearchUrl($this->source);	
+
+			// print_r($item);
+			// die();
 
 			// If getting domain urls
 			if($this->model == "domains")
@@ -353,7 +379,7 @@ class worker
 			}
 			// If getting keyword urls
 			else
-			{	    			                     			
+			{	  			                     			
 				// If keyword's search hash is unique
 				if(!$urls[$item->searchHash])
 				{    				
@@ -377,7 +403,7 @@ class worker
 	}	
 	
 	// Loop through keywords and return array of urls to scrape
-	public function getProxiesRedis($urls, &$items)
+	public function getProxies($urls, &$items)
 	{  					
 		$need = count($urls) - count($this->proxyList);
 			
@@ -387,7 +413,7 @@ class worker
 		if($need != 0)
 		{		
 			// Instantiate new proxies object
-			$this->proxies = new proxies($this->engine);
+			$this->proxies = new proxies($this->source);
 					
 			// Select proxies for urls with no proxies attached yet
 			$this->proxies->select($need);	
@@ -414,8 +440,7 @@ class worker
 					{
 						$item->proxy = array_pop($this->proxies->proxies);
 						$this->proxyList[$item->searchHash] = $item->proxy;
-					}					
-					
+					}			
 				}	
 			}
 
@@ -424,111 +449,10 @@ class worker
 				echo "FUCK! popping left: ".count($this->proxies->proxies)."\n";
 			}
 		}	
-		
+
 		// Returned the proxy array
 		return $this->proxyList;		
 	}	
-	
-	// Loop through keywords and return array of urls to scrape
-	public function getUrls($items, $total)
-	{    
-		// Get proxies
-		$this->getProxies($total);
-
-		// Loop through each keyword
-		foreach($items as $key => &$item)
-		{  
-			// Generate the search page url 
-			$item->setSearchUrl();	
-			
-			// If no proxy set for this keyword/url yet
-			if(!$item->proxy)
-			{
-				$item->proxy = current($this->proxies->proxies);
-
-				// Move to next proxy
-				next($this->proxies->proxies);	
-			}						  		
-
-			// If getting domain urls
-			if($this->model == "domains")
-			{ 			                     	
-				// If keyword's search hash is unique
-				if(!$urls[$item->url])
-				{    		
-					// Add the keyword's search page url to scraping list
-					$urls[$item->url] = $item->url;  
-					
-					$proxies[$item->url] = $item->proxy;	
-				}
-			}
-			// If getting keyword urls
-			else
-			{	    			                     			
-				// If keyword's search hash is unique
-				if(!$urls[$item->searchHash])
-				{    				
-					// Add the keyword's search page url to scraping list
-					$urls[$item->searchHash] = $item->url; 
-						
-					// Add keywords proxy to list to be used for scraping	
-					$proxies[$item->searchHash] = $item->proxy;						
-					
-					// This is a new search
-					$item->searchType = "new";
-				} 
-			}	 	
-		} 
-				
-		// Return the url and proxy arrays
-		return array('urls' => $urls, 'proxies'=> $proxies);				
-	}
-
-	public function getProxies($count)
-	{
-		// Instantiate new proxies object
-		$this->proxies = new proxies($this->engine);
-
-		// Select proxies for use
-		$this->proxies->selectProxies($count);	
-	}
-
-	public function updateProxies()
-	{
-		if(defined("DEV"))
-    	{
-			// Transfer proxy statuses from scraper class to proxy model
-			$this->proxies->blocked = $this->scrape->proxiesBlocked;
-			$this->proxies->denied = $this->scrape->proxiesDenied;
-			$this->proxies->timeout = $this->scrape->proxiesTimeout;
-			$this->proxies->dead = $this->scrape->proxiesDead;
-			$this->proxies->other = $this->scrape->proxiesOther;
-			$this->proxies->good = $this->scrape->proxiesGood;
-
-			echo "proxies blocked: ".count($this->proxies->blocked)." | scraper blocked: ".count($this->scrape->proxiesBlocked)."\n";
-			echo "proxies denied: ".count($this->proxies->denied)." | scraper denied: ".count($this->scrape->proxiesDenied)."\n";
-			echo "proxies timeout: ".count($this->proxies->timeout)." | scraper timeout: ".count($this->scrape->proxiesTimeout)."\n";
-			echo "proxies dead: ".count($this->proxies->dead)." | scraper dead: ".count($this->scrape->proxiesDead)."\n";
-			echo "proxies other: ".count($this->proxies->other)." | scraper other: ".count($this->scrape->proxiesOther)."\n";
-			echo "proxies good: ".count($this->proxies->good)." | scraper good: ".count($this->scrape->proxiesGood)."\n";
-		    		
-    		// Use Redis instead
-    		$this->proxies->update();
-    	}
-    	else
-    	{
-			// Transfer proxy statuses from scraper class to proxy model
-			$this->proxies->proxiesBlocked = $this->scrape->proxiesBlocked;
-			$this->proxies->proxiesDenied = $this->scrape->proxiesDenied;
-			$this->proxies->proxiesTimeout = $this->scrape->proxiesTimeout;
-			$this->proxies->proxiesDead = $this->scrape->proxiesDead;
-			$this->proxies->proxiesOther = $this->scrape->proxiesOther;
-			$this->proxies->proxiesGood = $this->scrape->proxiesGood;
-		    		
-			// Update proxy database
-			$this->proxies->updateProxyUse();    		
-    	}
-	}
     
 	// Load the correct source for the keyword's search results
 	public function getContent($item, $content = false)
@@ -549,7 +473,7 @@ class worker
 				// Set the new search as the source
 				$search = $content['output']; 
 
-				if($this->task == "pr" && empty($search))
+				if($this->source == "pr" && empty($search))
 				{
 					$search = "99";
 				}				
@@ -606,12 +530,12 @@ class worker
 	public function parsePattern()
 	{
 		// Search engine is google
-		if($this->engine == "google")
+		if($this->source == "google")
 		{
 			return PARSE_PATTERN_GOOGLE;
 		}
 		// Search engine is bing
-		elseif($this->engine == "bing")
+		elseif($this->source == "bing")
 		{
 			return PARSE_PATTERN_BING;
 		}

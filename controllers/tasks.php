@@ -93,7 +93,7 @@ class tasks
 	 	require_once('models/keywords.model.php'); 	
 	 	
 	 	// Set constants needed for keyword model
-	 	define('ENGINE', 'bing');
+	 	define('ENGINE', 'google');
 	 	define('MIGRATION', TRUE);
 	 	define('ONLY_USER', false);
 	 	define('TASK', false);

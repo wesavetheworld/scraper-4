@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************//
 
-class keywords 
+class keywordsOld 
 {   
 	// Contains keywords of the keywords selected
 	public $keywords;
@@ -532,15 +532,59 @@ class keywords
 }
 
 // ===========================================================================// 
+// ! Manage all keywords                                                      //
+// ===========================================================================//
+
+class keywords
+{
+	function __construct($keywords)
+	{
+		// Instantiate new redis object
+		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		
+		// Loop through items		
+		foreach($keywords as $keyword)
+		{
+ 			// Select keyword hash from redis		
+			$hash = $this->redis->hGetAll("k:$keyword");
+					
+			// Create new keyword object from redis hash
+			$this->keywords->$keyword = new keyword($hash);
+
+			// Echo count how many keywords are in the object
+			$this->total++;
+		}
+	}
+
+	public function update($keyword_id, $key)
+	{
+		// Update keyword hash
+		$this->redis->hmset("k:$keyword_id", array('lastRankGoogle'=>$this->keywords->$keyword_id->rank,
+												   'found'=>$this->keywords->$keyword_id->found));
+
+		// Update job list score
+		$this->redis->zAdd($key, time(), $keyword_id);		
+	}
+}
+
+// ===========================================================================// 
 // ! Create individual keyword objects                                        //
 // ===========================================================================//
 
 class keyword 
 {     
 	
-	function __construct()
-	{    
-
+	function __construct($fields)
+	{ 
+		// Loop through keyword hash and build keyword object
+		foreach($fields as $field => $value)
+		{
+			// Assign field to keyword object
+			$this->$field = $value;
+		}	
+		
+		// URL encode the keyword
+		$this->urlSafeKeyword();		
    	} 
 
 	// ===========================================================================// 
@@ -551,7 +595,7 @@ class keyword
 	public function keywordTest()
 	{    
   		// The required keys in the keyword array
-		$required = array('user_id','keyword','domain_id','domain','g_country');
+		$required = array('user_id','keyword','domain_id','domain','country');
 				
 		// Loop through each required key
 		foreach($required as $key)
@@ -582,7 +626,7 @@ class keyword
 	public function setResultsCount()
 	{    
 		// If last ranking was below the 10/100 switch
-		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->engine == 'bing')
+		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->source == 'bing')
 		{  
 			// Search by 10 results
 			$num = 10;
@@ -610,8 +654,11 @@ class keyword
 	}
 	
 	// Build the search engine results page for the keyword
-	public function setSearchUrl()
+	public function setSearchUrl($source)
 	{   
+		// Set the data source (google,bing,pr etc)
+		$this->source = $source;
+
 		// Get the current search hash 
 		$this->setSearchHash(); 
 		
@@ -621,10 +668,10 @@ class keyword
 		// Set the location of the keyword's saved search file
 		$this->searchFile = SAVED_SEARCH_DIR.$this->searchHash.".html";
 		
-		if($this->engine == "google")
+		if($this->source == "google")
 		{
 			// Build the google search results page url
-			$this->url  = "http://www.google".$this->g_country;
+			$this->url  = "http://www.google".$this->country;
 			$this->url .= "/search?q=".$this->urlSafe;
 			$this->url .= "&num=".$this->resultCount;  		
 
@@ -635,7 +682,7 @@ class keyword
 				$this->url .= "&start=".$this->searchOffset;	   
 			}	
 	    }
-		elseif($this->engine == "bing")
+		elseif($this->source == "bing")
 		{                			
 			// Build the bing search results page url
 			$this->url  = "http://www.bing.com";
@@ -657,8 +704,8 @@ class keyword
 	{
 		// Naming convention for the file
 		$searchHash  = $this->keyword;
-		$searchHash .= $this->engine;
-		$searchHash .= $this->g_country;
+		$searchHash .= $this->source;
+		$searchHash .= $this->country;
 		$searchHash .= $this->resultCount;
 		$searchHash .= $this->searchPage; 
 		

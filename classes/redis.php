@@ -28,6 +28,13 @@
  * @method string SRANDMEMBER(string $key) Get a random member from a set
  * @method string SYNC() Internal command used for replication
  */
+
+/* 
+*
+*	I (Joshua) heavily modified some of these functions.  Specifically the connection and _send functions to make them persistend.
+*
+*/
+
 class redis 
 {
 	protected $connection;
@@ -76,7 +83,6 @@ class redis
 
 	public function ReportError($msg, $line)
 	{
-		echo "ERROR!!\n";
 		$this->last_err = $line.': '.$msg;
 		$this->err_log[] = $line.': '.$msg;
 		return false;
