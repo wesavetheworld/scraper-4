@@ -218,6 +218,7 @@ class bootstrap
 
 		echo "ok done. sleeping...\n";
 		sleep(5);
+		
 		echo "this is what I got: \n $changes";
 
 		// If new revision downloaded
