@@ -35,10 +35,10 @@ class workerCore
 		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
 
 		// Set the current worker's name
-		$this->name = INSTANCE_NAME;	
+		$this->name = INSTANCE_NAME.":".WORKER_ID;	
 
 		// Set the channel to listen to jobs on
-		$this->channel = "worker:".INSTANCE_NAME;
+		$this->channel = "worker:".$this->name;
 	
 		// Set redis worker type key
 		$this->workerList = 'workers:'.SOURCE;

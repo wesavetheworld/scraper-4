@@ -280,7 +280,7 @@ class bootstrap
 		{
 			// Add instance specific daemon info
 			$supervisord = "[program:Client]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php client %(process_num)s\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php client\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";

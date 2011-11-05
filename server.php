@@ -68,7 +68,13 @@
 			{			
 				// Set the data model to be used	
 				define("SOURCE", $argv[2]);
-			}											
+			}		
+			
+			if($argv[3])
+			{			
+				// Set the data model to be used	
+				define("WORKER_ID", $argv[3]);
+			}													
 		}
 
 		// Include main router
