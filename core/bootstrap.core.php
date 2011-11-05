@@ -217,7 +217,7 @@ class bootstrap
 		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
 
 		// If new revision downloaded
-		if(strpos($changes, "Updating"))
+		if(strpos($changes, "Updating") !== FALSE)
 		{
 			// Create a new bootstrap for new code
 			exec('php /home/ec2-user/scraper/server.php bootstrap &> /dev/null &');
