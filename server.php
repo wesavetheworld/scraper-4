@@ -70,11 +70,17 @@
 				define("SOURCE", $argv[2]);
 			}		
 			
+			// If worker number is non-zero
 			if($argv[3])
 			{			
-				// Set the data model to be used	
+				// Set the data model to be used (strval because of "0" returning false)	
 				define("WORKER_ID", $argv[3]);
-			}													
+			}	
+			// If worker id is "0"
+			else
+			{
+				define("WORKER_ID", "0");
+			}												
 		}
 
 		// Include main router

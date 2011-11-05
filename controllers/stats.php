@@ -25,11 +25,11 @@ class stats
 	
 	function __construct()
 	{           
-		// Include keywords data model
-	 	require_once('classes/gearman.class.php');
-
 		// Include proxy data model
-		require_once('models/proxies.model.php'); 		 	
+		require_once('models/proxies.model.php'); 
+		
+		// Include job queue model		 	
+		require_once('models/queue.model.php'); 		 	
 	}
 	
 	// ===========================================================================// 
@@ -38,34 +38,44 @@ class stats
 	
 	public function stats()
 	{   
-		echo "started: ".JOB_SERVER_IP;		
-		
-		// Instantiate new gearman call
-		$jobServer = new jobServerStatus(JOB_SERVER_IP);
-					
-		$status = $jobServer->getStatus();
 
-		print_r($status['operations']);
-
-		$this->checkJobQueue('rankings');
+		$this->workerStats();
 
 		$this->proxyStats();
 	}
 
-	// Check for oustanding jobs stilled queued
-	private function checkJobQueue($type)
+	public function workerStats()
 	{
-		echo "\nQueued $type jobs: ";		
-
-		// Instantiate new gearman call
-		$jobServer = new jobServerStatus(JOB_SERVER_IP);
-
-		// Retrieve list of current jobs in queue
-		$status = $jobServer->getStatus();	
+		$this->queue = new queue();
 		
-		// Return specified job type job queue total
-		echo $status['operations'][$type]['total']."\n";	
-	}	
+		$stats = $this->queue->checkWorkers();
+
+		echo "Total Google workers: ".$stats['total']."\n";
+
+		$zebra = 0;
+		foreach($stats['list'] as $item)
+		{
+			if($zebra %2 == 0)
+			{
+				echo "\t$item | ";
+			}
+			else
+			{
+				echo "$item\n";
+			}
+
+			$zebra++;
+		}
+
+		echo "\n";
+
+		//print_r($stats['list']);
+
+
+
+		
+	}
+
 
 	// Check the status of the proxies
 	public function proxyStats()
@@ -83,6 +93,8 @@ class stats
 			echo " | In use: ".$this->proxies->checkInUse($source);		
 			echo " | All unblocked at: ".$this->proxies->checkBlockTime($source)."\n";
 		}	
+
+		echo "\n";
 	}	
 }	    
 
