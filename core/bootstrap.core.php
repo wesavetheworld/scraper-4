@@ -313,7 +313,7 @@ class bootstrap
 		{	
 			// Add workers for hourly google updates
 			$supervisord = "[program:GoogleHourly]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker google\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker google %(process_num)s\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
