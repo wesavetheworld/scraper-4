@@ -216,6 +216,10 @@ class bootstrap
 		// Updated code to latest revision in repo
 		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
 
+		echo "ok done. sleeping...\n";
+		sleep(5);
+		echo "this is what I got: \n $changes";
+
 		// If new revision downloaded
 		if(strpos($changes, "updated"))
 		{
