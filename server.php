@@ -73,7 +73,7 @@
 			// If worker number is non-zero
 			if($argv[3])
 			{			
-				// Set the data model to be used (strval because of "0" returning false)	
+				// Set worker id for the job queue	
 				define("WORKER_ID", $argv[3]);
 			}	
 			// If worker id is "0"
