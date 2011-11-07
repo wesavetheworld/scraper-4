@@ -34,7 +34,7 @@ class bootstrap
 		//exit();
 		// Penis tickle
 		// Check repo for any new revisions
-		$this->updateApp();
+		//$this->updateApp();
 
 		// Create a new amazon connection		
 		$this->amazon();
