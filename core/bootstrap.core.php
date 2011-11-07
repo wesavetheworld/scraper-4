@@ -26,7 +26,7 @@ class bootstrap
 	private $instanceName = false;
 
 	// Will contain the ec2 instance type
-	private $this->instanceType = false;	
+	private $instanceType = false;	
 	
 	// Will be set to true for development instances
 	private $instanceDev = false;
