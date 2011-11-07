@@ -31,7 +31,8 @@ class bootstrap
 	// Runs on class instantiation
 	function __construct()
 	{
-		exit();
+		//exit();
+		// Penis tickle
 		// Check repo for any new revisions
 		$this->updateApp();
 
