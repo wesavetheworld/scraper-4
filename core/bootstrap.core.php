@@ -24,6 +24,9 @@ class bootstrap
 	
 	// Will contain the ec2 instance name
 	private $instanceName = false;
+
+	// Will contain the ec2 instance type
+	private $this->instanceType = false;	
 	
 	// Will be set to true for development instances
 	private $instanceDev = false;
@@ -173,6 +176,13 @@ class bootstrap
 				$this->instanceDev = TRUE;
 			}
 		}	
+
+		// If tags are missing
+		if(!$this->instanceType || !$this->instanceName)
+		{
+			// Don't continue, just kill yourself
+			exit("no instance type or name tag found. I give up...\n");
+		}
 	}
 
 	// Get list of EC2 instance info
@@ -397,11 +407,6 @@ class bootstrap
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 					
-		}
-		// No instance tag found	
-		else
-		{
-			exit("no instance type tag found. I give up...\n");
 		}
 		
 		// Write new supervisord config file
