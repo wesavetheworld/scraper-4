@@ -332,24 +332,40 @@ class tasks
 	// ! Data migration methods                                                   //
 	// ===========================================================================//
 	
-	// Transfer proxies from MySQL to redis
-	private function migrateProxies()
-	{
+	private function migrate($data)
+	{		
 		// Include proxy data model
 		require_once('models/migration.model.php'); 
-
+		
 		// Instantiate new proxies object
-		$this->migration = new migration();
+		$this->migration = new migration();	
+		
+		// Call function for requested data source
+		$this->$data();	
+	}
 
+	// Migrate proxies from MySQL to redis
+	private function proxies()
+	{
 		// Copy proxies from MySQL to redis
 		$this->migration->proxies();
 
 		// Log current state
 		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
 	}   
+	
+	// Migrate keywords from MySQL to redis
+	private function serps()
+	{
+		// Copy serps from MySQL to redis
+		$this->migration->serps();		
+
+		// Log current state
+		utilities::notate("\Serps migrated to redis", "tasks.log"); 		
+	}
 
 	//Transfer keywords from MySQL to redis
-	private function migrateSerps()
+	private function migrateSerpsOld()
 	{
 		// Include keywords data model
 	 	require_once('models/keywords.model.php'); 	
@@ -360,7 +376,6 @@ class tasks
 	 	define('ONLY_USER', false);
 	 	define('TASK', false);
 	 	define('SCHEDULE', false);
-
 
 	 	// Select all items from db to update
 		$keywords = new keywords(); 		
