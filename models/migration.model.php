@@ -27,7 +27,7 @@ class migration
 	function __construct()
 	{
 		// Connect to serps redis db
-		$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		//$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
 		
 
 		// Establish DB connection
@@ -103,13 +103,12 @@ class migration
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{		
 			echo $proxy['proxy']."\n";						
-			// Create proxy hash		
+			// Add proxy to redis proxy db		
 			$this->proxies->add($proxy);		
 		}			
 	}	
 
 }
-
  
 // ******************************* INFORMATION *******************************//
 

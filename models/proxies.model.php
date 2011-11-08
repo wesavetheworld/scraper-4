@@ -170,13 +170,12 @@ class proxies
 
 		// Loop through sources
 		foreach($this->sources as $source)
-		{
-			// Add proxy to redis set (once for each source to keep track of blocks and use)
-			$this->redis->zadd('proxies:'.$source, microtime(true), $proxy['proxy']);	
-		}	
+		{	
+			$this->key = 'proxies:'.$source;
 
-		// Add proxy to the proxy queue
-		$this->update($proxy['proxy']);
+			// Add proxy to the proxy queue
+			$this->update($proxy['proxy']);			
+		}	
 	}
 
 	// ===========================================================================// 
