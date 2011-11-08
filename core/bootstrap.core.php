@@ -67,7 +67,7 @@ class bootstrap
 		if($this->instanceType == "redis")
 		{	
 			// If this is a overlord instance
-			if($this->instanceName == "overlord")
+			if($this->instanceName == "theBoss")
 			{
 				// Assign the boss elastic ip to this instance
 				$this->assignIp(BOSS_IP);			

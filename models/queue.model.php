@@ -30,7 +30,11 @@ class queue
 		require_once('classes/redis.php');
 
 		// Instantiate new redis object
-		$this->redis = new redis(BOSS_IP, BOSS_PORT);	
+		//$this->redis = new redis(BOSS_IP, BOSS_PORT);	
+
+		echo "here".BOSS_IP.BOSS_PORT;
+
+		die();
 	}
 
 	// Run when script ends
