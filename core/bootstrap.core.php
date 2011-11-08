@@ -244,7 +244,7 @@ class bootstrap
 	// Run redis database
 	private function runRedis()
 	{
-		exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/redis/redis.conf");
+		exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/core/redis.config.conf");
 	}	
 
 	// Associate an elastic ip with an instance
@@ -297,14 +297,14 @@ class bootstrap
 			$supervisord.= "numprocs=1\n"; 
 			$supervisord.= "process_name=%(process_num)s\n";					
 			
-			// Add instance specific daemon info
-			$supervisord.= "[program:Cron]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php cron\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
-			$supervisord.= "autostart=true\n";
-			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";					
+			// // Add instance specific daemon info
+			// $supervisord.= "[program:Cron]\n";
+			// $supervisord.= "command=php /home/ec2-user/scraper/server.php cron\n";
+			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			// $supervisord.= "autostart=true\n";
+			// $supervisord.= "autorestart=true\n";
+			// $supervisord.= "numprocs=1\n"; 
+			// $supervisord.= "process_name=%(process_num)s\n";					
 		}
 		// If this instance is for bing
 		elseif($this->instanceType == "bing")
