@@ -47,14 +47,14 @@
 		// The AWS elastic ip for the client server
 		define('BOSS_IP', '184.72.45.180');
 
-		// The AWS elastic ip for the job server
-		define('JOB_SERVER_IP', '50.18.56.175');
+		// Redis listening port
+		define("BOSS_PORT", 6379);
+
+		// Redis boss database number
+		define("BOSS_DB", 0);		
 
 		// The AWS elastic ip for the worker 1 server
 		define('WORKER_IP', '184.72.55.252');	
-
-		// The gluster shared data drive location
-		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data');	
 	}	
 	// else production environment
 	else
@@ -62,14 +62,14 @@
 		// The AWS elastic ip for the client server
 		define('BOSS_IP', '50.18.104.82');
 
-		// The AWS elastic ip for the job server
-		define('JOB_SERVER_IP', '50.18.187.13');
+		// Redis listening port
+		define("BOSS_PORT", 6379);
+
+		// Redis boss database number
+		define("BOSS_DB", 0);			
 
 		// The AWS elastic ip for the worker 1 server
-		define('WORKER_IP', '50.18.180.36');	
-
-		// The gluster shared data drive location
-		define('DATA_SERVER', 'ec2-50-18-187-16.us-west-1.compute.amazonaws.com:/gluster-data'); 	
+		define('WORKER_IP', '50.18.180.36');		
 	}	
 
 	// ===========================================================================// 

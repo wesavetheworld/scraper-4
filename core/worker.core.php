@@ -32,7 +32,7 @@ class workerCore
 		include('config/worker.config.php');
 
 		// Connect to redis
-		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		$this->redis = new redis(BOSS_IP, BOSS_PORT);	
 
 		// Set the current worker's name
 		$this->name = INSTANCE_NAME.":".WORKER_ID;	
