@@ -134,11 +134,16 @@ class proxies
 			// Micro time in one hour (when the proxy can be used next) 
 			$score = microtime(true) + PROXY_WAIT_BLOCKED;
 		}
-		else
+		elseif(defined("PROXY_WAIT_USE"))
 		{	
 			// Time in 1 minute (when the proxy can be used next)
 			$score = microtime(true) + PROXY_WAIT_USE;
 		}	
+		// For newly added proxies
+		else
+		{
+			$score = 0;
+		}
 		
 		// If an array of proxies was provided
 		if(is_array($proxy))
