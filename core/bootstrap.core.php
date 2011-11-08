@@ -66,12 +66,12 @@ class bootstrap
 		// If this is a redis server
 		if($this->instanceType == "redis")
 		{	
-			if($this->instanceName == 'redisSerps')
+			if($this->instanceName == 'redisSerps' || $this->instanceName == 'redisSerpsDev')
 			{
 				// Assign the redis serps elastic ip to this instance
 				$this->assignIp(REDIS_SERPS_IP);	
 			}
-			elseif($this->instanceName == 'redisProxies')
+			elseif($this->instanceName == 'redisProxies' || $this->instanceName == 'redisProxiesDev')
 			{
 				// Assign the redis proxy elastic ip to this instance
 				$this->assignIp(REDIS_PROXY_IP);					
