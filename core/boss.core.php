@@ -4,7 +4,7 @@
 
 // **************************************************************************//
 //  
-// ** CLIENT - Acts like cron. Fires off actions based on the current time.
+// ** BOSS - Manages all jobs required to run SEscout
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
 // ** @date	 2011-07-12
@@ -16,7 +16,7 @@
 
 // ********************************** START **********************************// 
 
-class clientCore 
+class bossCore 
 {    
 	// Bing instance status
 	private $bingStatus = false;

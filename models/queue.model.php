@@ -44,12 +44,44 @@ class queue
 	// ! Redis proxy select and update                                            //
 	// ===========================================================================//
 
-	// Get the status of workers
-	public function checkWorkers($type = "all")
+	public function getWorkerTypes()
 	{
-		$total = $this->redis->zCard('workers:google');
-		$list = $this->redis->zRangeByScore('workers:google', "0", "1", "WITHSCORES");
+		return $this->redis->send_command("keys", "workers:*");
+	}
 
+	// Get the status of workers
+	public function checkWorkers($type)
+	{
+		$total = $this->redis->zCard($type);
+		$list = $this->redis->zRangeByScore($type, "0", "1", "WITHSCORES");
+
+		$zebra = 0;
+
+		// Loop through redis response
+		foreach($list as $item)
+		{
+			// Worker name
+			if($zebra %2 == 0)
+			{
+				echo "\t$item | ";
+			}
+			// Worker status
+			else
+			{
+				if(!$item)
+				{
+					$item = "available";
+				}
+				else
+				{
+					$item = "working";
+				}
+
+				echo "$item\n";
+			}
+
+			$zebra++;
+		}
 		return array('total' => $total, 'list' => $list);
 
 		

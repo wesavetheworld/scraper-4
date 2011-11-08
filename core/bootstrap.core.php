@@ -54,7 +54,7 @@ class bootstrap
 		// Load the current instances id
 		$this->getInstanceId();
 
-		// Load the current instances description (client/worker)
+		// Load the current instances description (boss/worker)
 		$this->getInstanceType();
 
 		// Save all server settings to config files
@@ -66,7 +66,13 @@ class bootstrap
 		// If this is a redis server
 		if($this->instanceType == "redis")
 		{	
-			if($this->instanceName == 'redisSerps' || $this->instanceName == 'redisSerpsDev')
+			// If this is a overlord instance
+			if($this->instanceName == "overlord")
+			{
+				// Assign the boss elastic ip to this instance
+				$this->assignIp(BOSS_IP);			
+			}
+			elseif($this->instanceName == 'redisSerps' || $this->instanceName == 'redisSerpsDev')
 			{
 				// Assign the redis serps elastic ip to this instance
 				$this->assignIp(REDIS_SERPS_IP);	
@@ -80,25 +86,15 @@ class bootstrap
 			// Run redis database
 			$this->runRedis();
 		}		
-		// All othere instance types
-		else
-		{
-			// If this is a client instance
-			if($this->instanceType == "client")
-			{
-				// Assign the client elastic ip to this instance
-				$this->assignIp(CLIENT_IP);			
-			}
-			// If this is either production or development worker 1
-			elseif($this->instanceName == "google1" || $this->instanceName == "google1Dev")
-			{	
-				// Assign the worker elastic ip to this instance
-				$this->assignIp(WORKER_IP);					
-			}
-
-			// Set up which core daemon supervisord will controll
-			$this->editSupervisord(); 		
+		// If this is the flagship worker instance
+		elseif($this->instanceName == "google1" || $this->instanceName == "google1Dev")
+		{	
+			// Assign the worker elastic ip to this instance
+			$this->assignIp(WORKER_IP);					
 		}	
+		
+		// Set up which core daemon supervisord will controll
+		$this->editSupervisord(); 		
 
 		// Start system monitor and detach from script
 		exec("php /home/ec2-user/scraper/hub.php tasks monitor &> /dev/null &");
@@ -144,7 +140,7 @@ class bootstrap
 		}	
 	}
 
-	// Load the current instances type tag description (worker/client/job)
+	// Load the current instances type tag description (worker/boss/job)
 	private function getInstanceType()
 	{
 		// Get current instances info
@@ -286,11 +282,11 @@ class bootstrap
 	private function editSupervisord()
 	{
 		// If this is a worker instance
-		if($this->instanceType == "client")
+		if($this->instanceType == "boss")
 		{
 			// Add instance specific daemon info
-			$supervisord = "[program:Client]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php client\n";
+			$supervisord = "[program:Boss]\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/server.php boss\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";

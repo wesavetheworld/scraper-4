@@ -47,33 +47,18 @@ class stats
 	public function workerStats()
 	{
 		$this->queue = new queue();
-		
-		$stats = $this->queue->checkWorkers();
 
-		echo "Total Google workers: ".$stats['total']."\n";
+		$types = $this->queue->getWorkerTypes();
 
-		$zebra = 0;
-		foreach($stats['list'] as $item)
+		foreach($types as $type)
 		{
-			if($zebra %2 == 0)
-			{
-				echo "\t$item | ";
-			}
-			else
-			{
-				echo "$item\n";
-			}
+			echo "Total $type: ".$stats['total']."\n";
 
-			$zebra++;
+			$stats = $this->queue->checkWorkers($type);
+
+			echo "\n";	
 		}
 
-		echo "\n";
-
-		//print_r($stats['list']);
-
-
-
-		
 	}
 
 

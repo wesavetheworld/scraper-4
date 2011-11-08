@@ -45,7 +45,7 @@
 	if(defined("DEV"))
 	{
 		// The AWS elastic ip for the client server
-		define('CLIENT_IP', '184.72.45.180');
+		define('BOSS_IP', '184.72.45.180');
 
 		// The AWS elastic ip for the job server
 		define('JOB_SERVER_IP', '50.18.56.175');
@@ -60,7 +60,7 @@
 	else
 	{
 		// The AWS elastic ip for the client server
-		define('CLIENT_IP', '50.18.104.82');
+		define('BOSS_IP', '50.18.104.82');
 
 		// The AWS elastic ip for the job server
 		define('JOB_SERVER_IP', '50.18.187.13');
