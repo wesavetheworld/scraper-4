@@ -3,10 +3,10 @@
 // ******************************* INFORMATION ******************************//
 // **************************************************************************//
 //  
-// ** CLIENT - Acts like cron. Fires off actions based on the current time.
+// ** WORKER - Waits for work to be pushed to it, then performs the work
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
-// ** @date	 2011-07-12
+// ** @date	 2011-11-7
 // ** @access	private
 // ** @param	
 // ** @return	Loops indefinitely and executes new processes when needed     
@@ -16,18 +16,10 @@
 
 class workerCore 
 {    
-	// The redis key for worker types
-	public $key;
-
-	// The name of the current worker
-	public $name;
-
-	// The channel to listen to work on
-	public $channel;
-	
 	// When script starts
 	function __construct()
 	{
+		// Worker include files
 		include('controllers/worker.php');
 		include('config/worker.config.php');
 
@@ -35,16 +27,16 @@ class workerCore
 		$this->queue = new queue();			
 
 		// Set the current worker's name
-		$this->name = INSTANCE_NAME.":".WORKER_ID;	
+		$this->queue->name = INSTANCE_NAME.":".WORKER_ID;	
 
 		// Set the channel to listen to jobs on
-		$this->channel = "worker:".$this->name;
+		$this->queue->channel = "worker:".$this->queue->name;
 	
 		// Set redis worker type key
-		$this->workerList = 'workers:'.SOURCE;
+		$this->queue->workerGroup = 'workers:'.SOURCE;
 
 		// Notify redis that this worker is alive
-		$this->queue->status($this->name, $this->workerList, '0');				
+		$this->queue->status('0');				
 
 		// Subscribe to job channel and wait for work
 		$this->listen();
@@ -54,7 +46,7 @@ class workerCore
 	function __destruct() 
 	{
 		// Give up and go home
-		$this->queue->status($this->name, $this->workerList, 'quit');	
+		$this->queue->status('quit');	
 	}	
 
 	// ===========================================================================// 
@@ -69,7 +61,7 @@ class workerCore
 		{
 			echo "ready...\n";	
 
-			$job = $this->queue->getWork($this->channel);			
+			$job = $this->queue->getWork();			
 
 			// If a job was received (read_reply only waits for so long then the loop repeats)
 			if($job)
@@ -78,7 +70,7 @@ class workerCore
 				$this->work($job[2]);
 
 				// Notify redis that this worker is alive
-				$this->queue->status($this->name, $this->workerList, '0');	
+				$this->queue->status('0');	
 			}	
 		}		
 	}	

@@ -19,6 +19,18 @@
 
 class queue 
 {   
+	// The redis key for worker types
+	public $key;
+
+	// The name of the current worker
+	public $name;
+
+	// The channel to listen to work on
+	public $channel;
+		
+	// The group the worker belongs too	
+	public $workerGroup;
+
 	// ===========================================================================// 
 	// ! Opening and closing functions                                            //
 	// ===========================================================================//
@@ -160,35 +172,52 @@ class queue
 	// ! Job queue functions for workers                                          //
 	// ===========================================================================//
 	
-	public function getWork($channel)
+	public function getWork()
 	{		
 		// Listen on this worker's channel for work
-		$this->bossDB->subscribe($channel);
+		$this->bossDB->subscribe($this->channel);
 
 		// Wait for a job to be published
 		$work = $this->bossDB->read_reply();
 
 		// Redis commands are ignored if still subscribed to a channel
-		$this->bossDB->unsubscribe($channel);
+		$this->bossDB->unsubscribe($this->channel);
 		
 		return $work;				
 	}		
 	
 	// Set worker status (0 = ready, 1 = working, quit = offline)
-	public function status($name, $workerList, $status)
+	public function status($status)
 	{	
 		// If worker is shutting down
 		if($status == "quit")
 		{
 			// Remove this worker from the worker list
-			$this->bossDB->zRem($workerList, "$name");
+			$this->bossDB->zRem($this->workerGroup, "$this->name");
 		}
 		else
 		{
 			// Update the worker's status
-			$this->bossDB->zAdd($workerList, $status, "$name");	
+			$this->bossDB->zAdd($this->workerGroup, $status, "$this->name");	
 		}	
-	}		
+	}	
+	
+	// ===========================================================================// 
+	// ! Data source management                                                   //
+	// ===========================================================================//		
+
+	// Add a new data source to the job queue system
+	public function addSource($source)
+	{
+		// Add source to db
+		$this->bossDB->sAdd("sources", $source);
+	}
+
+	// List all data sources used by the job queue
+	public function listSources()
+	{
+		return $this->bossDB->sMembers("sources");
+	}
 
 	// ===========================================================================// 
 	// ! Message system (pub/sub)                                                 //
@@ -215,7 +244,17 @@ class queue
 	// Return every worker type checked in
 	public function getWorkerTypes()
 	{
-		return $this->bossDB->send_command("keys", "workers:*");
+		// Get all of the keys for the workers
+		$keys = $this->bossDB->send_command("keys", "workers:*");
+
+		// Loop through each worker type key
+		foreach($keys as $key)
+		{
+			// Remove the  "workers:" part of the key to leave just the type (i.e google,bing etc)
+			$types[] = str_replace("workers:", "", $key);
+		}
+
+		return $types;
 	}
 
 	// Get the status of each worker from a worker type

@@ -38,9 +38,6 @@ class proxies
 	// Run on class instantiation
 	function __construct($engine = false)
 	{  	
-		// Include redis class
-		require_once('classes/redis.php');
-
 		// Instantiate new redis object
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
 				
@@ -165,6 +162,23 @@ class proxies
 		}		
 	}
 
+	// Add a new proxy to the db
+	public function add($proxy)
+	{
+		// Create proxy hash		
+		$this->redis->hmset('p:'.$proxy['proxy'], $proxy);	
+
+		// Loop through sources
+		foreach($this->sources as $source)
+		{
+			// Add proxy to redis set (once for each source to keep track of blocks and use)
+			$this->redis->zadd('proxies:'.$source, microtime(true), $proxy['proxy']);	
+		}	
+
+		// Add proxy to the proxy queue
+		$this->update($proxy['proxy']);
+	}
+
 	// ===========================================================================// 
 	// ! Redis proxy DB stats                                                     //
 	// ===========================================================================//	
@@ -225,47 +239,5 @@ class proxies
 		$last = $this->redis->zrevRange("proxies:".$engine, 0 , 0, TRUE);
 
 		return date("h:i", $last[1]);
-	}
-
-	// ===========================================================================// 
-	// ! Legacy MySQL related stuff                                               //
-	// ===========================================================================//	
-
-	// Select all proxies in the MySQL database and add them to a redis set
-	public function migrateToRedis()
-	{
-		// Establish DB connection
-		$this->db = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
-				
-		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
-		$sql = "SELECT 
-					proxy,
-					port,
-					username,
-					password,
-					tunnel
-				FROM 
-					proxies
-				ORDER BY 
-					RAND()";
-
-		$result = mysql_query($sql, $this->db) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
-		
-		// All proxy sources needed to be set
-		$sources = array('master', 'google', 'bing', 'pr', 'alexa', 'backlinks');
-
-		// Build proxy and SQL array
-		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
-		{	
-			// Loop through sources
-			foreach($sources as $source)
-			{
-				// Add proxy to redis set (once for each source to keep track of blocks and use)
-				$this->redis->zadd('proxies:'.$source, microtime(true), $proxy['proxy']);	
-			}								
-			
-			// Create proxy hash		
-			$this->redis->hmset('p:'.$proxy['proxy'], $proxy);			
-		}			
-	}
+	}	
 }	

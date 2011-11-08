@@ -32,10 +32,7 @@ class tasks
 		require_once('models/proxies.model.php'); 
 		
 		// Include the amazon SDK
-		require_once('classes/amazon/sdk.class.php');						
-		
-	  	// Initiate benchmarking
-		utilities::benchmark();		  
+		require_once('classes/amazon/sdk.class.php');							  
 	}
 	  
 	// ===========================================================================// 
@@ -67,62 +64,8 @@ class tasks
 	} 
 	
 	// ===========================================================================// 
-	// ! Clen up type methods                                                     //
+	// ! Clean up type methods                                                    //
 	// ===========================================================================//	
-	
-	// Transfer proxies from MySQL to redis
-	private function migrateProxies()
-	{
-		// Include proxy data model
-		require_once('models/proxies.model.php'); 
-
-		// Instantiate new proxies object
-		$this->proxies = new proxies();
-
-		// Copy proxies from MySQL to redis
-		$this->proxies->migrateToRedis();
-
-		// Log current state
-		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
-	}   
-
-	//Transfer keywords from MySQL to redis
-	private function migrateSerps()
-	{
-		// Include keywords data model
-	 	require_once('models/keywords.model.php'); 	
-	 	
-	 	// Set constants needed for keyword model
-	 	define('ENGINE', 'google');
-	 	define('MIGRATION', TRUE);
-	 	define('ONLY_USER', false);
-	 	define('TASK', false);
-	 	define('SCHEDULE', false);
-
-
-	 	// Select all items from db to update
-		$keywords = new keywords(); 		
-		
-		// Migrate keywords from MySQL to redis
-		$keywords->migrateToRedis();
-
-		// Log current state
-		utilities::notate("\tMigration complete", "tasks.log"); 		
-	}
-
-	
-	// Resets all stats for proxies (use/blocked/status)
-	private function proxyReset()
-	{
-		// Instantiate a new proxy object
-		$proxies = new proxies();
-
-		// Rest proxy stats
-		$proxies->reset();
-		
-		// Log current state
-		utilities::notate("\tProxy stats reset", "tasks.log"); 
-	}
 	
 	// Remove the log files from the day
 	private function cleanLogs()
@@ -143,77 +86,7 @@ class tasks
 		
 		// Log current state
 		utilities::notate("\tLog files cleaned up", "tasks.log");
-	}
-	
-	// Remove old saved searches
-	private function cleanSearchDirectory()
-	{ 
-		// Loop through all log files
-		foreach(glob(SAVED_SEARCH_DIR.'*.html') as $search)
-		{    
-			// If search file is not from today
-			if(date("Y-m-d-G", filemtime($search)) != date("Y-m-d-G"))
-			{
-				// Remove search file
-				unlink($search);
-			}	
-		}
-		
-		// Log current state
-		utilities::notate("\tSearch directory cleaned", "tasks.log");
-	} 
-	
-	// Check back in any keywords left checked out for some reason
-	private function keywordCheckIn()
-	{   
-		// Instantiate a new keywords object
-		$keywords = new keywords(true, true);
-
-		// Check keywords back in
-		$keywords->setCheckOut(0, true);
-		
-		// Log current state
-		utilities::notate("\tOld keywords checked in", "tasks.log");		   
-	}
-	
-	// Check that all keywords are following their schedules
-	private function checkSchedules()
-	{        	
-		// Instantiate a new keywords object
-		$keywords = new keywords(true, true);
-
-		// Make sure keyword schedules are honored
-		$keywords->checkSchedules();
-		
-		// Log current state
-		utilities::notate("\tSchedule check complete", "tasks.log");	   
-	}      
-	
-	// Turn on/off the kill switch                                                    
-	private function killswitch()
-	{    
-		// If kill argument passed
-		if($_SERVER['argv'][3] == 'kill')
-		{   
-			// Write killswitch file
-			file_put_contents(KILL_SWITCH_FILE, "kill");  
-
-			// Log current state
-			utilities::notate("\tKillswitch flicked", "tasks.log");	
-		}
-		else
-		{    
-			// If killswitch is present
-			if(file_exists(KILL_SWITCH_FILE))			
-			{
-				// Delete killswitch
-				unlink(KILL_SWITCH_FILE);
-			}   
-			
-			// Log current state
-			utilities::notate("\tIt's alive!!!", "tasks.log");			   
-		}
-	}
+	}   
 
 	// ===========================================================================// 
 	// ! ec2 related methods                                                      //
@@ -312,7 +185,24 @@ class tasks
 			return true;
 		}
 	}	
+
+	// ===========================================================================// 
+	// ! Stats monitoring methods                                                 //
+	// ===========================================================================//	
 		
+	// Check that all keywords are following their schedules
+	private function checkSchedules()
+	{        	
+		// Instantiate a new keywords object
+		$keywords = new keywords(true, true);
+
+		// Make sure keyword schedules are honored
+		$keywords->checkSchedules();
+		
+		// Log current state
+		utilities::notate("\tSchedule check complete", "tasks.log");	   
+	}   
+
 	// ===========================================================================// 
 	// ! System monitoring methods                                                //
 	// ===========================================================================//	
@@ -343,6 +233,9 @@ class tasks
 	{
 		if($instruction == 'reset')
 		{		
+			// Change this workers status in the job queue
+			//$this->queue->status(INSTANCE_NAME.":".WORKER_ID, $this->workerList, '0');	
+
 			// Restart the application
 			$this->restartSupervisord();
 		}
@@ -372,91 +265,10 @@ class tasks
 			echo "no actions found for that\n";
 		}	
 	} 
-
-	// // Check the system for actions to take
-	// private function monitorSystem()
-	// {
-	// 	// What type of isntance is running
-	// 	$instanceType = $_SERVER['argv'][3];
-
-	// 	// Infinite loop
-	// 	while(TRUE)
-	// 	{
-	// 		// Check if the system status file exists
-	// 		if(file_exists(SYSTEM_STATUS))
-	// 		{
-	// 			// Open the system status file
-	// 			$system = file_get_contents(SYSTEM_STATUS);
-
-	// 			// If there is a system command
-	// 			if($system)
-	// 			{
-	// 				// Get each part of the system message
-	// 				$system = explode("_", $system);
-	// 				$action = $system[0];
-	// 				$who = $system[1];
-	// 				$time = $system[2];
-
-	// 				// If the command timestamp is not older than 40 seconds
-	// 				if($time > (time() - 40))
-	// 				{
-	// 					// If system command applies to this instance
-	// 					if(in_array($who, array($instanceType, 'all')))
-	// 					{
-	// 						// If there is a system message
-	// 						if($action == 'reset')
-	// 						{		
-	// 							// Restart the application
-	// 							$this->restartSupervisord();
-	// 						}
-	// 						elseif($action == "stop")
-	// 						{
-	// 							// Kill all scripts
-	// 							$this->killSupervisord();												
-	// 						}							
-	// 						elseif($action == "reboot")
-	// 						{
-	// 							// Kill all scripts
-	// 							$this->killSupervisord();												
-								
-	// 							// Shutdown the server
-	// 							exec("reboot");
-	// 						}					
-	// 						elseif($action == "shutdown")
-	// 						{
-	// 							// Kill all scripts
-	// 							$this->killSupervisord();													
-								
-	// 							// Shutdown the server
-	// 							exec("shutdown now");
-	// 						}
-
-	// 						echo "some command has been run";
-	// 					}
-	// 					else
-	// 					{
-	// 						echo "not for me";
-	// 					}
-	// 				}
-	// 				else
-	// 				{
-	// 					echo "command is old.";
-	// 				}	
-	// 			}
-	// 			else
-	// 			{
-	// 				echo "no commands to run";
-	// 			}		
-	// 		} 
-	// 		else
-	// 		{
-	// 			echo "file does not exist";
-	// 		}
-
-	// 		// Wait 30 seconds and check again
-	// 		sleep(30);
-	// 	}	
-	// }
+		
+	// ===========================================================================// 
+	// ! Supervisord daemon methods                                               //
+	// ===========================================================================//	
 
 	// Get a list of all current system processes 
 	private function killSupervisord()
@@ -514,27 +326,49 @@ class tasks
 			// Log current state
 			utilities::notate("Supervisord is not running, starting....", "tasks.log");				
 		}		
-	}
+	}	
 
-	// Set a system status message (pause,kill)
-	// private function system()
-	// {
-	// 	// Set the system status + a timestamp
-	// 	$status = $_SERVER['argv'][3]."_".time();
+	// ===========================================================================// 
+	// ! Data migration methods                                                   //
+	// ===========================================================================//
+	
+	// Transfer proxies from MySQL to redis
+	private function migrateProxies()
+	{
+		// Include proxy data model
+		require_once('models/migration.model.php'); 
 
-	// 	// Write status file
-	// 	file_put_contents(SYSTEM_STATUS, $status);	
+		// Instantiate new proxies object
+		$this->migration = new migration();
+
+		// Copy proxies from MySQL to redis
+		$this->migration->proxies();
+
+		// Log current state
+		utilities::notate("\tProxies migrated to redis", "tasks.log"); 		
+	}   
+
+	//Transfer keywords from MySQL to redis
+	private function migrateSerps()
+	{
+		// Include keywords data model
+	 	require_once('models/keywords.model.php'); 	
+	 	
+	 	// Set constants needed for keyword model
+	 	define('ENGINE', 'google');
+	 	define('MIGRATION', TRUE);
+	 	define('ONLY_USER', false);
+	 	define('TASK', false);
+	 	define('SCHEDULE', false);
+
+
+	 	// Select all items from db to update
+		$keywords = new keywords(); 		
 		
-	// 	// Log current state
-	// 	utilities::notate("\tSystem: $status", "tasks.log");			
-	// }
+		// Migrate keywords from MySQL to redis
+		$keywords->migrateToRedis();
 
-	// private function testSystem()
-	// {
-	// 	// Kill all scripts
-	// 	$this->killSupervisord();		
-
-	// 	// Restart the application
-	// 	$this->restartSupervisord();			
-	// }	
+		// Log current state
+		utilities::notate("\tMigration complete", "tasks.log"); 		
+	}		
 }	

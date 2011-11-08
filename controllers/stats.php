@@ -61,12 +61,10 @@ class stats
 				echo "\t$worker\n";
 			}
 
-
 			echo "\n";	
 		}
 
 	}
-
 
 	// Check the status of the proxies
 	public function proxyStats()
