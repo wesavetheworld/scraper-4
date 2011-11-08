@@ -109,7 +109,7 @@
 	define("REDIS_SERPS_IP", "50.18.172.44");
 
 	// Redis listening port
-	define("REDIS_SERPS_PORT", 4730);
+	define("REDIS_SERPS_PORT", 6379);
 
 	// Redis Proxy database number
 	define("REDIS_SERPS_DB", 0);
@@ -153,7 +153,7 @@
 	define("REDIS_PROXY_IP", "50.18.170.228");
 
 	// Redis listening port
-	define("REDIS_PROXY_PORT", 4730);
+	define("REDIS_PROXY_PORT", 6379);
 
 	// Redis Proxy database number
 	define("REDIS_PROXY_DB", 0);	
