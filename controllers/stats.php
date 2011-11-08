@@ -52,9 +52,15 @@ class stats
 
 		foreach($types as $type)
 		{
+			$stats = $this->queue->checkWorkers($type);
+
 			echo "Total $type: ".$stats['total']."\n";
 
-			$stats = $this->queue->checkWorkers($type);
+			foreach($stats['workers'] as $worker)
+			{
+				echo "\t$worker\n";
+			}
+
 
 			echo "\n";	
 		}

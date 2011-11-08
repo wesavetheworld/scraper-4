@@ -31,8 +31,8 @@ class workerCore
 		include('controllers/worker.php');
 		include('config/worker.config.php');
 
-		// Connect to redis
-		$this->redis = new redis(BOSS_IP, BOSS_PORT);	
+		// Instantiate a new job queue object
+		$this->queue = new queue();			
 
 		// Set the current worker's name
 		$this->name = INSTANCE_NAME.":".WORKER_ID;	
@@ -44,7 +44,7 @@ class workerCore
 		$this->workerList = 'workers:'.SOURCE;
 
 		// Notify redis that this worker is alive
-		$this->status('0');		
+		$this->queue->status($this->name, $this->workerList, '0');				
 
 		// Subscribe to job channel and wait for work
 		$this->listen();
@@ -54,7 +54,7 @@ class workerCore
 	function __destruct() 
 	{
 		// Give up and go home
-		$this->status('quit');
+		$this->queue->status($this->name, $this->workerList, 'quit');	
 	}	
 
 	// ===========================================================================// 
@@ -68,16 +68,8 @@ class workerCore
 		while(TRUE)
 		{
 			echo "ready...\n";	
-			
-			$this->redis->subscribe($this->channel);
 
-			echo "subscribed to $this->channel!\n";
-
-			// Wait for a job to be published
-			$job = $this->redis->read_reply();
-
-			// Redis commands are ignored if still subscribed to a channel
-			$this->redis->unsubscribe($this->channel);				
+			$job = $this->queue->getWork($this->channel);			
 
 			// If a job was received (read_reply only waits for so long then the loop repeats)
 			if($job)
@@ -86,29 +78,9 @@ class workerCore
 				$this->work($job[2]);
 
 				// Notify redis that this worker is alive
-				$this->status('0');	
+				$this->queue->status($this->name, $this->workerList, '0');	
 			}	
 		}		
-	}	
-
-	// ===========================================================================// 
-	// ! Manage the worker stats (available, busy, quit)                          //
-	// ===========================================================================//	
-	
-	// Set worker status (0 = ready, 1 = working, quit = offline)
-	private function status($status)
-	{	
-		// If worker is shutting down
-		if($status == "quit")
-		{
-			// Remove this worker from the worker list
-			$this->redis->zRem($this->workerList, "$this->name");
-		}
-		else
-		{
-			// Update the worker's status
-			$this->redis->zAdd($this->workerList, $status, "$this->name") ."\n";	
-		}	
 	}	
 
 	// ===========================================================================// 

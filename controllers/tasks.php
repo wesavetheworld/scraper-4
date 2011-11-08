@@ -320,22 +320,14 @@ class tasks
 	// Subscribe to the worker channel and listen for instructions
 	private function monitor()
 	{
-		// Connect to redis
-		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);
+		$this->queue = new queue();
 		
 		while(TRUE)
 		{
 			echo "listening...\n";
 
-			// Subscribe to all worker channels
-			$this->redis->subscribe("monitor:all");
-			// Subscribe to only worker type channel
-			$this->redis->subscribe("monitor:".INSTANCE_TYPE);
-			// Subscribe to specific worker channel
-			$this->redis->subscribe("monitor:".INSTANCE_NAME);
-
 			// Wait for instructions
-			$instructions = $this->redis->read_reply();		
+			$instructions = $this->queue->monitor();		
 
 			// If instructions received
 			if($instructions)
@@ -343,7 +335,6 @@ class tasks
 				// Follow the instructions received
 				$this->obey($instructions[2]);
 			}
-
 		}	
 	}
 
@@ -526,24 +517,24 @@ class tasks
 	}
 
 	// Set a system status message (pause,kill)
-	private function system()
-	{
-		// Set the system status + a timestamp
-		$status = $_SERVER['argv'][3]."_".time();
+	// private function system()
+	// {
+	// 	// Set the system status + a timestamp
+	// 	$status = $_SERVER['argv'][3]."_".time();
 
-		// Write status file
-		file_put_contents(SYSTEM_STATUS, $status);	
+	// 	// Write status file
+	// 	file_put_contents(SYSTEM_STATUS, $status);	
 		
-		// Log current state
-		utilities::notate("\tSystem: $status", "tasks.log");			
-	}
+	// 	// Log current state
+	// 	utilities::notate("\tSystem: $status", "tasks.log");			
+	// }
 
-	private function testSystem()
-	{
-		// Kill all scripts
-		$this->killSupervisord();		
+	// private function testSystem()
+	// {
+	// 	// Kill all scripts
+	// 	$this->killSupervisord();		
 
-		// Restart the application
-		$this->restartSupervisord();			
-	}	
+	// 	// Restart the application
+	// 	$this->restartSupervisord();			
+	// }	
 }	

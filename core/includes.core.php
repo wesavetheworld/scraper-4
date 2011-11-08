@@ -20,7 +20,10 @@
    	include('classes/utilities.class.php');
    	
 	// Include redis class
-	include('classes/redis.php'); 	   		
+	include('classes/redis.php'); 	
+	
+	// Include queue model
+	include('models/queue.model.php'); 		   		
     
 	// If notifo notifications are turned on
 	if(NOTIFO)
