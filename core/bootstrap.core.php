@@ -64,10 +64,10 @@ class bootstrap
 		require_once('core/includes.core.php');    		 				
 
 		// If this is a redis server
-		if($this->instanceType == "redis")
+		if($this->instanceType == "redis" || $this->instanceType == "boss")
 		{	
 			// If this is a overlord instance
-			if($this->instanceName == "theBoss")
+			if($this->instanceType == "boss")
 			{
 				// Assign the boss elastic ip to this instance
 				$this->assignIp(BOSS_IP);			
