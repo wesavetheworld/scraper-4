@@ -27,13 +27,11 @@ class migration
 	function __construct()
 	{
 		// Connect to serps redis db
-		$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
-
-		// Connect to proxies redis db
-		$this->proxiesDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);			
+		//$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		
 
 		// Establish DB connection
-	///	$this->MySQL = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);			
+		//$this->MySQL = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);					
 	}
 
 
@@ -71,12 +69,12 @@ class migration
 
 	// Select all proxies in the MySQL database and add them to a redis set
 	public function proxies()
-	{	
+	{					
 		// Include queue model
 		require_once('models/proxies.model.php'); 
-			
+
 		// Establish DB connection
-		//$this->proxiesDB = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
+		$this->proxiesMySQL = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
 
 		// Create new proxy object
 		$this->proxies = new proxies();
@@ -86,7 +84,6 @@ class migration
 
 		// Get a list of sources based on worker types
 		$this->proxies->sources = $this->queue->listSources();
-
 				
 		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
 		$sql = "SELECT 
@@ -100,7 +97,7 @@ class migration
 				ORDER BY 
 					RAND()";
 
-		$result = mysql_query($sql, $this->proxiesDB) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
+		$result = mysql_query($sql, $this->proxiesMySQL) or utilities::reportErrors("ERROR ON proxy select: ".mysql_error());	
 
 		//$this->proxies->sources = $this->proxies->();
 
