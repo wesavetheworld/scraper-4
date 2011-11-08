@@ -244,7 +244,7 @@ class bootstrap
 	// Run redis database
 	private function runRedis()
 	{
-		exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/core/redis.config.conf");
+		exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/config/redis.config.conf");
 	}	
 
 	// Associate an elastic ip with an instance
