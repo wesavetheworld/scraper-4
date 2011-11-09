@@ -1,4 +1,4 @@
-<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
+<?php if(!defined('ROUTER')) exit("Go away. Pass commands through router.php\n");
 
 // ******************************* INFORMATION ******************************//
 
@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************// 
 
-class bootstrap 
+class bootstrap
 {    
 	// Will contain the ec2 instance id
 	private $instanceId = false;
@@ -97,7 +97,7 @@ class bootstrap
 		$this->editSupervisord(); 		
 
 		// Start system monitor and detach from script
-		exec("php /home/ec2-user/scraper/hub.php tasks monitor &> /dev/null &");
+		exec("php /home/ec2-user/scraper/router.php monitor &> /dev/null &");
 
 		// Bootstrap complete
 		exit("Server successfully configured\n");
@@ -226,7 +226,7 @@ class bootstrap
 		if(strpos($changes, "Updating") !== FALSE)
 		{
 			// Create a new bootstrap for new code
-			exec('php /home/ec2-user/scraper/server.php bootstrap &> /dev/null &');
+			exec('php /home/ec2-user/scraper/router.php bootstrap &> /dev/null &');
 
 			// Kill current bootstrap
 			exit('new code. restarting...');
@@ -286,8 +286,8 @@ class bootstrap
 		{
 			// Add instance specific daemon info
 			$supervisord = "[program:Boss]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php boss\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php boss\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
@@ -295,8 +295,8 @@ class bootstrap
 			
 			// Add instance specific daemon info
 			$supervisord.= "[program:Cron]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php cron\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php cron\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
@@ -307,8 +307,8 @@ class bootstrap
 		{
 			// Add workers for ranking updates
 			$supervisord = "[program:Bing]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker bing %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker bing %(process_num)s\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=10\n"; 
@@ -319,8 +319,8 @@ class bootstrap
 		{	
 			// Add workers for hourly google updates
 			$supervisord = "[program:GoogleHourly]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker google %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker google %(process_num)s\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -331,8 +331,8 @@ class bootstrap
 		{
 			// Add workers for domain pagerank
 			$supervisord = "[program:prDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker pr %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker pr %(process_num)s\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -340,8 +340,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:backlinksDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker backlinks %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker backlinks %(process_num)s\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -349,8 +349,8 @@ class bootstrap
 			
 			// Add workers for domain pagerank
 			$supervisord.= "[program:alexaDaily]\n";
-			$supervisord.= "command=php /home/ec2-user/scraper/server.php worker alexa %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker alexa %(process_num)s\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=5\n"; 
@@ -361,7 +361,7 @@ class bootstrap
 		{	
 			// // Add workers for hourly google updates
 			// $supervisord = "[program:GoogleNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords google new\n";
+			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker keywords google new\n";
 			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
@@ -370,7 +370,7 @@ class bootstrap
 
 			// // Add workers for daily google updates
 			// $supervisord.= "[program:BingNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/server.php worker keywords bing new\n";
+			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker keywords bing new\n";
 			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
@@ -379,7 +379,7 @@ class bootstrap
 			
 			// // Add workers for domain pagerank
 			// $supervisord.= "[program:prNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains pr new\n";
+			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains pr new\n";
 			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
@@ -388,7 +388,7 @@ class bootstrap
 			
 			// // Add workers for domain pagerank
 			// $supervisord.= "[program:backlinksNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains backlinks new\n";
+			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains backlinks new\n";
 			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
@@ -397,7 +397,7 @@ class bootstrap
 			
 			// // Add workers for domain pagerank
 			// $supervisord.= "[program:alexaNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/server.php worker domains alexa new\n";
+			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains alexa new\n";
 			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
@@ -411,4 +411,7 @@ class bootstrap
 		// Run supervisord daemon
 		exec("/usr/bin/supervisord &> /dev/null &");
 	}	
-}			
+}	
+
+// ********************************** END **********************************// 
+		

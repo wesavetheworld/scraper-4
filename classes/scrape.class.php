@@ -1,4 +1,20 @@
-<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
+<?php if(!defined('ROUTER')) exit("Go away. Pass commands through router.php\n");
+
+// ******************************* INFORMATION *******************************//
+
+// ***************************************************************************//
+//  
+// ** SCRAPER - The class used for scraping with cURL 
+// ** 
+// ** @author	Joshua Heiland <thezenman@gmail.com>
+// ** @date	 2011-06-21
+// ** @access	private
+// ** @param	
+// ** @return	constants for application 
+//  	
+// ***************************************************************************//
+
+// ********************************** START **********************************//
 
 class scraper
 {
@@ -74,14 +90,7 @@ class scraper
 
 	function __construct()
 	{      
-		// Include keywords data model
-		require_once('models/proxies.model.php'); 
-
 	}	
-
-	// ===========================================================================// 
-	// ! Public Methods                                                           //
-	// ===========================================================================//
 	
 	// ===========================================================================// 
 	// ! Public Methods                                                           //
@@ -146,44 +155,6 @@ class scraper
 		curl_multi_close($this->mh);
 	}
 	
-	// ===========================================================================// 
-	// ! Private Methods                                                          //
-	// ===========================================================================// 
-	
- 	// Select proxies for scraping from the database
-	// private function proxyDatabaseSelect($totalProxies = 1, $blockedProxies = false)
-	// {
-	// 	// Instantiate new proxies object
-	// 	$this->proxies = new proxies($this->engine);
-
-	// 	// Select proxies for use
-	// 	$this->selectProxies($totalProxies, $blockedProxies);
-
-	// } 
-	
-	// // Make sure there are enough proxies for a request not to get proxies blocked
-	// private function proxyStrain($proxies, $uses)
-	// {   
-	// 	// Get the amount of proxies being used
-	// 	$proxyTotal = count($proxies);
-		
-	// 	return true;
-	// } 
-	
-	// *****************************************************************************
-	// ** proxySelect
-	// ** Grab a least used proxy from the database
-	// **
-	// ** @return		Nothing
-	// *****************************************************************************
-	// private function proxySelect()
-	// {
-	// 	// Set current proxy
-	// 	$this->proxy = $this->proxies[$this->proxyKey];   
-		
-	// 	// Increment key
-	// 	$this->proxyKey++;
-	// }
 	
 	// *****************************************************************************
 	// ** curlAgentRandom
@@ -347,22 +318,6 @@ class scraper
 		// Increment the amount of total scrapes
 		$this->scrapesTotal++;
 
-			// echo "url: ".$this->urls[$i]."\n";
-			// echo "proxy: ".$this->proxies[$i]['proxy']."\n";
-			// echo "header: ".$this->results[$i]['httpInfo']['http_code']."\n"; 	
-			// if($this->results[$i]['curlError'])
-			// {
-			// 	echo "code: ".$this->results[$i]['httpInfo']['http_code'];
-			// 	echo " | error: ".$this->results[$i]['curlError']."\n";
-			// }
-			// else
-			// {
-			// 	echo "code: ".$this->results[$i]['httpInfo']['http_code']."\n";
-			// 	echo "url :".$this->urls[$i]."\n";				
-			// 	echo "proxy :".$this->proxies[$i]."\n";				
-			// }
-			//echo "\n";
-
 		// If curl returned an error 
 		if($this->results[$i]['curlError'])
 		{
@@ -484,52 +439,7 @@ class scraper
 		} 	
 	}
 	
-	// Update proxies
-	// private function updateProxies()
-	// {  
-	// 	utilities::notate("updating proxy section", "scrape.log");			
-
-	// 	// Update blocked proxies
-	// 	if(count($this->proxiesBlocked) > 0)
-	// 	{
-	// 		$query = "UPDATE proxies SET blocked_".$this->engine." = 1 WHERE proxy IN('".implode("','", $this->proxiesBlocked)."')";
-	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
-
-	//  		// Log current state
-	// 		utilities::notate("Proxies blocked: ".count($this->proxiesBlocked), "scrape.log");			
-	// 	}
-		
-	// 	// Update blocked proxies
-	// 	if(count($this->proxiesDenied) > 0)
-	// 	{
-	// 		$query = "UPDATE proxies SET status = 'disabled' WHERE proxy IN('".implode("','", $this->proxiesDenied)."')";
-	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
-
-	//  		// Log current state
-	// 		utilities::notate("Proxies denied: ".count($this->proxiesDenied), "scrape.log");				
-	// 	}
-		
-	// 	// Update timed out proxies
-	// 	if(count($this->proxiesTimeout) > 0)
-	// 	{
-	// 		$query = "UPDATE proxies SET timeouts = timeouts + 1 WHERE proxy IN('".implode("','", $this->proxiesTimeout)."')";
-	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
-
-	//  		// Log current state
-	// 		utilities::notate("Proxies timedout: ".count($this->proxiesTimeout), "scrape.log");				
-	// 	}	
-		
-	// 	// Update timed out proxies
-	// 	if(count($this->proxiesDead) > 0)
-	// 	{
-	// 		$query = "UPDATE proxies SET dead = dead + 1 WHERE proxy IN('".implode("','", $this->proxiesDead)."')";
-	// 		mysql_query($query) or utilities::reportErrors("ERROR ON proxy update: ".mysql_error());
-
-	//  		// Log current state
-	// 		utilities::notate("Proxies dead: ".count($this->proxiesDead), "scrape.log");				
-	// 	}						
-	// }
+	
 }
 
-
-?>
+// ********************************** END **********************************// 

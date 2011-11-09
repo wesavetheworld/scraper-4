@@ -22,6 +22,7 @@ class cronCore
 	// Include dependencies on instantiation
 	function __construct()
 	{
+		$this->cron();
 	}	
 
 	// ===========================================================================// 
@@ -29,7 +30,7 @@ class cronCore
 	// ===========================================================================//
 	
 	// The main loop that acts as a daemon
-	public function daemon()
+	public function cron()
 	{	
 		// Loop forever if not development client
 		while(TRUE && !defined("DEV"))
@@ -117,7 +118,7 @@ class cronCore
 	private function run($controller, $options = false)
 	{
 		// Build the command to execute
-		$command = "php hub.php $controller $options > /dev/null 2>/dev/null &";
+		$command = "php router.php $controller $options > /dev/null 2>/dev/null &";
 
 		// Execute command given
 		exec($command);	

@@ -19,10 +19,6 @@ class workerCore
 	// When script starts
 	function __construct()
 	{
-		// Worker include files
-		include('controllers/worker.php');
-		include('config/worker.config.php');
-
 		// Instantiate a new job queue object
 		$this->queue = new queue();			
 
@@ -88,3 +84,5 @@ class workerCore
 		$worker->work($job);
 	}	
 }	
+
+// ********************************** END **********************************// 

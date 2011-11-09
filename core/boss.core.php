@@ -1,4 +1,4 @@
-<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
+<?php  if(!defined('ROUTER')) exit('No direct script access allowed\n');
 
 // ******************************* INFORMATION ******************************//
 
@@ -22,7 +22,10 @@ class bossCore
 	function __construct()
 	{
 		// Instantiate a new job queue object
-		$this->queue = new queue();			
+		$this->queue = new queue();	
+
+		// Run the Boss
+		$this->theBoss();				
 	}	
 
 	// ===========================================================================// 
@@ -30,7 +33,7 @@ class bossCore
 	// ===========================================================================//
 	
 	// The main loop that acts as a daemon
-	public function daemon()
+	public function theBoss()
 	{	
 		// Declare job types explicitly to avoid issues where workers are off line (like bing)
 		$workerTypes = array('google', 'bing', 'pr', 'backlinks', 'alexa');
@@ -44,7 +47,6 @@ class bossCore
 				// Loop for as long as this type of worker is available and there are jobs
 				while(($worker = $this->queue->hire($source)) && ($job = $this->queue->checkForJobs($source)))
 				{
-					echo "good\n";
 					// Assign the job to the worker
 					$this->queue->assignWork($source, $worker, $job);
 				}	
@@ -55,3 +57,5 @@ class bossCore
 		}
 	}
 }	
+
+// ********************************** END **********************************// 
