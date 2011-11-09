@@ -28,6 +28,15 @@ ini_set('memory_limit', '-1');
 
 // Set php time limit to unlimited
 set_time_limit(0);	
+
+// Define core file to use to use
+define("CORE", $_SERVER['argv'][1]);	
+
+// If no core provided, bitch
+if(!CORE)
+{
+	echo "No core specified\n";
+}
 		
 // ===========================================================================// 
 // ! Boss server settings                                                     //

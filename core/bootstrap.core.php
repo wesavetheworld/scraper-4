@@ -17,7 +17,7 @@
 
 // ********************************** START **********************************// 
 
-class bootstrap
+class bootstrapCore
 {    
 	// Will contain the ec2 instance id
 	private $instanceId = false;

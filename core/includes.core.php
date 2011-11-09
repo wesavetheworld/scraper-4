@@ -4,7 +4,7 @@
 
 // **************************************************************************//
 //  
-// ** INCLUDES - A single file to manage all of the app includes
+// ** require_onceS - A single file to manage all of the app require_onces
 // ** 
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
@@ -21,85 +21,89 @@
 // ! Configuration files             	                                      //
 // ===========================================================================//
 
-// Instance specific settings (created in bootstrap at boot)
-include('config/instance.config.php');
-
 // Environment settings and DB credentials
-include('config/environment.config.php');	
+require_once('config/environment.config.php');	
 
 // All of the settings required for all controllers
-include('config/settings.config.php'); 
+require_once('config/settings.config.php'); 
+
+// Don't load instance config since bootstrap will write that file
+if(CORE != "bootstrap")
+{
+	// Instance specific settings (created in bootstrap at boot)
+	require_once('config/instance.config.php');	
+}
 
 // If this is a worker instance
 if(CORE == "worker")
 {
-	// Include worker settings
-	include('config/scraping.config.php');												
+	// require_once worker settings
+	require_once('config/scraping.config.php');												
 }
 
 // ===========================================================================// 
 // ! Required classes                	                                      //
 // ===========================================================================//
 
-// Include all utility static functions
-include('classes/utilities.class.php');
+// require_once all utility static functions
+require_once('classes/utilities.class.php');
 	
-// Include redis class
-include('classes/redis.class.php'); 
+// require_once redis class
+require_once('classes/redis.class.php'); 
 
 // If this is a worker instance
 if(CORE == "worker")
 {
-	// Include worker controller
-	include('classes/worker.class.php');	
+	// require_once worker controller
+	require_once('classes/worker.class.php');	
 
-	// Include serp parsing class
-	include('classes/parse.class.php');
+	// require_once serp parsing class
+	require_once('classes/parse.class.php');
 
-	// Include scraping class
-	include('classes/scrape.class.php'); 													
+	// require_once scraping class
+	require_once('classes/scrape.class.php'); 													
 }
 
 // If notifo notifications are turned on
 if(NOTIFO)
 {
-	// Include notifo api class
-	include('classes/notifo.class.php');  
+	// require_once notifo api class
+	require_once('classes/notifo.class.php');  
 }	
 
 // If Twilio notifications are turned on
 if(TWILIO)
 {
-	// Include twilio api class
-	include('classes/twilio.class.php');
+	// require_once twilio api class
+	require_once('classes/twilio.class.php');
 } 
 
 // ===========================================================================// 
 // ! Required data models              	                                      //
 // ===========================================================================//
 
-// Include queue model
-include('models/queue.model.php'); 
+// require_once queue model
+require_once('models/queue.model.php'); 
 
 // If this is a worker instance
 if(CORE == "worker" )
 {
-	// Include proxy data model
-	include('models/proxies.model.php');
+	// require_once proxy data model
+	require_once('models/proxies.model.php');
 	
-	// Include domains data model
-	include('models/domains.model.php');	
+	// require_once domains data model
+	require_once('models/domains.model.php');	
 	
-	// Include keywords data model
-	include('models/keywords.model.php');													
+	// require_once keywords data model
+	require_once('models/keywords.model.php');													
 }
 
 // ===========================================================================// 
 // ! Main core file to load          	                                      //
 // ===========================================================================//	
 
-// Include required core file
-include("core/".CORE.".core.php");
+// require_once required core file
+require_once("core/".CORE.".core.php");
 
 // ********************************** END **********************************// 
 	
