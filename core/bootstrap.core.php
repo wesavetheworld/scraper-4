@@ -61,7 +61,7 @@ class bootstrapCore
 		$this->saveType();	 
 		
 		// Include all required core files (Dependencies and helper classes)
-		require_once('core/includes.core.php');    		 				
+		include('core/includes.core.php');    		 				
 
 		// If this is a redis server
 		if($this->instanceType == "redis" || $this->instanceType == "boss")
@@ -231,6 +231,9 @@ class bootstrapCore
 			// Kill current bootstrap
 			exit('new code. restarting...');
 		}
+
+		// Set the status of the server to updated
+		define("UPDATED", TRUE);		
 	}
 
 	// ===========================================================================// 
