@@ -364,6 +364,16 @@ class tasks
 		utilities::notate("\Serps migrated to redis", "tasks.log"); 		
 	}
 
+	// Migrate any new keywords and domains
+	private function serpsNew()
+	{
+		// Copy serps from MySQL to redis
+		$this->migration->serps('new');		
+
+		// Log current state
+		utilities::notate("\Serps new migrated to redis", "tasks.log"); 		
+	}
+
 	//Transfer keywords from MySQL to redis
 	private function migrateSerpsOld()
 	{

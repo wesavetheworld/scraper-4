@@ -63,11 +63,38 @@ class migration
 		
 	}	
 
+	// Migrate all serps from MySQL to redis
+	public function serps($new = false)
+	{		
+	 	// Set constants needed for keyword model
+	 	define('ENGINE', 'google');
+	 	define('MIGRATION', TRUE);
+	 	define('ONLY_USER', false);
+	 	define('SCHEDULE', false);
+
+	 	// If migrating only new keywords
+	 	if($new)
+	 	{
+		 	define('TASK', "rankingsNew"); 		
+	 	}
+	 	// Get all keywords
+	 	else
+	 	{
+ 		 	define('TASK', false);	
+	 	}
+
+	 	// Select all items from db to update
+		$keywords = new keywordsMySQL(); 		
+		
+		// Migrate keywords from MySQL to redis
+		$keywords->migrateToRedis();	
+	}
+
 	// ===========================================================================// 
 	// ! Proxy stuff                                                              //
 	// ===========================================================================//
 
-	// Select all proxies in the MySQL database and add them to a redis set
+	// Migrate all proxies from MySQL to redis
 	public function proxies()
 	{					
 		// Include queue model
@@ -166,10 +193,11 @@ class keywordsMySQL
 	
 	private function dbConnect()
 	{
-		echo "connecting to db";
+		echo "connecting to db\n";
 
 		// Establish DB connection
 		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+
 	}  
 
 	// ===========================================================================// 
@@ -178,16 +206,13 @@ class keywordsMySQL
 	
 	public function migrateToRedis()
 	{
-		// Include redis class
-		require_once('classes/redis.php');
-
 		// Instantiate new redis object
-		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		$this->boss = new redis(BOSS_IP, BOSS_PORT);	
 		
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
 		{	
-
 			// if($keyword->keyword == $last)
 			// {
 			// 	// Get score for keyword
@@ -203,8 +228,8 @@ class keywordsMySQL
 
 			$member = $keyword->keyword_id;				
 
-			$this->redis->zadd('google:'.$keyword->schedule, microtime(true) - (60 * 60), $member);	
-			$this->redis->zadd('bing:daily', microtime(true), $member);	
+			$this->boss->zadd('google:'.$keyword->schedule, microtime(true) - (60 * 60), $member);	
+			$this->boss->zadd('bing:daily', microtime(true), $member);	
 			
 			$last = $keyword->keyword;		
 	
@@ -218,7 +243,7 @@ class keywordsMySQL
 			$hash['notifications'] = $keyword->notifications;
 
 			// Create proxy hash		
-			$this->redis->hmset('k:'.$keyword->keyword_id, $hash);			
+			$this->serps->hmset('k:'.$keyword->keyword_id, $hash);		
 		}				
 	}
 
@@ -257,7 +282,7 @@ class keywordsMySQL
 				// Update the keywords select as checked out
 				$this->setCheckOut('1');    	
 			}	
-			
+
 			return $keywords;
 		}	
 	} 
@@ -350,6 +375,15 @@ class keywordsMySQL
 		
 		if(defined("MIGRATION") == true)
 		{
+			// If selecting only new keywords
+			if(TASK == "rankingsNew")
+			{
+			 	$new =   "AND
+							keywords.google_status = '0000-00-00 00:00:00'
+						  AND
+							keywords.check_out != 1";		
+			}	
+					
 			// Construct query
 			$query =   "SELECT
 							keywords.user_id,
@@ -366,9 +400,10 @@ class keywordsMySQL
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE
 							keywords.status !='suspended'
+						$new							
 						ORDER BY
 							keywords.keyword";
-		}		 			
+		}		
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
@@ -377,7 +412,7 @@ class keywordsMySQL
 		if(mysql_num_rows($result) > 0)
 		{
 			// Loop through results
-			while($keyword = mysql_fetch_object($result, 'keyword'))
+			while($keyword = mysql_fetch_object($result, 'keywordMySQL'))
 			{   
 				// Test keyword for all required fields
 				if($keyword->keywordTest())

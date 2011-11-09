@@ -26,14 +26,17 @@ class keywords
 {
 	function __construct($keywords)
 	{
-		// Instantiate new redis object
-		$this->redis = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		// Connect to serps db
+		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		
+		// Connect to boss db
+		$this->boss = new redis(BOSS_IP, BOSS_PORT);		
 		
 		// Loop through items		
 		foreach($keywords as $keyword)
 		{
  			// Select keyword hash from redis		
-			$hash = $this->redis->hGetAll("k:$keyword");
+			$hash = $this->serps->hGetAll("k:$keyword");
 					
 			// Create new keyword object from redis hash
 			$this->keywords->$keyword = new keyword($hash);
@@ -43,16 +46,99 @@ class keywords
 		}
 	}
 
+	// ===========================================================================// 
+	// ! Updating redis keyword data                                              //
+	// ===========================================================================//	
+
 	// Update a keywords hash in redis
 	public function update($keyword_id, $key)
 	{
+		// Update mysql serp data
+		$this->updateMySQL($this->keywords->$keyword_id);
+		
 		// Update keyword hash
-		$this->redis->hmset("k:$keyword_id", array('lastRankGoogle'=>$this->keywords->$keyword_id->rank,
+		$this->serps->hmset("k:$keyword_id", array('lastRankGoogle'=>$this->keywords->$keyword_id->rank,
 												   'found'=>$this->keywords->$keyword_id->found));
 
 		// Update job list score
-		$this->redis->zAdd($key, time(), $keyword_id);		
+		$this->boss->zAdd($key, time(), $keyword_id);		
 	}
+
+	// ===========================================================================// 
+	// ! Updating MySQL keyword data                                              //
+	// ===========================================================================//
+	
+	// Update keywords table with new keyword info
+	public function updateMySQL($keyword)
+	{
+		// If no connection to the database yet(worker)
+		if(!$this->db)
+		{
+			// Establish DB connection
+			$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);		
+		}
+ 
+		// If this keyword has no ranking yet
+		if(!isset($keyword->rank) && $keyword->rank != '0')
+		{   
+			// Skip keyword
+			continue;
+		}
+
+		// If keyword's tracking data was updated successfully
+		if($this->updateRanking($keyword))
+		{
+			// If updating google and the keyword
+			if($keyword->engine == "google")
+			{
+				// Save any notifications for keyword
+				$setNotify = " notify = '".$keyword->notify."',";
+			}
+
+			//echo "SAVE NOTIFY for $keyword->keyword_id: $keyword->notify \n";
+
+			// Update keywords table with update time and notifications
+			$query = "	UPDATE 
+							keywords 
+						SET 
+					  		$setNotify 
+					  		".$keyword->engine."_status = NOW(),  
+					  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
+							calibrate = '".$keyword->calibrate."',
+							check_out = 0,
+					  		time = NOW(), 
+					  		date = '".date("Y-m-d")."' 
+					  WHERE 
+					  	keyword_id='".$keyword->keyword_id."'";  
+										  
+			// If keyword update successful
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error());			
+		}	
+	} 
+	
+	// Update existing row in tracking table with new rankings
+	private function updateRanking($keyword)
+	{	      		
+		$query = "	INSERT INTO 
+						tracking 
+						(keyword_id,".$keyword->engine.",
+						".$keyword->engine."_match,
+						dupecount,
+						date) 
+			      VALUES (
+						'".$keyword->keyword_id."',
+						'".$keyword->rank."',
+						'".mysql_real_escape_string($keyword->found)."',
+						'0',
+						'".date("Y-m-d")."'
+			            )
+			      ON DUPLICATE KEY UPDATE 
+			      		".$keyword->engine." = '".$keyword->rank."', 
+					 	".$keyword->engine."_match = '".$keyword->found."'";			          				 	
+		
+		// Execute update query
+		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
+	}  	
 }
 
 // ===========================================================================// 
