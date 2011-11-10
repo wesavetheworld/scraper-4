@@ -27,9 +27,6 @@ require_once("core/".CORE.".core.php");
 // ===========================================================================// 
 // ! Configuration files             	                                      //
 // ======================n====================================================//
-	
-// All of the settings required for all controllers
-require_once('config/settings.config.php'); 
 
 // Only include files after bootstrapping 
 if(defined("UPDATED") || CORE != "bootstrap")
@@ -40,6 +37,9 @@ if(defined("UPDATED") || CORE != "bootstrap")
 	// Environment settings and DB credentials
 	require_once('config/environment.config.php');	
 }		
+
+// All of the settings required for all controllers
+require_once('config/settings.config.php'); 
 
 // If this is a worker instance
 if(CORE == "worker")
@@ -69,6 +69,19 @@ if(CORE == "worker")
 
 	// require_once scraping class
 	require_once('classes/scrape.class.php'); 													
+}
+
+// If this is the boss and a task is provided
+if(CORE == "boss" && TASK)
+{
+	// Include tasks class
+	require_once('classes/tasks.class.php');
+
+	if(TASK == "migrate")
+	{
+		// Include migration data model
+		require_once('models/migration.model.php'); 		
+	}
 }
 
 // If notifo notifications are turned on

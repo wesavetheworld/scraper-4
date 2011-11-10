@@ -1,4 +1,4 @@
-<?php  if(!defined('HUB')) exit('No direct script access allowed\n');
+<?php  if(!defined('CORE')) exit('No direct script access allowed\n');
  
 // ******************************* INFORMATION *******************************//
 
@@ -22,17 +22,18 @@ class tasks
 	// Include dependencies on instantiation	
  	function __construct()
 	{    
-		//Include settings for ranking collecting
-		require_once('config/rankings.config.php'); 
+		// //Include settings for ranking collecting
+		// require_once('config/rankings.config.php'); 
 
-		// Include keywords data model
-		require_once('models/keywords.model.php'); 		
+		// // Include keywords data model
+		// require_once('models/keywords.model.php'); 		
 
-		// Include proxy data model
-		require_once('models/proxies.model.php'); 
+		// // Include proxy data model
+		// require_once('models/proxies.model.php'); 
 		
-		// Include the amazon SDK
-		require_once('classes/amazon/sdk.class.php');							  
+		// // Include the amazon SDK
+		// require_once('classes/amazon/sdk.class.php');	
+		
 	}
 	  
 	// ===========================================================================// 
@@ -203,17 +204,15 @@ class tasks
 		utilities::notate("\tSchedule check complete", "tasks.log");	   
 	}   
 
-	
-
 	// ===========================================================================// 
 	// ! Data migration methods                                                   //
 	// ===========================================================================//
 	
-	private function migrate($data)
-	{		
-		// Include proxy data model
-		require_once('models/migration.model.php'); 
-		
+	public function migrate()
+	{	
+		// Get the data source to migrate	
+		$data = $_SERVER['argv'][3];
+
 		// Instantiate new proxies object
 		$this->migration = new migration();	
 		

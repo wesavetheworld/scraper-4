@@ -46,25 +46,6 @@ ini_set('memory_limit', '-1');
 set_time_limit(0);	
 
 // ===========================================================================// 
-// ! Worker settings                                                         //
-// ===========================================================================//
-
-// Set the data model to be used	
-define("SOURCE", $_SERVER['argv'][2]);
-
-// If worker number is non-zero
-if($_SERVER['argv'][3])
-{			
-	// Set worker id for the job queue	
-	define("WORKER_ID", $_SERVER['argv'][3]);
-}	
-// If worker id is "0"
-else
-{
-	define("WORKER_ID", "0");
-}		
-
-// ===========================================================================// 
 // ! Notifo API                                                               //
 // ===========================================================================//	
                        
@@ -101,5 +82,37 @@ define("TWILIO", FALSE);
 // 
 // // API text mobile numbers
 // define("TWILIO_API_NOTIFY_MOBILE", serialize(array("6263941441")));	 
+
+// ===========================================================================// 
+// ! Worker argument settings                                                 //
+// ===========================================================================//
+
+if(INSTANCE_TYPE == "worker")
+{
+	// Set the data model to be used	
+	define("SOURCE", $_SERVER['argv'][2]);
+
+	// If worker number is non-zero
+	if($_SERVER['argv'][3])
+	{			
+		// Set worker id for the job queue	
+		define("WORKER_ID", $_SERVER['argv'][3]);
+	}	
+	// If worker id is "0"
+	else
+	{
+		define("WORKER_ID", "0");
+	}	
+}
+
+// ===========================================================================// 
+// ! Boss argument settings                                                   //
+// ===========================================================================//
+
+if(INSTANCE_TYPE == "boss")
+{
+	// Define the task, if one was provided	
+	define("TASK", $_SERVER['argv'][2]);
+}
 
 // ********************************** END **********************************// 

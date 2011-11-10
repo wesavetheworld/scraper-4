@@ -5,6 +5,7 @@
 // **************************************************************************//
 //  
 // ** BOSS - Monitors redis for work to be done and assigns it to available workers
+// ** also, specific tasks can be passed to it to perform like data migration
 // ** 
 // ** @author	Joshua Heiland <thezenman@gmail.com>
 // ** @date	 2011-11-7
@@ -24,8 +25,18 @@ class bossCore
 		// Instantiate a new job queue object
 		$this->queue = new queue();	
 
-		// Run the Boss
-		$this->theBoss();				
+		// If a specific task was provided
+		if(TASK)
+		{
+			// Perform the task.
+			$this->runTask(TASK);		
+		}
+		// Default behavior - BE THE BOSS!!
+		else
+		{
+			// Run the Boss
+			$this->theBoss();		
+		}
 	}	
 
 	// ===========================================================================// 
@@ -33,7 +44,7 @@ class bossCore
 	// ===========================================================================//
 	
 	// The main loop that acts as a daemon
-	public function theBoss()
+	private function theBoss()
 	{	
 		// Declare job types explicitly to avoid issues where workers are off line (like bing)
 		$workerTypes = array('google', 'bing', 'pr', 'backlinks', 'alexa');
@@ -55,6 +66,19 @@ class bossCore
 			echo "check complete\n";
 			sleep(3);
 		}
+	}
+
+	// ===========================================================================// 
+	// ! Boss tasks                                                               //
+	// ===========================================================================//	
+
+	private function runTask($task)
+	{	
+		// Instantiate a new tasks object
+		$do = new tasks();
+
+		// Perform the task
+		$do->$task();
 	}
 }	
 
