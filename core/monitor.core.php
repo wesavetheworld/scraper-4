@@ -59,10 +59,7 @@ class monitorCore
 	private function obey($instruction)
 	{
 		if($instruction == 'reset')
-		{		
-			// Change this workers status in the job queue
-			//$this->queue->status(INSTANCE_NAME.":".WORKER_ID, $this->workerList, '0');	
-
+		{			
 			// Restart the application
 			$this->restartSupervisord();
 		}

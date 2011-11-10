@@ -4,7 +4,7 @@ This is a complete php data mining application that utilizes multiple simultaneo
 #Application design
 
 ###How to use it
-Every aspect of the app is controlled from command line by passing commands to the "router.php", like so:
+Every aspect of the app is controlled from command line by passing commands to "router.php", like so:
 
  ````
  php router.php bootstrap
