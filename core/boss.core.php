@@ -1,4 +1,4 @@
-<?php  if(!defined('ROUTER')) exit('No direct script access allowed\n');
+<?php if(!defined('CORE')) exit("Go away. Pass commands through router.php\n");
 
 // ******************************* INFORMATION ******************************//
 

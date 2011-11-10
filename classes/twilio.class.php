@@ -1,4 +1,4 @@
-<?php if(!defined('ROUTER')) exit("Go away. Pass commands through router.php\n");
+<?php if(!defined('CORE')) exit("Go away. Pass commands through router.php\n");
     /*
     Copyright (c) 2009-2010 Twilio, Inc.
 
