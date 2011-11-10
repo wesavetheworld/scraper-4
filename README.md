@@ -40,9 +40,11 @@ Redis is used for all exchange of data. It runs the job queue, messaging system 
 Every server that runs this application will launch a monitoring script on boot.  The system monitor subscribes to redis channels for all servers, it's type of server, and it's specific channel. All servers can be sent commands in real time via the redis prompt. Available commands are:
 
 Kills and restarts supervisord
-    publish monitor:[type] reset
-
+````
+publish monitor:[type] reset
+````
 Kills supervisord
+   
     publish monitor:[type] stop
 
 Kill supervisord then reboot instance
