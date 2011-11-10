@@ -93,7 +93,7 @@ class bootstrapCore
 		elseif($this->instanceName == "google1" || $this->instanceName == "google1Dev")
 		{	
 			// Assign the worker elastic ip to this instance
-			$this->assignIp(WORKER_IP);					
+			$this->assignIp(GOOGLE_IP);					
 		}	
 		
 		// Set up which core daemon supervisord will controll

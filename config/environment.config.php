@@ -32,8 +32,8 @@ if(defined("DEV"))
 	// Redis boss database number
 	define("BOSS_DB", 0);		
 
-	// The AWS elastic ip for the worker 1 server
-	define('WORKER_IP', '184.72.55.252');	
+	// The AWS elastic ip for the google 1 server
+	define('GOOGLE_IP', '184.72.55.252');	
 }	
 // else production environment
 else
@@ -47,8 +47,8 @@ else
 	// Redis boss database number
 	define("BOSS_DB", 0);			
 
-	// The AWS elastic ip for the worker 1 server
-	define('WORKER_IP', '50.18.180.36');		
+	// The AWS elastic ip for the google 1 server
+	define('GOOGLE_IP', '50.18.180.36');		
 }					
 
 // ===========================================================================// 
