@@ -1,8 +1,9 @@
 #Introduction
 This is a complete php data mining application that utilizes multiple simultaneous cURL connections (it's fast). It was written to run on EC2 across multiple instances. Each task (boss, worker, databse, etc..) is designed to exist on a separate instance.
 
-#Application design - how it all works
-Every aspect of the app is controlled from command line and starts at the "router.php" file. Commands are passed to the router telling the app what to do, like so:
+#Application design
+###How to use it
+Every aspect of the app is controlled from command line by passing commands to the "router.php", like so:
 
  ````
  php router.php bootstrap
@@ -17,6 +18,17 @@ Every aspect of the app is controlled from command line and starts at the "route
 ####Self updating
 The first function run during bootstrap pulls the latest revision from git. If newer code was pulled, a new bootstrap process is started and the current one ended. So the easiest way to update the multi-server application is to simply reboot all of the instances.
 
+####Self awareness
+In the AWS control panel, you can assign "tags" to an instance. During the bootstrap process, the app will retrieve it's tags and save them to a config file.
+
+####Doing stuff
+Based on the tags retrieved aboved, it will write to the supervisord config file, setting which tasks will be deamonized and how many processes of each type should be run in parallel.
+
+####Supervisord
+The last step of bootstrapping is to start supervisord(http://supervisord.org/). Supervisord will load it's config file, which now contains the commands specific for the current instance type, and run those processess.  If for any reason those processes die, supervisord will relaunch them,
+
+###Core Daemons
+For every type of action there is a core daemmon that will be run. As the name suggests, they are never ending daemonized scripts that typically just loop on forever firing off events based on a pub/sub event or time based event. Everything else is basically about supporting these, as they are the "core" of the application.
 
 #Redis
 Redis is used for all exchange of data. It runs the job queue, messaging system between servers, and stores all data collected by the app.
