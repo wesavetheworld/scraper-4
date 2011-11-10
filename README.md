@@ -31,10 +31,10 @@ The last step of bootstrapping is to start [supervisord](http://supervisord.org/
 
 ---------------------------------------
 ###Core Daemons
-For every type of action there is a core daemmon that will be run. As the name suggests, they are never ending daemonized scripts that typically just loop on forever firing off events based on a pub/sub event or time based event. Everything else is basically about supporting these, as they are the "core" of the application.
+For every type of action there is a core daemmon that will be run. As the name suggests, they are never ending daemonized scripts that typically just loop on forever firing off events based on [pub/sub](http://redis.io/topics/pubsub) or time based events. Everything else is basically about supporting these, as they are the "core" of the application.
 
 #Redis
-Redis is used for all exchange of data. It runs the job queue, messaging system between servers, and stores all data collected by the app.
+[Redis](http://redis.io) is used for all exchange of data. It runs the job queue, messaging system between servers, and stores all data collected by the app.
 
 ###Sever monitoring messaging system
  Boostratp will launch a server monitoring daemon.  The monitoring daemon subscribes to redis channels for all servers, it's type of server, and it's specific channel. All servers can be sent commands in real time via the redis prompt. Available commands are:
