@@ -31,14 +31,9 @@ require_once("core/".CORE.".core.php");
 // All of the settings required for all controllers
 require_once('config/settings.config.php'); 
 
-echo "checking...";
-echo "core: ".CORE." updated: ".UPDATED."\n";
-
 // Only include files after bootstrapping 
-if(CORE != "bootstrap" && !defined("UPDATED"))
+if(defined("UPDATED") || CORE != "bootstrap")
 {
-	echo "ok Im in!\n";
-
 	// Instance specific settings (created in bootstrap at boot)
 	require_once('config/instance.config.php');		
 			
