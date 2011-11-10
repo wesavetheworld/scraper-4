@@ -27,7 +27,7 @@ require_once("core/".CORE.".core.php");
 echo "checking...";
 echo "core: ".CORE." updated: ".UPDATED."\n";
 // Only include files after bootstrapping 
-if(CORE != "bootstrap" && !defined("UPDATED"))
+if((CORE != "bootstrap") && !defined("UPDATED"))
 {
 	echo "ok Im in!\n";
 	// ===========================================================================// 
