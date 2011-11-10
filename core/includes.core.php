@@ -24,9 +24,11 @@
 // require_once required core file
 require_once("core/".CORE.".core.php");
 
+echo "checking...\n";
 // Only include files after bootstrapping 
 if(CORE != "bootstrap" && !defined("UPDATED"))
 {
+	echo "ok Im in!\n";
 	// ===========================================================================// 
 	// ! Configuration files             	                                      //
 	// ===========================================================================//

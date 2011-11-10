@@ -37,6 +37,12 @@ class bootstrapCore
 		// Check repo for any new revisions
 		$this->updateApp();
 
+		// Set the status of the server to updated
+		define("UPDATED", TRUE);	
+		
+		// Include all required core files (Dependencies and helper classes)
+		include('core/includes.core.php');  		
+
 		// Create a new amazon connection		
 		$this->amazon();
 		
@@ -58,10 +64,7 @@ class bootstrapCore
 		$this->getInstanceType();
 
 		// Save all server settings to config files
-		$this->saveType();	 
-		
-		// Include all required core files (Dependencies and helper classes)
-		include('core/includes.core.php');    		 				
+		$this->saveType();	   		 				
 
 		// If this is a redis server
 		if($this->instanceType == "redis" || $this->instanceType == "boss")
@@ -230,10 +233,7 @@ class bootstrapCore
 
 			// Kill current bootstrap
 			exit('new code. restarting...');
-		}
-
-		// Set the status of the server to updated
-		define("UPDATED", TRUE);		
+		}			
 	}
 
 	// ===========================================================================// 
