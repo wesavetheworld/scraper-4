@@ -3,10 +3,10 @@ This is a complete php data mining application that utilizes multiple simultaneo
 
 #Application design - how it all works
 Every aspect of the app is controlled from command line and starts at the "router.php" file. Commands are passed to the router telling the app what to do, like so:
-	 php router.php bootstrap
-	 php router.php boss
-	 php router.php worker google
-	 etc...
+ ````php router.php bootstrap
+ php router.php boss
+ php router.php worker google
+ etc...````
 
 ###Bootstrapping
  Each instance runs the app on boot, issuing the command "php path/to/app/router.php bootstrap" from server location "/etc/rc.local". If the location of the app on the server changes, the command in rc.local needs to be updated as well as the path used in the bootstrap core file. When the bootstrap core runs, it will use the aws api to determine what type of server it is, based on instance tags, and run the correct core daemon for it's type (redis,client,worker:google,worker:bing etc).
