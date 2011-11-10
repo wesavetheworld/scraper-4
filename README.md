@@ -13,13 +13,27 @@ Every aspect of the app is controlled from command line by passing commands to t
  ````
 * * *
 
+test here 
+
 ***
+
+test here 
+
 
 *****
 
+test here 
+
+
 - - -
 
+test here 
+
+
 ---------------------------------------
+
+test here 
+
 ###Bootstrapping
  Each instance runs the app on boot, issuing the command "php path/to/app/router.php bootstrap" from server location "/etc/rc.local". If the location of the app on the server changes, the command in rc.local needs to be updated as well as the path used in the bootstrap core file. When the bootstrap core runs, it will use the aws api to determine what type of server it is, based on instance tags, and run the correct core daemon for it's type (redis,client,worker:google,worker:bing etc).
 
