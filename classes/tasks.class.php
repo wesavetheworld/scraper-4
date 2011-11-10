@@ -232,44 +232,14 @@ class tasks
 	
 	// Migrate keywords from MySQL to redis
 	private function serps()
-	{
+
+		// Only new keywords should be provided if command found
+		$new = $_SERVER['argv'][3];
+
 		// Copy serps from MySQL to redis
-		$this->migration->serps();		
+		$this->migration->serps($new);		
 
 		// Log current state
 		utilities::notate("\Serps migrated to redis", "tasks.log"); 		
-	}
-
-	// Migrate any new keywords and domains
-	private function serpsNew()
-	{
-		// Copy serps from MySQL to redis
-		$this->migration->serps('new');		
-
-		// Log current state
-		utilities::notate("\Serps new migrated to redis", "tasks.log"); 		
-	}
-
-	//Transfer keywords from MySQL to redis
-	private function migrateSerpsOld()
-	{
-		// Include keywords data model
-	 	require_once('models/keywords.model.php'); 	
-	 	
-	 	// Set constants needed for keyword model
-	 	define('ENGINE', 'google');
-	 	define('MIGRATION', TRUE);
-	 	define('ONLY_USER', false);
-	 	define('TASK', false);
-	 	define('SCHEDULE', false);
-
-	 	// Select all items from db to update
-		$keywords = new keywords(); 		
-		
-		// Migrate keywords from MySQL to redis
-		$keywords->migrateToRedis();
-
-		// Log current state
-		utilities::notate("\tMigration complete", "tasks.log"); 		
-	}		
+	}	
 }	
