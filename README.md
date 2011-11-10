@@ -11,7 +11,15 @@ Every aspect of the app is controlled from command line by passing commands to t
  php router.php worker google
  etc...
  ````
+* * *
 
+***
+
+*****
+
+- - -
+
+---------------------------------------
 ###Bootstrapping
  Each instance runs the app on boot, issuing the command "php path/to/app/router.php bootstrap" from server location "/etc/rc.local". If the location of the app on the server changes, the command in rc.local needs to be updated as well as the path used in the bootstrap core file. When the bootstrap core runs, it will use the aws api to determine what type of server it is, based on instance tags, and run the correct core daemon for it's type (redis,client,worker:google,worker:bing etc).
 
@@ -25,7 +33,7 @@ In the AWS control panel, you can assign "tags" to an instance. During the boots
 Based on the tags retrieved aboved, it will write to the supervisord config file, setting which tasks will be deamonized and how many processes of each type should be run in parallel.
 
 ####Supervisord
-The last step of bootstrapping is to start supervisord(http://supervisord.org/). Supervisord will load it's config file, which now contains the commands specific for the current instance type, and run those processess.  If for any reason those processes die, supervisord will relaunch them,
+The last step of bootstrapping is to start [supervisord](http://supervisord.org/). Supervisord will load it's config file, which now contains the commands specific for the current instance type, and run those processess.  If for any reason those processes die, supervisord will relaunch them,
 
 ###Core Daemons
 For every type of action there is a core daemmon that will be run. As the name suggests, they are never ending daemonized scripts that typically just loop on forever firing off events based on a pub/sub event or time based event. Everything else is basically about supporting these, as they are the "core" of the application.
