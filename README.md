@@ -1,5 +1,3 @@
-![Alt text](http://assets.zendesk.com/system/logos/2001/7476/sescout-small-head.png?1316705839)
-
 #Introduction
 This is a complete php data mining application that utilizes multiple simultaneous cURL connections (it's fast). It was written to run on EC2 across multiple instances. Each task (boss, worker, databse, etc..) is designed to exist on a separate instance.
 
