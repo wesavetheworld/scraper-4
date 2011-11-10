@@ -403,9 +403,7 @@ class keywordsMySQL
 							keywords.status !='suspended'
 						$new	
 						LIMIT
-							10						
-						ORDER BY
-							keywords.keyword";
+							10";
 		}		
 																								
 		// Execute query and return results			
