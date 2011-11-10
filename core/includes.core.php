@@ -27,11 +27,11 @@ if(CORE != "bootstrap" && !defined("UPDATED"))
 	// Instance specific settings (created in bootstrap at boot)
 	require_once('config/instance.config.php');	
 		
-	// Environment settings and DB credentials
-	require_once('config/environment.config.php');	
-
 	// All of the settings required for all controllers
-	require_once('config/settings.config.php'); 	
+	require_once('config/settings.config.php'); 
+			
+	// Environment settings and DB credentials
+	require_once('config/environment.config.php');		
 }
 
 // If this is a worker instance

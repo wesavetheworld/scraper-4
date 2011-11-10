@@ -36,6 +36,15 @@ define('NOTATION', TRUE);
 // Folder used for logs
 define("LOG_DIRECTORY", "logs/"); 
 
+// Turn off php notices
+error_reporting(E_ALL ^ E_NOTICE);
+
+// Set system php memory limit to unlimited
+ini_set('memory_limit', '-1');	
+
+// Set php time limit to unlimited
+set_time_limit(0);	
+
 // ===========================================================================// 
 // ! Worker settings                                                         //
 // ===========================================================================//

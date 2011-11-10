@@ -33,7 +33,13 @@ include('core/includes.core.php');
 
 // ===========================================================================// 
 // ! Route to correct core daemon                                             //
-// ===========================================================================// 	
+// ===========================================================================// 
+
+// If no core provided, bitch
+if(!CORE)
+{
+	exit("No core specified\n");
+}	
 
 // Define the core class to instantiate
 $class = CORE."Core";
