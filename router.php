@@ -23,7 +23,7 @@
 // ===========================================================================//
 
 // Checked for in all othere files to prevent direct access   
-define('CORE', $_SERVER['argv'][1]));	
+define('CORE', $_SERVER['argv'][1]);	
 
 // Set working directory for correct file includes etc 
 chdir(dirname($_SERVER['argv'][0]));
