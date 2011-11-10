@@ -3,9 +3,14 @@ This is a complete php data mining application that utilizes multiple simultaneo
 
 #Application design - how it all works
 Every aspect of the app is controlled from command line and starts at the "router.php" file. Commands are passed to the router telling the app what to do, like so:
- ````php router.php bootstrap
+
+ ````
+ php router.php bootstrap
+ 
  php router.php boss
+
  php router.php worker google
+
  etc...````
 
 ###Bootstrapping
