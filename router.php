@@ -19,7 +19,7 @@
 // ********************************** START **********************************// 
 
 // ===========================================================================// 
-// ! Define the core to use (core == purpose/actions)                         //
+// ! Define the core to use (core == purpose/action)                         //
 // ===========================================================================//
 
 // Checked for in all othere files to prevent direct access   
