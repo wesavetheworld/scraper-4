@@ -61,7 +61,7 @@ if(defined("DEV"))
 else
 {
 	// The AWS elastic ip for the client server
-	define('BOSS_IP', '50.18.104.82');
+	define('BOSS_IP', '');
 
 	// Redis listening port
 	define("BOSS_PORT", 6379);
