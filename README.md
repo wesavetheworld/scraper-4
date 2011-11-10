@@ -33,6 +33,17 @@ The last step of bootstrapping is to start [supervisord](http://supervisord.org/
 ###Core Daemons
 For every type of action there is a core daemmon that will be run. As the name suggests, they are never ending daemonized scripts that typically just loop on forever firing off events based on [pub/sub](http://redis.io/topics/pubsub) or time based events. Everything else is basically about supporting these, as they are the "core" of the application.
 
+####boss.core
+The boss
+####worker.core
+the worker
+####monitor.core
+waits for messages
+####cron.core
+manages all time-based events
+####manual.core
+all events manually fired by either the command line or cron
+
 #Redis
 [Redis](http://redis.io) is used for all exchange of data. It runs the job queue, messaging system between servers, and stores all data collected by the app.
 
