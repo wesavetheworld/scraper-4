@@ -290,7 +290,7 @@ class bootstrapCore
 			// Add instance specific daemon info
 			$supervisord = "[program:Boss]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php boss\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
@@ -299,7 +299,7 @@ class bootstrapCore
 			// Add instance specific daemon info
 			$supervisord.= "[program:Cron]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php cron\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
@@ -365,7 +365,7 @@ class bootstrapCore
 			// // Add workers for hourly google updates
 			// $supervisord = "[program:GoogleNew]\n";
 			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker keywords google new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
 			// $supervisord.= "numprocs=5\n"; 
@@ -374,7 +374,7 @@ class bootstrapCore
 			// // Add workers for daily google updates
 			// $supervisord.= "[program:BingNew]\n";
 			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker keywords bing new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
 			// $supervisord.= "numprocs=5\n"; 
@@ -383,7 +383,7 @@ class bootstrapCore
 			// // Add workers for domain pagerank
 			// $supervisord.= "[program:prNew]\n";
 			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains pr new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
 			// $supervisord.= "numprocs=5\n"; 
@@ -392,7 +392,7 @@ class bootstrapCore
 			// // Add workers for domain pagerank
 			// $supervisord.= "[program:backlinksNew]\n";
 			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains backlinks new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
 			// $supervisord.= "numprocs=5\n"; 
@@ -401,7 +401,7 @@ class bootstrapCore
 			// // Add workers for domain pagerank
 			// $supervisord.= "[program:alexaNew]\n";
 			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains alexa new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/data/logs/".$this->instanceType.".log\n";
+			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
 			// $supervisord.= "autostart=true\n";
 			// $supervisord.= "autorestart=true\n";
 			// $supervisord.= "numprocs=5\n"; 
