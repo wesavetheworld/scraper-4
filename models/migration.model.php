@@ -75,12 +75,12 @@ class migration
 	 	// If migrating only new keywords
 	 	if($new)
 	 	{
-		 	define('TASK', "rankingsNew"); 		
+		 	define('NEW_ONLY', TRUE); 		
 	 	}
 	 	// Get all keywords
 	 	else
 	 	{
- 		 	define('TASK', false);	
+		 	define('NEW_ONLY', FALSE); 		
 	 	}
 
 	 	// Select all items from db to update
@@ -277,7 +277,7 @@ class keywordsMySQL
 			$this->total = count($this->keywordIds);			
 			
 			// If selecting new or keywords needing calibration
-			if(TASK == "rankingsNew")
+			if(NEW_ONLY)
 			{
 				// Update the keywords select as checked out
 				$this->setCheckOut('1');    	
@@ -376,8 +376,9 @@ class keywordsMySQL
 		if(defined("MIGRATION") == true)
 		{
 			// If selecting only new keywords
-			if(TASK == "rankingsNew")
+			if(NEW_ONLY)
 			{
+				echo "added\n";
 			 	$new =   "AND
 							keywords.google_status = '0000-00-00 00:00:00'
 						  AND
@@ -400,7 +401,9 @@ class keywordsMySQL
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE
 							keywords.status !='suspended'
-						$new							
+						$new	
+						LIMIT
+							10						
 						ORDER BY
 							keywords.keyword";
 		}		

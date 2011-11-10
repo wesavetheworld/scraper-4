@@ -232,9 +232,9 @@ class tasks
 	
 	// Migrate keywords from MySQL to redis
 	private function serps()
-
+	{
 		// Only new keywords should be provided if command found
-		$new = $_SERVER['argv'][3];
+		$new = $_SERVER['argv'][4];
 
 		// Copy serps from MySQL to redis
 		$this->migration->serps($new);		
