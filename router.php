@@ -19,11 +19,15 @@
 // ********************************** START **********************************// 
 
 // ===========================================================================// 
-// ! Set server path and load needed files                                    //
+// ! Define the core to use (core == purpose/actions)                         //
 // ===========================================================================//
 
 // Checked for in all othere files to prevent direct access   
-define('CORE', $_SERVER['argv'][1]);	
+define('CORE', $_SERVER['argv'][1]);if(!CORE){exit("No core specified\n");}	
+
+// ===========================================================================// 
+// ! Set server path and load needed files                                    //
+// ===========================================================================//
 
 // Set working directory for correct file includes etc 
 chdir(dirname($_SERVER['argv'][0]));
@@ -34,12 +38,6 @@ include('core/includes.core.php');
 // ===========================================================================// 
 // ! Route to correct core daemon                                             //
 // ===========================================================================// 
-
-// If no core provided, bitch
-if(!CORE)
-{
-	exit("No core specified\n");
-}	
 
 // Define the core class to instantiate
 $class = CORE."Core";
