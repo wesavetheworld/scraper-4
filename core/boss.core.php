@@ -55,11 +55,10 @@ class bossCore
 				// Loop for as long as this type of worker is available and there are jobs
 				while(($worker = $this->queue->hire($source)) && ($job = $this->queue->checkForJobs($source)))
 				{
+					
 					// Assign the job to the worker
 					$this->queue->assignWork($source, $worker, $job);
 				}	
-
-				echo "worker: $worker | job: $job\n";
 			}
 
 			echo "check complete\n";

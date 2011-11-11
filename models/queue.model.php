@@ -80,16 +80,11 @@ class queue
 		{
 			$key = "$source:$schedule";
 
-			echo "\t key: $key\n";
-
 			// Get the score range to search based on key name
 			$scoreLimit = $this->getScoreRange($key);
 
 			// Select a range of proxies ordered by last block 
-			$items = $this->serpsDB->zRangeByScore($key, 0, $scoreLimit, false, array(0, 100));
-
-			echo "limit: $scoreLimit\n";
-			print_r($items);
+			$items = $this->bossDB->zRangeByScore($key, 0, $scoreLimit, false, array(0, 100));
 
 			// If items were found in the db that need updating
 			if($items)

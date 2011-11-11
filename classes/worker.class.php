@@ -95,7 +95,12 @@ class worker
 	 	require_once("models/$class.model.php"); 
 	 	
 		// Instantiate new object
-		$this->items = new $class($job->items);	 			
+		$this->items = new $class($job->items);	
+		
+		echo "this:\n";
+		print_r($this->items);
+		
+		die(); 			
 	}
 
 	private function setModel($source)
