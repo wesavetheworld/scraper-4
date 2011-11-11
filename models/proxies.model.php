@@ -26,7 +26,7 @@ class proxies
 	public $key;
 
 	// All sources the proxies are used for
-	public $sources = array('google', 'bing', 'pr', 'alexa', 'backlinks');
+	public $sources;
 
 	// Contains the detailed proxy arrays
 	public $proxies = array();
@@ -45,7 +45,7 @@ class proxies
 		$this->engine = $engine;
 
 		// Set redis proxy queue key
-		$this->key = "proxies:".$this->engine;		
+		$this->key = "proxies:".$this->engine;			
 	}
 
 	// Run when script ends

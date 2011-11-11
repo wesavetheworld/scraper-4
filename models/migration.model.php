@@ -110,7 +110,7 @@ class migration
 		$this->queue = new queue();
 
 		// Get a list of sources based on worker types
-		$this->proxies->sources = $this->queue->listSources();
+		$this->proxies->sources = $this->queue->sources;
 
 		// If no sources returned
 		if(!$this->proxies->sources)
