@@ -84,7 +84,7 @@ class proxies
 	 		$this->redis->watch($this->key);
 
 	 		// If there are enough proxies to select for the job
-	 		if($this->redis->zCount($this->key, 0, microtime(true)) >= $totalProxies)
+	 		if($this->redis->zCount($this->key, 0, time()) >= $totalProxies)
 	 		{
 	 			// Start a redis transaction
 	 			$this->redis->multi();
@@ -132,12 +132,12 @@ class proxies
 		if($blocked)
 		{
 			// Micro time in one hour (when the proxy can be used next) 
-			$score = microtime(true) + PROXY_WAIT_BLOCKED;
+			$score = time() + PROXY_WAIT_BLOCKED;
 		}
 		elseif(defined("PROXY_WAIT_USE"))
 		{	
 			// Time in 1 minute (when the proxy can be used next)
-			$score = microtime(true) + PROXY_WAIT_USE;
+			$score = time() + PROXY_WAIT_USE;
 		}	
 		// For newly added proxies
 		else
@@ -198,7 +198,7 @@ class proxies
 	// Count proxies currently available for use
 	public function checkAvailable($engine = "google")
 	{
-	 	$score = microtime(true);
+	 	$score = time();
 
 		$this->working = $this->redis->zCount("proxies:".$engine, 0, $score);		
 
@@ -208,9 +208,9 @@ class proxies
 	// Count proxies currently blocked 
 	public function checkBlocked($engine = "google")
 	{
-	 	$now = microtime(true) + PROXY_WAIT_USE;
+	 	$now = time() + PROXY_WAIT_USE;
 
-	 	$future = microtime(true) + PROXY_WAIT_BLOCKED;
+	 	$future = time() + PROXY_WAIT_BLOCKED;
 
 		$this->blocked = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
@@ -220,9 +220,9 @@ class proxies
 	// Count proxies currently resting(forced delay between uses)
 	public function checkResting($engine = "google")
 	{
-	 	$now = microtime(true);
+	 	$now = time();
 
-	 	$future = microtime(true) + PROXY_WAIT_USE;
+	 	$future = time() + PROXY_WAIT_USE;
 
 		$this->resting = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 

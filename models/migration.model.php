@@ -234,8 +234,8 @@ class keywordsMySQL
 
 			$member = $keyword->keyword_id;				
 
-			$this->boss->zadd('google:'.$keyword->schedule, microtime(true) - (60 * 60), $member);	
-			$this->boss->zadd('bing:daily', microtime(true), $member);	
+			$this->boss->zadd('google:'.$keyword->schedule, time() - (60 * 60), $member);	
+			$this->boss->zadd('bing:daily', time(), $member);	
 			
 			$last = $keyword->keyword;		
 	
