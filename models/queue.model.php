@@ -31,6 +31,9 @@ class queue
 	// The group the worker belongs too	
 	public $workerGroup;
 
+	// Sources/queue types
+	public $sources;
+
 	// ===========================================================================// 
 	// ! Opening and closing functions                                            //
 	// ===========================================================================//
@@ -42,7 +45,10 @@ class queue
 		$this->bossDB = new redis(BOSS_IP, BOSS_PORT);	
 
 		// Connect to the serps server
-		$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);
+		
+		// Get the array of sources/queue types		
+		$this->sources = json_decode(QUEUE_SOURCES);	
 	}
 
 	// Run when script ends
@@ -242,20 +248,20 @@ class queue
 	// ===========================================================================//
 
 	// Return every worker type checked in
-	public function getWorkerTypes()
-	{
-		// Get all of the keys for the workers
-		$keys = $this->bossDB->send_command("keys", "workers:*");
+	// public function getWorkerTypes()
+	// {
+	// 	// Get all of the keys for the workers
+	// 	$keys = $this->bossDB->send_command("keys", "workers:*");
 
-		// Loop through each worker type key
-		foreach($keys as $key)
-		{
-			// Remove the  "workers:" part of the key to leave just the type (i.e google,bing etc)
-			$types[] = str_replace("workers:", "", $key);
-		}
+	// 	// Loop through each worker type key
+	// 	foreach($keys as $key)
+	// 	{
+	// 		// Remove the  "workers:" part of the key to leave just the type (i.e google,bing etc)
+	// 		$types[] = str_replace("workers:", "", $key);
+	// 	}
 
-		return $types;
-	}
+	// 	return $types;
+	// }
 
 	// Get the status of each worker from a worker type
 	public function checkWorkers($type)
@@ -268,6 +274,9 @@ class queue
 
 		// Redis returns key=>value as "key","value","key"... so have to keep track of loop
 		$i = 0;
+
+		// Declare as array first incase no results are found
+		$workers = array();
 
 		// Loop through worker type retured
 		foreach($results as $result)

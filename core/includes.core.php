@@ -82,6 +82,11 @@ if(CORE == "boss" && TASK)
 		// Include migration data model
 		require_once('models/migration.model.php'); 		
 	}
+	elseif(TASK == "stats")
+	{
+		// Include proxy data model
+		require_once('models/proxies.model.php'); 	
+	}
 }
 
 // If notifo notifications are turned on

@@ -46,14 +46,11 @@ class bossCore
 	// The main loop that acts as a daemon
 	private function theBoss()
 	{	
-		// Declare job types explicitly to avoid issues where workers are off line (like bing)
-		$workerTypes = array('google', 'bing', 'pr', 'backlinks', 'alexa');
-
 		// Loop forever if not development client
 		while(TRUE)
 		{	
 			// Loop through each worker type		
-			foreach($workerTypes as $source)
+			foreach($this->queue->sources as $source)
 			{
 				// Loop for as long as this type of worker is available and there are jobs
 				while(($worker = $this->queue->hire($source)) && ($job = $this->queue->checkForJobs($source)))

@@ -241,5 +241,58 @@ class tasks
 
 		// Log current state
 		utilities::notate("\Serps migrated to redis", "tasks.log"); 		
+	}
+	
+	// ===========================================================================// 
+	// ! Application stats methods                                                //
+	// ===========================================================================//
+	
+	// public function stats()
+	// {   
+	// 	// Get the data source to migrate	
+	// 	$stats = $_SERVER['argv'][3];
+		
+	// 	// Call function for requested data source
+	// 	$this->$stats();	
+	// }	
+	
+	// Check that status of the workers
+	public function workerStats()
+	{
+		$this->queue = new queue();
+
+		foreach($this->queue->sources as $type)
+		{
+			$stats = $this->queue->checkWorkers("workers:".$type);
+
+			echo "Total $type: ".$stats['total']."\n";
+
+			foreach($stats['workers'] as $worker)
+			{
+				echo "\t$worker\n";
+			}
+
+			echo "\n";	
+		}
 	}	
+	
+	// Check the status of the proxies
+	public function proxyStats()
+	{
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->engine);
+
+		echo "Total proxies: ".$this->proxies->checkTotal('master')."\n";		
+
+		foreach($this->proxies->sources as $source)
+		{
+			echo "\t$source Available: ".$this->proxies->checkAvailable($source);		
+			echo " | Resting : ".$this->proxies->checkResting($source);		
+			echo " | Blocked : ".$this->proxies->checkBlocked($source);		
+			echo " | In use: ".$this->proxies->checkInUse($source);		
+			echo " | All unblocked at: ".$this->proxies->checkBlockTime($source)."\n";
+		}	
+
+		echo "\n";
+	}			
 }	
