@@ -399,7 +399,7 @@ class keywordsMySQL
 							keywords.status !='suspended'
 						$new	
 						AND
-							keywords.user_id = 65";
+							keywords.user_id = 1";
 		}		
 																								
 		// Execute query and return results			
