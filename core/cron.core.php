@@ -33,7 +33,7 @@ class cronCore
 	public function cron()
 	{	
 		// Loop forever if not development client
-		while(TRUE && !defined("DEV"))
+		while(TRUE)
 		{
 			// Log time for current task loop
 			utilities::notate("Actions at: ".date("H:i:s"), "clientd.log");
@@ -81,7 +81,8 @@ class cronCore
 	// Tasks that should be run daily
 	private function hourOne()
 	{	
-		
+		// Migrate all items (to account for removals)
+		$this->migrate();		
 	}	
 	
 	// Tasks that should be run hourly
@@ -105,26 +106,43 @@ class cronCore
 	// Tasks that should be run every minute
 	private function minuteAll()
 	{
-		
+		// Check for new items
+		$this->migrate('new');
+	}
+	
+	// ===========================================================================// 
+	// ! Supporting functions                                                     //
+	// ===========================================================================//
+	
+	// Check for new items in the db
+	private function migrate($new = false)
+	{
+		// If only migrating new items
+		if($new)
+		{
+			// Add a space for the command
+			$new = " $new";
+		}
+
+		// Tell boss to load migrate tool for only new items
+		$this->run("migrate serps$new");
 	}		
-
-
 	
 	// ===========================================================================// 
 	// ! Main daemon functions                                                    //
 	// ===========================================================================//	
 
 	// Execute bash command that detaches from daemon
-	private function run($controller, $options = false)
+	private function run($command)
 	{
 		// Build the command to execute
-		$command = "php router.php $controller $options > /dev/null 2>/dev/null &";
+		$command = "php router.php boss $command > /dev/null 2>/dev/null &";
 
 		// Execute command given
 		exec($command);	
 
 		// Log current command
-		utilities::notate("command: $controller $options", "clientd.log");		  		   	 				
+		utilities::notate("command: $command", "clientd.log");		  		   	 				
 	}
 
 	// Determine amount of time to wait before daemon loops again
