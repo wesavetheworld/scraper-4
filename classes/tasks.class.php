@@ -210,18 +210,18 @@ class tasks
 	
 	public function migrate()
 	{	
-		// Get the data source to migrate	
-		$data = $_SERVER['argv'][3];
-
 		// Instantiate new proxies object
 		$this->migration = new migration();	
+
+		// Define the migrate function to call	
+		$function = "migrate".ucwords($_SERVER['argv'][3]);
 		
 		// Call function for requested data source
-		$this->$data();	
+		$this->$function();	
 	}
 
 	// Migrate proxies from MySQL to redis
-	private function proxies()
+	private function migrateProxies()
 	{
 		// Copy proxies from MySQL to redis
 		$this->migration->proxies();
@@ -231,7 +231,7 @@ class tasks
 	}   
 	
 	// Migrate keywords from MySQL to redis
-	private function serps()
+	private function migrateSerps()
 	{
 		// Only new keywords should be provided if command found
 		$new = $_SERVER['argv'][4];
@@ -247,17 +247,18 @@ class tasks
 	// ! Application stats methods                                                //
 	// ===========================================================================//
 	
-	// public function stats()
-	// {   
-	// 	// Get the data source to migrate	
-	// 	$stats = $_SERVER['argv'][3];
+	// Route to a stats related method
+	public function stats()
+	{	
+		// Define the stats function to call	
+		$function = "stats".ucwords($_SERVER['argv'][3]);
 		
-	// 	// Call function for requested data source
-	// 	$this->$stats();	
-	// }	
+		// Call function for requested data source
+		$this->$function();	
+	}
 	
 	// Check that status of the workers
-	public function workerStats()
+	public function statsWorkers()
 	{
 		$this->queue = new queue();
 
@@ -277,7 +278,7 @@ class tasks
 	}	
 	
 	// Check the status of the proxies
-	public function proxyStats()
+	public function statsProxies()
 	{
 		// Instantiate new proxies object
 		$this->proxies = new proxies($this->engine);

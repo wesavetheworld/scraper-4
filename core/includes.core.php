@@ -82,7 +82,7 @@ if(CORE == "boss" && TASK)
 		// Include migration data model
 		require_once('models/migration.model.php'); 		
 	}
-	elseif(TASK == "proxyStats")
+	elseif(TASK == "stats")
 	{
 		// Include proxy data model
 		require_once('models/proxies.model.php'); 	

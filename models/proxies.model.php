@@ -40,6 +40,9 @@ class proxies
 	{  	
 		// Instantiate new redis object
 		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
+
+		// Get the array of sources/queue types		
+		$this->sources = json_decode(QUEUE_SOURCES);		
 				
 		// Set the engine for proxies
 		$this->engine = $engine;
