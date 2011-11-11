@@ -32,6 +32,7 @@ class cronCore
 	// The main loop that acts as a daemon
 	public function cron()
 	{	
+		exit();
 		// Loop forever if not development client
 		while(TRUE)
 		{
@@ -52,8 +53,8 @@ class cronCore
 				$this->hourOne();			
 			}
 
-			// The first min of every hour
-			if(date("i") == "00")
+			// The last min of every hour
+			if(date("i") == "59")
 			{
 				// Run all hourly tasks
 				$this->hourAll();
@@ -88,7 +89,8 @@ class cronCore
 	// Tasks that should be run hourly
 	private function hourAll()
 	{
-	
+		// Check update schedules
+		$this->run("checkQueueSchedules");
 	}
 	
 	// Taks that should be run every 10 minutes

@@ -295,6 +295,36 @@ class tasks
 
 		echo "\n";
 	}	
+
+	public function test()
+	{
+		$this->queue = new queue();
+		//$this->queue->fakeAdd();
+		//$this->queue->fakeCheckOut();
+		//$this->queue->fakeUpdate();
+		$this->queue->fakeOld();
+		//$this->queue->fakeCheck();
+	}
+
+	// Check that queue item update schedules are on track
+	public function checkQueueSchedules()
+	{
+		$this->queue = new queue();
+
+		// Count unupdated items
+		$alert = $this->queue->checkUpdateSchedules($source);
+
+		echo $alert;
+
+		die();
+
+		// If notifo is turned on and there is an alert
+		if($alert && NOTIFO)
+		{
+			// Send alert
+			tools::sendAlert($alert);
+		}
+	}	
 	
 	public function keywordStats()
 	{

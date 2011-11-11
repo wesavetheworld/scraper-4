@@ -92,13 +92,44 @@ class queue
 				// Build job array
 				$job['key'] = $key;
 				$job['source'] = $source;
-				$job['schedule'] = $schedule;
+				$job['schedule'] = $schedule;		
 				$job['items'] =  $items;
 
 				return $job;
 			}	
 		}	
 	}	
+
+	public function checkUpdateSchedules($source)
+	{
+		// Loop through all source queues
+		foreach($this->sources as $source)
+		{	
+			// Get schedule list for provided source
+			$schedules = $this->getSchedules($source);
+					
+			// Loop through available schedules for the item (hourly, daily)
+			foreach($schedules as $schedule)
+			{
+				$key = "$source:$schedule";
+
+				// Get the score range to search based on key name
+				$scoreLimit = $this->getScoreRange($key);	
+				
+				// Count how many items (excluding new) are behind schedule
+				$count = $this->bossDB->zCount($key, 1, $scoreLimit);
+
+				// If found behind schedule
+				if($count)
+				{
+					// Notify admin
+					$behind .= "$count unupdated for $key\n";
+				}					
+			}				
+		}	
+		
+		return $behind;		
+	}
 
 	// Check if any jobs need to be created
 	public function checkForJobsNew($source)
@@ -110,6 +141,8 @@ class queue
 		foreach($schedules as $schedule)
 		{
 			$key = "$source:$schedule";
+
+			echo "key: $key\n";
 
 			// Get the score range to search based on key name
 			$scoreLimit = $this->getScoreRange($key);
@@ -179,27 +212,6 @@ class queue
 		}
 	}	
 
-	public function getScoreRange($key)
-	{
-		// If it's an hourly key
-		if(strpos($key, "hourly"))
-		{
-			// Timestamp for the last second of last hour			
-			$endRange = new DateTime('last hour'); 
-			$endRange = strtotime($endRange->format('Y-m-d h').":59:59"); 			
-		}
-		// Else it's a daily key
-		else
-		{
-			// Timestamp for the last second of yesterday
-			$endRange = new DateTime('yesterday'); 
-			$endRange = strtotime($endRange->format('Y-m-d')." 23:59:59");   	
-		}
-		
-		// Search for scores between 0 and the last minute of last hour
-		return $endRange;
-	}	
-
 	// Send work to a worker
 	public function assignWork($source, $worker, $job)
 	{
@@ -230,7 +242,7 @@ class queue
 		foreach($job['items'] as $item)
 		{
 			// Build array for bulk sorted set update
-			$update[] = time() + (60 * 30);
+			$update[] = $this->setTime('checkout');
 			$update[] = $item;
 		}
 
@@ -276,18 +288,18 @@ class queue
 	// ! Data source management                                                   //
 	// ===========================================================================//		
 
-	// Add a new data source to the job queue system
-	public function addSource($source)
-	{
-		// Add source to db
-		$this->bossDB->sAdd("sources", $source);
-	}
+	// // Add a new data source to the job queue system
+	// public function addSource($source)
+	// {
+	// 	// Add source to db
+	// 	$this->bossDB->sAdd("sources", $source);
+	// }
 
-	// List all data sources used by the job queue
-	public function listSources()
-	{
-		return $this->bossDB->sMembers("sources");
-	}
+	// // List all data sources used by the job queue
+	// public function listSources()
+	// {
+	// 	return $this->bossDB->sMembers("sources");
+	// }
 
 	// ===========================================================================// 
 	// ! Message system (pub/sub)                                                 //
@@ -371,4 +383,64 @@ class queue
 
 		return array('total' => $total, 'workers' => $workers);
 	}
+
+	// ===========================================================================// 
+	// ! Score timestamp function                                                 //
+	// ===========================================================================//
+
+	public function fakeAdd()
+	{
+		$this->bossDB->zadd('google:hourly', 0, 123);	
+	}
+
+	public function fakeCheckOut()
+	{
+		$this->bossDB->zadd('google:hourly', $this->setTime('checkout'), 123);	
+	}	
+	
+	public function fakeUpdate()
+	{
+		$this->bossDB->zadd('google:hourly', time(), 123);	
+	}	
+
+	public function fakeCheck()
+	{
+		echo $this->getScoreRange("google:hourly")."\n";
+	}
+
+	public function fakeOld()
+	{
+		$this->bossDB->zadd('google:hourly', time() - (60 * 60), 123);	
+	}		
+
+	public function getScoreRange($key)
+	{
+		// If it's an hourly key
+		if(strpos($key, "hourly"))
+		{
+			// Timestamp for the last second of last hour			
+			$endRange = new DateTime('last hour'); 
+			$endRange = strtotime($endRange->format('Y-m-d H').":59:59"); 			
+		}
+		// Else it's a daily key
+		else
+		{
+			// Timestamp for the last second of yesterday
+			$endRange = new DateTime('yesterday'); 
+			$endRange = strtotime($endRange->format('Y-m-d')." 23:59:59");   	
+		}
+		
+		// Search for scores between 0 and the last minute of last hour
+		return $endRange;
+	}	
+	
+	// Calculate a time to return for a redis score
+	public function setTime($type)
+	{
+		if($type == 'checkout')
+		{
+			return time() + (60 * 30);
+		}
+		
+	}		
 }	
