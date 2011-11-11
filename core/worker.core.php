@@ -31,9 +31,6 @@ class workerCore
 		// Set redis worker type key
 		$this->queue->workerGroup = 'workers:'.SOURCE;
 
-		echo "source: ".$this->queue->workerGroup."\n";
-		die();
-
 		// Notify redis that this worker is alive
 		$this->queue->status('0');				
 

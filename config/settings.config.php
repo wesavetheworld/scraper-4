@@ -90,7 +90,7 @@ define("TWILIO", FALSE);
 // ! Worker argument settings                                                 //
 // ===========================================================================//
 
-if(INSTANCE_TYPE == "worker")
+if(CORE == "worker")
 {
 	// Set the data model to be used	
 	define("SOURCE", $_SERVER['argv'][2]);
