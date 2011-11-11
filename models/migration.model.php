@@ -101,7 +101,7 @@ class migration
 		require_once('models/proxies.model.php'); 
 
 		// Establish DB connection
-		$this->proxiesMySQL = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
+		//$this->proxiesMySQL = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
 
 		// Create new proxy object
 		$this->proxies = new proxies();
@@ -111,6 +111,12 @@ class migration
 
 		// Get a list of sources based on worker types
 		$this->proxies->sources = $this->queue->listSources();
+
+		// If no sources returned
+		if(!$this->proxies->sources)
+		{
+			die("no sources found\n");
+		}
 				
 		// Grab proxies with lowest 24 hour use counts and have not been blocked within the hour
 		$sql = "SELECT 
@@ -270,9 +276,9 @@ class keywordsMySQL
 				// Determine what type of results page to scrape for a keyword (10/100)
 				$keyword->setResultsCount();
 			}	
-
-		 	utilities::benchmark('keywords f: ');
-			 
+			
+			echo "keywords selected...\n";
+						 
 			// Get the total number of keywords selected
 			$this->total = count($this->keywordIds);			
 			
