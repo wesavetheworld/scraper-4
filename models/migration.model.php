@@ -101,7 +101,7 @@ class migration
 		require_once('models/proxies.model.php'); 
 
 		// Establish DB connection
-		//$this->proxiesMySQL = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
+		$this->proxiesMySQL = utilities::databaseConnect(PROXY_HOST, PROXY_USER, PROXY_PASS, PROXY_DB);
 
 		// Create new proxy object
 		$this->proxies = new proxies();
