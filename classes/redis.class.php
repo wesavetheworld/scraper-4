@@ -733,10 +733,14 @@ class redis
 	public function hMSet($key, $fields)
 	{
 		$args[] = $key;
-		foreach ($fields as $field => $value)
+		foreach($fields as $field => $value)
 		{
-			$args[] = $field;
-			$args[] = $value;
+			// If field isn't blank
+			if($field)
+			{
+				$args[] = $field;
+				$args[] = $value;
+			}	
 		}
 		return $this->__call('hMSet', $args);
 	}

@@ -234,10 +234,13 @@ class keywordsMySQL
 
 			$member = $keyword->keyword_id;				
 
-			$this->boss->zadd('google:'.$keyword->schedule, time() - (60 * 60), $member);	
-			$this->boss->zadd('bing:daily', time(), $member);	
+			$this->boss->zadd('google:'.$keyword->schedule, 0, $member);	
+			$this->boss->zadd('bing:daily', 0, $member);	
 			
 			$last = $keyword->keyword;		
+
+			// Reset hash
+			$hash = array();
 	
 			$hash['keyword_id'] = $keyword->keyword_id;
 			$hash['keyword'] = $keyword->keyword;
@@ -408,8 +411,8 @@ class keywordsMySQL
 						WHERE
 							keywords.status !='suspended'
 						$new	
-						LIMIT
-							10";
+						AND
+							keywords.user_id = 65";
 		}		
 																								
 		// Execute query and return results			

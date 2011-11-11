@@ -95,12 +95,7 @@ class worker
 	 	require_once("models/$class.model.php"); 
 	 	
 		// Instantiate new object
-		$this->items = new $class($job->items);	
-		
-		echo "this:\n";
-		print_r($this->items);
-		
-		die(); 			
+		$this->items = new $class($job->items);			
 	}
 
 	private function setModel($source)
@@ -354,9 +349,6 @@ class worker
 			// Generate the search page url 
 			$item->setSearchUrl($this->source);	
 
-			// print_r($item);
-			// die();
-
 			// If getting domain urls
 			if($this->model == "domains")
 			{ 			                     	
@@ -480,24 +472,10 @@ class worker
 		elseif($this->model != 'domains')
 		{    
   			// Load a valid saved search file as the source
-			//$search = file_get_contents($item->searchFile);
 		} 	
 		
 		return $search;
 	}
-
-	// Save search results to a file
-	public function searchSave($item, $content)
-	{   
-		// Set header information to be saved with output
-		$save  = "code: ".$content['httpInfo']['http_code'];
-		$save .= "\n size: ".$content['httpInfo']['size_download'];
-		$save .= "\n\n".$content['output'];
-		$save .= "\nthe end\n";
-		
-		// Save search results to a file
-		file_put_contents($item->searchFile, $save);		
-	} 
 	
 	// If a keyword just switch result amount (10/100)
 	public function calibration($keyword)

@@ -57,8 +57,7 @@ class keywords
 		$this->updateMySQL($this->keywords->$keyword_id);
 		
 		// Update keyword hash
-		$this->serps->hmset("k:$keyword_id", array('lastRankGoogle'=>$this->keywords->$keyword_id->rank,
-												   'found'=>$this->keywords->$keyword_id->found));
+		$this->serps->hmset("k:$keyword_id", array($this->lastRankName => $this->keywords->$keyword_id->rank));
 
 		// Update job list score
 		$this->boss->zAdd($key, time(), $keyword_id);		
@@ -89,7 +88,7 @@ class keywords
 		if($this->updateRanking($keyword))
 		{
 			// If updating google and the keyword
-			if($keyword->engine == "google")
+			if($keyword->source == "google")
 			{
 				// Save any notifications for keyword
 				$setNotify = " notify = '".$keyword->notify."',";
@@ -102,8 +101,8 @@ class keywords
 							keywords 
 						SET 
 					  		$setNotify 
-					  		".$keyword->engine."_status = NOW(),  
-					  		".$keyword->engine."_searches = '".serialize(array_keys($keyword->savedSearches))."',
+					  		".$keyword->source."_status = NOW(),  
+					  		".$keyword->source."_searches = '".serialize(array_keys($keyword->savedSearches))."',
 							calibrate = '".$keyword->calibrate."',
 							check_out = 0,
 					  		time = NOW(), 
@@ -112,7 +111,7 @@ class keywords
 					  	keyword_id='".$keyword->keyword_id."'";  
 										  
 			// If keyword update successful
-			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error());			
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error());		
 		}	
 	} 
 	
@@ -121,8 +120,8 @@ class keywords
 	{	      		
 		$query = "	INSERT INTO 
 						tracking 
-						(keyword_id,".$keyword->engine.",
-						".$keyword->engine."_match,
+						(keyword_id,".$keyword->source.",
+						".$keyword->source."_match,
 						dupecount,
 						date) 
 			      VALUES (
@@ -133,8 +132,8 @@ class keywords
 						'".date("Y-m-d")."'
 			            )
 			      ON DUPLICATE KEY UPDATE 
-			      		".$keyword->engine." = '".$keyword->rank."', 
-					 	".$keyword->engine."_match = '".$keyword->found."'";			          				 	
+			      		".$keyword->source." = '".$keyword->rank."', 
+					 	".$keyword->source."_match = '".$keyword->found."'";			          				 	
 		
 		// Execute update query
 		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING: ".mysql_error());
@@ -226,6 +225,16 @@ class keyword
 			$this->searchOffset = $this->searchPage.substr($this->resultCount, 1, 2);
 		}
 	}
+
+	// Set the last rank based on the current source
+	public function setLastRank()
+	{
+		// Which field in the object is the correct last rank
+		$this->lastRankName = "lastRank".ucwords($this->source);
+
+		// Set the last rank with the correct field
+		$this->lastRank = $this->{$this->lastRankName};		
+	}
 	
 	// Build the search engine results page for the keyword
 	public function setSearchUrl($source)
@@ -233,14 +242,17 @@ class keyword
 		// Set the data source (google,bing,pr etc)
 		$this->source = $source;
 
+		// Set the last rank
+		$this->setLastRank();
+
+		// Check the results count to get for the keyword
+		$this->setResultsCount();
+
 		// Get the current search hash 
 		$this->setSearchHash(); 
 		
 		// Check for a search page offset 
 		$this->setSearchOffset();
-		                          
-		// Set the location of the keyword's saved search file
-		$this->searchFile = SAVED_SEARCH_DIR.$this->searchHash.".html";
 		
 		if($this->source == "google")
 		{

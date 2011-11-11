@@ -95,7 +95,7 @@ else
 	define("DB_NAME_SERPS", "serps"); 		
 }	
 
-	// Database host
+	// // Database host
 	// define("DB_HOST", ":/Applications/MAMP/tmp/mysql/mysql.sock");
 
 	// // Database username
