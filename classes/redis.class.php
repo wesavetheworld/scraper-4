@@ -122,7 +122,7 @@ class redis
 
 			if(!$w)
 			{
-				echo "redis command failed. Trying again in 3 seconds...\n";
+				echo "redis command \"$command\" failed. Trying again in 3 seconds...\n";
 				sleep(3);
 				
 				// Establish a connection with redis
