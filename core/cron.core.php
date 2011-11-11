@@ -32,7 +32,6 @@ class cronCore
 	// The main loop that acts as a daemon
 	public function cron()
 	{	
-		exit();
 		// Loop forever if not development client
 		while(TRUE)
 		{
