@@ -60,7 +60,7 @@ class redis
 		// Loop until a connection to redis can be established
 		while(!$socket)
 		{		
-			$socket = fsockopen($this->host, $this->port, $errno, $errstr);
+			$socket = fsockopen($this->host, $this->port, $errno, $errstr, 1);
 			//if (!$socket) return $this->ReportError('Connection error: '.$errno.':'.$errstr, __LINE__);
 			
 			// If the connection was not established
