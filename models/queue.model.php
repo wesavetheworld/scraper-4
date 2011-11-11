@@ -100,6 +100,70 @@ class queue
 		}	
 	}	
 
+	// Check if any jobs need to be created
+	public function checkForJobsNew($source)
+	{
+		// Get schedule list for provided source
+		$schedules = $this->getSchedules($source);
+
+		// Loop through available schedules for the item (hourly, daily)
+		foreach($schedules as $schedule)
+		{
+			$key = "$source:$schedule";
+
+			// Get the score range to search based on key name
+			$scoreLimit = $this->getScoreRange($key);
+
+			echo "current time: ".date("h:i")." \n";
+
+			echo "next update at: ".date("h:i", $scoreLimit + (60 * 60) + 60)."\n";
+
+			$scoreLimit = 10000000000000000;
+
+			// Select a range of proxies ordered by last block 
+			$items = $this->bossDB->zRangeByScore($key, 0, $scoreLimit, TRUE, array(0, 100));
+		
+			$i = 0;
+
+			// Loop through worker type retured
+			foreach($items as $item)
+			{
+				// Worker name
+				if($i % 2 == 0)
+				{
+					//$worker = "$worker | p";
+					$keyword = "\t$item update at: ";
+				}
+				// Worker status
+				else
+				{
+					$keyword .= date("h:i", $item);
+
+					// Add worker stat to workers array
+					$results[] = $keyword;
+				}
+				$i++;
+			}
+
+			print_r($results);
+
+
+			die();
+
+			// If items were found in the db that need updating
+			if($items)
+			{
+				// Build job array
+				$job['key'] = $key;
+				$job['source'] = $source;
+				$job['schedule'] = $schedule;
+				$job['items'] =  $items;
+
+				return $job;
+			}	
+		}	
+	}	
+
 	// Based on the data source, determine the available update schedules
 	public function getSchedules($source)
 	{

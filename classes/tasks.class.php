@@ -294,5 +294,15 @@ class tasks
 		}	
 
 		echo "\n";
-	}			
+	}	
+	
+	public function keywordStats()
+	{
+		$this->queue = new queue();
+
+		foreach($this->queue->sources as $source)
+		{
+			print_r($this->queue->checkForJobsNew($source));
+		}
+	}		
 }	

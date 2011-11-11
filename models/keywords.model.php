@@ -102,7 +102,6 @@ class keywords
 						SET 
 					  		$setNotify 
 					  		".$keyword->source."_status = NOW(),  
-					  		".$keyword->source."_searches = '".serialize(array_keys($keyword->savedSearches))."',
 							calibrate = '".$keyword->calibrate."',
 							check_out = 0,
 					  		time = NOW(), 
