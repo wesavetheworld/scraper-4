@@ -35,167 +35,18 @@ class utilities
 			}  
 		}     	   			
     }    
-	
-	// Checks for system status file
-	public static function checkStatus()
-	{   
-		// If system status exists
-		if(file_exists(SYSTEM_STATUS))
-		{    
-			// Get file contents
-			$status = file_get_contents(SYSTEM_STATUS);
-		
-			// If the file contains data
-			if($status)
-			{   
-				// If system status says to kill yourself
-				if($status == "kill")
-				{				
-					// Log current state
-					utilities::notate("Kill switch flicked"); 
-				
-				  	// Finish execution
-					utilities::complete();		
-				}
-				elseif($status == "pause")
-				{
-					// Log current state
-					utilities::notate("System paused..."); 
-										
-					// Wait for 60
-					sleep(60);
-
-					// Check status again
-					utilities::checkStatus();
-				}
-			}
-		}
-	}  
-	
-	// Fork application into a new process
-	public static function fork()
-	{
-		// Fork current process
-		$pid = pcntl_fork();
-		
-		// If forking returned an error
-		if($pid == -1) 
-		{
-		     die('could not fork');
-		} 
-		// If parent
-		elseif($pid) 
-		{
-			// Return successful forking 
-			return true;
-		}	
-	}  
-    
-    
-      
-	
-	// When called, keeps track of execution time since last call
-	public static function benchmark($description = false, $log = false, $last = false, $reset = false, $return = false)
-	{
-		// Check benchmarking is turned on in the settings
-		if(BENCHMARK)
-		{
-			static $firstTime =  null;
-			static $lastTime = null;
-			
-			// If reset param passed
-			if($reset)
-			{   
-				// Reset the first time
-				$firstTime = null;
-				$lastTime = null;
-			}
-
-			$time = microtime(true); 
-			
-			if($lastTime == null)
-			{
-				$firstTime = $time;
-				$duration = "starting";
-			}
-			elseif($last)
-			{
-				$duration = $time - $firstTime;
-			}	
-			else
-			{	                                                                                        
-				// Using sprintf to parse E notation
-				$duration  = sprintf('%.16f', $time - $lastTime)." seconds ";
-								
-				$duration .= "(memory: ".utilities::byteConvert(memory_get_usage(true)).")";                  				
-			}	
-
-			$lastTime = $time;
-            
-			// If a description is provided but it's not a timeout check
-			if($description && $description != 'checkTimeOut')
-			{
-				// If returning data instead of printing it
-				if($return)
-				{
-					return $description.$duration."\n";
-				}
-
-				print $description.$duration."\n";
-			}  
-
-			// If a log file has been defined
-			if($log)
-			{
-				// Write to log file
-				utilities::log($description, $log);			
-			}				
-			
-			// If a request to check timeout status is found
-			if($description == 'checkTimeOut')
-			{
-				// Check if script has exceded max execution time yet
-				if(defined("MAX_EXECUTION_TIME") && !$last && $time - $firstTime >= MAX_EXECUTION_TIME)
-				{     
-					// Script has exceeded max time
-					return true;       
-				}  
-			}	
-		}
-	}  
 	 
 	// Return notation for the current part of the script
 	public static function notate($description, $log = false)
 	{   
-		print $description."\n";
-		return true;
-
 		// If notation is turned on
 		if(NOTATION)
 		{   
 			// Print description to screen
 			print $description."\n";
-
-			// If a log file has been defined
-			if($log)
-			{
-				// Write to log file
-				utilities::log($description, $log);			
-			}	
 		}			
 	}
 
-	// Log status to log file
-	public static function log($data, $logFile)
-	{	
-		// If a log file has been defined
-		if($logFile)
-		{
-			// Open the log file for writing
-			//file_put_contents(LOG_DIRECTORY.$logFile, $data."\n", FILE_APPEND);					
-		}	
-	}
-	
 	// Convert large bytes into readable versions
 	public static function byteConvert($bytes)
 	{
@@ -243,69 +94,69 @@ class utilities
 	// Function used to notify admin of any errors that occur
 	public static function reportErrors($error = false, $sendAllErrors = false)
 	{                
-		// Declare function static variables
-		static $errorCount = 0;             
-		static $errors = "";
+		// // Declare function static variables
+		// static $errorCount = 0;             
+		// static $errors = "";
 
-		// If an error message was passed
-		if($error)
-		{
-			// Display errors
-			echo $error."\n";
+		// // If an error message was passed
+		// if($error)
+		// {
+		// 	// Display errors
+		// 	echo $error."\n";
 			
-			// Write to log file
-			utilities::log($error, 'client.log');			  
+		// 	// Write to log file
+		// 	utilities::log($error, 'client.log');			  
 			
-			// Add new error to error list
-			$errors .= $error;			  	
+		// 	// Add new error to error list
+		// 	$errors .= $error;			  	
 
-			// Increment error count
-			$errorCount++;			
-		}
+		// 	// Increment error count
+		// 	$errorCount++;			
+		// }
 		
-		// If the erros should be sent now
-		if($sendAllErrors)  
-		{  	  		    
-			// If notifo reporting is turned on in the settings
-			if(NOTIFO && $errors)
-			{                                     
-				// Instantiate notifo only once
-				$notifo = new Notifo_API;   
+		// // If the erros should be sent now
+		// if($sendAllErrors)  
+		// {  	  		    
+		// 	// If notifo reporting is turned on in the settings
+		// 	if(NOTIFO && $errors)
+		// 	{                                     
+		// 		// Instantiate notifo only once
+		// 		$notifo = new Notifo_API;   
 			             			
-				// Build notifo notification
-				$params['to'] = NOTIFO_NOTIFY_USERNAME;
-				$params['msg'] = $errors;
-				$params['title'] = "scraper error";
+		// 		// Build notifo notification
+		// 		$params['to'] = NOTIFO_NOTIFY_USERNAME;
+		// 		$params['msg'] = $errors;
+		// 		$params['title'] = "scraper error";
 			
-				// Send notifo error
-				$notifo->sendNotification($params);	
+		// 		// Send notifo error
+		// 		$notifo->sendNotification($params);	
 				
-				// Reset errors 
-				$errors = "";
-				$errorCount = 0;		
-			} 
+		// 		// Reset errors 
+		// 		$errors = "";
+		// 		$errorCount = 0;		
+		// 	} 
+		// } 
+	}
+	
+	// Notifo admin of errors
+	public static function sendAlert($errors)
+	{	
+		// If notifo reporting is turned on in the settings
+		if(NOTIFO && $errors)
+		{                                     
+			// Instantiate notifo only once
+			$notifo = new Notifo_API;   
+		             			
+			// Build notifo notification
+			$params['to'] = NOTIFO_NOTIFY_USERNAME;
+			$params['msg'] = $errors;
+			$params['title'] = "scraper error";
+		
+			// Send notifo error
+			$notifo->sendNotification($params);		
 		} 
 	}
-	
-	// Called to end the execution of the script and
-	public static function complete()
-	{                   
-		
-	  	// Log current state
-		utilities::notate("Instance ".INSTANCE. " complete\n\n"); 
 
-		// Send any error notifications
-	 	utilities::reportErrors(false, true); 
-	    
-		// Final benchmark
-		utilities::benchmark('total execution: ', true); 
-		
-		exit();
-	}
-
-	
-	
-	
 }
 
 
