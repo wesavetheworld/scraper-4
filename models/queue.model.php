@@ -78,6 +78,8 @@ class queue
 		// Loop through available schedules for the item (hourly, daily)
 		foreach($schedules as $schedule)
 		{
+			$key = "$source:$schedule";
+
 			// Get the score range to search based on key name
 			$scoreLimit = $this->getScoreRange($key);
 

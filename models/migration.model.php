@@ -218,20 +218,7 @@ class keywordsMySQL
 		
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
-		{	
-			// if($keyword->keyword == $last)
-			// {
-			// 	// Get score for keyword
-			// 	$member = $this->redis->zscore('keywords:'.$keyword->schedule, $keyword->keyword_id);
-
-			// 	// Add new keyword to previous keyword
-			// 	$member = "$member,$keyword->keyword_id";				
-			// }
-			// else
-			// {
-			// 	$member = $keyword->keyword_id;				
-			// }
-
+		{
 			$member = $keyword->keyword_id;				
 
 			$this->boss->zadd('google:'.$keyword->schedule, 0, $member);	
