@@ -53,7 +53,7 @@ if(CORE == "worker")
 // ===========================================================================//
 
 // require_once all utility static functions
-//require_once('classes/utilities.class.php');
+require_once('classes/utilities.class.php');
 
 // require_once all utility static functions
 require_once('classes/tools.class.php');
