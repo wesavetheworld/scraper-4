@@ -322,7 +322,7 @@ class tasks
 		if($alert && NOTIFO)
 		{
 			// Send alert
-			tools::sendAlert($alert);
+			utilities::sendAlert($alert);
 		}
 	}	
 	
