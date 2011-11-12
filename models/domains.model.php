@@ -71,8 +71,12 @@ class domains
 
 		$value = $this->domains->$domain_id->stat;
 		
+		$this->domains->$domain_id->updateCount = intval($this->domains->$domain_id->updateCount) + 1;		
+
+
 		// Update keyword hash
-		$this->serps->hmset("d:$domain_id", array($this->stat => $this->domains->$domain_id->$value));
+		$this->serps->hmset("d:$domain_id", array($this->stat => $this->domains->$domain_id->$value,
+													'updateCount' => $this->domains->$domain_id->updateCount));
 
 		// Update job list score
 		$this->boss->zAdd($key, time(), $domain_id);	
