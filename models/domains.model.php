@@ -30,37 +30,107 @@ class domains
 
 	public $task = TASK;
 
-	function __construct($empty = false)
+	function __construct($domains)
 	{  					
-		if(!$empty)
-		{                             
-			// Connect to database
-			$this->dbConnect();
+		// Connect to serps db
+		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		
+		// Connect to boss db
+		$this->boss = new redis(BOSS_IP, BOSS_PORT);		
+		
+		// Loop through items		
+		foreach($domains as $domain)
+		{
+ 			// Select domain hash from redis		
+			$hash = $this->serps->hGetAll("d:$domain");
 					
-			// Select domains
-			$this->getDomains();   
-		}	
+			// Create new domain object from redis hash
+			$this->domains->$domain = new domain($hash);
+
+			// Echo count how many keywords are in the object
+			$this->total++;
+		}
 	} 
     
 	// Called when script execution has ended
 	function __destruct() 
 	{	
-		// // If any keywords failed to update
-		// if(count($this->keywordIds))
-		// {    
-		// 	// Check any remaining keywords back in
-		//$this->setCheckOut('0');
-		// }  
-	}  
-	  
-	private function dbConnect()
-	{
-		echo "connecting to db";
 
-		// Establish DB connection
-		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
-	}  	
+	}  
 	
+	// ===========================================================================// 
+	// ! Updating redis keyword data                                              //
+	// ===========================================================================//	
+
+	// Update a keywords hash in redis
+	public function update($domain_id, $key)
+	{
+		echo "domain_id: $domain_id\n";
+		// Update mysql serp data
+		$this->updateMySQL($this->domains->$domain_id);
+
+		$value = $this->domains->$domain_id->stat;
+		
+		// Update keyword hash
+		$this->serps->hmset("d:$domain_id", array($this->stat => $this->domains->$domain_id->$value));
+
+		// Update job list score
+		$this->boss->zAdd($key, time(), $keyword_id);		
+	}		
+
+	// ===========================================================================// 
+	// ! Updating MySQL keyword data                                              //
+	// ===========================================================================//
+	
+	// Update keywords table with new keyword info
+	public function updateMySQL(&$domain)
+	{
+		// If no connection to the database yet(worker)
+		if(!$this->db)
+		{
+			// Establish DB connection
+			$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);		
+		}
+
+		// If domains's tracking data was updated successfully
+		if($this->updateStat($domain))
+		{
+			// Update domain table with update time
+			$query = "	UPDATE 
+							domains 
+						SET 
+				  		 	".$domain->stat."_status = NOW(), 
+							check_out = '0',
+				 			updated = NOW()
+					  	WHERE 
+					  		domain_id = ".$domain->domain_id;  
+										  
+			// If keyword update successful
+			mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error());		
+		}	
+	} 	
+
+	// Update existing row in tracking table with new rankings
+	private function updateStat($domain)
+	{	 		     	
+		// Build update query
+		$query = "	INSERT INTO 
+						domain_stats 
+						(domain_id,
+						".$domain->stat.",
+						date) 
+			      	VALUES (
+						'".$domain->domain_id."',
+						'".$domain->{$domain->stat}."',
+						NOW()
+			            )
+    			    ON DUPLICATE KEY UPDATE 
+    			    	".$domain->stat." = '".$domain->{$domain->stat}."'";	
+							                                            
+		// Execute update query
+		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
+	} 	
+
 	// ===========================================================================// 
 	// ! Functions for creating domain objects                                   //
 	// ===========================================================================//	
@@ -171,79 +241,79 @@ class domains
 	// ! Updating keyword objects                                                 //
 	// ===========================================================================//
 	
-	// Update keywords table with new keyword info
-	public function updateDomains()
-	{
-		// If no connection to the database yet(worker)
-		if(!$this->db)
-		{
-			echo "no connection found... could be the problem?";
-			$this->dbConnect();
-		}
+	// // Update keywords table with new keyword info
+	// public function updateDomains()
+	// {
+	// 	// If no connection to the database yet(worker)
+	// 	if(!$this->db)
+	// 	{
+	// 		echo "no connection found... could be the problem?";
+	// 		$this->dbConnect();
+	// 	}
 
-		// Loop through finished keywords object
-		foreach($this->updated as $key => &$domain)
-		{	 
-			// If this keyword has no ranking yet
-			if(!isset($domain->{$domain->stat}))
-			{   
-				// Skip keyword
-				continue;
-			} 
+	// 	// Loop through finished keywords object
+	// 	foreach($this->updated as $key => &$domain)
+	// 	{	 
+	// 		// If this keyword has no ranking yet
+	// 		if(!isset($domain->{$domain->stat}))
+	// 		{   
+	// 			// Skip keyword
+	// 			continue;
+	// 		} 
 			
-			// If domains's tracking data was updated successfully
-			if($this->updateStat($domain))
-			{
-				// Update keywords table with update time and notifications
-				$query = "	UPDATE 
-								domains 
-							SET 
-					  		 	".$domain->stat."_status = NOW(), 
-								check_out = '0',
-					 			updated = NOW()
-						  	WHERE 
-						  		domain_id = ".$domain->domain_id; 
+	// 		// If domains's tracking data was updated successfully
+	// 		if($this->updateStat($domain))
+	// 		{
+	// 			// Update keywords table with update time and notifications
+	// 			$query = "	UPDATE 
+	// 							domains 
+	// 						SET 
+	// 				  		 	".$domain->stat."_status = NOW(), 
+	// 							check_out = '0',
+	// 				 			updated = NOW()
+	// 					  	WHERE 
+	// 					  		domain_id = ".$domain->domain_id; 
 											  
-				// If domain update successful
-				if(mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
-				{
-					// Remove domain from domain id array
-					unset($this->domainIds[$key]);        
+	// 			// If domain update successful
+	// 			if(mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON UPDATING KEYWORDS: ".mysql_error()))
+	// 			{
+	// 				// Remove domain from domain id array
+	// 				unset($this->domainIds[$key]);        
 					
-					// Remove domain from domain array
-					unset($this->domains->$key);        
-				}	
-				// Keyword update failed	
-				else
-				{
-					// Log status
-					//utilities::notate("Could not update domain", "rankings.log");		  		   	 			
-				}			
-			}	
+	// 				// Remove domain from domain array
+	// 				unset($this->domains->$key);        
+	// 			}	
+	// 			// Keyword update failed	
+	// 			else
+	// 			{
+	// 				// Log status
+	// 				//utilities::notate("Could not update domain", "rankings.log");		  		   	 			
+	// 			}			
+	// 		}	
 			
-   		}
-	} 
+ //   		}
+	// } 
 	
-	// Update existing row in tracking table with new rankings
-	private function updateStat($domain)
-	{	 		     	
-		// Build update query
-		$query = "	INSERT INTO 
-						domain_stats 
-						(domain_id,
-						".$domain->stat.",
-						date) 
-			      	VALUES (
-						'".$domain->domain_id."',
-						'".$domain->{$domain->stat}."',
-						NOW()
-			            )
-    			    ON DUPLICATE KEY UPDATE 
-    			    	".$domain->stat." = '".$domain->{$domain->stat}."'";	
+	// // Update existing row in tracking table with new rankings
+	// private function updateStat($domain)
+	// {	 		     	
+	// 	// Build update query
+	// 	$query = "	INSERT INTO 
+	// 					domain_stats 
+	// 					(domain_id,
+	// 					".$domain->stat.",
+	// 					date) 
+	// 		      	VALUES (
+	// 					'".$domain->domain_id."',
+	// 					'".$domain->{$domain->stat}."',
+	// 					NOW()
+	// 		            )
+ //    			    ON DUPLICATE KEY UPDATE 
+ //    			    	".$domain->stat." = '".$domain->{$domain->stat}."'";	
 							                                            
-		// Execute update query
-		return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
-	} 
+	// 	// Execute update query
+	// 	return mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON stats update: ".mysql_error());				
+	// } 
 }
 
 // ===========================================================================// 
@@ -253,9 +323,14 @@ class domains
 class domain 
 {     
 	
-	function __construct()
-	{    
-
+	function __construct($fields)
+	{ 
+		// Loop through domain hash and build domain object
+		foreach($fields as $field => $value)
+		{
+			// Assign field to domain object
+			$this->$field = $value;
+		}			
    	} 
 
 	// ===========================================================================// 
@@ -294,48 +369,13 @@ class domain
 		// Keyword object is complete
 		return TRUE;          
 	} 
-	
-	// Create a url that can be scraped
-	public function urlSafeKeyword() 
-	{
-		// Encode keyword to be used as part of ur to scrape
-		$this->urlSafe = htmlspecialchars(htmlentities(urlencode($this->keyword)));
-	}
-	
-	// Determine whether to grab 10 or 100 results per search 
-	public function setResultsCount()
-	{    		 
-		// If last ranking was below the 10/100 switch
-		if($this->lastRank < NUM_SWITCH_THRESHHOLD && $this->lastRank != 0 || $this->engine == 'bing')
-		{  
-			// Search by 10 results
-			$num = 10;
-		}
-		// Last ranking was over threshhold
-		else
-		{
-			// Search by 100 results
-			$num = 100;
-		} 
-						 
-		// Set search result total
-		$this->resultCount = $num;
-	}
-	
-	// Determine which page of search results to scrape 
-	public function setSearchOffset()
-	{                                             
-	 	// If the keyword has a search page offset
-		if($this->searchPage)
-		{
-			// Combine search page offset with result count (ie 200)
-			$this->searchOffset = $this->searchPage.substr($this->resultCount, 1, 2);
-		}
-	}
-	
-	// Build the search engine results page for the keyword
-	public function setSearchUrl()
+
+// Build the search engine results page for the keyword
+	public function setSearchUrl($source)
 	{   
+		// Set the data source (google,bing,pr etc)
+		$this->stat = $source;
+
 		if($this->stat == "backlinks")
 		{
 		 	// Build the yahoo backlinks search url
@@ -351,28 +391,31 @@ class domain
 			// Build the alexa url
 	   		$this->url = "http://data.alexa.com/data/hmyq81hNHng1MD?cli=10&dat=ns&ref=&url=".urlencode($this->domain); 
 		}
+
+		// Get the current search hash 
+		$this->setSearchHash(); 		
 	}
-	
+
 	// Create a hash for the keyword's saved search file name
 	public function setSearchHash()
 	{
 		// Naming convention for the file
-		$searchHash  = $this->domain;
-		
+		$searchHash = $this->www.$this->domain;
+
 		// Calculate hash for filename
 		$searchHash = crc32($searchHash);
-		
+
 		// Format hash
 		$searchHash = vsprintf("%u", $searchHash);
-		
+
 		// Set keyword's saved search file hash
 		$this->searchHash = $searchHash; 
 	}	
-	
+
     // ===========================================================================// 
 	// ! PageRank methods                                                         //
 	// ===========================================================================//	
-	
+
 	//Genearate a hash for a url
 	private function HashURL($String)
 	{
@@ -428,7 +471,7 @@ class domain
 
 	    return '7'.$CheckByte.$HashStr;
 	}
-	
+
 	function StrToNum($Str, $Check, $Magic)
 	{
 	    $Int32Unit = 4294967296;  // 2^32
@@ -450,11 +493,12 @@ class domain
 	    }
 	    return $Check;
 	}
-	
+
 	public function Rank(){
 		$Xml = $this->loadXml();
 		if(!is_object($Xml) || !isset($Xml->SD[1]) || !is_object($Xml->SD[1])) return 0;
 		return trim($Xml->SD[1]->REACH['RANK']);
 	}		
-	
+
+		
 }

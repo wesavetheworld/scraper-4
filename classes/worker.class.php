@@ -61,9 +61,6 @@ class worker
 			$this->parseContent();
 		}
 
-		// Update DB with new data
-		//$this->updateItems();
-
 		echo "\njob complete\n\n\n";
 
 		// Job has been completed
@@ -147,190 +144,160 @@ class worker
 			// Create new parsing object
 			$this->parse = new parse;	
 
-			// Content for domains
-			if($this->model == "domains")
-			{
-				$this->parseDomains($key, $item);
+			// If valid scraped content can be loaded
+			if(($content = $this->getContent($item, $this->scrape->results[$item->searchHash])) || ($this->model == "domains" && $item->bad == 10))
+			{  		
+				echo "good scrape!\n";
+
+				// Define the parsing function for the current data model
+				$parse = "parse".ucwords($this->model);
+
+				// Parse the content
+				$this->$parse($content, $key, $item);		
 			}	
-			// Content for keywords
-			elseif($this->model == "keywords")
+			// No scraped content returned
+			else
 			{
-				$this->parseKeywords($key, $item);
+				echo "bad scrape!\n";
+
+				// If this item has it's own proxy
+				if($item->proxy)
+				{		
+					// Check proxy back in. Set status to block if scraper code says
+					$this->proxies->update($item->proxy['proxy'], $this->scrape->results[$item->searchHash]['blocked']);
+
+					// For domains (for now)
+					$item->bad++;
+
+					// Remove proxy used for this item so that a new one will be selected for in the next loop
+					unset($item->proxy);
+				}	
+			}
+
+			// Item should be updated
+			if($item->updated)
+			{
+				// Update item and proxy
+				$this->updateItem($key, $item);
 			}
 		}								
 	}
 
-	private function parseKeywords($key, &$item)
+	// Update the final state of an item and it's proxy
+	private function updateItem($key, &$item)
 	{
-		// If a valid search results page can be loaded (new scrape or saved file)
-		if($content = $this->getContent($item, $this->scrape->results[$item->searchHash]))
-		{  		
-					echo "good scrape!\n";
-				
-			// Find the keyword's domain in one of the ranking urls
-			$this->parse->findElements($this->parsePattern(), $content)->findInElements($item->domain);			 
-						   				
-			// If domain was found or keyword on last search page
-			if($this->parse->found || $item->searchPage == SEARCH_DEPTH - 1)
-			{   
-				// If a ranking was found 
-				if($this->parse->found)
-				{   
-					// Set new keyword rank (amount of results per page + position on current page)
-					$item->rank = $item->searchOffset + $this->parse->position; 
-												
-					// Set the matching url that was found ranking
-					$item->found = $this->parse->found;  
-				}
-				// If no ranking was found
-				else
-				{    
-					// "0" is used for "not found"
-					$item->rank = 0;   
-				}  
-
-				// If scraping google
-				if($this->source == 'google')
-				{
-					//echo "checking notifications PT 1\n";
-					// See if a rank change notification should be sent
-					$item->setNotification();
-					//echo "notification for ".$item->keyword_id." : ".$item->notify."\n";
-				}	
-										
-				// Calibrate keyword ranking (10/100 results)
-				$this->calibration($item);   
-
-				// Add keyword to completed list
-				//$this->items->updated[$key] = $item;
-
-				// If this item has it's own proxy
-				if($item->proxy)
-				{
-					// Check proxy back in.
-					$this->proxies->update($item->proxy['proxy']);
-				}	
-
-				// Update and checkin keyword to redis
-				$this->items->update($item->keyword_id, "$this->source:$this->schedule");
-
-				// Remove keyword from keyword id array
-				unset($this->items->{$this->model}->$key);  
-			    
-				// Decrease keywords remaining by one
-				$this->items->total--; 
-			}
-			// Domain was not found ranking
-			else
-			{ 		
-					
-				// Increase search results page for next scrape
-				$item->searchPage++; 						
-			} 
-		}
-		// No scraped content returned
-		else
+		// If this item has it's own proxy
+		if($item->proxy)
 		{
-			echo "bad scrape!\n";
-
-			// If this item has it's own proxy
-			if($item->proxy)
-			{		
-				// Check proxy back in. Set status to block if scraper code says
-				$this->proxies->update($item->proxy['proxy'], $this->scrape->results[$item->searchHash]['blocked']);
-
-				// Remove proxy used for this item so that a new one will be selected for in the next loop
-				unset($item->proxy);
-			}	
+			// Check proxy back in.
+			$this->proxies->update($item->proxy['proxy']);
 		}	
+
+		// Update and checkin keyword to redis
+		$this->items->update($key, "$this->source:$this->schedule");
+
+		// Remove keyword from keyword id array
+		unset($this->items->{$this->model}->$key);  
+	    
+		// Decrease keywords remaining by one
+		$this->items->total--; 			
 	}
 
-	private function parseDomains($key, &$item)
-	{
-		// If valid output is available
-		$content = $this->getContent($item, $this->scrape->results[$item->url]);
-
-		// If a valid search results page can be loaded (new scrape or saved file)
-		if($content || $item->bad == 10)
-		//if($content)
-		{  	
-			echo "good scrape \n";
-
-			if($item->bad != 10)
-			{					
-				if($this->source == "backlinks")
-				{
-					// Find the keyword's domain in one of the ranking urls
-					$this->parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
-					
-					// Set backlinks for domain
-					$item->backlinks =  str_replace(",","",$this->parse->elements[0]); 
-				}
-				elseif($this->source == "pr")
-				{    
-					// Set the pagerank for domain
-					$item->pr = $this->parse->pageRank($content); 
-
-					echo "pr:$item->pr\n";
-				} 
-				elseif($this->source == "alexa")
-				{    
-					// Set the alexa rank for domain
-					$item->alexa = $this->parse->alexa($content); 
-				}
+	private function parseKeywords(&$content, $key, &$item)
+	{			
+		// Find the keyword's domain in one of the ranking urls
+		$this->parse->findElements($this->parsePattern(), $content)->findInElements($item->domain);			 
+					   				
+		// If domain was found or keyword on last search page
+		if($this->parse->found || $item->searchPage == SEARCH_DEPTH - 1)
+		{   
+			// If a ranking was found 
+			if($this->parse->found)
+			{   
+				// Set new keyword rank (amount of results per page + position on current page)
+				$item->rank = $item->searchOffset + $this->parse->position; 
+											
+				// Set the matching url that was found ranking
+				$item->found = $this->parse->found;  
 			}
-			// If all bad searches(something must be wrong with the domain)
+			// If no ranking was found
 			else
+			{    
+				// "0" is used for "not found"
+				$item->rank = 0;   
+			}  
+
+			// If scraping google
+			if($this->source == 'google')
 			{
-				if($this->source == "backlinks")
-				{	
-					// Set backlinks for domain
-					$item->backlinks =  NULL; 
-				}
-				elseif($this->source == "pr")
-				{    
-					// Set the pagerank for domain
-					$item->pr = NULL; 
-				} 
-				elseif($this->source == "alexa")
-				{    
-					// Set the alexa rank for domain
-					$item->alexa = NULL; 
-				}				
+				//echo "checking notifications PT 1\n";
+				// See if a rank change notification should be sent
+				$item->setNotification();
+				//echo "notification for ".$item->keyword_id." : ".$item->notify."\n";
+			}	
+									
+			// Calibrate keyword ranking (10/100 results)
+			$this->calibration($item);   
+
+			// Set item as updated
+			$item->updated = TRUE;
+		}
+		// Domain was not found ranking
+		else
+		{ 		
+			// Increase search results page for next scrape
+			$item->searchPage++; 						
+		} 	
+	}
+
+	private function parseDomains(&$content, $key, &$item)
+	{
+		// If this is a successful ranking
+		if($item->bad != 10)
+		{					
+			if($this->source == "backlinks")
+			{
+				// Find the keyword's domain in one of the ranking urls
+				$this->parse->findElements(PARSE_PATTERN_BACKLINKS, $content); 
+				
+				// Set backlinks for domain
+				$item->backlinks =  str_replace(",","",$this->parse->elements[0]); 
 			}
+			elseif($this->source == "pr")
+			{    
+				// Set the pagerank for domain
+				$item->pr = $this->parse->pageRank($content); 
 
-			// Add keyword to completed list
-			$this->items->updated[$key] = $item;
-
-			// If this item has it's own proxy
-			if($item->proxy)
-			{
-				// Check proxy back in.
-				$this->proxies->update($item->proxy['proxy']);
-			}				
-
-			// Remove keyword from keyword id array
-			unset($this->items->{$this->model}->$key); 						
-
-			// Decrease total domains remaining
-			$this->items->total--; 
-		}	
+				echo "good pr:$item->pr\n";
+			} 
+			elseif($this->source == "alexa")
+			{    
+				// Set the alexa rank for domain
+				$item->alexa = $this->parse->alexa($content); 
+			}
+		}
+		// If all bad searches(something must be wrong with the domain)
 		else
 		{
-			// If this item has it's own proxy
-			if($item->proxy)
-			{			
-				// Check proxy back in. Set status to block if scraper code says
-				$this->proxies->update($item->proxy['proxy'], $this->scrape->results[$item->url]['blocked']);				
-
-				// Remove proxy used for this item so that a new one will be selected for in the next loop
-				unset($item->proxy);
-			}	
-
-			echo "bad scrape \n";
-
-			$item->bad++;			
+			if($this->source == "backlinks")
+			{	
+				// Set backlinks for domain
+				$item->backlinks =  NULL; 
+			}
+			elseif($this->source == "pr")
+			{    
+				// Set the pagerank for domain
+				$item->pr = NULL; 
+			} 
+			elseif($this->source == "alexa")
+			{    
+				// Set the alexa rank for domain
+				$item->alexa = NULL; 
+			}				
 		}
+
+		// Set item as updated
+		$item->updated = TRUE;		
 	}
 
 	// ===========================================================================// 
@@ -349,44 +316,22 @@ class worker
 			// Generate the search page url 
 			$item->setSearchUrl($this->source);	
 
-			// If getting domain urls
-			if($this->model == "domains")
-			{ 			                     	
-				// If keyword's search hash is unique
-				if(!$urls[$item->url])
-				{    		
-					// If proxy set for this domain/url already
-					if($item->proxy)
-					{
-    					$this->proxyList[$item->url] = $item->proxy;
-					}						
-						
-					// Add the keyword's search page url to scraping list
-					$urls[$item->url] = $item->url;  
-					
-					$proxies[$item->url] = $item->proxy;						
-				}
-			}
-			// If getting keyword urls
-			else
-			{	  			                     			
-				// If keyword's search hash is unique
-				if(!$urls[$item->searchHash])
-				{    				
-					// If proxy set for this keyword/url already
-					if($item->proxy)
-					{
-    					$this->proxyList[$item->searchHash] = $item->proxy;
-					}						
-								
-					// Add the keyword's search page url to scraping list
-					$urls[$item->searchHash] = $item->url; 					
-					
-					// This is a new search
-					$item->searchType = "new";
-				}
-			}	 
-		} 
+			// If keyword's search hash is unique
+			if(!$urls[$item->searchHash])
+			{    				
+				// If proxy set for this keyword/url already
+				if($item->proxy)
+				{
+					$this->proxyList[$item->searchHash] = $item->proxy;
+				}						
+							
+				// Add the keyword's search page url to scraping list
+				$urls[$item->searchHash] = $item->url; 					
+				
+				// This is a new search
+				$item->searchType = "new";
+			}				 
+		} 	
 								
 		// Return the url array
 		return $urls;				
@@ -396,9 +341,6 @@ class worker
 	public function getProxies($urls, &$items)
 	{  					
 		$need = count($urls) - count($this->proxyList);
-			
-		echo "keywords:".$this->items->total." | urls to scrape: ".count($urls)." | keywords with proxies already: ".count($this->proxyList)."\n";	
-		echo "total: $need\n";
 
 		if($need != 0)
 		{		
@@ -413,25 +355,12 @@ class worker
 			// Loop through urls
 			foreach($items as $key => &$item)
 			{
-				// If getting domain urls
-				if($this->model == "domains")
-				{ 		
-					// If url has no proxy
-					if(!$this->proxyList[$item->url])
-					{
-						$item->proxy = array_pop($this->proxies->proxies);
-						$this->proxyList[$item->url] = $item->proxy;
-					}
-				}
-				else
+				// If url has no proxy
+				if(!$this->proxyList[$item->searchHash])
 				{
-					// If url has no proxy
-					if(!$this->proxyList[$item->searchHash])
-					{
-						$item->proxy = array_pop($this->proxies->proxies);
-						$this->proxyList[$item->searchHash] = $item->proxy;
-					}			
-				}	
+					$item->proxy = array_pop($this->proxies->proxies);
+					$this->proxyList[$item->searchHash] = $item->proxy;
+				}		
 			}
 
 			if(count($this->proxies->proxies) > 0)
@@ -445,7 +374,7 @@ class worker
 	}	
     
 	// Load the correct source for the keyword's search results
-	public function getContent($item, $content = false)
+	public function getContent($item, &$content)
 	{   
 		// If a new url was scraped for this keyword
 		if($content)
@@ -461,12 +390,7 @@ class worker
 				}	
 				
 				// Set the new search as the source
-				$search = $content['output']; 
-
-				if($this->source == "pr" && empty($search))
-				{
-					$search = "99";
-				}				
+				$search = $content['output']; 				
 			}			
 		} 
 		elseif($this->model != 'domains')
@@ -517,22 +441,22 @@ class worker
 		}
 	}
 
-	// Update database with new items
-	private function updateItems()
-	{
-		// If updating keywords
-		if($this->model == "keywords")
-		{
-			// Update finished keywords in DB
-			$this->items->updateKeywords();                
-		}
-		// If updating domains
-		elseif($this->model == "domains")
-		{
-			// Update finished domains in DB
-			$this->items->updateDomains();  			
-		}				
-	}	
+	// // Update database with new items
+	// private function updateItems()
+	// {
+	// 	// If updating keywords
+	// 	if($this->model == "keywords")
+	// 	{
+	// 		// Update finished keywords in DB
+	// 		$this->items->updateKeywords();                
+	// 	}
+	// 	// If updating domains
+	// 	elseif($this->model == "domains")
+	// 	{
+	// 		// Update finished domains in DB
+	// 		$this->items->updateDomains();  			
+	// 	}				
+	// }	
 }	    
 
 // ********************************** END **********************************// 

@@ -67,17 +67,17 @@ define("REDIS_SERPS_DB", 0);
 // If development environment
 if(defined("DEV"))
 {	
-	// Database host
-	define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
+	// // Database host
+	// define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
-	// Database username
-	define("DB_SERP_USER", "seserps");
+	// // Database username
+	// define("DB_SERP_USER", "seserps");
 
-	// Database password
-	define("DB_SERPS_PASS", "234k3k3LSJapBbr");
+	// // Database password
+	// define("DB_SERPS_PASS", "234k3k3LSJapBbr");
 
-	// Database name
-	define("DB_NAME_SERPS", "serps"); 
+	// // Database name
+	// define("DB_NAME_SERPS", "serps"); 
 }	
 // else production environment
 else
@@ -95,17 +95,17 @@ else
 	define("DB_NAME_SERPS", "serps"); 		
 }	
 
-	// // Database host
-	// define("DB_HOST", ":/Applications/MAMP/tmp/mysql/mysql.sock");
+	// Database host
+	define("DB_HOST", ":/Applications/MAMP/tmp/mysql/mysql.sock");
 
-	// // Database username
-	// define("DB_SERP_USER", "root");
+	// Database username
+	define("DB_SERP_USER", "root");
 
-	// // Database password
-	// define("DB_SERPS_PASS", "root");
+	// Database password
+	define("DB_SERPS_PASS", "root");
 
-	// // Database name
-	// define("DB_NAME_SERPS", "serps"); 			
+	// Database name
+	define("DB_NAME_SERPS", "serps"); 			
 
 // ===========================================================================// 
 // ! Proxy Database credentials                                               //
