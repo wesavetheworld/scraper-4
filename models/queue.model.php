@@ -120,13 +120,15 @@ class queue
 					if($min == '0')
 					{
 						$max = '0';	
-						$type = "new";			
+						$type = "new";
+						$tab = "\t";			
 					}
 					else
 					{
 						// Get the score range to search based on key name
 						$max = $this->getScoreRange($key);	
-						$type = "behind";												
+						$type = "behind";
+						$tab = "";												
 					}
 
 					// Count how many items (excluding new) are behind schedule
@@ -137,7 +139,7 @@ class queue
 					if($count)
 					{
 						// Notify admin
-						$behind .= "$count/$total $type for $key\n";
+						$behind .= "$tab$count/$total $type for $key\n";
 					}					
 				}				
 			}	

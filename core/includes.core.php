@@ -44,10 +44,11 @@ require_once('config/settings.config.php');
 // If this is a worker instance
 if(CORE == "worker")
 {
-	// require_once worker settings
-	require_once('config/scraping.config.php');												
+												
 }
-
+	// require_once worker settings
+	require_once('config/scraping.config.php');
+	
 // ===========================================================================// 
 // ! Required classes                	                                      //
 // ===========================================================================//

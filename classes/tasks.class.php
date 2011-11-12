@@ -287,11 +287,11 @@ class tasks
 
 		foreach($this->proxies->sources as $source)
 		{
-			echo "\t$source Available: ".$this->proxies->checkAvailable($source);		
-			echo " | Resting : ".$this->proxies->checkResting($source);		
-			echo " | Blocked : ".$this->proxies->checkBlocked($source);		
-			echo " | In use: ".$this->proxies->checkInUse($source);		
-			echo " | All unblocked at: ".$this->proxies->checkBlockTime($source)."\n";
+			echo "\t".ucwords($source).": ".$this->proxies->checkTotal($source)." total";
+			echo " | ".$this->proxies->checkAvailable($source)." ready";		
+			echo " | ".$this->proxies->checkResting($source)." resting";		
+			echo " | ".$this->proxies->checkBlocked($source)." blocked";		
+			echo " | all ready in ".$this->proxies->checkBlockTime($source)." mins\n";
 		}	
 
 		echo "\n";

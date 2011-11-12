@@ -47,7 +47,7 @@ define('CURL_TIMEOUT', 5);
 define('PROXY_WAIT_BLOCKED', 60 * 5);			 	
 
 // Amount of time to rest before using a proxy again (in seconds)
-define('PROXY_WAIT_USE', 90);		
+define('PROXY_WAIT_USE', 20);		
 
 // ===========================================================================// 
 // ! Regular expressions used for finding data on the page scraped            //

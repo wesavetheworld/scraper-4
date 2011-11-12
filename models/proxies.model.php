@@ -211,7 +211,7 @@ class proxies
 	// Count proxies currently blocked 
 	public function checkBlocked($engine = "google")
 	{
-	 	$now = time() + PROXY_WAIT_USE;
+	 	$now = time() + (PROXY_WAIT_USE + 1);
 
 	 	$future = time() + PROXY_WAIT_BLOCKED;
 
@@ -223,21 +223,13 @@ class proxies
 	// Count proxies currently resting(forced delay between uses)
 	public function checkResting($engine = "google")
 	{
-	 	$now = time();
+	 	$now = time() + 1;
 
 	 	$future = time() + PROXY_WAIT_USE;
 
 		$this->resting = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
 		return $this->resting;
-	}	
-	
-	// Count proxies currently checked out
-	public function checkInUse()
-	{
-		$this->inUse = $this->total - ($this->working + $this->blocked + $this->resting);
-
-		return $this->inUse;		
 	}				
 
 	// Check the unblock time on the newest blocked proxy to determine whan all proxies will be unblocked
@@ -245,6 +237,7 @@ class proxies
 	{
 		$last = $this->redis->zrevRange("proxies:".$engine, 0 , 0, TRUE);
 
-		return date("h:i", $last[1]);
+		// Amount of mins until all proxies are unblocked
+		return round(($last[1] - time()) / 60);
 	}	
 }	
