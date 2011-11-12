@@ -406,7 +406,7 @@ class keywordsMySQL
 							keywords.status !='suspended'
 						$new	
 						AND
-							keywords.user_id = 1";
+							keywords.user_id = 1910";
 		}		
 																								
 		// Execute query and return results			
@@ -1107,7 +1107,7 @@ class domainsMySQL
 						check_out = 0
 					{$date}
 					AND
-						user_id = 1"; 
+						user_id = 1910"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
