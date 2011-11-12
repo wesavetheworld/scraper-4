@@ -119,18 +119,7 @@ class worker
 		$this->scrape->urls = $this->getUrls($this->items->{$this->model}, $this->items->total); 				
 		
 		// Build an array of proxies to use for scraping
-		$this->scrape->proxies = $this->getProxies($this->scrape->urls, $this->items->{$this->model});
-		
-		// echo "urls: \n";
-		// print_r($this->scrape->urls);
-		// echo "\n";
-
-		// echo "urls: \n";
-		// print_r($this->scrape->proxies);
-		// echo "\n";
-		
-		// die();		
-					
+		$this->scrape->proxies = $this->getProxies($this->scrape->urls, $this->items->{$this->model});	
 								
 		// Execute the scraping
 		$this->scrape->curlExecute();		

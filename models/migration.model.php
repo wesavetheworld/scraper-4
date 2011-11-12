@@ -1050,7 +1050,7 @@ class domainsMySQL
 			$hash['pr'] = 0;
 			$hash['backlinks'] = 0;
 			$hash['alexa'] = 0;
-						$hash['updateCount'] = 0;
+			$hash['updateCount'] = 0;
 
 
 			// Create domain hash	

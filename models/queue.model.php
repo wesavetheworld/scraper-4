@@ -45,7 +45,7 @@ class queue
 		$this->bossDB = new redis(BOSS_IP, BOSS_PORT);	
 
 		// Connect to the serps server
-		$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);
+		//$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);
 		
 		// Get the array of sources/queue types		
 		$this->sources = json_decode(QUEUE_SOURCES);	
@@ -247,7 +247,7 @@ class queue
 		}
 
 		// Checkout the items
-		$this->serpsDB->zAddBulk($job['key'], $update) ."\n";				
+		$this->bossDB->zAddBulk($job['key'], $update) ."\n";				
 	}	
 
 	// ===========================================================================// 
