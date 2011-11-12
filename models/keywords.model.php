@@ -55,9 +55,13 @@ class keywords
 	{
 		// Update mysql serp data
 		$this->updateMySQL($this->keywords->$keyword_id);
+
+		$this->keywords->$keyword_id->updateCount = intval($this->keywords->$keyword_id->updateCount) + 1;		
 		
 		// Update keyword hash
-		$this->serps->hmset("k:$keyword_id", array($this->lastRankName => $this->keywords->$keyword_id->rank));
+		$this->serps->hmset("k:$keyword_id", array($this->lastRankName => $this->keywords->$keyword_id->rank,
+													'updateCount' => $this->keywords->$keyword_id->updateCount	
+													));
 
 		// Update job list score
 		$this->boss->zAdd($key, time(), $keyword_id);		

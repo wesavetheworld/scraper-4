@@ -243,6 +243,7 @@ class keywordsMySQL
 			$hash['lastRankGoogle'] = $keyword->lastRankGoogle;
 			$hash['lastRankBing'] = $keyword->lastRankBing;
 			$hash['notifications'] = $keyword->notifications;
+			$hash['updateCount'] = 0;
 
 			// Create proxy hash		
 			$this->serps->hmset('k:'.$keyword->keyword_id, $hash);		
