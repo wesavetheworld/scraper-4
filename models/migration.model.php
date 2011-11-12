@@ -404,8 +404,7 @@ class keywordsMySQL
 						WHERE
 							keywords.status !='suspended'
 						$new	
-						AND
-							keywords.user_id = 1910";
+						";
 		}		
 																								
 		// Execute query and return results			
@@ -1094,7 +1093,7 @@ class domainsMySQL
 	{  
 		if(NEW_ONLY)
 		{
-			$date = " AND pr_status = '0000-00-00' AND check_out = 0 AND ";
+			$date = " WHERE pr_status = '0000-00-00' AND check_out = 0";
 		}	
 		
 		// Construct query
@@ -1102,9 +1101,7 @@ class domainsMySQL
 						* 
 					FROM 
 						domains		
-					WHERE 
-					{$date}
-						user_id = 1910"; 
+					{$date}"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
