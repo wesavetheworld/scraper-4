@@ -1046,9 +1046,9 @@ class domainsMySQL
 			$hash['domain_id'] = $domain->domain_id;
 			$hash['domain'] = $domain->domain;
 			$hash['www'] = $domain->www;
-			$hash['pr'] = $domain->pr;
-			$hash['backlinks'] = $domain->backlinks;
-			$hash['alexa'] = $domain->alexa;
+			$hash['pr'] = 0;
+			$hash['backlinks'] = 0;
+			$hash['alexa'] = 0;
 
 			// Create domain hash	
 			$this->serps->hmset('d:'.$domain->domain_id, $hash);	
@@ -1099,18 +1099,12 @@ class domainsMySQL
 		$query =   "SELECT 
 						* 
 					FROM 
-						domains
-					LEFT JOIN
-							domain_stats 
-						ON 
-							domain_stats.domain_id = domains.domain_id						
-						AND
-							domain_stats.date = domains.updated						
+						domains		
 					WHERE 
-						domains.check_out = 0
+						check_out = 0
 					{$date}
 					AND
-						domains.user_id = 1"; 
+						user_id = 1"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
