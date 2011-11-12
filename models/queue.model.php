@@ -220,7 +220,14 @@ class queue
 		// If source is google
 		if($source == "google")
 		{	
-			return array("hourly", "daily");
+			// Keep track of use
+			static $count;
+			$count++;
+			
+			// Every 3rd call reverse order to update some daily keywords first
+		    if($count % 3 == 0) return array("daily", "houly");
+
+			return array("hourly", "daily");  
 		}
 		// All other sources
 		else
