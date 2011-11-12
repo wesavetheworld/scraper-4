@@ -83,11 +83,11 @@ class migration
 		 	define('NEW_ONLY', FALSE); 		
 	 	}
 
-	 // 	// Select all keywords from db to import
-		// $keywords = new keywordsMySQL(); 		
+	 	// Select all keywords from db to import
+		$keywords = new keywordsMySQL(); 		
 		
-		// // Migrate keywords from MySQL to redis
-		// $keywords->migrateToRedis();
+		// Migrate keywords from MySQL to redis
+		$keywords->migrateToRedis();
 		
 		// Select all domains from db to import
 		$domains = new domainsMySQL(); 		
