@@ -75,7 +75,9 @@ class domains
 		$this->serps->hmset("d:$domain_id", array($this->stat => $this->domains->$domain_id->$value));
 
 		// Update job list score
-		$this->boss->zAdd($key, time(), $keyword_id);		
+		$this->boss->zAdd($key, time(), $domain_id);	
+		
+		echo "zAdd $key ".time()." $domain_id \n";	
 	}		
 
 	// ===========================================================================// 
