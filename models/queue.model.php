@@ -100,34 +100,49 @@ class queue
 		}	
 	}	
 
-	public function checkUpdateSchedules($source)
+	public function checkUpdateSchedules()
 	{
-		// Loop through all source queues
-		foreach($this->sources as $source)
-		{	
-			// Get schedule list for provided source
-			$schedules = $this->getSchedules($source);
-					
-			// Loop through available schedules for the item (hourly, daily)
-			foreach($schedules as $schedule)
-			{
-				$key = "$source:$schedule";
+		$mins = array('1', '0');
 
-				// Get the score range to search based on key name
-				$scoreLimit = $this->getScoreRange($key);	
-				
-				// Count how many items (excluding new) are behind schedule
-				$count = $this->bossDB->zCount($key, 1, $scoreLimit);
-
-				// If found behind schedule
-				if($count)
+		foreach($mins as $min)
+		{
+			// Loop through all source queues
+			foreach($this->sources as $source)
+			{	
+				// Get schedule list for provided source
+				$schedules = $this->getSchedules($source);
+						
+				// Loop through available schedules for the item (hourly, daily)
+				foreach($schedules as $schedule)
 				{
-					// Notify admin
-					$behind .= "$count unupdated for $key\n";
-				}					
-			}				
+					$key = "$source:$schedule";
+
+					if($min == '0')
+					{
+						$max = '0';	
+						$type = "new";			
+					}
+					else
+					{
+						// Get the score range to search based on key name
+						$max = $this->getScoreRange($key);	
+						$type = "behind";												
+					}
+
+					// Count how many items (excluding new) are behind schedule
+					$count = $this->bossDB->zCount($key, $min, $max);
+					$total = $this->bossDB->zCard($key);
+
+					// If found behind schedule
+					if($count)
+					{
+						// Notify admin
+						$behind .= "$count/$total $type for $key\n";
+					}					
+				}				
+			}	
 		}	
-		
+			
 		return $behind;		
 	}
 

@@ -313,7 +313,7 @@ class tasks
 		$this->queue = new queue();
 
 		// Count unupdated items
-		$alert = $this->queue->checkUpdateSchedules($source);
+		$alert = $this->queue->checkUpdateSchedules();
 
 		echo $alert;
 
