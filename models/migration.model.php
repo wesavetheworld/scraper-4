@@ -381,7 +381,6 @@ class keywordsMySQL
 			// If selecting only new keywords
 			if(NEW_ONLY)
 			{
-				echo "added\n";
 			 	$new =   "AND
 							keywords.google_status = '0000-00-00 00:00:00'
 						  AND
@@ -1095,7 +1094,7 @@ class domainsMySQL
 	{  
 		if(NEW_ONLY)
 		{
-			$date = " AND pr_status = '0000-00-00'";
+			$date = " AND pr_status = '0000-00-00' AND check_out = 0 AND ";
 		}	
 		
 		// Construct query
@@ -1104,9 +1103,7 @@ class domainsMySQL
 					FROM 
 						domains		
 					WHERE 
-						check_out = 0
 					{$date}
-					AND
 						user_id = 1910"; 
 																								
 		// Execute query and return results			
