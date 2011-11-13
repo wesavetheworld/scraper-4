@@ -171,7 +171,7 @@ class proxies
 		{
 			echo "good\n";
 			// Create a random score to break up sequential adding
-			$score = time() - rand(0, 3000000);		
+			$score = rand(0, time());		
 			echo "$score : $proxy\n";	
 		}
 		// Normal use
