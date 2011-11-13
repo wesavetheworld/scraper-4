@@ -159,9 +159,6 @@ class proxies
 		 		$update[] = $p;
 		 	} 
 
-		 	// Increment overall proxy use for the current hour
-	 		$this->redis->send_command("HINCRBY usage ".date("H")." ".count($proxy));
-
 	 		// Add proxies back with new score
 			$this->redis->zAddBulk($this->key, $update);			
 		}
@@ -171,6 +168,13 @@ class proxies
 			// Add proxy back into sorted set with new score (timestamp)
 			$this->redis->zadd($this->key, $score, $proxy);			
 		}		
+	}
+
+	// Update proxy usage for this hour
+	public function usage($inc)
+	{
+		// Increment overall proxy usage hash for the current hour
+		$this->redis->send_command("HINCRBY", "usage", date("H"), $inc);
 	}
 
 	// Add a new proxy to the db

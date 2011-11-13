@@ -122,7 +122,10 @@ class worker
 		$this->scrape->proxies = $this->getProxies($this->scrape->urls, $this->items->{$this->model});	
 								
 		// Execute the scraping
-		$this->scrape->curlExecute();		
+		$this->scrape->curlExecute();
+		
+		// Update proxy use
+		$this->proxies->usage(count($this->scrape->results));		
 	}
 
 	private function parseContent()
