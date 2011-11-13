@@ -141,8 +141,11 @@ class migration
 		// Build proxy and SQL array
 		while($proxy = mysql_fetch_array($result, MYSQL_ASSOC))
 		{
+
+			echo $proxy['proxy']."\n";
+
 			// Add proxy to redis proxy db		
-			$this->proxies->add($proxy);		
+			//$this->proxies->add($proxy);		
 		}			
 	}	
 }
