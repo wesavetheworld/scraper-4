@@ -28,6 +28,12 @@ class proxies
 	// All sources the proxies are used for
 	public $sources;
 
+	// Amount of time to set the proxy to wait before next use
+	public $waitUse = PROXY_WAIT_USE;
+	
+	// Amount of time to set the proxy to wait when blocked
+	public $waitBlocked = PROXY_WAIT_BLOCKED;
+
 	// Contains the detailed proxy arrays
 	public $proxies = array();
 
@@ -48,13 +54,36 @@ class proxies
 		$this->engine = $engine;
 
 		// Set redis proxy queue key
-		$this->key = "proxies:".$this->engine;			
+		$this->key = "proxies:".$this->engine;	
+		
+		// Check for updated proxy settings in redis
+		$this->getProxySettings();		
 	}
 
 	// Run when script ends
 	function __destruct()
 	{
 			
+	}
+	
+	// Check for updated proxy settings in redis
+	public function getProxySettings()
+	{
+		// $this->redis->send_command("hset", "settings", "waitUse", "30");
+		// $this->redis->send_command("hset", "settings", "waitBlocked", "600");
+
+		// Get proxy wait settings from database
+		$settings = $this->redis->hgetall("settings");	
+
+		// If proxy settings found in database
+		if($settings)
+		{
+			// Amount of time to set the proxy to wait before next use
+			$this->waitUse = $settings['waitUse'];
+		
+			// Amount of time to set the proxy to wait when blocked
+			$this->waitBlocked = $settings['waitBlocked'];	
+		}	
 	}
 
 	// ===========================================================================// 
@@ -135,32 +164,35 @@ class proxies
 		if($blocked)
 		{
 			// Micro time in one hour (when the proxy can be used next) 
-			$score = time() + PROXY_WAIT_BLOCKED;
+			$score = time() + $this->waitBlocked;
 		}
-		elseif(defined("PROXY_WAIT_USE"))
+		else
 		{	
 			// Time in 1 minute (when the proxy can be used next)
-			$score = time() + PROXY_WAIT_USE;
+			$score = time() + $this->waitUse;
 		}	
-		// For newly added proxies
-		else
-		{
-			$score = 0;
-		}
 		
 		// If an array of proxies was provided
 		if(is_array($proxy))
 		{
+			// Test array to keep track of proxy use order
+			$used = array("log:used");
+
 		 	// Loop through each proxy to be updated
 		 	foreach($proxy as $p)
 		 	{
 		 		// Build array for bulk sorted set update
 		 		$update[] = $score;
 		 		$update[] = $p;
+
+		 		$used[] = $p; 
 		 	} 
 
 	 		// Add proxies back with new score
 			$this->redis->zAddBulk($this->key, $update);			
+			
+			// Add proxies used to used log			
+			$this->redis->__call("lPush", $used);
 		}
 		// Just a single proxy was provided
 		else
@@ -218,9 +250,9 @@ class proxies
 	// Count proxies currently blocked 
 	public function checkBlocked($engine = "google")
 	{
-	 	$now = time() + (PROXY_WAIT_USE + 1);
+	 	$now = time() + ($this->waitUse + 1);
 
-	 	$future = time() + PROXY_WAIT_BLOCKED;
+	 	$future = time() + $this->waitBlocked;
 
 		$this->blocked = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
@@ -232,7 +264,7 @@ class proxies
 	{
 	 	$now = time() + 1;
 
-	 	$future = time() + PROXY_WAIT_USE;
+	 	$future = time() + $this->waitUse;
 
 		$this->resting = $this->redis->zCount("proxies:".$engine,  $now, $future);		
 
@@ -243,6 +275,12 @@ class proxies
 	public function checkBlockTime($engine = "google")
 	{
 		$last = $this->redis->zrevRange("proxies:".$engine, 0 , 0, TRUE);
+
+		// If none are blocked
+		if($last[1] <= time())
+		{
+			return 0;
+		}
 
 		// Amount of mins until all proxies are unblocked
 		return round(($last[1] - time()) / 60);

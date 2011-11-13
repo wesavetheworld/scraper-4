@@ -18,11 +18,8 @@
 // ********************************** START **********************************//   
 
 // ===========================================================================// 
-// ! Passed arguments through CLI ($argv[1] used for controller)              //
+// ! Keyword search depth and error settings                                  //
 // ===========================================================================//  
-
-// Should the scraper use proxies
-define("PROXY_USE", TRUE);
 
 // How many times to retry scraping of a keyword before failing
 define("MAX_FAILED_HTTP_ERRORS", 100);
@@ -42,6 +39,13 @@ define("MAX_CALIBRATIONS", 2);
 
 // cURL connection timout limit
 define('CURL_TIMEOUT', 5);  
+
+// ===========================================================================// 
+// ! Proxy settings - These get overruled if settings updated in redis        //
+// ===========================================================================//	
+
+// Should the scraper use proxies
+define("PROXY_USE", TRUE);
 
 // Amount of time to rest a proxy when it gets blocked (in seconds)
 define('PROXY_WAIT_BLOCKED', 60 * 5);			 	

@@ -125,7 +125,7 @@ class worker
 		$this->scrape->curlExecute();
 		
 		// Update proxy use
-		$this->proxies->usage(count($this->scrape->results));		
+		$this->proxies->usage(count($this->scrape->results), $this->scrape->proxies);		
 	}
 
 	private function parseContent()
