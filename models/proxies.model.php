@@ -158,7 +158,7 @@ class proxies
 	}
 
 	// Add proxies back into sorted set with new timestamp score (1 hour for blocked, now for non blocked)
-	public function update($proxy, $blocked = false)
+	public function update($proxy, $blocked = false, $new = false)
 	{
 		// If these are blocked proxies
 		if($blocked)
@@ -166,6 +166,13 @@ class proxies
 			// Micro time in one hour (when the proxy can be used next) 
 			$score = time() + $this->waitBlocked;
 		}
+		// If adding a new proxy to db
+		elseif($new)
+		{
+			// Create a random score to break up sequential adding
+			$score = time() + rand(0, 30);			
+		}
+		// Normal use
 		else
 		{	
 			// Time in 1 minute (when the proxy can be used next)
@@ -221,7 +228,7 @@ class proxies
 			$this->key = 'proxies:'.$source;
 
 			// Add proxy to the proxy queue
-			$this->update($proxy['proxy']);			
+			$this->update($proxy['proxy'], false, true);			
 		}	
 	}
 
