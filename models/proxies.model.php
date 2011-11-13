@@ -169,6 +169,7 @@ class proxies
 		// If adding a new proxy to db
 		elseif($new)
 		{
+			echo "good\n";
 			// Create a random score to break up sequential adding
 			$score = time() + rand(0, 30);			
 		}
