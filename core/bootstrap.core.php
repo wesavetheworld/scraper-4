@@ -432,7 +432,7 @@ class bootstrapCore
 		}
 		
 		// Write new supervisord config file
-		file_put_contents("config/supervisord.config.ini", $supervisord);
+		file_put_contents("core/supervisord.core.conf", $supervisord);
 
 		// Run supervisord daemon
 		exec("/usr/bin/supervisord &> /dev/null &");
