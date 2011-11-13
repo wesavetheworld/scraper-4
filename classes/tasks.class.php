@@ -319,6 +319,8 @@ class tasks
 		if($_SERVER['argv'][3])
 		{
 			echo $alert;
+			// Log the errors
+			$this->queue->log($alert);			
 		}
 		else
 		{
@@ -342,13 +344,10 @@ class tasks
 		// Retrieve alert log
 		$alerts = $this->queue->log('view');
 
-		// Set timezone for display
-		date_default_timezone_set('America/Los_Angeles');
-
 		// Loop through and print alerts
 		foreach($alerts as $time => $alert)
 		{
-			echo date("g:ia", $time)."\n$alert\n\n";
+			echo "$time\n$alert\n\n";
 		}	
 	}
 	

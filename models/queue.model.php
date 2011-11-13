@@ -420,7 +420,9 @@ class queue
 		// Else write alert to log
 		else
 		{
-			$this->bossDB->hset('log:alerts', time(), $action);
+			// Set timezone for display
+			date_default_timezone_set('America/Los_Angeles');			
+			$this->bossDB->hset('log:alerts', date("g:ia", time()), $action);
 		}
 	}
 
