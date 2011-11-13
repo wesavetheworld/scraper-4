@@ -322,6 +322,9 @@ class tasks
 		}
 		else
 		{
+			// Log the errors
+			$this->queue->log($alert);
+
 			// If notifo is turned on and there is an alert
 			if($alert && NOTIFO)
 			{
@@ -330,6 +333,24 @@ class tasks
 			}
 		}	
 	}	
+
+	// View the queue alert log
+	public function viewLog()
+	{
+		$this->queue = new queue();
+				
+		// Retrieve alert log
+		$alerts = $this->queue->log('view');
+
+		// Set timezone for display
+		date_default_timezone_set('America/Los_Angeles');
+
+		// Loop through and print alerts
+		foreach($alerts as $time => $alert)
+		{
+			echo date("g:ia", $time)."\n$alert\n\n";
+		}	
+	}
 	
 	public function keywordStats()
 	{

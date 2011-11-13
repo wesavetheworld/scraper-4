@@ -343,7 +343,7 @@ class bootstrapCore
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=5\n"; 
+			$supervisord.= "numprocs=2\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
@@ -353,7 +353,7 @@ class bootstrapCore
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";			
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=5\n"; 
+			$supervisord.= "numprocs=2\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 	
 			
 			// Add workers for domain pagerank
@@ -363,7 +363,7 @@ class bootstrapCore
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";			
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=5\n"; 
+			$supervisord.= "numprocs=2\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 				
 		}	
 		// All other instance types

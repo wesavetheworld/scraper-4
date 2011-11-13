@@ -408,6 +408,22 @@ class queue
 		return array('total' => $total, 'workers' => $workers);
 	}
 
+	// Manage the job queue alert lob
+	public function log($action)
+	{
+		// If action it to view the log
+		if($action == "view")
+		{	
+			// Return last 10 alerts
+			return $this->bossDB->hGetAll('log:alerts');
+		}
+		// Else write alert to log
+		else
+		{
+			$this->bossDB->hset('log:alerts', time(), $action);
+		}
+	}
+
 	// ===========================================================================// 
 	// ! Score timestamp function                                                 //
 	// ===========================================================================//
@@ -466,5 +482,30 @@ class queue
 			return time() + (60 * 30);
 		}
 		
-	}		
+	}	
+	
+	// Converted a redis sorted set into an associative array
+	public function redisToArray(&$results)
+	{
+		// Loop through worker type retured
+		foreach($results as $result)
+		{
+			// Every other result
+			if($i % 2 == 0)
+			{
+				// Name key
+				$value = $result;
+			}
+			// Worker status
+			else
+			{
+				// Add value
+				$array[$result] = $value;
+			}
+
+			$i++;
+		}		
+		
+		return $array;
+	}	
 }	
