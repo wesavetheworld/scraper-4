@@ -171,6 +171,13 @@ class bootstrapCore
 				// Set as a dev server
 				$this->instanceDev = TRUE;
 			}
+
+			// Check if this is a development server
+			if($tag->key == 'highCPU')
+			{
+				// Set as a dev server
+				$this->highCPU = TRUE;
+			}			
 		}	
 
 		// If tags are missing
@@ -327,7 +334,18 @@ class bootstrapCore
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";			
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
-			$supervisord.= "numprocs=5\n"; 
+			
+			// If this is a high cpu instanct
+			if($this->highCPU)
+			{
+				$supervisord.= "numprocs=20\n"; 				
+			}
+			// Normal micro instance
+			else
+			{
+				$supervisord.= "numprocs=5\n"; 
+			}
+
 			$supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 																	
 		}				
 		// If this instance is for bing
