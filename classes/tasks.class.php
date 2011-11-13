@@ -315,16 +315,20 @@ class tasks
 		// Count unupdated items
 		$alert = $this->queue->checkUpdateSchedules();
 
-		echo $alert;
-
-		die();
-
-		// If notifo is turned on and there is an alert
-		if($alert && NOTIFO)
+		// If manual argument passed (checking from command line)
+		if($_SERVER['argv'][3])
 		{
-			// Send alert
-			utilities::sendAlert($alert);
+			echo $alert;
 		}
+		else
+		{
+			// If notifo is turned on and there is an alert
+			if($alert && NOTIFO)
+			{
+				// Send alert
+				utilities::sendAlert($alert);
+			}
+		}	
 	}	
 	
 	public function keywordStats()
