@@ -35,13 +35,7 @@ class bootstrapCore
 	function __construct()
 	{
 		// Check repo for any new revisions
-		$this->updateApp();
-
-		// Set the status of the server to updated
-		define("UPDATED", TRUE);	
-		
-		// Include all required core files (Dependencies and helper classes)
-		include('core/includes.core.php');  		
+		$this->updateApp();		
 
 		// Create a new amazon connection		
 		$this->amazon();
@@ -64,7 +58,13 @@ class bootstrapCore
 		$this->getInstanceType();
 
 		// Save all server settings to config files
-		$this->saveType();	   		 				
+		$this->saveType();	   
+		
+		// Set up which core daemon supervisord will controll
+		$this->editSupervisord(); 
+		
+		// Include all required core files (Dependencies and helper classes)
+		require_once('core/environment.config.php');  						 				
 
 		// If this is a redis server
 		if($this->instanceType == "redis" || $this->instanceType == "boss")
@@ -94,10 +94,7 @@ class bootstrapCore
 		{	
 			// Assign the worker elastic ip to this instance
 			$this->assignIp(GOOGLE_IP);					
-		}	
-		
-		// Set up which core daemon supervisord will controll
-		$this->editSupervisord(); 		
+		}			
 
 		// Start system monitor and detach from script
 		exec("php /home/ec2-user/scraper/router.php monitor &> /dev/null &");
@@ -233,7 +230,7 @@ class bootstrapCore
 
 			// Kill current bootstrap
 			exit('new code. restarting...');
-		}			
+		}				
 	}
 
 	// ===========================================================================// 
