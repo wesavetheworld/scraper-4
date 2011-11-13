@@ -174,7 +174,7 @@ class proxies
 	public function usage($inc)
 	{
 		// Increment overall proxy usage hash for the current hour
-		$this->redis->send_command("HINCRBY", "usage", date("H"), $inc);
+		$this->redis->send_command("HINCRBY", "usage", date("H").":$this->engine", $inc);
 	}
 
 	// Add a new proxy to the db
