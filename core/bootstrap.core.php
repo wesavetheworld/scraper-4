@@ -64,6 +64,7 @@ class bootstrapCore
 		$this->editSupervisord(); 
 		
 		// Include all required core files (Dependencies and helper classes)
+		require_once('config/instance.config.php');  						 				
 		require_once('config/environment.config.php');  						 				
 
 		// If this is a redis server
