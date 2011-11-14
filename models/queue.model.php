@@ -127,7 +127,7 @@ class queue
 					{
 						// Get the score range to search based on key name
 						$max = $this->getScoreRange($key);	
-						$type = "behind";
+						$type = "unupdated";
 						$tab = "";												
 					}
 
@@ -139,7 +139,7 @@ class queue
 					if($count)
 					{
 						// Notify admin
-						$behind .= "$tab$count/$total $type for $key\n";
+						$behind .= "$tab$count/$total $type $key\n";
 					}					
 				}				
 			}	

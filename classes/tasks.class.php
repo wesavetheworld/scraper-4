@@ -299,11 +299,29 @@ class tasks
 
 	public function test()
 	{
-		$this->queue = new queue();
+		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
+
+		// $start = microtime(true);
+		// while($i < 2)
+		// {
+		// 	$this->redis->send_pipeline("HINCRBY", "test", "2", "1");
+		// 	//$this->redis->send_command("HINCRBY", "test", "2", "1");
+
+		// 	$i++;
+		// }
+
+		// echo $this->redis->send_pipeline('send');
+
+		// $finish = microtime(true) - start;
+
+		echo $this->redis->send_pipeline2();
+
+		die("\ndone\n");
+		//$this->queue = new queue();
 		//$this->queue->fakeAdd();
 		//$this->queue->fakeCheckOut();
 		//$this->queue->fakeUpdate();
-		$this->queue->fakeOld();
+		//$this->queue->fakeOld();
 		//$this->queue->fakeCheck();
 	}
 
@@ -318,9 +336,7 @@ class tasks
 		// If manual argument passed (checking from command line)
 		if($_SERVER['argv'][3])
 		{
-			echo $alert;
-			// Log the errors
-			$this->queue->log($alert);			
+			echo $alert;			
 		}
 		else
 		{
@@ -343,6 +359,9 @@ class tasks
 				
 		// Retrieve alert log
 		$alerts = $this->queue->log('view');
+		
+		// Sort alerts by time logged
+		ksort($alerts);
 
 		// Loop through and print alerts
 		foreach($alerts as $time => $alert)

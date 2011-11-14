@@ -109,6 +109,73 @@ class redis
 		return $this->_send($args);
 	}
 
+	public function send_pipeline($send = false)
+	{
+		static $sent;
+
+		if($send != "send")
+		{
+			$args = func_get_args();
+
+			while(!$w)
+			{
+				$command = '*'.count($args)."\r\n";
+				foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";
+
+				$w = fwrite($this->connection, $command);
+
+				//echo "$w bytes | $sent\n";
+
+
+
+				if(!$w)
+				{
+					echo "redis command \"$command\" failed. Trying again in 3 seconds...\n";
+					sleep(3);
+					
+					// Establish a connection with redis
+					$this->connect();				
+				}
+			}
+
+			$sent++;
+		}
+		else
+		{	
+			return trim(fgets($this->connection));
+		}	
+	}	
+	
+	public function send_pipeline2()
+	{
+		// while($i < 500)
+		// {
+		// 	$actions[] =  array("HINCRBY", "test", "2", "1", "HINCRBY", "test", "2", "1");
+		// 	$actions[] =  array("HINCRBY", "test", "2", "1");
+		// 	$i++;
+		// }
+
+		// foreach($actions as $args)
+		// {
+		// 	$command .= '*'.count($args)."\r\n";
+		// 	foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";		
+		// }	
+		$args = array("HINCRBY", "test", "2", "1");
+
+		$command .= '*'.count($args)."\r\n";
+		foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";
+		
+		echo $command;			
+
+		fwrite($this->connection, $command);
+
+		return $this->read_reply();
+
+
+		
+	}
+
+
 	protected function _send($args)
 	{
 		while(!$w)
