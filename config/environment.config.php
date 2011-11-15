@@ -105,7 +105,21 @@ else
 	// define("DB_SERPS_PASS", "root");
 
 	// // Database name
-	// define("DB_NAME_SERPS", "serps"); 			
+	// define("DB_NAME_SERPS", "serps"); 	
+	
+// ===========================================================================// 
+// ! Saved searches Database credentials                                      //
+// ===========================================================================//	
+
+// Ip of the redis database instance 
+define("REDIS_SEARCHES_IP", "50.18.187.16");
+
+// Redis listening port
+define("REDIS_SEARCHES_PORT", 6379);
+
+// Redis Proxy database number
+define("REDIS_SEARCHES_DB", 0);	
+		
 
 // ===========================================================================// 
 // ! Proxy Database credentials                                               //

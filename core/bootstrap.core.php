@@ -86,6 +86,11 @@ class bootstrapCore
 				// Assign the redis proxy elastic ip to this instance
 				$this->assignIp(REDIS_PROXY_IP);					
 			}
+			elseif($this->instanceName == 'searches' || $this->instanceName == 'searchesDev')
+			{
+				// Assign the redis searches elastic ip to this instance
+				$this->assignIp(REDIS_SEARCHES_IP);					
+			}			
 
 			// Run redis database
 			$this->runRedis();
