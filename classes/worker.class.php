@@ -92,7 +92,10 @@ class worker
 	 	require_once("models/$class.model.php"); 
 	 	
 		// Instantiate new object
-		$this->items = new $class($job->items);			
+		$this->items = new $class($job->items);	
+		
+		// Save searches
+		$this->searches = new searches();		
 	}
 
 	private function setModel($source)
@@ -145,7 +148,10 @@ class worker
 				$parse = "parse".ucwords($this->model);
 
 				// Parse the content
-				$this->$parse($content, $key, $item);		
+				$this->$parse($content, $key, $item);
+				
+				// Save bad search
+				//$this->searches->save("g:$item->searchHash", $this->scrape->results[$item->searchHash]['output'])						
 			}	
 			// No scraped content returned
 			else
@@ -164,6 +170,9 @@ class worker
 					// Remove proxy used for this item so that a new one will be selected for in the next loop
 					unset($item->proxy);
 				}	
+
+				// Save bad search
+				$this->searches->save("b:$item->searchHash", $this->scrape->results[$item->searchHash]['output'])
 			}
 
 			// Item should be updated

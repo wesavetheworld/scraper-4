@@ -28,7 +28,7 @@ class searches
 	function __construct()
 	{  	
 		// Connect to the boss server
-		$this->bossDB = new redis(REDIS_SEARCHES_IP, REDIS_SEARCHES_PORT);	
+		$this->redis = new redis(REDIS_SEARCHES_IP, REDIS_SEARCHES_PORT);	
 	}
 
 	// Run when script ends
@@ -38,6 +38,11 @@ class searches
 	}
 
 	// ===========================================================================// 
-	// ! Job queue functions for the Boss                                         //
+	// ! Saved search functions                                                   //
 	// ===========================================================================//	
+
+	public function save($id, $content)
+	{
+		$this->redis->send_command("set", "s:$id", $content);
+	}
 }	

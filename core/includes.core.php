@@ -111,6 +111,10 @@ if(TWILIO)
 // require_once queue model
 require_once('models/queue.model.php'); 
 
+// Saved searches data model
+require_once('model/searches.model.php');
+
+
 // If this is a worker instance
 if(CORE == "worker" )
 {
