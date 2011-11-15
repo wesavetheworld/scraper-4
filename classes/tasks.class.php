@@ -325,6 +325,74 @@ class tasks
 		//$this->queue->fakeCheck();
 	}
 
+	public function testHeaders()
+	{
+		require_once('classes/scrape.class.php'); 
+		require_once('models/proxies.model.php'); 
+
+
+		$this->source = "backlinks";
+
+		// Create new scraping instance
+		$this->scrape = new scraper; 
+
+		// If a domain stats connection
+		$this->scrape->task = $this->source;    	
+
+		// Build an array of search engine urls to scrape
+		$this->scrape->urls = array("https://dev2.sescout.com/login"); 
+
+		// Instantiate new proxies object
+		$this->proxies = new proxies($this->source);
+					
+		$this->proxies->select(1);
+
+		// Select proxies for urls with no proxies attached yet
+		$this->scrape->proxies = $this->proxies->proxies; 	
+								
+		// Execute the scraping
+		$this->scrape->curlExecute();
+
+		print_r($this->scrape->results[0]['output']);
+
+	}
+
+	// Loop through keywords and return array of urls to scrape
+	public function getProxies($urls, $items)
+	{  					
+		$need = count($urls) - count($this->proxyList);
+
+		if($need != 0)
+		{		
+			// Instantiate new proxies object
+			$this->proxies = new proxies($this->source);
+					
+			// Select proxies for urls with no proxies attached yet
+			$this->proxies->select($need);	
+			
+			echo "proxies selected: ".count($this->proxies->proxies)."\n";	
+
+			// Loop through urls
+			foreach($items as $key => &$item)
+			{
+				// If url has no proxy
+				if(!$this->proxyList[$item->searchHash])
+				{
+					$item->proxy = array_pop($this->proxies->proxies);
+					$this->proxyList[$item->searchHash] = $item->proxy;
+				}		
+			}
+
+			if(count($this->proxies->proxies) > 0)
+			{
+				echo "FUCK! popping left: ".count($this->proxies->proxies)."\n";
+			}
+		}	
+
+		// Returned the proxy array
+		return $this->proxyList;		
+	}		
+
 	// Check that queue item update schedules are on track
 	public function checkQueueSchedules()
 	{

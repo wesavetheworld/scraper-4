@@ -89,7 +89,13 @@ class scraper
 	public $results = array();  
 
 	function __construct()
-	{      
+	{    
+		// Get array of user agents to use
+		$this->agent = json_decode(USER_AGENTS);
+
+		// Get array of referrers to use
+		$this->referer = json_decode(REFERRERS);		
+	  
 	}	
 	
 	// ===========================================================================// 
