@@ -151,7 +151,7 @@ class worker
 				$this->$parse($content, $key, $item);
 				
 				// Save bad search
-				//$this->searches->save("g:$item->searchHash", $this->scrape->results[$item->searchHash]['output'])						
+				$this->searches->save("s:$item->searchHash", $this->scrape->results[$item->searchHash]['output'])						
 			}	
 			// No scraped content returned
 			else
@@ -173,6 +173,8 @@ class worker
 
 				// Save bad search
 				$this->searches->save("b:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);
+				echo "saved\n"
+
 			}
 
 			// Item should be updated
