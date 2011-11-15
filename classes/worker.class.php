@@ -173,8 +173,6 @@ class worker
 
 				// Save bad search
 				$this->searches->save("b:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);
-				echo "saved\n"
-
 			}
 
 			// Item should be updated
