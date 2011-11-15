@@ -150,6 +150,7 @@ class worker
 				// Parse the content
 				$this->$parse($content, $key, $item);
 				
+				echo "save: $item->searchHash\n";
 				// Save bad search
 				$this->searches->save("s:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);						
 			}	
@@ -170,6 +171,7 @@ class worker
 					// Remove proxy used for this item so that a new one will be selected for in the next loop
 					unset($item->proxy);
 				}	
+				echo "save: $item->searchHash\n";
 
 				// Save bad search
 				$this->searches->save("b:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);
