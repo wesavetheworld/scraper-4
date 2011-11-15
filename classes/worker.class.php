@@ -151,7 +151,7 @@ class worker
 				$this->$parse($content, $key, $item);
 				
 				// Save bad search
-				$this->searches->save("s:$item->searchHash", $this->scrape->results[$item->searchHash]['output'])						
+				$this->searches->save("s:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);						
 			}	
 			// No scraped content returned
 			else
