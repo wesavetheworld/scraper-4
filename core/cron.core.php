@@ -82,7 +82,7 @@ class cronCore
 	private function hourOne()
 	{	
 		// Migrate all items (to account for removals)
-		$this->migrate();		
+		//$this->migrate();		
 	}	
 	
 	// Tasks that should be run hourly
