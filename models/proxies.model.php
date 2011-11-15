@@ -212,10 +212,12 @@ class proxies
 	}
 
 	// Update proxy usage for this hour
-	public function usage($inc)
+	public function usage($type, $inc)
 	{
+		$field = date("H").":$type";
+		 
 		// Increment overall proxy usage hash for the current hour
-		$this->redis->send_command("HINCRBY", "usage", date("H").":$this->engine", $inc);
+		$this->redis->send_command("HINCRBY", "usage:$this->engine", $field, $inc);
 	}
 
 	// Add a new proxy to the db

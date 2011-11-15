@@ -128,7 +128,7 @@ class worker
 		$this->scrape->curlExecute();
 		
 		// Update proxy use
-		$this->proxies->usage(count($this->scrape->results), $this->scrape->proxies);		
+		$this->proxies->usage('total', count($this->scrape->results));		
 	}
 
 	private function parseContent()
@@ -151,6 +151,9 @@ class worker
 				$this->$parse($content, $key, $item);
 				
 				echo "save: $item->searchHash\n";
+
+				// Increment bad scrapes for the hour
+				$this->proxies->usage('good', 1);				
 				
 				// $search = new parse;
 				
@@ -183,6 +186,10 @@ class worker
 
 				// Save bad search
 				$this->searches->save("b:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);
+			
+				// Increment bad scrapes for the hour
+				$this->proxies->usage('bad', 1);		
+
 			}
 
 			// Item should be updated
