@@ -151,8 +151,16 @@ class worker
 				$this->$parse($content, $key, $item);
 				
 				echo "save: $item->searchHash\n";
-				// Save bad search
-				$this->searches->save("s:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);						
+				
+				// $search = new parse;
+				
+				// $search->findElements($this->parsePattern('save'), $this->scrape->results[$item->searchHash]['output']);
+				
+				// echo  $search->elements[0];	
+
+				// $this->searches->save("s:$item->searchHash", $search->elements[0]);
+				
+				// die();						
 			}	
 			// No scraped content returned
 			else
@@ -430,10 +438,15 @@ class worker
 	}
 
 	// Determine the correct regex pattern to use for parsing
-	public function parsePattern()
+	public function parsePattern($save = false)
 	{
+		// If saving a search
+		if($save)
+		{
+			return PARSE_PATTERN_GOOGLE_SAVE;			
+		}
 		// Search engine is google
-		if($this->source == "google")
+		elseif($this->source == "google")
 		{
 			return PARSE_PATTERN_GOOGLE;
 		}

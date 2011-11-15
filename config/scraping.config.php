@@ -60,6 +60,9 @@ define('PROXY_WAIT_USE', 20);
 // The regular expression for parsing google rankings
 define("PARSE_PATTERN_GOOGLE","(<h3 class=\"r\"><a href=\"(.*)\".*>(.*)</a></h3>)siU");	
 
+// The regular expression for saving a google search results
+define("PARSE_PATTERN_GOOGLE_SAVE","(<div id=\"search\">(.*)<!--z-->)siU");	
+
 // The regular expression for parsing google rankings
 define("PARSE_PATTERN_BING", '(<div class="sb_tlst">.*<h3>.*<a href="(.*)".*>(.*)</a>.*</h3>.*</div>)siU');				
 
