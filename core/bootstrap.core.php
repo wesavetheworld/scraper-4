@@ -337,7 +337,7 @@ class bootstrapCore
 			// Add workers for hourly google updates
 			$supervisord = "[program:GoogleHourly]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker google %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";	
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";											
@@ -363,7 +363,7 @@ class bootstrapCore
 			// Add workers for domain pagerank
 			$supervisord = "[program:prDaily]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker pr %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";									
@@ -375,7 +375,7 @@ class bootstrapCore
 			// Add workers for domain pagerank
 			$supervisord.= "[program:backlinksDaily]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker backlinks %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";	
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";											
@@ -387,7 +387,7 @@ class bootstrapCore
 			// Add workers for domain pagerank
 			$supervisord.= "[program:alexaDaily]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker alexa %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
 			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";						
