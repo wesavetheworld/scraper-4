@@ -43,6 +43,6 @@ class searches
 
 	public function save($id, $content)
 	{
-		$this->redis->send_command("set", "s:$id", $content);
+		$this->redis->send_command("set", "$id", $content);
 	}
 }	
