@@ -352,7 +352,7 @@ class bootstrapCore
 			// If this is a high cpu instanct
 			if($this->highCPU)
 			{
-				$supervisord.= "numprocs=20\n"; 				
+				$supervisord.= "numprocs=15\n"; 				
 			}
 			// Normal micro instance
 			else
