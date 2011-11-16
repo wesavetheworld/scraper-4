@@ -91,9 +91,6 @@ class bootstrapCore
 				// Assign the redis searches elastic ip to this instance
 				$this->assignIp(REDIS_SEARCHES_IP);					
 			}			
-
-			// Run redis database
-			$this->runRedis();
 		}		
 		// If this is the flagship worker instance
 		elseif($this->instanceName == "google1" || $this->instanceName == "google1Dev")
@@ -251,10 +248,10 @@ class bootstrapCore
 	// ===========================================================================//    		
 
 	// Run redis database
-	private function runRedis()
-	{
-		exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/config/redis.config.conf");
-	}	
+	// private function runRedis()
+	// {
+	// 	exec("/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/config/redis.config.conf");
+	// }	
 
 	// Associate an elastic ip with an instance
 	private function assignIp($ip)
@@ -319,7 +316,33 @@ class bootstrapCore
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
 			$supervisord.= "numprocs=1\n"; 
-			$supervisord.= "process_name=%(process_num)s\n";					
+			$supervisord.= "process_name=%(process_num)s\n";	
+			
+			// Run redis
+			$supervisord.= "[program:Redis]\n";
+			$supervisord.= "command=/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/config/redis.config.conf\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/redis.log\n";
+			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/redis-errors.log\n";		
+			$supervisord.= "stderr_logfile_maxbytes=5MB\n";										
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";							
+		}
+		elseif($this->instanceType == "redis")
+		{
+			// Run redis
+			$supervisord.= "[program:Redis]\n";
+			$supervisord.= "command=/home/ec2-user/redis/src/redis-server /home/ec2-user/scraper/config/redis.config.conf\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/redis.log\n";
+			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/redis-errors.log\n";		
+			$supervisord.= "stderr_logfile_maxbytes=5MB\n";										
+			$supervisord.= "autostart=true\n";
+			$supervisord.= "autorestart=true\n";
+			$supervisord.= "numprocs=1\n"; 
+			$supervisord.= "process_name=%(process_num)s\n";			
 		}
 		// If this instance is for bing
 		elseif($this->instanceType == "bing")
@@ -401,55 +424,7 @@ class bootstrapCore
 			$supervisord.= "numprocs=2\n"; 
 			$supervisord.= "process_name=%(process_num)s\n"; 				
 		}	
-		// All other instance types
-		elseif($this->instanceType == "new")
-		{	
-			// // Add workers for hourly google updates
-			// $supervisord = "[program:GoogleNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker keywords google new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=5\n"; 
-			// $supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
 
-			// // Add workers for daily google updates
-			// $supervisord.= "[program:BingNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker keywords bing new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=5\n"; 
-			// $supervisord.= "process_name=%(program_name)s_%(process_num)02d\n\n"; 
-			
-			// // Add workers for domain pagerank
-			// $supervisord.= "[program:prNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains pr new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=5\n"; 
-			// $supervisord.= "process_name=%(process_num)s\n"; 	
-			
-			// // Add workers for domain pagerank
-			// $supervisord.= "[program:backlinksNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains backlinks new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=5\n"; 
-			// $supervisord.= "process_name=%(process_num)s\n"; 	
-			
-			// // Add workers for domain pagerank
-			// $supervisord.= "[program:alexaNew]\n";
-			// $supervisord.= "command=php /home/ec2-user/scraper/router.php worker domains alexa new\n";
-			// $supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/".$this->instanceType.".log\n";
-			// $supervisord.= "autostart=true\n";
-			// $supervisord.= "autorestart=true\n";
-			// $supervisord.= "numprocs=5\n"; 
-			// $supervisord.= "process_name=%(process_num)s\n"; 					
-		}
-		
 		// Write new supervisord config file
 		file_put_contents("core/supervisord.core.conf", $supervisord);
 
