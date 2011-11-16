@@ -62,11 +62,6 @@ class monitorCore
 		{			
 			// Restart the application
 			$this->restartSupervisord();
-		}
-		elseif($instruction == "stop")
-		{
-			// Kill all scripts
-			$this->killSupervisord();												
 		}							
 		elseif($instruction == "reboot")
 		{
