@@ -8,6 +8,9 @@ class parse
 
 	// The search engine results being parsed
 	public $engine;
+
+	// Will contain just the div containing search results
+	public $searchDiv;
    
 	// ===========================================================================// 
 	// ! Parsing methods                                                          //
@@ -83,6 +86,38 @@ class parse
 		// Set alexa rank for domain
 		return trim($xml->SD[1]->POPULARITY['TEXT']);
 	} 
+
+	// Return just the search div from google
+	public function findSearch(&$content)
+	{
+		$search = explode('<!--a-->', $content); 
+
+		// It's the new version of google
+		if($search[1])
+		{      
+			$search = explode('<!--z-->', $search[1]);		
+		} 
+		// It's an old version of google
+		else
+		{
+			$search = explode('<div id="ires">', $content);
+
+			// if its the main old one
+			if($search[1])
+			{
+				$search = explode('</ol></div>', $search[1]);  
+				$search[0] = $search[0]."</ol>";
+			}
+			// It's not the main old version either
+			else
+			{
+				// Just save the original file
+				$search[0] = $content;
+			}	
+		}	  
+					
+		$this->searchDiv = $search[0];
+	}
 	
 	// ===========================================================================// 
 	// ! Supporting functions                                                     //

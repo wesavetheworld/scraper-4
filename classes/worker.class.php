@@ -127,8 +127,10 @@ class worker
 		// Execute the scraping
 		$this->scrape->curlExecute();
 		
-		// Update proxy use
-		$this->proxies->usage('total', count($this->scrape->results));		
+		// Update scraping stats
+		$this->proxies->usage('total', $this->scrape->scrapesTotal);		
+		$this->proxies->usage('good', $this->scrape->scrapesGood);		
+		$this->proxies->usage('bad', $this->scrape->scrapesBad);		
 	}
 
 	private function parseContent()
@@ -149,21 +151,17 @@ class worker
 
 				// Parse the content
 				$this->$parse($content, $key, $item);
-				
-				echo "save: $item->searchHash\n";
-
-				// Increment bad scrapes for the hour
-				$this->proxies->usage('good', 1);				
-				
-				// $search = new parse;
-				
-				// $search->findElements($this->parsePattern('save'), $this->scrape->results[$item->searchHash]['output']);
-				
-				// echo  $search->elements[0];	
-
-				// $this->searches->save("s:$item->searchHash", $search->elements[0]);
-				
-				// die();						
+								
+				// If this is a google search
+				if($this->source == "google")
+				{		
+					// Extract the search results div						
+					$this->parse->findSearch($content);				
+					
+					$save = $item->url."<br />".$this->parse->searchDiv;
+					// Save good search
+					$this->searches->save("s:$item->keyword_id:$item->resultCount:$item->searchPage", $save);	
+				}					
 			}	
 			// No scraped content returned
 			else
@@ -182,13 +180,15 @@ class worker
 					// Remove proxy used for this item so that a new one will be selected for in the next loop
 					unset($item->proxy);
 				}	
-				echo "save: $item->searchHash\n";
 
-				// Save bad search
-				$this->searches->save("b:$item->searchHash", $this->scrape->results[$item->searchHash]['output']);
-			
-				// Increment bad scrapes for the hour
-				$this->proxies->usage('bad', 1);		
+				// If this is a google search
+				if($this->source == "google")
+				{
+					$save = $item->url."<br />".$this->scrape->results[$item->searchHash]['output'];
+					// Save bad search
+					$this->searches->save("b:$item->keyword_id:$item->resultCount:$item->searchPage", $save);
+				}	
+				
 
 			}
 

@@ -65,10 +65,10 @@ class scraper
 	public $scrapesBad = 0; 
 	
 	// The amount of scrapes that succeed
-	private $scrapesGood = 0;
+	public $scrapesGood = 0;
 
 	// The total amount of new scrapes performed
-	private $scrapesTotal = 0;	
+	public $scrapesTotal = 0;	
 	
 	// CURL handle
 	private $mh;
