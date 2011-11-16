@@ -39,7 +39,8 @@ class parse
 		foreach($this->elements as $position => $element)
 		{				
 			// If current element matches element searched for
-			if(preg_match("/$find/i", $element)) 
+		    // Regex explained: "(\/|$)" means ends with "/" or just ends. This fixes issues with .co/.com false matches
+			if(preg_match("/$find(\/|$)/i", $element)) 
 			{    
 				// The matching element found
 			   	$this->found = $element;     
