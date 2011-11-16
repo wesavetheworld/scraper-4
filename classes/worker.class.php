@@ -160,7 +160,7 @@ class worker
 					
 					$save = $item->url."<br />".$this->parse->searchDiv;
 					// Save good search
-					//$this->searches->save("s:$item->keyword_id:$item->resultCount:$item->searchPage", $save);	
+					$this->searches->save("s:$item->keyword_id:$item->resultCount:$item->searchPage", $save);	
 				}					
 			}	
 			// No scraped content returned
@@ -186,7 +186,7 @@ class worker
 				{
 					$save = $item->url."<br />".$this->scrape->results[$item->searchHash]['output'];
 					// Save bad search
-					//$this->searches->save("b:$item->keyword_id:$item->resultCount:$item->searchPage", $save);
+					$this->searches->save("b:$item->keyword_id:$item->resultCount:$item->searchPage", $save);
 				}	
 				
 
