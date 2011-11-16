@@ -160,7 +160,7 @@ class worker
 					
 					$save = $item->url."<br />".$this->parse->searchDiv;
 					// Save good search
-					$this->searches->save("s:$item->keyword_id:$item->resultCount:$item->searchPage", $save);	
+					//$this->searches->save("s:$item->keyword_id:$item->resultCount:$item->searchPage", $save);	
 				}					
 			}	
 			// No scraped content returned
