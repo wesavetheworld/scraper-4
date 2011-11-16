@@ -95,7 +95,7 @@ class worker
 		$this->items = new $class($job->items);	
 		
 		// Save searches
-		$this->searches = new searches();		
+		$this->searches = new searches();	
 	}
 
 	private function setModel($source)
@@ -160,7 +160,7 @@ class worker
 					
 					$save = $item->url."<br />".$this->parse->searchDiv;
 					// Save good search
-					$this->searches->save("s:$item->keyword_id:$item->resultCount:$item->searchPage", $save);	
+					$this->searches->save("good", $item->keyword_id."_".$item->resultCount."_".$item->searchPage, $save);	
 				}					
 			}	
 			// No scraped content returned
@@ -186,7 +186,8 @@ class worker
 				{
 					$save = $item->url."<br />".$this->scrape->results[$item->searchHash]['output'];
 					// Save bad search
-					$this->searches->save("b:$item->keyword_id:$item->resultCount:$item->searchPage", $save);
+					$this->searches->save("bad", $item->keyword_id."_".$item->resultCount."_".$item->searchPage, $save);	
+
 				}	
 				
 

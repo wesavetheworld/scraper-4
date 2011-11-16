@@ -32,8 +32,11 @@ class workerCore
 		$this->queue->workerGroup = 'workers:'.SOURCE;
 
 		// Notify redis that this worker is alive
-		$this->queue->status('0');				
-
+		$this->queue->status('0');	
+		
+		// Save searches
+		$this->searches = new searches();
+		
 		// Subscribe to job channel and wait for work
 		$this->listen();
 	}

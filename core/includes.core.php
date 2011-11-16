@@ -48,6 +48,9 @@ if(CORE == "worker")
 }
 	// require_once worker settings
 	require_once('config/scraping.config.php');
+
+	// Include the amazon SDK
+	require_once('classes/amazon/sdk.class.php');	
 	
 // ===========================================================================// 
 // ! Required classes                	                                      //
