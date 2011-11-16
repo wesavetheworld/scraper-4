@@ -70,9 +70,6 @@ class monitorCore
 		}							
 		elseif($instruction == "reboot")
 		{
-			// Stop redis if running
-			$this->killRedis();
-
 			// Kill all scripts
 			$this->killSupervisord();												
 			
@@ -81,9 +78,6 @@ class monitorCore
 		}					
 		elseif($instruction == "shutdown")
 		{
-			// Stop redis if running
-			$this->killRedis();
-						
 			// Kill all scripts
 			$this->killSupervisord();													
 			
@@ -95,24 +89,6 @@ class monitorCore
 			echo "no actions found for \"$instruction\"\n";
 		}	
 	} 
-
-	// ===========================================================================// 
-	// ! Redis methods                                                            //
-	// ===========================================================================//	
-
-	// Stop redis safely if running
-	private function killRedis()
-	{
-		if(INSTANCE_TYPE == "redis" || INSTANCE_TYPE == "boss")
-		{
-			// Connect to redis
-			$this->redis = new redis();
-
-			// Shut down redis
-			$this->redis->send_command("shutdown");
-		}	
-	}
-
 		
 	// ===========================================================================// 
 	// ! Supervisord daemon methods                                               //
