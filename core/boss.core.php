@@ -58,7 +58,7 @@ class bossCore
 					
 					// Assign the job to the worker
 					$this->queue->assignWork($source, $worker, $job);
-				}	
+				}
 			}
 
 			echo "check complete\n";
