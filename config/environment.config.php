@@ -39,7 +39,7 @@ if(defined("DEV"))
 else
 {
 	// The AWS elastic ip for the client server
-	define('BOSS_IP', '184.72.45.180');
+	define('BOSS_IP', '50.18.180.36');
 
 	// Redis listening port
 	define("BOSS_PORT", 6379);
@@ -83,7 +83,7 @@ if(defined("DEV"))
 else
 {
 	// Ip of the redis database instance 
-	define("REDIS_SERPS_IP", "50.18.172.44");
+	define("REDIS_SERPS_IP", "50.18.182.135");
 
 	// Redis listening port
 	define("REDIS_SERPS_PORT", 6379);
@@ -136,7 +136,7 @@ if(defined("DEV"))
 else
 {
 	// Ip of the redis database instance 
-	define("REDIS_PROXY_IP", "50.18.170.228");
+	define("REDIS_PROXY_IP", "50.18.187.13");
 
 	// Redis listening port
 	define("REDIS_PROXY_PORT", 6379);
