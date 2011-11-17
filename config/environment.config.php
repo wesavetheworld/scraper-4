@@ -33,7 +33,7 @@ if(defined("DEV"))
 	define("BOSS_DB", 0);		
 
 	// The AWS elastic ip for the google 1 server
-	define('GOOGLE_IP', '184.72.55.252');	
+	define('GOOGLE_IP', '50.18.187.16');	
 }	
 // else production environment
 else
@@ -48,7 +48,7 @@ else
 	define("BOSS_DB", 0);			
 
 	// The AWS elastic ip for the google 1 server
-	define('GOOGLE_IP', '184.72.55.25');		
+	define('GOOGLE_IP', '184.72.55.252');		
 }					
 
 // ===========================================================================// 
