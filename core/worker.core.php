@@ -55,7 +55,7 @@ class workerCore
 		if($job = $this->queue->getWork())
 		{
 			// Perform the task
-			$this->work($job[2]);	
+			$this->work($job);	
 
 			// Listen for more work
 			$this->listen();

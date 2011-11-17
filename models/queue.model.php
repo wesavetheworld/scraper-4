@@ -308,7 +308,7 @@ class queue
 					$this->bossDB->unsubscribe($this->channel);			
 
 					// Return the job received
-					return $work;
+					return $work[2];
 				}	
 			}	
 		}			
