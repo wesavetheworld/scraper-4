@@ -37,7 +37,7 @@
 
 class redis 
 {
-	protected $connection;
+	public $connection;
 	protected $last_err;
 	protected $err_log;
 

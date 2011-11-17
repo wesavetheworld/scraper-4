@@ -278,19 +278,65 @@ class queue
 	// ! Job queue functions for workers                                          //
 	// ===========================================================================//
 	
+	// Get work from the boss server
 	public function getWork()
 	{		
+		// Notify redis that this worker is alive
+		$this->status('0');
+
 		// Listen on this worker's channel for work
 		$this->bossDB->subscribe($this->channel);
 
-		// Wait for a job to be published
-		$work = $this->bossDB->read_reply();
+		// Loop until work is received
+		while(true)
+		{
+			// Listen to worker channel for work
+			$work = $this->bossDB->read_reply();
 
-		// Redis commands are ignored if still subscribed to a channel
-		$this->bossDB->unsubscribe($this->channel);
+			// If a job is received (read_reply will return false after a while so it needs to loop)
+			if($work)
+			{		
+				// Check if this is just a ping
+				if($work[2] == "ping")
+				{
+					echo "Im here master\n";
+				}
+				// It's a real job
+				else
+				{	
+					// Redis commands are ignored if still subscribed to a channel
+					$this->bossDB->unsubscribe($this->channel);			
+
+					// Return the job received
+					return $work;
+				}	
+			}	
+		}			
+	}	
+
+
+	// public function getWork()
+	// {		
+	// 	// Listen on this worker's channel for work
+	// 	$this->bossDB->subscribe($this->channel);
+
+	// 	echo $this->channel;
+
+	// 	// Wait for a job to be published
+	// 	$work = $this->bossDB->read_reply();
+
+	// 	// If just a test message
+	// 	if($work[2] == "ping")
+	// 	{
+	// 		echo "Im here master\n";
+	// 		return false;
+	// 	}
+
+	// 	// Redis commands are ignored if still subscribed to a channel
+	// 	$this->bossDB->unsubscribe($this->channel);
 		
-		return $work;				
-	}		
+	// 	return $work;				
+	// }		
 	
 	// Set worker status (0 = ready, 1 = working, quit = offline)
 	public function status($status)

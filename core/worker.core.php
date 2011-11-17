@@ -30,12 +30,6 @@ class workerCore
 	
 		// Set redis worker type key
 		$this->queue->workerGroup = 'workers:'.SOURCE;
-
-		// Notify redis that this worker is alive
-		$this->queue->status('0');	
-		
-		// Save searches
-		$this->searches = new searches();
 		
 		// Subscribe to job channel and wait for work
 		$this->listen();
@@ -55,23 +49,17 @@ class workerCore
 	// Register types of jobs available
 	private function listen()
 	{			
-		// Daemonize it
-		while(TRUE)
+		echo $this->queue->channel." ready...\n";	
+
+		// When a job is received
+		if($job = $this->queue->getWork())
 		{
-			echo "ready...\n";	
+			// Perform the task
+			$this->work($job[2]);	
 
-			$job = $this->queue->getWork();			
-
-			// If a job was received (read_reply only waits for so long then the loop repeats)
-			if($job)
-			{
-				// Perform the task
-				$this->work($job[2]);
-
-				// Notify redis that this worker is alive
-				$this->queue->status('0');	
-			}	
-		}		
+			// Listen for more work
+			$this->listen();
+		}	
 	}	
 
 	// ===========================================================================// 
