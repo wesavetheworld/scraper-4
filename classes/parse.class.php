@@ -116,6 +116,8 @@ class parse
 				$search[0] = $content;
 			}	
 		}	  
+		
+		unset($search);
 					
 		$this->searchDiv = $search[0];
 	}

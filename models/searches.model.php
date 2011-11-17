@@ -73,7 +73,7 @@ class searches
 	// ! Saved search functions                                                   //
 	// ===========================================================================//	
 
-	public function save($type, $name, $content)
+	public function save($type, $name, &$content)
 	{
 
 		$this->S3->create_object("searches-".$type, $name.".html", array("body"=>$content));
