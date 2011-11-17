@@ -33,7 +33,7 @@ class cronCore
 	public function cron()
 	{	
 		// Loop forever if not development client
-		while(TRUE)
+		while(TRUE && !defined("DEV"))
 		{
 			// Log time for current task loop
 			utilities::notate("Actions at: ".date("H:i:s"), "clientd.log");

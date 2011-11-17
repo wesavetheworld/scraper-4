@@ -76,6 +76,13 @@ class searches
 	public function save($type, $name, &$content)
 	{
 
+		// If this is a dev instance
+		if(defined("DEV"))
+		{
+			// Change bucket name
+			$type = $type."-dev";
+		}
+
 		$this->S3->create_object("searches-".$type, $name.".html", array("body"=>$content));
 
 		//$this->redis->send_command("set", "$id", $content);
