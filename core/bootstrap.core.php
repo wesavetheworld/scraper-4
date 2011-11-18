@@ -229,8 +229,18 @@ class bootstrapCore
 	// Update the app to the latest code revision
 	public function updateApp()
 	{		
+		// Determine which branch to checkout
+		if($this->instanceDev)
+		{
+			$branch = "Development";
+		}
+		else
+		{
+			$branch = "master";
+		}
+
 		// Updated code to latest revision in repo
-		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git Development");
+		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git $branch");
 
 		// If new revision downloaded
 		if(strpos($changes, "Updating") !== FALSE && !strpos($changes, "error"))
