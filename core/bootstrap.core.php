@@ -232,15 +232,15 @@ class bootstrapCore
 		// Determine which branch to checkout
 		if($this->instanceDev)
 		{
-			$branch = "Development";
+			$this->branch = "Development";
 		}
 		else
 		{
-			$branch = "master";
+			$this->branch = "master";
 		}
 
 		// Updated code to latest revision in repo
-		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git $branch");
+		$changes = shell_exec("git pull git@github.com:iamjoshua/scraper.git $this->branch");
 
 		// If new revision downloaded
 		if(strpos($changes, "Updating") !== FALSE && !strpos($changes, "error"))
@@ -287,6 +287,7 @@ class bootstrapCore
 		$config.= "// This config file is auto generated on boot.\n\n";
 		$config.= 'define("INSTANCE_TYPE", "'.$this->instanceType.'");'."\n";
 		$config.= 'define("INSTANCE_NAME", "'.$this->instanceName.'");'."\n";
+		$config.= 'define("BRANCH", "'.$this->branch.'");'."\n";
 
 		// If bootstrapping the development server
 		if($this->instanceDev)
