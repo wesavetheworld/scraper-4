@@ -201,7 +201,7 @@ class proxies
 			$this->redis->zAddBulk($this->key, $update);			
 			
 			// Add proxies used to used log			
-			$this->redis->__call("lPush", $used);
+			//$this->redis->__call("lPush", $used);
 		}
 		// Just a single proxy was provided
 		else
