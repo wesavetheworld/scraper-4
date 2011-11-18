@@ -57,6 +57,13 @@ class bootstrapCore
 		// Load the current instances description (boss/worker)
 		$this->getInstanceType();
 
+		// If this is a dev instance
+		if($this->instanceDev)
+		{
+			// Update app again to get dev branch
+			$this->updateApp();	
+		}
+
 		// Save all server settings to config files
 		$this->saveType();	   
 		
