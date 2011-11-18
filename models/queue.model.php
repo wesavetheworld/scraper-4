@@ -62,11 +62,14 @@ class queue
 
 	private function disconnect()
 	{
-		// Close the redis connection
-		$this->bossDB->__desctruct();
+		if($this->bossDB)
+		{			
+			// Close the redis connection
+			$this->bossDB->__desctruct();
 
-		// Destroy redis object
-		unset($this->bossDB);		
+			// Destroy redis object
+			unset($this->bossDB);		
+		}	
 	}
 
 	// Run when script ends
