@@ -67,6 +67,9 @@ class workerCore
 
 		// Do the work!
 		$worker->work($job);
+
+		// Destroy worker to stop memory leaking
+		unset($worker);
 	}	
 }	
 
