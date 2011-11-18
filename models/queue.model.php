@@ -41,8 +41,8 @@ class queue
 	// Run on class instantiation
 	function __construct()
 	{  	
-		// Connect to the boss server
-		$this->bossDB = new redis(BOSS_IP, BOSS_PORT);	
+		// Connect to redis
+		$this->connect();
 
 		// Connect to the serps server
 		//$this->serpsDB = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);
@@ -51,10 +51,29 @@ class queue
 		$this->sources = json_decode(QUEUE_SOURCES);	
 	}
 
+	private function connect()
+	{
+		if(!$this->bossDB)
+		{		
+			// Connect to the boss server
+			$this->bossDB = new redis(BOSS_IP, BOSS_PORT);			
+		}	
+	}
+
+	private function disconnect()
+	{
+		// Close the redis connection
+		$this->bossDB->__desctruct();
+
+		// Destroy redis object
+		unset($this->bossDB);		
+	}
+
 	// Run when script ends
 	function __destruct()
 	{
-			
+		$this->disconnect();
+
 	}
 
 	// ===========================================================================// 
@@ -281,62 +300,73 @@ class queue
 	// Get work from the boss server
 	public function getWork()
 	{		
+		while(true)
+		{
+			// Check in to job server
+			$this->checkIn();
+
+			// Rest connection at this time
+			$reset = time() + 120;
+
+			// Loop until work is received (ignore blank fgets responses) or connection reset time reached
+			while(($work = $this->bossDB->read_reply()) === FALSE && time() < $reset)
+			{}
+
+			// Check out to do work
+			$this->checkOut();
+
+			// If it's not just a ping or reset time
+			if($work !== FALSE &&!$this->pingCheck($work[2]))	
+			{		
+				// Return the job received
+				return $work[2];
+			}	
+		}	
+	}	
+
+	// Check into job server to receive work
+	private function checkIn()
+	{
+		// Connect to redis
+		$this->connect();
+		
 		// Notify redis that this worker is alive
 		$this->status('0');
 
 		// Listen on this worker's channel for work
 		$this->bossDB->subscribe($this->channel);
 
-		// Loop until work is received
-		while(true)
+		echo "$this->channel ready...\n";
+	}
+
+	// Check out of job server to do work
+	private function checkOut()
+	{
+		// Deregister from job queue
+		$this->status("1");
+
+		// Unsubscribe from channel
+		$this->bossDB->unsubscribe($this->channel);			
+
+		// Destroy redis connection
+		$this->disconnect();	
+	}
+
+	// Check published messages for ping checks
+	private function pingCheck($message)
+	{
+		// If the message is a ping
+		if($message == "ping")
 		{
-			// Listen to worker channel for work
-			$work = $this->bossDB->read_reply();
+			// Respond joyfully
+			echo "Im here master\n";
 
-			// If a job is received (read_reply will return false after a while so it needs to loop)
-			if($work)
-			{		
-				// Check if this is just a ping
-				if($work[2] == "ping")
-				{
-					echo "Im here master\n";
-				}
-				// It's a real job
-				else
-				{	
-					// Redis commands are ignored if still subscribed to a channel
-					$this->bossDB->unsubscribe($this->channel);			
+			// It's a ping, so tell getWork to disregard
+			return true;				
+		}	
 
-					// Return the job received
-					return $work[2];
-				}	
-			}	
-		}			
+		return false;	
 	}	
-
-
-	// public function getWork()
-	// {		
-	// 	// Listen on this worker's channel for work
-	// 	$this->bossDB->subscribe($this->channel);
-
-	// 	echo $this->channel;
-
-	// 	// Wait for a job to be published
-	// 	$work = $this->bossDB->read_reply();
-
-	// 	// If just a test message
-	// 	if($work[2] == "ping")
-	// 	{
-	// 		echo "Im here master\n";
-	// 		return false;
-	// 	}
-
-	// 	// Redis commands are ignored if still subscribed to a channel
-	// 	$this->bossDB->unsubscribe($this->channel);
-		
-	// 	return $work;				
-	// }		
 	
 	// Set worker status (0 = ready, 1 = working, quit = offline)
 	public function status($status)
@@ -353,23 +383,6 @@ class queue
 			$this->bossDB->zAdd($this->workerGroup, $status, "$this->name");	
 		}	
 	}	
-	
-	// ===========================================================================// 
-	// ! Data source management                                                   //
-	// ===========================================================================//		
-
-	// // Add a new data source to the job queue system
-	// public function addSource($source)
-	// {
-	// 	// Add source to db
-	// 	$this->bossDB->sAdd("sources", $source);
-	// }
-
-	// // List all data sources used by the job queue
-	// public function listSources()
-	// {
-	// 	return $this->bossDB->sMembers("sources");
-	// }
 
 	// ===========================================================================// 
 	// ! Message system (pub/sub)                                                 //

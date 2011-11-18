@@ -85,7 +85,7 @@ class redis
 	{
 		$this->last_err = $line.': '.$msg;
 		$this->err_log[] = $line.': '.$msg;
-		return false;
+		return $this->last_err;
 	}
 
 	public function getErrLog()
@@ -263,6 +263,10 @@ class redis
 			case ':':
 				return intval(substr(trim($reply), 1));
 				break;
+			// Blank response(WHY?!?!?!? some kind of fgets timeout)	
+			case "":
+				return "";
+				break;	
 			default:
 				return $this->ReportError('unkown answer: '.$reply, __LINE__);
 				break;

@@ -18,7 +18,7 @@ class workerCore
 {    
 	// When script starts
 	function __construct()
-	{
+	{	
 		// Instantiate a new job queue object
 		$this->queue = new queue();			
 
@@ -29,37 +29,31 @@ class workerCore
 		$this->queue->channel = "worker:".$this->queue->name;
 	
 		// Set redis worker type key
-		$this->queue->workerGroup = 'workers:'.SOURCE;
-		
+		$this->queue->workerGroup = 'workers:'.SOURCE;	
+						
 		// Subscribe to job channel and wait for work
 		$this->listen();
 	}
 	
 	// When script is ended
 	function __destruct() 
-	{
-		// Give up and go home
-		$this->queue->status('quit');	
-	}	
+	{}	
 
 	// ===========================================================================// 
 	// ! Wait for work to be published                                            //
 	// ===========================================================================//		
 	
-	// Register types of jobs available
+	// Listen for work
 	private function listen()
 	{			
-		echo $this->queue->channel." ready...\n";	
-
 		// When a job is received
-		if($job = $this->queue->getWork())
-		{
-			// Perform the task
-			$this->work($job);	
+		$job = $this->queue->getWork();
+		
+		// Perform the task
+		$this->work($job);	
 
-			// Listen for more work
-			$this->listen();
-		}	
+		// Listen for more work
+		$this->listen();
 	}	
 
 	// ===========================================================================// 
