@@ -316,7 +316,7 @@ class queue
 			$this->checkOut();
 
 			// If it's not just a ping or reset time
-			if($work !== FALSE &&!$this->pingCheck($work[2]))	
+			if($work && !$this->pingCheck($work[2]))	
 			{		
 				// Return the job received
 				return $work[2];
