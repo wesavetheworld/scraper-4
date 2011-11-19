@@ -37,7 +37,10 @@ class workerCore
 	
 	// When script is ended
 	function __destruct() 
-	{}	
+	{
+		// Checkout of job server
+		$this->queue->status("quit");
+	}	
 
 	// ===========================================================================// 
 	// ! Wait for work to be published                                            //
@@ -53,7 +56,9 @@ class workerCore
 		$this->work($job);	
 
 		// Listen for more work
-		$this->listen();
+		//$this->listen();
+
+		echo "job done, restarting...\n";
 	}	
 
 	// ===========================================================================// 
@@ -67,9 +72,6 @@ class workerCore
 
 		// Do the work!
 		$worker->work($job);
-
-		// Destroy worker to stop memory leaking
-		unset($worker);
 	}	
 }	
 
