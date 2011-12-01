@@ -178,7 +178,7 @@ class redis
 
 	protected function _send($args)
 	{
-		while(!$w)
+		while(!isset($w))
 		{
 			$command = '*'.count($args)."\r\n";
 			foreach ($args as $arg) $command .= "$".strlen($arg)."\r\n".$arg."\r\n";

@@ -35,6 +35,11 @@ class tasks
 		// require_once('classes/amazon/sdk.class.php');	
 		
 	}
+
+	public function traffic()
+	{
+		include 'classes/google/traffic.class.php';
+	}
 	  
 	// ===========================================================================// 
 	// ! Main routing method                                                      //
