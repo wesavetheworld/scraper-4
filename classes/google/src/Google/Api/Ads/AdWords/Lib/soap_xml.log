@@ -1,0 +1,1554 @@
+[Dec 01 2011 22:19:45.000000 - ERROR] POST /api/adwords/o/v201109/TrafficEstimatorService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 834
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TrafficEstimatorSelector">
+        <ns2:campaignEstimateRequests xsi:type="ns2:CampaignEstimateRequest">
+          <ns2:adGroupEstimateRequests xsi:type="ns2:AdGroupEstimateRequest">
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>mars cruise</ns1:text>
+                <ns1:matchType>BROAD</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>cheap cruise</ns1:text>
+                <ns1:matchType>PHRASE</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>cruise</ns1:text>
+                <ns1:matchType>EXACT</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>moon walk</ns1:text>
+                <ns1:matchType>BROAD</ns1:matchType>
+              </ns2:keyword>
+              <ns2:isNegative>true</ns2:isNegative>
+            </ns2:keywordEstimateRequests>
+            <ns2:maxCpc xsi:type="ns1:Money">
+              <ns1:microAmount>1000000</ns1:microAmount>
+            </ns2:maxCpc>
+          </ns2:adGroupEstimateRequests>
+          <ns2:criteria xsi:type="ns1:Location">
+            <ns1:id>2840</ns1:id>
+          </ns2:criteria>
+          <ns2:criteria xsi:type="ns1:Language">
+            <ns1:id>1000</ns1:id>
+          </ns2:criteria>
+        </ns2:campaignEstimateRequests>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Thu, 01 Dec 2011 22:19:45 GMT
+Expires: Thu, 01 Dec 2011 22:19:45 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 483
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <ResponseHeader xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109" xmlns="https://adwords.google.com/api/adwords/o/v201109">
+      <ns2:requestId>0004b30f3feab3b00a860c04000029f3</ns2:requestId>
+      <ns2:operations>0</ns2:operations>
+      <ns2:responseTime>420</ns2:responseTime>
+      <ns2:units>0</ns2:units>
+    </ResponseHeader>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>QuotaCheckError.ACCOUNT_DELINQUENT @ </faultstring>
+      <detail>
+        <ApiExceptionFault xmlns="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+          <ns2:message>QuotaCheckError.ACCOUNT_DELINQUENT @ </ns2:message>
+          <ns2:ApplicationException.Type>ApiException</ns2:ApplicationException.Type>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:QuotaCheckError">
+            <ns2:fieldPath/>
+            <ns2:trigger/>
+            <ns2:errorString>QuotaCheckError.ACCOUNT_DELINQUENT</ns2:errorString>
+            <ns2:ApiError.Type>QuotaCheckError</ns2:ApiError.Type>
+            <ns2:reason>ACCOUNT_DELINQUENT</ns2:reason>
+          </ns2:errors>
+        </ApiExceptionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 01 2011 22:21:29.000000 - ERROR] POST /api/adwords/o/v201109/TrafficEstimatorService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 830
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TrafficEstimatorSelector">
+        <ns2:campaignEstimateRequests xsi:type="ns2:CampaignEstimateRequest">
+          <ns2:adGroupEstimateRequests xsi:type="ns2:AdGroupEstimateRequest">
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>mars cruise</ns1:text>
+                <ns1:matchType>BROAD</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>cheap cruise</ns1:text>
+                <ns1:matchType>PHRASE</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>cruise</ns1:text>
+                <ns1:matchType>EXACT</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>moon walk</ns1:text>
+                <ns1:matchType>BROAD</ns1:matchType>
+              </ns2:keyword>
+              <ns2:isNegative>true</ns2:isNegative>
+            </ns2:keywordEstimateRequests>
+            <ns2:maxCpc xsi:type="ns1:Money">
+              <ns1:microAmount>1000000</ns1:microAmount>
+            </ns2:maxCpc>
+          </ns2:adGroupEstimateRequests>
+          <ns2:criteria xsi:type="ns1:Location">
+            <ns1:id>2840</ns1:id>
+          </ns2:criteria>
+          <ns2:criteria xsi:type="ns1:Language">
+            <ns1:id>1000</ns1:id>
+          </ns2:criteria>
+        </ns2:campaignEstimateRequests>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Thu, 01 Dec 2011 22:21:29 GMT
+Expires: Thu, 01 Dec 2011 22:21:29 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 484
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <ResponseHeader xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109" xmlns="https://adwords.google.com/api/adwords/o/v201109">
+      <ns2:requestId>0004b30f461738f80a868c0f00007d70</ns2:requestId>
+      <ns2:operations>0</ns2:operations>
+      <ns2:responseTime>394</ns2:responseTime>
+      <ns2:units>0</ns2:units>
+    </ResponseHeader>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>QuotaCheckError.ACCOUNT_DELINQUENT @ </faultstring>
+      <detail>
+        <ApiExceptionFault xmlns="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+          <ns2:message>QuotaCheckError.ACCOUNT_DELINQUENT @ </ns2:message>
+          <ns2:ApplicationException.Type>ApiException</ns2:ApplicationException.Type>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:QuotaCheckError">
+            <ns2:fieldPath/>
+            <ns2:trigger/>
+            <ns2:errorString>QuotaCheckError.ACCOUNT_DELINQUENT</ns2:errorString>
+            <ns2:ApiError.Type>QuotaCheckError</ns2:ApiError.Type>
+            <ns2:reason>ACCOUNT_DELINQUENT</ns2:reason>
+          </ns2:errors>
+        </ApiExceptionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 01 2011 22:24:08.000000 - ERROR] POST /api/adwords/o/v201109/TrafficEstimatorService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 831
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TrafficEstimatorSelector">
+        <ns2:campaignEstimateRequests xsi:type="ns2:CampaignEstimateRequest">
+          <ns2:adGroupEstimateRequests xsi:type="ns2:AdGroupEstimateRequest">
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>mars cruise</ns1:text>
+                <ns1:matchType>BROAD</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>cheap cruise</ns1:text>
+                <ns1:matchType>PHRASE</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>cruise</ns1:text>
+                <ns1:matchType>EXACT</ns1:matchType>
+              </ns2:keyword>
+            </ns2:keywordEstimateRequests>
+            <ns2:keywordEstimateRequests xsi:type="ns2:KeywordEstimateRequest">
+              <ns2:keyword xsi:type="ns1:Keyword">
+                <ns1:text>moon walk</ns1:text>
+                <ns1:matchType>BROAD</ns1:matchType>
+              </ns2:keyword>
+              <ns2:isNegative>true</ns2:isNegative>
+            </ns2:keywordEstimateRequests>
+            <ns2:maxCpc xsi:type="ns1:Money">
+              <ns1:microAmount>1000000</ns1:microAmount>
+            </ns2:maxCpc>
+          </ns2:adGroupEstimateRequests>
+          <ns2:criteria xsi:type="ns1:Location">
+            <ns1:id>2840</ns1:id>
+          </ns2:criteria>
+          <ns2:criteria xsi:type="ns1:Language">
+            <ns1:id>1000</ns1:id>
+          </ns2:criteria>
+        </ns2:campaignEstimateRequests>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Thu, 01 Dec 2011 22:24:08 GMT
+Expires: Thu, 01 Dec 2011 22:24:08 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 484
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <ResponseHeader xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109" xmlns="https://adwords.google.com/api/adwords/o/v201109">
+      <ns2:requestId>0004b30f4f9dbeb00a860c04000029f3</ns2:requestId>
+      <ns2:operations>0</ns2:operations>
+      <ns2:responseTime>416</ns2:responseTime>
+      <ns2:units>0</ns2:units>
+    </ResponseHeader>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>QuotaCheckError.ACCOUNT_DELINQUENT @ </faultstring>
+      <detail>
+        <ApiExceptionFault xmlns="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+          <ns2:message>QuotaCheckError.ACCOUNT_DELINQUENT @ </ns2:message>
+          <ns2:ApplicationException.Type>ApiException</ns2:ApplicationException.Type>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:QuotaCheckError">
+            <ns2:fieldPath/>
+            <ns2:trigger/>
+            <ns2:errorString>QuotaCheckError.ACCOUNT_DELINQUENT</ns2:errorString>
+            <ns2:ApiError.Type>QuotaCheckError</ns2:ApiError.Type>
+            <ns2:reason>ACCOUNT_DELINQUENT</ns2:reason>
+          </ns2:errors>
+        </ApiExceptionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 00:29:13.000000 - ERROR] POST /api/adwords/o/v201109/TrafficEstimatorService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 630
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TrafficEstimatorSelector">
+        <ns2:campaignEstimateRequests>
+          <ns2:criteria xsi:type="ns1:Location">
+            <ns1:id>2840</ns1:id>
+          </ns2:criteria>
+          <ns2:criteria xsi:type="ns1:Language">
+            <ns1:id>1000</ns1:id>
+          </ns2:criteria>
+        </ns2:campaignEstimateRequests>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 00:29:13 GMT
+Expires: Fri, 02 Dec 2011 00:29:13 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 515
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <ResponseHeader xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109" xmlns="https://adwords.google.com/api/adwords/o/v201109">
+      <ns2:requestId>0004b3110eeea3780a86fc0b000017c3</ns2:requestId>
+      <ns2:operations>1</ns2:operations>
+      <ns2:responseTime>250</ns2:responseTime>
+      <ns2:units>15</ns2:units>
+    </ResponseHeader>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>[NotEmptyError.EMPTY_LIST @ selector.campaignEstimateRequests[0].adGroupEstimateRequests]</faultstring>
+      <detail>
+        <ApiExceptionFault xmlns="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+          <ns2:message>[NotEmptyError.EMPTY_LIST @ selector.campaignEstimateRequests[0].adGroupEstimateRequests]</ns2:message>
+          <ns2:ApplicationException.Type>ApiException</ns2:ApplicationException.Type>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:NotEmptyError">
+            <ns2:fieldPath>selector.campaignEstimateRequests[0].adGroupEstimateRequests</ns2:fieldPath>
+            <ns2:trigger/>
+            <ns2:errorString>NotEmptyError.EMPTY_LIST</ns2:errorString>
+            <ns2:ApiError.Type>NotEmptyError</ns2:ApiError.Type>
+            <ns2:reason>EMPTY_LIST</ns2:reason>
+          </ns2:errors>
+        </ApiExceptionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 00:39:01.000000 - ERROR] POST /api/adwords/o/v200909/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 979
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v200909" xmlns:ns2="https://adwords.google.com/api/adwords/o/v200909" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:applicationToken>INSERT_APPLICATION_TOKEN_HERE</ns1:applicationToken>
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:clientCustomerId>*******</ns1:clientCustomerId>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>window shutters</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>shutters</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>plantation shutters</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>blinds</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>toys</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>playmobil</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:CountryTargetSearchParameter">
+          <ns2:countryTargets xsi:type="ns1:CountryTarget">
+            <ns1:countryCode>GB</ns1:countryCode>
+          </ns2:countryTargets>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:LanguageTargetSearchParameter">
+          <ns2:languageTargets xsi:type="ns1:LanguageTarget">
+            <ns1:languageCode>en</ns1:languageCode>
+          </ns2:languageTargets>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 00:39:01 GMT
+Expires: Fri, 02 Dec 2011 00:39:01 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 523
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <ResponseHeader xmlns:ns2="https://adwords.google.com/api/adwords/cm/v200909" xmlns="https://adwords.google.com/api/adwords/o/v200909">
+      <ns2:requestId>0004b31131f6c7380a860c04000029f3</ns2:requestId>
+      <ns2:operations>0</ns2:operations>
+      <ns2:responseTime>126</ns2:responseTime>
+      <ns2:units>0</ns2:units>
+    </ResponseHeader>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>AuthenticationError.CLIENT_CUSTOMER_ID_INVALID @ ; trigger:'*******' Service[TargetingIdeaService.get]</faultstring>
+      <detail>
+        <ApiExceptionFault xmlns="https://adwords.google.com/api/adwords/o/v200909" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v200909">
+          <ns2:message>AuthenticationError.CLIENT_CUSTOMER_ID_INVALID @ ; trigger:'*******' Service[TargetingIdeaService.get]</ns2:message>
+          <ns2:ApplicationException.Type>ApiException</ns2:ApplicationException.Type>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:AuthenticationError">
+            <ns2:fieldPath/>
+            <ns2:trigger>*******</ns2:trigger>
+            <ns2:ApiError.Type>AuthenticationError</ns2:ApiError.Type>
+            <ns2:reason>CLIENT_CUSTOMER_ID_INVALID</ns2:reason>
+          </ns2:errors>
+        </ApiExceptionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:02:27.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 834
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:id>2840</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:id>1000</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:02:27 GMT
+Expires: Fri, 02 Dec 2011 01:02:27 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:04:31.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 798
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters/>
+        <ns2:searchParameters/>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:04:31 GMT
+Expires: Fri, 02 Dec 2011 01:04:31 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 207
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-type.2: The type definition cannot be abstract for element ns2:searchParameters. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:04:39.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 800
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters/>
+        <ns2:searchParameters/>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:04:39 GMT
+Expires: Fri, 02 Dec 2011 01:04:39 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 207
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-type.2: The type definition cannot be abstract for element ns2:searchParameters. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:05:56.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 785
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:id>2840</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:id>1000</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:05:56 GMT
+Expires: Fri, 02 Dec 2011 01:05:56 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:13:31.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 835
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:id>2840</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:id>1000</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:13:31 GMT
+Expires: Fri, 02 Dec 2011 01:13:31 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:14:29.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 835
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:id>2840</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:id>1000</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:14:29 GMT
+Expires: Fri, 02 Dec 2011 01:14:29 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:16:09.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 691
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+  <SOAP-ENV:Header>
+    <ns1:RequestHeader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:SoapHeader">
+      <ns2:authToken>*****</ns2:authToken>
+      <ns2:developerToken>i8l3qopIDW6GZway-h1oJQ</ns2:developerToken>
+      <ns2:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns2:userAgent>
+    </ns1:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns1:get>
+      <ns1:selector xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:TargetingIdeaSelector">
+        <ns1:ideaType>KEYWORD</ns1:ideaType>
+        <ns1:requestType>STATS</ns1:requestType>
+        <ns1:requestedAttributeTypes>KEYWORD</ns1:requestedAttributeTypes>
+        <ns1:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns1:requestedAttributeTypes>
+        <ns1:paging xsi:type="ns2:Paging">
+          <ns2:startIndex>0</ns2:startIndex>
+          <ns2:numberResults>10</ns2:numberResults>
+        </ns1:paging>
+      </ns1:selector>
+    </ns1:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:16:09 GMT
+Expires: Fri, 02 Dec 2011 01:16:09 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 429
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-enumeration-valid: Value 'KEYWORD' is not facet-valid with respect to enumeration '[UNKNOWN, AD_SHARE, APPROX_CONTENT_IMPRESSIONS_PER_DAY, AVERAGE_TARGETED_MONTHLY_SEARCHES, COMPETITION, CRITERION, EXTRACTED_FROM_WEBPAGE, FORMATS, GLOBAL_MONTHLY_SEARCHES, IDEA_TYPE, IN_STREAM_AD_INFO, KEYWORD_CATEGORY, NGRAM_GROUP, PLACEMENT_NAME, SAMPLE_URL, SEARCH_SHARE, PLACEMENT_CATEGORY, PLACEMENT_TYPE, TARGETED_MONTHLY_SEARCHES]'. It must be a value from the enumeration. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:17:07.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 691
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+  <SOAP-ENV:Header>
+    <ns1:RequestHeader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:SoapHeader">
+      <ns2:authToken>*****</ns2:authToken>
+      <ns2:developerToken>i8l3qopIDW6GZway-h1oJQ</ns2:developerToken>
+      <ns2:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns2:userAgent>
+    </ns1:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns1:get>
+      <ns1:selector xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:TargetingIdeaSelector">
+        <ns1:ideaType>KEYWORD</ns1:ideaType>
+        <ns1:requestType>STATS</ns1:requestType>
+        <ns1:requestedAttributeTypes>KEYWORD</ns1:requestedAttributeTypes>
+        <ns1:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns1:requestedAttributeTypes>
+        <ns1:paging xsi:type="ns2:Paging">
+          <ns2:startIndex>0</ns2:startIndex>
+          <ns2:numberResults>10</ns2:numberResults>
+        </ns1:paging>
+      </ns1:selector>
+    </ns1:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:17:07 GMT
+Expires: Fri, 02 Dec 2011 01:17:07 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 429
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-enumeration-valid: Value 'KEYWORD' is not facet-valid with respect to enumeration '[UNKNOWN, AD_SHARE, APPROX_CONTENT_IMPRESSIONS_PER_DAY, AVERAGE_TARGETED_MONTHLY_SEARCHES, COMPETITION, CRITERION, EXTRACTED_FROM_WEBPAGE, FORMATS, GLOBAL_MONTHLY_SEARCHES, IDEA_TYPE, IN_STREAM_AD_INFO, KEYWORD_CATEGORY, NGRAM_GROUP, PLACEMENT_NAME, SAMPLE_URL, SEARCH_SHARE, PLACEMENT_CATEGORY, PLACEMENT_TYPE, TARGETED_MONTHLY_SEARCHES]'. It must be a value from the enumeration. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:17:23.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 708
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/o/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201109">
+  <SOAP-ENV:Header>
+    <ns1:RequestHeader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:SoapHeader">
+      <ns2:authToken>*****</ns2:authToken>
+      <ns2:developerToken>i8l3qopIDW6GZway-h1oJQ</ns2:developerToken>
+      <ns2:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns2:userAgent>
+    </ns1:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns1:get>
+      <ns1:selector xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns1:TargetingIdeaSelector">
+        <ns1:searchParameters/>
+        <ns1:ideaType>KEYWORD</ns1:ideaType>
+        <ns1:requestType>STATS</ns1:requestType>
+        <ns1:requestedAttributeTypes>KEYWORD</ns1:requestedAttributeTypes>
+        <ns1:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns1:requestedAttributeTypes>
+        <ns1:paging xsi:type="ns2:Paging">
+          <ns2:startIndex>0</ns2:startIndex>
+          <ns2:numberResults>10</ns2:numberResults>
+        </ns1:paging>
+      </ns1:selector>
+    </ns1:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:17:23 GMT
+Expires: Fri, 02 Dec 2011 01:17:23 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 207
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-type.2: The type definition cannot be abstract for element ns1:searchParameters. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:18:49.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 785
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:id>2840</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:id>1000</ns1:id>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:18:49 GMT
+Expires: Fri, 02 Dec 2011 01:18:49 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:27:56.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 748
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters/>
+        <ns2:searchParameters/>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:27:56 GMT
+Expires: Fri, 02 Dec 2011 01:27:56 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 207
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-type.2: The type definition cannot be abstract for element ns2:searchParameters. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:29:49.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 791
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:locationName>us</ns1:locationName>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:code>en</ns1:code>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:29:49 GMT
+Expires: Fri, 02 Dec 2011 01:29:49 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:30:22.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 796
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:locationName>US</ns1:locationName>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:code>en</ns1:code>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:30:22 GMT
+Expires: Fri, 02 Dec 2011 01:30:22 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:30:40.000000 - ERROR] POST /api/adwords/o/v201109/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 792
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201109" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201109" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>cruise</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Location">
+          <ns1:locationName>GB</ns1:locationName>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns1:Language">
+          <ns1:code>en</ns1:code>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:30:40 GMT
+Expires: Fri, 02 Dec 2011 01:30:40 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 239
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Client</faultcode>
+      <faultstring>Unmarshalling Error: cvc-elt.4.3: Type 'ns1:Location' is not validly derived from the type definition, 'SearchParameter', of element 'ns2:searchParameters'. </faultstring>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+
+[Dec 02 2011 01:44:24.000000 - ERROR] POST /api/adwords/o/v201008/TargetingIdeaService HTTP/1.1
+Host: adwords.google.com
+Connection: Keep-Alive
+User-Agent: PHP-SOAP/5.3.6, gzip
+Accept-Encoding: gzip, deflate
+Content-Encoding: gzip
+Content-Type: text/xml; charset=utf-8
+SOAPAction: ""
+Content-Length: 823
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://adwords.google.com/api/adwords/cm/v201008" xmlns:ns2="https://adwords.google.com/api/adwords/o/v201008" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SOAP-ENV:Header>
+    <ns2:RequestHeader xsi:type="ns1:SoapHeader">
+      <ns1:authToken>*****</ns1:authToken>
+      <ns1:developerToken>i8l3qopIDW6GZway-h1oJQ</ns1:developerToken>
+      <ns1:userAgent>AwApi-PHP-2.7.1-INSERT_COMPANY_NAME_HERE</ns1:userAgent>
+    </ns2:RequestHeader>
+  </SOAP-ENV:Header>
+  <SOAP-ENV:Body>
+    <ns2:get>
+      <ns2:selector xsi:type="ns2:TargetingIdeaSelector">
+        <ns2:searchParameters xsi:type="ns2:RelatedToKeywordSearchParameter">
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>crappy pants</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>crappy pants</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>crappy pants</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+          <ns2:keywords xsi:type="ns1:Keyword">
+            <ns1:text>crappy pants2</ns1:text>
+            <ns1:matchType>EXACT</ns1:matchType>
+          </ns2:keywords>
+        </ns2:searchParameters>
+        <ns2:searchParameters xsi:type="ns2:KeywordMatchTypeSearchParameter">
+          <ns2:keywordMatchTypes>EXACT</ns2:keywordMatchTypes>
+        </ns2:searchParameters>
+        <ns2:ideaType>KEYWORD</ns2:ideaType>
+        <ns2:requestType>STATS</ns2:requestType>
+        <ns2:requestedAttributeTypes>KEYWORD</ns2:requestedAttributeTypes>
+        <ns2:requestedAttributeTypes>AVERAGE_TARGETED_MONTHLY_SEARCHES</ns2:requestedAttributeTypes>
+        <ns2:paging xsi:type="ns1:Paging">
+          <ns1:startIndex>0</ns1:startIndex>
+          <ns1:numberResults>10</ns1:numberResults>
+        </ns2:paging>
+      </ns2:selector>
+    </ns2:get>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+
+HTTP/1.1 500 Internal Server Error
+Content-Type: text/xml; charset=UTF-8
+Content-Encoding: gzip
+Date: Fri, 02 Dec 2011 01:44:24 GMT
+Expires: Fri, 02 Dec 2011 01:44:24 GMT
+Cache-Control: private, max-age=0
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Content-Length: 536
+Server: GSE
+
+<?xml version="1.0"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <ResponseHeader xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201008" xmlns="https://adwords.google.com/api/adwords/o/v201008">
+      <ns2:requestId>0004b3121bcbdcb80a860c04000029f3</ns2:requestId>
+      <ns2:operations>1</ns2:operations>
+      <ns2:responseTime>159</ns2:responseTime>
+      <ns2:units>6</ns2:units>
+    </ResponseHeader>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault>
+      <faultcode>soap:Server</faultcode>
+      <faultstring>[DistinctError.DUPLICATE_ELEMENT @ selector.searchParameters[0].keywords[1], DistinctError.DUPLICATE_ELEMENT @ selector.searchParameters[0].keywords[2]]</faultstring>
+      <detail>
+        <ApiExceptionFault xmlns="https://adwords.google.com/api/adwords/o/v201008" xmlns:ns2="https://adwords.google.com/api/adwords/cm/v201008">
+          <ns2:message>[DistinctError.DUPLICATE_ELEMENT @ selector.searchParameters[0].keywords[1], DistinctError.DUPLICATE_ELEMENT @ selector.searchParameters[0].keywords[2]]</ns2:message>
+          <ns2:ApplicationException.Type>ApiException</ns2:ApplicationException.Type>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:DistinctError">
+            <ns2:fieldPath>selector.searchParameters[0].keywords[1]</ns2:fieldPath>
+            <ns2:trigger/>
+            <ns2:errorString>DistinctError.DUPLICATE_ELEMENT</ns2:errorString>
+            <ns2:ApiError.Type>DistinctError</ns2:ApiError.Type>
+            <ns2:reason>DUPLICATE_ELEMENT</ns2:reason>
+          </ns2:errors>
+          <ns2:errors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ns2:DistinctError">
+            <ns2:fieldPath>selector.searchParameters[0].keywords[2]</ns2:fieldPath>
+            <ns2:trigger/>
+            <ns2:errorString>DistinctError.DUPLICATE_ELEMENT</ns2:errorString>
+            <ns2:ApiError.Type>DistinctError</ns2:ApiError.Type>
+            <ns2:reason>DUPLICATE_ELEMENT</ns2:reason>
+          </ns2:errors>
+        </ApiExceptionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>
+

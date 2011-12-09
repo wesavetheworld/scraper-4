@@ -93,12 +93,19 @@ if(CORE == "boss" && TASK)
 	}
 }
 
+// If boxcar notifications are turned on
+if(BOXCAR)
+{
+	// require_once boxcar api class
+	require_once('classes/boxcar.class.php');  
+}	
+
 // If notifo notifications are turned on
 if(NOTIFO)
 {
 	// require_once notifo api class
 	require_once('classes/notifo.class.php');  
-}	
+}
 
 // If Twilio notifications are turned on
 if(TWILIO)

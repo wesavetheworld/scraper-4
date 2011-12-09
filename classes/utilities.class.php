@@ -141,19 +141,14 @@ class utilities
 	// Notifo admin of errors
 	public static function sendAlert($errors)
 	{	
-		// If notifo reporting is turned on in the settings
-		if(NOTIFO && $errors)
+		// If boxcar reporting is turned on in the settings
+		if(BOXCAR && $errors)
 		{                                     
-			// Instantiate notifo only once
-			$notifo = new Notifo_API;   
-		             			
-			// Build notifo notification
-			$params['to'] = NOTIFO_NOTIFY_USERNAME;
-			$params['msg'] = $errors;
-			$params['title'] = "scraper error";
-		
-			// Send notifo error
-			$notifo->sendNotification($params);		
+			// instantiate a new instance of the boxcar api
+			$b = new boxcar_api(BOXCAR_API_KEY, BOXCAR_API_SEC, 'http://a2.twimg.com/profile_images/1536135790/back_07.png');
+
+			// send a message to a specific user, with an ID of 999
+			$b->notify(BOXCAR_API_EMAIL, 'Joshua', $errors);			
 		} 
 	}
 

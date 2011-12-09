@@ -416,12 +416,8 @@ class tasks
 			// Log the errors
 			$this->queue->log($alert);
 
-			// If notifo is turned on and there is an alert
-			if($alert && NOTIFO)
-			{
-				// Send alert
-				utilities::sendAlert($alert);
-			}
+			// Send push notification to admin
+			utilities::sendAlert($alert);
 		}	
 	}	
 

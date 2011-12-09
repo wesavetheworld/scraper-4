@@ -53,7 +53,7 @@ define("QUEUE_SOURCES", json_encode(array("google", "bing", "pr", "backlinks", "
 // ===========================================================================//	
                        
 // Should errors be sent using notifo
-define("NOTIFO", TRUE);
+define("NOTIFO", FALSE);
 
 // API username
 define("NOTIFO_API_USERNAME", "sescout_errors");
@@ -63,6 +63,22 @@ define("NOTIFO_API_SECRET", "91d2418e11bfb939c9c45325634c3708a8dc4e58");
 
 // API secret
 define("NOTIFO_NOTIFY_USERNAME", "sescout");
+
+// ===========================================================================// 
+// ! Boxcar API                                                               //
+// ===========================================================================//
+
+// Should errors be sent using boxcar
+define("BOXCAR", TRUE);
+
+// Boxcar api key
+define('BOXCAR_API_KEY', 'wFfS7qJRqhyzSsBRwdiV');
+
+// Boxcar secret key
+define('BOXCAR_API_SEC', '8EzdwJw5PCBEUqLN1d7XqFVzSsE9oW6uVzJRE5as');
+
+// Boxcar provideer email
+define('BOXCAR_API_EMAIL', 'push@sescout.com');
 
 // ===========================================================================// 
 // ! Twilio API                                                               //
