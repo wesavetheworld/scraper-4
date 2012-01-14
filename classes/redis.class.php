@@ -59,9 +59,6 @@ class redis
 			// Select correct database
 			$this->select($db);
 		}
-		// echo "keys: ";
-		// print_r($this->keys("*"));
-		// die();
 	}
 
 	// Connect to the redis server
