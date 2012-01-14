@@ -33,10 +33,10 @@ class domains
 	function __construct($domains)
 	{  					
 		// Connect to serps db
-		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
+		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
 		
 		// Connect to boss db
-		$this->boss = new redis(BOSS_IP, BOSS_PORT);		
+		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);		
 		
 		// Loop through items		
 		foreach($domains as $domain)

@@ -44,7 +44,7 @@ class redis
 	protected $host;
 	protected $port;
 
-	public function __construct($host = 'localhost', $port = '6379')
+	public function __construct($host = 'localhost', $port = '6379', $db = 0)
 	{
 		// Set connection constants
 		$this->host = $host;
@@ -52,6 +52,16 @@ class redis
 
 		// Establish a connection with redis
 		$this->connect();	
+
+		// If database is not zero
+		if($db != 0)
+		{
+			// Select correct database
+			$this->select($db);
+		}
+		// echo "keys: ";
+		// print_r($this->keys("*"));
+		// die();
 	}
 
 	// Connect to the redis server

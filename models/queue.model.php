@@ -56,7 +56,7 @@ class queue
 		if(!$this->bossDB)
 		{		
 			// Connect to the boss server
-			$this->bossDB = new redis(BOSS_IP, BOSS_PORT);			
+			$this->bossDB = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);			
 		}	
 	}
 

@@ -20,8 +20,23 @@
 // ! Boss server settings                                                     //
 // ===========================================================================//	
 
+// If local environment
+if(defined("LOCAL"))
+{
+	// The AWS elastic ip for the client server
+	define('BOSS_IP', '127.0.0.1');
+
+	// Redis listening port
+	define("BOSS_PORT", 6379);
+
+	// Redis boss database number
+	define("BOSS_DB", 0);		
+
+	// The AWS elastic ip for the google 1 server
+	define('GOOGLE_IP', '127.0.0.1');
+}
 // If development environment
-if(defined("DEV"))
+elseif(defined("DEV"))
 {
 	// The AWS elastic ip for the client server
 	define('BOSS_IP', '184.72.45.180');
@@ -55,8 +70,32 @@ else
 // ! SERPS Database credentials                                               //
 // ===========================================================================//
 
+// If local environment
+if(defined("LOCAL"))
+{
+	// Ip of the redis database instance 
+	define("REDIS_SERPS_IP", "127.0.0.1");
+
+	// Redis listening port
+	define("REDIS_SERPS_PORT", 6379);
+
+	// Redis Proxy database number
+	define("REDIS_SERPS_DB", 1);
+
+	// Database host
+	define("DB_HOST", ":/tmp/mysql.sock");
+
+	// Database username
+	define("DB_SERP_USER", "root");
+
+	// Database password
+	define("DB_SERPS_PASS", "root");
+
+	// Database name
+	define("DB_NAME_SERPS", "serps"); 
+}
 // If development environment
-if(defined("DEV"))
+elseif(defined("DEV"))
 {	
 	// Ip of the redis database instance 
 	define("REDIS_SERPS_IP", "50.18.172.44");
@@ -108,8 +147,32 @@ else
 // ! Proxy Database credentials                                               //
 // ===========================================================================//          	  
 
+// If local environment
+if(defined("LOCAL"))
+{	
+	// Ip of the redis database instance 
+	define("REDIS_PROXY_IP", "127.0.0.1");
+
+	// Redis listening port
+	define("REDIS_PROXY_PORT", 6379);
+
+	// Redis Proxy database number
+	define("REDIS_PROXY_DB", 2);	
+
+	// Proxy Database host
+	define("PROXY_HOST", "");
+
+	// Proxy Database username
+	define("PROXY_USER", "");
+
+	// Proxy Database password
+	define("PROXY_PASS", "");
+
+	// Proxy Database name
+	define("PROXY_DB", ""); 	
+}
 // If development environment
-if(defined("DEV"))
+elseif(defined("DEV"))
 {	
 	// Ip of the redis database instance 
 	define("REDIS_PROXY_IP", "50.18.170.228");

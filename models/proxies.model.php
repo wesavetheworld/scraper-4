@@ -45,7 +45,7 @@ class proxies
 	function __construct($engine = false)
 	{  	
 		// Instantiate new redis object
-		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT);	
+		$this->redis = new redis(REDIS_PROXY_IP, REDIS_PROXY_PORT, REDIS_PROXY_DB);	
 
 		// Get the array of sources/queue types		
 		$this->sources = json_decode(QUEUE_SOURCES);		
