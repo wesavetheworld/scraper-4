@@ -33,13 +33,16 @@ class workerCore
 						
 		// Subscribe to job channel and wait for work
 		$this->listen();
+
+		// Check worker out job queue
+		$this->queue->status("quit");		
 	}
 	
 	// When script is ended
 	function __destruct() 
 	{
 		// Checkout of job server
-		$this->queue->status("quit");
+		//$this->queue->status("quit");
 	}	
 
 	// ===========================================================================// 
