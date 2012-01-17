@@ -24,7 +24,7 @@
 
 class keywords
 {
-	function __construct($keywords)
+	function __construct($keywords, $source)
 	{
 		// Connect to serps db
 		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
@@ -35,11 +35,32 @@ class keywords
 		// Loop through items		
 		foreach($keywords as $keyword)
 		{
+			// The first letter of the source used for the ranking hash key
+			$this->sourceKey = substr($source, 0, 1);
+
+			// The keyword's hash field for today's ranking
+			$this->rankKey = $this->sourceKey.":".date("Y-m-d");
+
+			// The keyword's hash field for yesterday's ranking			
+			$yesterday = $this->sourceKey.":".date("Y-m-d", time()-(86400));
+
+			// The keyword's hash field for the matching url found ranking			
+			$this->matchKey = $k."m:".date("Y-m-d");
+
+			// Hash fields to select
+			$fields =  array('keyword', 
+						    'keyword_id',
+                            'domain', 
+                            'country',
+                            $this->rankKey,
+                            $yesterday
+                            );
+
  			// Select keyword hash from redis		
-			$hash = $this->serps->hGetAll("k:$keyword");
+			$hash = $this->serps->hMGet("k:$keyword", $fields);                                         
 					
 			// Create new keyword object from redis hash
-			$this->keywords->$keyword = new keyword($hash);
+			$this->keywords->$keyword = new keyword($hash, $fields);
 
 			// Echo count how many keywords are in the object
 			$this->total++;
@@ -56,10 +77,12 @@ class keywords
 		// Update mysql serp data
 		$this->updateMySQL($this->keywords->$keyword_id);
 
-		$this->keywords->$keyword_id->updateCount = intval($this->keywords->$keyword_id->updateCount) + 1;		
-		
+		// why am I doing this?		
+		$this->keywords->$keyword_id->updateCount = intval($this->keywords->$keyword_id->updateCount) + 1;	
+
 		// Update keyword hash
-		$this->serps->hmset("k:$keyword_id", array($this->lastRankName => $this->keywords->$keyword_id->rank,
+		$this->serps->hmset("k:$keyword_id", array( $this->rankKey => $this->keywords->$keyword_id->rank,
+													$this->matchKey => $this->keywords->$keyword_id->found,
 													'updateCount' => $this->keywords->$keyword_id->updateCount	
 													));
 
@@ -150,14 +173,16 @@ class keywords
 class keyword 
 {     
 	
-	function __construct($fields)
+	function __construct($hash, $fields)
 	{ 
+		$key = 0;
+
 		// Loop through keyword hash and build keyword object
-		foreach($fields as $field => $value)
+		foreach($hash as $value)
 		{
 			// Assign field to keyword object
-			$this->$field = $value;
-		}	
+			$this->$fields[$key++] = $value;
+		}
 		
 		// URL encode the keyword
 		$this->urlSafeKeyword();		
@@ -232,11 +257,26 @@ class keyword
 	// Set the last rank based on the current source
 	public function setLastRank()
 	{
-		// Which field in the object is the correct last rank
-		$this->lastRankName = "lastRank".ucwords($this->source);
+		// The first letter of the source used for the ranking hash key
+		$sourceKey = substr($this->source, 0, 1);
 
-		// Set the last rank with the correct field
-		$this->lastRank = $this->{$this->lastRankName};		
+		// The keyword's hash field for today's ranking
+		$today = $sourceKey.":".date("Y-m-d");
+
+		// The keyword's hash field for yesterday's ranking			
+		$yesterday = $sourceKey.":".date("Y-m-d", time()-(86400));		
+
+		// If there is a ranking field for today
+		if($this->$today)
+		{
+			// Use today's rank as the last rank
+			$this->lastRank = $this->$today;	
+		}	
+		elseif($this->$yesterday)
+		{
+			// Use yesterday's rank as the last rank
+			$this->lastRank = $this->$yesterday;				
+		}
 	}
 	
 	// Build the search engine results page for the keyword

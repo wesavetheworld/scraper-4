@@ -68,15 +68,16 @@ class domains
 		echo "domain_id: $domain_id\n";
 		// Update mysql serp data
 		$this->updateMySQL($this->domains->$domain_id);
-
-		$value = $this->domains->$domain_id->stat;
 		
-		$this->domains->$domain_id->updateCount = intval($this->domains->$domain_id->updateCount) + 1;		
-
+		$this->domains->$domain_id->updateCount = intval($this->domains->$domain_id->updateCount) + 1;	
+		
+		$stat = $this->domains->$domain_id->stat;		
+		$statKey = substr($stat, 0, 1).":".date("Y-m-d");	
+		$value = $this->domains->$domain_id->$stat;
 
 		// Update keyword hash
-		$this->serps->hmset("d:$domain_id", array($this->stat => $this->domains->$domain_id->$value,
-													'updateCount' => $this->domains->$domain_id->updateCount));
+		$this->serps->hmset("d:$domain_id", array($statKey => $value,
+												  'updateCount' => $this->domains->$domain_id->updateCount));
 
 		// Update job list score
 		$this->boss->zAdd($key, time(), $domain_id);	
