@@ -92,7 +92,7 @@ class worker
 	 	require_once("models/$class.model.php"); 
 	 	
 		// Instantiate new object
-		$this->items = new $class($job->items);	
+		$this->items = new $class($job->items, $this->source);	
 		
 		// Save searches
 		//$this->searches = new searches();	
