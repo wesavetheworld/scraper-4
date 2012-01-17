@@ -222,8 +222,8 @@ class keywordsMySQL
 	public function migrateToRedis()
 	{
 		// Instantiate new redis object
-		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
-		$this->boss = new redis(BOSS_IP, BOSS_PORT);	
+		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
+		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);	
 		
 		// Loop through keywords
 		foreach($this->keywords as $keyword)
@@ -232,24 +232,30 @@ class keywordsMySQL
 
 			$this->boss->zadd('google:'.$keyword->schedule, 0, $member);	
 			$this->boss->zadd('bing:daily', 0, $member);	
+
+			// Remove schedule from keyword object before saving in redis
+		 	unset($keyword->schedule);
+
 			
 			$last = $keyword->keyword;		
 
 			// Reset hash
-			$hash = array();
+			//$hash = array();
 	
-			$hash['keyword_id'] = $keyword->keyword_id;
-			$hash['keyword'] = $keyword->keyword;
-			$hash['domain_id'] = $keyword->domain_id;
-			$hash['domain'] = $keyword->domain;
-			$hash['country'] = $keyword->g_country;
-			$hash['lastRankGoogle'] = $keyword->lastRankGoogle;
-			$hash['lastRankBing'] = $keyword->lastRankBing;
-			$hash['notifications'] = $keyword->notifications;
-			$hash['updateCount'] = 0;
+			// $hash['keyword_id'] = $keyword->keyword_id;
+			// $hash['keyword'] = $keyword->keyword;
+			// $hash['domain'] = $keyword->domain;
+			// $hash['country'] = $keyword->g_country;
+			
+			// //Loop through tracking data
+			// foreach($rankings as $date => $data)
+			// {
+			// 	$hash[]
+			// }
 
+			echo "importing...\n";
 			// Create proxy hash		
-			$this->serps->hmset('k:'.$keyword->keyword_id, $hash);		
+			$this->serps->hmset('k:'.$keyword->keyword_id, $keyword);		
 		}				
 	}
 
@@ -268,14 +274,16 @@ class keywordsMySQL
 		if($this->keywords)
 		{
 			// Select past ranking data for keywords
-			$this->selectRankings();   
+			$this->selectRankings();  
+			
+			//die(); 
 
 			// Loop through keywords
-			foreach($this->keywords as $keyword)
-			{
-				// Determine what type of results page to scrape for a keyword (10/100)
-				$keyword->setResultsCount();
-			}	
+			// foreach($this->keywords as $keyword)
+			// {
+			// 	// Determine what type of results page to scrape for a keyword (10/100)
+			// 	$keyword->setResultsCount();
+			// }	
 			
 			echo "keywords selected...\n";
 						 
@@ -322,12 +330,7 @@ class keywordsMySQL
 		$select = "SELECT 
 							keywords.keyword_id,
 							keywords.keyword,
-							keywords.user_id,
-							keywords.g_country,
-							keywords.notifications,
-							keywords.calibrate,
-							keywords.date,							
-							domains.domain_id,
+							keywords.g_country as country,
 							domains.domain							
 						FROM 
 							keywords
@@ -392,13 +395,10 @@ class keywordsMySQL
 					
 			// Construct query
 			$query =   "SELECT
-							keywords.user_id,
 							keywords.keyword_id,
 							keywords.keyword,
 							keywords.schedule,
-							keywords.g_country,
-							keywords.notifications,
-							domains.domain_id,
+							keywords.g_country as country,
 							domains.domain	
 						FROM 
 							keywords
@@ -423,14 +423,14 @@ class keywordsMySQL
 				if($keyword->keywordTest())
 				{				
 					// Make the keyword save to be used in the url	
-					$keyword->urlSafeKeyword();				     				
+					//$keyword->urlSafeKeyword();				     				
 
 					// Set a unique keyword reference (fix for serializing objects)
-					$keyword->uniqueId();	
+					//$keyword->uniqueId();	
 					
 					// Set the engine to use for scraping this keyword
-					$keyword->engine = ENGINE;				
-				 
+					//$keyword->engine = ENGINE;
+														
 					// Add keyword object to keyword array
 					$this->keywords->{$keyword->keyword_id} = $keyword;   
 
@@ -479,53 +479,65 @@ class keywordsMySQL
 					WHERE 
 						keyword_id IN($ids) 
 				    AND 
-						date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
+						DATEDIFF(NOW(), date) < 31				
 					ORDER BY
 						date";
-		
+				////date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
+	
 		// Perform query				
-	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());				
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());			
+	    
+	    echo "start:\n";	
 		
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
 		{   
-			if(defined('MIGRATION'))
-			{
-				// If there is a row for today
-				if($row->date == date("Y-m-d"))
-				{ 
-					// Add ranking object to rankings array
-					$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
-					$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
-				} 
-				// If there was no rank for today and there is one for yesterday
-				elseif(!$lastRankGoogle)
-				{
-				 	// Add ranking object to rankings array
-					$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
-				} 
-				elseif(!$lastRankBing)
-				{
-				 	// Add ranking object to rankings array
-					$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
-				} 								
+			$g = "g:".$row->date;
+			$gm = "gm:".$row->date;
+			$b = "b:".$row->date;
+			$bm = "bm:".$row->date;
+
+			$this->keywords->{$row->keyword_id}->$g = $row->google;			
+			$this->keywords->{$row->keyword_id}->$gm = $row->google_match;			
+			$this->keywords->{$row->keyword_id}->$b = $row->bing;			
+			$this->keywords->{$row->keyword_id}->$bm = $row->bing_match;			
+			// if(defined('MIGRATION'))
+			// {
+			// 	// If there is a row for today
+			// 	if($row->date == date("Y-m-d"))
+			// 	{ 
+			// 		// Add ranking object to rankings array
+			// 		$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
+			// 		$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
+			// 	} 
+			// 	// If there was no rank for today and there is one for yesterday
+			// 	elseif(!$lastRankGoogle)
+			// 	{
+			// 	 	// Add ranking object to rankings array
+			// 		$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
+			// 	} 
+			// 	elseif(!$lastRankBing)
+			// 	{
+			// 	 	// Add ranking object to rankings array
+			// 		$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
+			// 	} 								
 				
-			}
-			else
-			{
-				// If there is a row for today
-				if($row->date == date("Y-m-d"))
-				{ 
-					// Add ranking object to rankings array
-					$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
-				} 
-				// If there was no rank for today and there is one for yesterday
-				elseif(!$lastRank)
-				{
-				 	// Add ranking object to rankings array
-					$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
-				} 
-			}	
+			// }
+			// else
+			// {
+			// 	// If there is a row for today
+			// 	if($row->date == date("Y-m-d"))
+			// 	{ 
+			// 		// Add ranking object to rankings array
+			// 		$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
+			// 	} 
+			// 	// If there was no rank for today and there is one for yesterday
+			// 	elseif(!$lastRank)
+			// 	{
+			// 	 	// Add ranking object to rankings array
+			// 		$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
+			// 	} 
+			// }	
 		}
 	}                                          
 	
@@ -699,7 +711,7 @@ class keywordMySQL
 	public function keywordTest()
 	{    
   		// The required keys in the keyword array
-		$required = array('user_id','keyword','domain_id','domain','g_country');
+		$required = array('keyword','domain','country');
 				
 		// Loop through each required key
 		foreach($required as $key)
@@ -1038,24 +1050,24 @@ class domainsMySQL
 	public function migrateToRedis()
 	{
 		// Instantiate new redis object
-		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT);	
-		$this->boss = new redis(BOSS_IP, BOSS_PORT);	
+		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
+		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);	
 		
 		// Loop through keywords
 		foreach($this->domains as $domain)
 		{	
 			// Build domain hash
-			$hash['domain_id'] = $domain->domain_id;
-			$hash['domain'] = $domain->domain;
-			$hash['www'] = $domain->www;
-			$hash['pr'] = 0;
-			$hash['backlinks'] = 0;
-			$hash['alexa'] = 0;
-			$hash['updateCount'] = 0;
+			// $hash['domain_id'] = $domain->domain_id;
+			// $hash['domain'] = $domain->domain;
+			// $hash['www'] = $domain->www;
+			// $hash['pr'] = 0;
+			// $hash['backlinks'] = 0;
+			// $hash['alexa'] = 0;
+			// $hash['updateCount'] = 0;
 
 
 			// Create domain hash	
-			$this->serps->hmset('d:'.$domain->domain_id, $hash);	
+			$this->serps->hmset('d:'.$domain->domain_id, $domain);	
 			
 			// Insert domain into job queue
 			$this->boss->zadd('pr:daily', 0, $domain->domain_id);	
@@ -1077,6 +1089,9 @@ class domainsMySQL
 		// If domains are selected
 		if($this->domains)
 		{ 				 
+			$this->selectRankings();			
+			print_r($this->domains);
+
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);		
 			
@@ -1101,7 +1116,9 @@ class domainsMySQL
 		
 		// Construct query
 		$query =   "SELECT 
-						* 
+						domain_id,
+						domain,
+						www
 					FROM 
 						domains		
 					{$date}"; 
@@ -1124,7 +1141,16 @@ class domainsMySQL
 					// // Set the engine to use for scraping this keyword
 					// $domain->pr = $this->pr;				
 					// $domain->backlinks = $this->backlinks;				
-					// $domain->alexa = $this->alexa;				
+					// $domain->alexa = $this->alexa;
+					
+					if($domain->www == 1)
+					{
+						$domain->www = "www";
+					}
+					else
+					{
+						$domain->www = "";
+					}				
 				 
 					// Add keyword object to keyword array
 					$this->domains->{$domain->domain_id} = $domain;   
@@ -1137,6 +1163,46 @@ class domainsMySQL
   		
    	}
 	
+	// Select domains's ranking positions
+	private function selectRankings()
+	{
+		// Glue domain array together
+		$ids = implode(",", array_keys($this->domainIds));  
+		
+		// Db column containing the ranking
+		$position = ENGINE;
+		
+		// Construct query
+		$query = "	SELECT 
+						* 
+					FROM 
+						domain_stats 
+					WHERE 
+						domain_id IN($ids) 
+				    AND 
+						DATEDIFF(NOW(), date) < 31				
+					ORDER BY
+						date";
+				////date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
+	
+		// Perform query				
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());			
+	    
+	    echo "start:\n";	
+		
+		// Add keyword tracking info to data array
+		while($row = mysql_fetch_object($result))
+		{   
+			$p = "p:".$row->date;
+			$b = "b:".$row->date;
+			$a = "a:".$row->date;
+
+			$this->domains->{$row->domain_id}->$p = $row->pr;			
+			$this->domains->{$row->domain_id}->$b = $row->backlinks;			
+			$this->domains->{$row->domain_id}->$a = $row->alexa;			
+		}
+	}  
+
 	// Check in and out keywords  
 	private function setCheckOut($status = '1')
 	{
@@ -1252,7 +1318,7 @@ class domainMySQL
 	public function domainTest()
 	{    
   		// The required keys in the keyword array
-		$required = array('domain_id','domain','user_id');
+		$required = array('domain_id','domain');
 				
 		// Loop through each required key
 		foreach($required as $key)

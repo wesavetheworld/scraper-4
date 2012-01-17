@@ -118,6 +118,8 @@ class cronCore
 	// Check for new items in the db
 	private function migrate($new = false)
 	{
+		echo "migating...\n\n";
+		
 		// If only migrating new items
 		if($new)
 		{
