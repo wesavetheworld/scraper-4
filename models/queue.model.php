@@ -377,6 +377,9 @@ class queue
 		// If worker is shutting down
 		if($status == "quit")
 		{
+			// Connection was probably terminated by now
+			$this->connect();
+
 			// Remove this worker from the worker list
 			$this->bossDB->zRem($this->workerGroup, "$this->name");
 		}
