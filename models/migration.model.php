@@ -82,7 +82,7 @@ class migration
 	 	{
 		 	define('NEW_ONLY', FALSE); 		
 	 	}
-	 	
+
 	 	echo "starting...\n";
 
 	 	// Select all keywords from db to import
@@ -418,7 +418,9 @@ class keywordsMySQL
 							keywords.status !='suspended'
 						$new	
 						";
-		}		
+		}	
+		
+		echo "executing query: \n\n";	
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
