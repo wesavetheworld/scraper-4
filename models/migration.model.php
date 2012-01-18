@@ -102,16 +102,16 @@ class migration
 				// Migrate keywords from MySQL to redis
 				$keywords->migrateToRedis();
 
-				echo "keyword batch ".$count++." imported to redis.(about ".$offset." total keywords)\n";				
+			 	// Each additional offset
+			 	$offset += $limit;					
+
+				echo "keyword batch ".$count++." imported to redis.( ~".$offset." total keywords)\n";				
 			}	
 			// No keywords left
 			else
 			{
 				echo "\tno more keywords =)\n"; 
 			}
-	
-		 	// Each additional offset
-		 	$offset += $limit;	
 		}
 		// While there are keywords left to migrate
 		while($keywords->keywords);	
