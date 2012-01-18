@@ -82,6 +82,8 @@ class migration
 	 	{
 		 	define('NEW_ONLY', FALSE); 		
 	 	}
+	 	
+	 	echo "starting...\n";
 
 	 	// Select all keywords from db to import
 		$keywords = new keywordsMySQL(); 		
