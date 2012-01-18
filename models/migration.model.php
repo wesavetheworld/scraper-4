@@ -88,12 +88,16 @@ class migration
 		
 		// Migrate keywords from MySQL to redis
 		$keywords->migrateToRedis();
+
+		echo "keywords imported to redis\n";
 		
 		// Select all domains from db to import
 		$domains = new domainsMySQL(); 		
 		
 		// Migrate domains from Mysql to redis
 		$domains->migrateToRedis();	
+
+		echo "domains imported to redis\n";
 	}
 
 	// ===========================================================================// 
@@ -270,11 +274,15 @@ class keywordsMySQL
 		// Select keyword data
 		$this->selectKeywords();
 				
+		echo "keywords selected\n";
+
 		// If keywords are selected
 		if($this->keywords)
 		{
 			// Select past ranking data for keywords
 			$this->selectRankings();  
+
+			echo "keword rankings selected\n";
 			
 			//die(); 
 
@@ -1085,11 +1093,15 @@ class domainsMySQL
 	{                                             
 		// Select keyword data
 		$this->selectDomains();
+
+		echo "domains selected\n";
 				
 		// If domains are selected
 		if($this->domains)
 		{ 				 
 			$this->selectRankings();			
+
+			echo "domain stats selected\n";
 
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);		
