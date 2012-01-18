@@ -86,14 +86,15 @@ class migration
 	 	echo "starting migration...\n";
 	 	
 	 	// Initial query offset
-	 	$offset = 0;	
+	 	$offset = 0;
+	 	$limit = 500;	
 	 	$count = 0;	
 		
 		// Migrate keywords
 		do
 		{
 			// Select keywords
-			$keywords = new keywordsMySQL(false, false, 200, $offset);	
+			$keywords = new keywordsMySQL(false, false, $limit, $offset);	
 			
 			// If keywords returned
 			if($keywords->keywords)
@@ -101,7 +102,7 @@ class migration
 				// Migrate keywords from MySQL to redis
 				$keywords->migrateToRedis();
 
-				echo "keyword batch ".$count++." imported to redis\n";				
+				echo "keyword batch ".$count++." imported to redis.(about ".$offset." total keywords)\n";				
 			}	
 			// No keywords left
 			else
@@ -110,7 +111,7 @@ class migration
 			}
 	
 		 	// Each additional offset
-		 	$offset += 200;	
+		 	$offset += $limit;	
 		}
 		// While there are keywords left to migrate
 		while($keywords->keywords);	
@@ -275,31 +276,15 @@ class keywordsMySQL
 
 			// Remove schedule from keyword object before saving in redis
 		 	unset($keyword->schedule);
-
 			
-			$last = $keyword->keyword;		
-
-			// Reset hash
-			//$hash = array();
-	
-			// $hash['keyword_id'] = $keyword->keyword_id;
-			// $hash['keyword'] = $keyword->keyword;
-			// $hash['domain'] = $keyword->domain;
-			// $hash['country'] = $keyword->g_country;
-			
-			// //Loop through tracking data
-			// foreach($rankings as $date => $data)
-			// {
-			// 	$hash[]
-			// }
-
-			echo "\timporting to redis...\n";
-			// Create proxy hash		
+			// Create keyword hash		
 			$this->serps->hmset('k:'.$keyword->keyword_id, $keyword);		
-		}				
+		}			
+	
+		echo "\tkeywords imported to redis...\n";
 	}
 
-
+  
 	// ===========================================================================// 
 	// ! Functions for creating keyword objects                                   //
 	// ===========================================================================//	
