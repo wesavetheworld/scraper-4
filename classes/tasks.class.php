@@ -245,7 +245,7 @@ class tasks
 		$this->migration->serps($new);		
 
 		// Log current state
-		utilities::notate("\Serps migrated to redis", "tasks.log"); 		
+		utilities::notate("\nSerps migrated to redis successfully", "tasks.log"); 		
 	}
 	
 	// ===========================================================================// 
