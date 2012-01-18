@@ -1090,7 +1090,6 @@ class domainsMySQL
 		if($this->domains)
 		{ 				 
 			$this->selectRankings();			
-			print_r($this->domains);
 
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);		
