@@ -238,14 +238,17 @@ class tasks
 	// Migrate keywords from MySQL to redis
 	private function migrateSerps()
 	{
+		// Data model to migrate (keywords/domains)
+		$type = $_SERVER['argv'][4];
+				
 		// Only new keywords should be provided if command found
-		$new = $_SERVER['argv'][4];
+		$new = $_SERVER['argv'][5];
 
 		// Copy serps from MySQL to redis
-		$this->migration->serps($new);		
+		$this->migration->serps($new, $type);		
 
 		// Log current state
-		utilities::notate("\nSerps migrated to redis successfully", "tasks.log"); 		
+		utilities::notate("$type migrated to redis successfully", "tasks.log"); 		
 	}
 	
 	// ===========================================================================// 
