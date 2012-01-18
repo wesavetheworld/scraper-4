@@ -64,8 +64,14 @@ class migration
 	}	
 
 	// Migrate all serps from MySQL to redis
-	public function serps($new = false)
+	public function serps($new = false, $type)
 	{		
+		if(!$type)
+		{
+			echo "no data type to migrate\n";
+			return false;
+		}
+
 	 	// Set constants needed for keyword model
 	 	define('ENGINE', 'google');
 	 	define('MIGRATION', TRUE);
@@ -90,31 +96,64 @@ class migration
 	 	$limit = 500;	
 	 	$count = 0;	
 		
-		// Migrate keywords
-		do
+		// If migrating keywords
+		if($type == "keywords")
 		{
-			// Select keywords
-			$keywords = new keywordsMySQL(false, false, $limit, $offset);	
-			
-			// If keywords returned
-			if($keywords->keywords)
+			// Migrate keywords
+			do
 			{
-				// Migrate keywords from MySQL to redis
-				$keywords->migrateToRedis();
+				// Select keywords
+				$keywords = new keywordsMySQL(false, false, $limit, $offset);	
+				
+				// If keywords returned
+				if($keywords->keywords)
+				{
+					// Migrate keywords from MySQL to redis
+					$keywords->migrateToRedis();
 
-			 	// Each additional offset
-			 	$offset += $limit;					
+				 	// Each additional offset
+				 	$offset += $limit;					
 
-				echo "keyword batch ".$count++." imported to redis.( ~".$offset." total keywords)\n";				
-			}	
-			// No keywords left
-			else
-			{
-				echo "\tno more keywords =)\n"; 
+					echo "keyword batch ".$count++." imported to redis.( ~".$offset." total keywords)\n";				
+				}	
+				// No keywords left
+				else
+				{
+					echo "\tno more keywords =)\n"; 
+				}
 			}
+			// While there are keywords left to migrate
+			while($keywords->keywords);	
 		}
-		// While there are keywords left to migrate
-		while($keywords->keywords);	
+		// If migrating domains
+		elseif($type == "domains")
+		{
+			// Migrate keywords
+			do
+			{
+				// Select keywords
+				$domains = new domainsMySQL($limit, $offset);	
+				
+				// If keywords returned
+				if($domains->domains)
+				{
+					// Migrate keywords from MySQL to redis
+					$domains->migrateToRedis();
+
+				 	// Each additional offset
+				 	$offset += $limit;					
+
+					echo "domain batch ".$count++." imported to redis.( ~".$offset." total domain)\n";				
+				}	
+				// No keywords left
+				else
+				{
+					echo "\tno more domains =)\n"; 
+				}
+			}
+			// While there are keywords left to migrate
+			while($domains->domains);	
+		}	
 		
 		// Select all domains from db to import
 		//$domains = new domainsMySQL(); 		
@@ -1050,10 +1089,22 @@ class domainsMySQL
 
 	public $task = TASK;
 
-	function __construct()
+	// Limit the amount of domains to select
+	public $limit;
+
+	// Set the offset used in selecting domains
+	public $ofset;
+
+	function __construct($limit = false, $offset = false)
 	{  					               
 		// Connect to database
 		$this->dbConnect();
+
+		// Set the query limit
+		$this->limit = $limit;
+
+		// Set the query offset
+		$this->offset = $offset;
 
 		// Select domains
 		$this->getDomains();  
@@ -1072,7 +1123,7 @@ class domainsMySQL
 	  
 	private function dbConnect()
 	{
-		echo "connecting to db";
+		echo "connecting to db\n";
 
 		// Establish DB connection
 		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
@@ -1091,16 +1142,6 @@ class domainsMySQL
 		// Loop through keywords
 		foreach($this->domains as $domain)
 		{	
-			// Build domain hash
-			// $hash['domain_id'] = $domain->domain_id;
-			// $hash['domain'] = $domain->domain;
-			// $hash['www'] = $domain->www;
-			// $hash['pr'] = 0;
-			// $hash['backlinks'] = 0;
-			// $hash['alexa'] = 0;
-			// $hash['updateCount'] = 0;
-
-
 			// Create domain hash	
 			$this->serps->hmset('d:'.$domain->domain_id, $domain);	
 			
@@ -1108,7 +1149,9 @@ class domainsMySQL
 			$this->boss->zadd('pr:daily', 0, $domain->domain_id);	
 			$this->boss->zadd('backlinks:daily', 0, $domain->domain_id);	
 			$this->boss->zadd('alexa:daily', 0, $domain->domain_id);					
-		}				
+		}	
+		
+		echo "\tdomains imported to redis...\n";
 	}	
 	
 	// ===========================================================================// 
@@ -1121,14 +1164,14 @@ class domainsMySQL
 		// Select keyword data
 		$this->selectDomains();
 
-		echo "domains selected\n";
+		echo "\tdomains selected\n";
 				
 		// If domains are selected
 		if($this->domains)
 		{ 				 
 			$this->selectRankings();			
 
-			echo "domain stats selected\n";
+			echo "\tdomain stats selected\n";
 
 			// Get the total number of keywords selected
 			$this->total = count($this->domainIds);		
@@ -1150,6 +1193,15 @@ class domainsMySQL
 		if(NEW_ONLY)
 		{
 			$date = " WHERE pr_status = '0000-00-00' AND check_out = 0";
+		}
+		
+		// If a query limit/offset is passed
+		if($this->limit)
+		{
+			$limit = "LIMIT
+						$this->limit
+					  OFFSET	
+					  	$this->offset";
 		}	
 		
 		// Construct query
@@ -1159,7 +1211,8 @@ class domainsMySQL
 						www
 					FROM 
 						domains		
-					{$date}"; 
+					{$date}
+					$limit"; 
 																								
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
@@ -1219,15 +1272,12 @@ class domainsMySQL
 						domain_id IN($ids) 
 				    AND 
 						DATEDIFF(NOW(), date) < 31				
-					ORDER BY
-						date";
+					";
 				////date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
 	
 		// Perform query				
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());			
-	    
-	    echo "start:\n";	
-		
+	    		
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
 		{   
