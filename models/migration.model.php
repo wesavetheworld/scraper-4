@@ -83,23 +83,45 @@ class migration
 		 	define('NEW_ONLY', FALSE); 		
 	 	}
 
-	 	echo "starting...\n";
-
-	 	// Select all keywords from db to import
-		$keywords = new keywordsMySQL(); 		
+	 	echo "starting migration...\n";
+	 	
+	 	// Initial query offset
+	 	$offset = 0;	
+	 	$count = 0;	
 		
-		// Migrate keywords from MySQL to redis
-		$keywords->migrateToRedis();
+		// Migrate keywords
+		do
+		{
+			// Select keywords
+			$keywords = new keywordsMySQL(false, false, 200, $offset);	
+			
+			// If keywords returned
+			if($keywords->keywords)
+			{
+				// Migrate keywords from MySQL to redis
+				$keywords->migrateToRedis();
 
-		echo "keywords imported to redis\n";
+				echo "keyword batch ".$count++." imported to redis\n";				
+			}	
+			// No keywords left
+			else
+			{
+				echo "\tno more keywords =)\n"; 
+			}
+	
+		 	// Each additional offset
+		 	$offset += 200;	
+		}
+		// While there are keywords left to migrate
+		while($keywords->keywords);	
 		
 		// Select all domains from db to import
-		$domains = new domainsMySQL(); 		
+		//$domains = new domainsMySQL(); 		
 		
 		// Migrate domains from Mysql to redis
-		$domains->migrateToRedis();	
+		//$domains->migrateToRedis();	
 
-		echo "domains imported to redis\n";
+		//echo "domains imported to redis\n";
 	}
 
 	// ===========================================================================// 
@@ -183,8 +205,14 @@ class keywordsMySQL
 	
 	// Contains the count(int) of keywords in the main object
 	public $total;	
+
+	// Limit the amount of keywords to select
+	public $limit;
+
+	// Set the offset used in selecting keywords
+	public $ofset;
 	
-	function __construct($empty = false, $dbConnect = false)
+	function __construct($empty = false, $dbConnect = false, $limit = false, $offset = false)
 	{  		
 		// If a db connection is requested
 		if(!$empty || $dbConnect)
@@ -196,8 +224,14 @@ class keywordsMySQL
 		// If a keyword object should be built		
 		if(!$empty)
 		{
+			// Set the query limit
+			$this->limit = $limit;
+
+			// Set the query offset
+			$this->offset = $offset;
+
 		    // Select keywords
-			$this->getKeywords();   
+			$this->getKeywords();  
 		}	
 	} 
     
@@ -259,7 +293,7 @@ class keywordsMySQL
 			// 	$hash[]
 			// }
 
-			echo "importing...\n";
+			echo "\timporting to redis...\n";
 			// Create proxy hash		
 			$this->serps->hmset('k:'.$keyword->keyword_id, $keyword);		
 		}				
@@ -276,7 +310,7 @@ class keywordsMySQL
 		// Select keyword data
 		$this->selectKeywords();
 				
-		echo "keywords selected\n";
+		echo "\tkeywords selected\n";
 
 		// If keywords are selected
 		if($this->keywords)
@@ -284,7 +318,7 @@ class keywordsMySQL
 			// Select past ranking data for keywords
 			$this->selectRankings();  
 
-			echo "keword rankings selected\n";
+			echo "\tkeword rankings selected\n";
 			
 			//die(); 
 
@@ -295,7 +329,6 @@ class keywordsMySQL
 			// 	$keyword->setResultsCount();
 			// }	
 			
-			echo "keywords selected...\n";
 						 
 			// Get the total number of keywords selected
 			$this->total = count($this->keywordIds);			
@@ -402,6 +435,15 @@ class keywordsMySQL
 						  AND
 							keywords.check_out != 1";		
 			}	
+
+			// If a query limit/offset is passed
+			if($this->limit)
+			{
+				$limit = "LIMIT
+							$this->limit
+						  OFFSET	
+						  	$this->offset";
+			}
 					
 			// Construct query
 			$query =   "SELECT
@@ -416,12 +458,11 @@ class keywordsMySQL
 							domains ON keywords.domain_id = domains.domain_id 
 						WHERE
 							keywords.status !='suspended'
-						$new	
+						$new
+						$limit	
 						";
 		}	
-		
-		echo "executing query: \n\n";	
-																								
+																										
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
         
@@ -492,15 +533,12 @@ class keywordsMySQL
 						keyword_id IN($ids) 
 				    AND 
 						DATEDIFF(NOW(), date) < 31				
-					ORDER BY
-						date";
+					";
 				////date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
 	
 		// Perform query				
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON TRACKING SELECTION: ".mysql_error());			
-	    
-	    echo "start:\n";	
-		
+	    		
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
 		{   
