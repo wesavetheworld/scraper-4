@@ -83,6 +83,7 @@ class keywords
 		// Update keyword hash
 		$this->serps->hmset("k:$keyword_id", array( $this->rankKey => $this->keywords->$keyword_id->rank,
 													$this->matchKey => $this->keywords->$keyword_id->found,
+													'u:' => time(),
 													'updateCount' => $this->keywords->$keyword_id->updateCount	
 													));
 
