@@ -315,7 +315,10 @@ class keywordsMySQL
 
 			// Remove schedule from keyword object before saving in redis
 		 	unset($keyword->schedule);
-			
+		 	
+		 	// Add update time field to keyword object
+		 	$keyword->{"u:"} = time();
+		 				
 			// Create keyword hash		
 			$this->serps->hmset('k:'.$keyword->keyword_id, $keyword);		
 		}			
