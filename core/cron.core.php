@@ -108,7 +108,7 @@ class cronCore
 	private function minuteAll()
 	{
 		// Check for new items
-		$this->migrate('new');
+		//$this->migrate('new');
 	}
 	
 	// ===========================================================================// 
