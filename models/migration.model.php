@@ -177,7 +177,7 @@ class migration
 					FROM 
 						keywords
 					WHERE
-						keywords.status !='suspended'";
+						status !='suspended'";
 																										
 		// Execute query and return results			
 	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
@@ -198,17 +198,17 @@ class migration
 			// Loop through keywords
 			foreach($keywordIds as $keyword_id => $schedule)
 			{
-				$this->boss->zadd('google:'.$schedule, 0, $keyword_id);	
-				$this->boss->zadd('bing:daily', 0, $keyword_id);	
+				$this->boss->zadd('google:'.$schedule, 1, $keyword_id);	
+				$this->boss->zadd('bing:daily', 1, $keyword_id);	
 			}	
 
 			// Loop through domains
 			foreach($domainIds as $domain_id)
 			{
 				// Insert domain into job queue
-				$this->boss->zadd('pr:daily', 0, $domain_id);	
-				$this->boss->zadd('backlinks:daily', 0, $domain_id);	
-				$this->boss->zadd('alexa:daily', 0, $domain_id);				
+				$this->boss->zadd('pr:daily', 1, $domain_id);	
+				$this->boss->zadd('backlinks:daily', 1, $domain_id);	
+				$this->boss->zadd('alexa:daily', 1, $domain_id);				
 			}
 		}	
 	}
