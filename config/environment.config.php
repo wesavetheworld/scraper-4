@@ -130,6 +130,15 @@ else
 	// Redis Proxy database number
 	define("REDIS_SERPS_DB", 0);
 
+	// Ip of the redis database instance 
+	define("REDIS_SERPS_SLAVE_IP", "");
+
+	// Redis listening port
+	define("REDIS_SERPS_SLAVE_PORT", 6379);
+
+	// Redis Proxy database number
+	define("REDIS_SERPS_SLAVE_DB", 0);	
+
 	// Database host
 	define("DB_HOST", "serps.c7mnew97kkqx.us-west-1.rds.amazonaws.com");
 
