@@ -250,6 +250,17 @@ class tasks
 		// Log current state
 		utilities::notate("$type migrated to redis successfully", "tasks.log"); 		
 	}
+
+	// Migrate keyword/domain ids to job queu
+	private function migrateQueue()
+	{
+		// Copy serps from MySQL to redis
+		$this->migration->queue();		
+
+		// Log current state
+		utilities::notate("$type migrated to redis queue successfully", "tasks.log"); 		
+		
+	}
 	
 	// ===========================================================================// 
 	// ! Application stats methods                                                //

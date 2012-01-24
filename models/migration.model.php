@@ -164,6 +164,55 @@ class migration
 		//echo "domains imported to redis\n";
 	}
 
+	// Migrate keyword and domain ids to redis job queue
+	public function queue()
+	{
+		$this->db = utilities::databaseConnect(DB_HOST, DB_SERP_USER, DB_SERPS_PASS, DB_NAME_SERPS);
+
+		// Construct query
+		$query =   "SELECT
+						keyword_id,
+						domain_id,
+						schedule
+					FROM 
+						keywords
+					WHERE
+						keywords.status !='suspended'";
+																										
+		// Execute query and return results			
+	    $result = mysql_query($query, $this->db) or utilities::reportErrors("ERROR ON SELECTING: ".mysql_error());
+        
+		// If keywords are returned
+		if(mysql_num_rows($result) > 0)
+		{
+			// Loop through results
+			while($keyword = mysql_fetch_object($result))
+			{
+				$keywordIds[$keyword->keyword_id] = $keyword->schedule;
+				$domainIds[$keyword->domain_id] = $keyword->domain_id;
+			}   
+
+			// Connect to redis
+			$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);	
+
+			// Loop through keywords
+			foreach($keywordIds as $keyword_id => $schedule)
+			{
+				$this->boss->zadd('google:'.$schedule, 0, $keyword_id);	
+				$this->boss->zadd('bing:daily', 0, $keyword_id);	
+			}	
+
+			// Loop through domains
+			foreach($domainIds as $domain_id)
+			{
+				// Insert domain into job queue
+				$this->boss->zadd('pr:daily', 0, $domain_id);	
+				$this->boss->zadd('backlinks:daily', 0, $domain_id);	
+				$this->boss->zadd('alexa:daily', 0, $domain_id);				
+			}
+		}	
+	}
+
 	// ===========================================================================// 
 	// ! Proxy stuff                                                              //
 	// ===========================================================================//
