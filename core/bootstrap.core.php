@@ -399,7 +399,7 @@ class bootstrapCore
 			if($this->highCPU)
 			{
 				//$num = $this->checkProxies();
-				$supervisord.= "numprocs=8\n"; 				
+				$supervisord.= "numprocs=5\n"; 				
 			}
 			// Normal micro instance
 			else
