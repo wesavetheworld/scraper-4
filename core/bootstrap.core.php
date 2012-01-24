@@ -88,6 +88,11 @@ class bootstrapCore
 				// Assign the redis serps elastic ip to this instance
 				$this->assignIp(REDIS_SERPS_IP);	
 			}
+			elseif($this->instanceName == 'redisSerpsSlave' || $this->instanceName == 'redisSerpsSlaveDev')
+			{
+				// Assign the redis serps elastic ip to this instance
+				$this->assignIp(REDIS_SERPS_SLAVE_IP);	
+			}			
 			elseif($this->instanceName == 'redisProxies' || $this->instanceName == 'redisProxiesDev')
 			{
 				// Assign the redis proxy elastic ip to this instance
@@ -393,7 +398,8 @@ class bootstrapCore
 			// If this is a high cpu instanct
 			if($this->highCPU)
 			{
-				$supervisord.= "numprocs=15\n"; 				
+				//$num = $this->checkProxies();
+				$supervisord.= "numprocs=8\n"; 				
 			}
 			// Normal micro instance
 			else
