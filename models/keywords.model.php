@@ -57,13 +57,20 @@ class keywords
                             );
 
  			// Select keyword hash from redis		
-			$hash = $this->serps->hMGet("k:$keyword", $fields);                                         
-					
-			// Create new keyword object from redis hash
-			$this->keywords->$keyword = new keyword($hash, $fields);
+			if($hash = $this->serps->hMGet("k:$keyword", $fields))
+			{  
+				// Create new keyword object from redis hash
+				$this->keywords->$keyword = new keyword($hash, $fields);
 
-			// Echo count how many keywords are in the object
-			$this->total++;
+				// Echo count how many keywords are in the object
+				$this->total++;
+			}
+			// Keyword hash not found
+			else
+			{
+				// Send push notification to admin
+				utilities::sendAlert("keyword hash ($keyword_id) not found!");
+			}	
 		}
 	}
 
