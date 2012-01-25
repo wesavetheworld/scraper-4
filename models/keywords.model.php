@@ -33,7 +33,7 @@ class keywords
 		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);		
 		
 		// Loop through items		
-		foreach($keywords as $keyword)
+		foreach($keywords as $keyword_id)
 		{
 			// The first letter of the source used for the ranking hash key
 			$this->sourceKey = substr($source, 0, 1);
@@ -57,16 +57,16 @@ class keywords
                             );
 
  			// Select keyword hash from redis		
-			$hash = $this->serps->hMGet("k:$keyword", $fields);
+			$hash = $this->serps->hMGet("k:$keyword_id", $fields);
 
 			// Creat the keyword object.
 			$keyword = new keyword($hash, $fields);
 
 			// If keyword object is intact
-			if(!$keyword->fail)
+			if($keyword->keyword_id)
 			{
 				// Create new keyword object from redis hash
-				$this->keywords->$keyword = $keyword;
+				$this->keywords->$keyword_id = $keyword;
 
 			 	// Echo count how many keywords are in the object
 				$this->total++;
@@ -185,23 +185,15 @@ class keyword
 	{ 
 		$key = 0;
 
-		// If required keyword fields are found
-		if($this->keywordTest($fields))
+		// Loop through keyword hash and build keyword object
+		foreach($hash as $value)
 		{
-			// Loop through keyword hash and build keyword object
-			foreach($hash as $value)
-			{
-				// Assign field to keyword object
-				$this->$fields[$key++] = $value;
-			}
-			
-			// URL encode the keyword
-			$this->urlSafeKeyword();
-		}	
-		else
-		{
-			$this->fail = true;
-		}		
+			// Assign field to keyword object
+			$this->$fields[$key++] = $value;
+		}
+		
+		// URL encode the keyword
+		$this->urlSafeKeyword();
    	} 
 
 	// ===========================================================================// 
@@ -209,8 +201,10 @@ class keyword
 	// ===========================================================================// 
 	
 	// Test a keyword array for keywords needed data
-	public function keywordTest()
+	public function keywordTest($hash)
 	{    
+				print_r($hash);
+
   		// The required keys in the keyword array
 		$required = array('keyword_id','keyword','domain','country');
 				
