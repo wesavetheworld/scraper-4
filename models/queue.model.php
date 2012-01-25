@@ -105,7 +105,7 @@ class queue
 			// Get the score range to search based on key name
 			$scoreLimit = $this->getScoreRange($key);
 
-			// Select a range of proxies ordered by last block 
+			// Select a range of items needing to be updated (based on last update time)
 			$items = $this->bossDB->zRangeByScore($key, 0, $scoreLimit, false, array(0, 100));
 
 			// If items were found in the db that need updating
