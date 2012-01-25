@@ -373,9 +373,9 @@ class bootstrapCore
 			// Add workers for ranking updates
 			$supervisord = "[program:Bing]\n";
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker bing %(process_num)s\n";
-			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.log\n";
+			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
-			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s-errors.log\n";
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";												
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -390,7 +390,7 @@ class bootstrapCore
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker google %(process_num)s\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
-			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";	
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s-errors.log\n";	
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";											
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -417,7 +417,7 @@ class bootstrapCore
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker pr %(process_num)s\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
-			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s-errors.log\n";
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";									
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -429,7 +429,7 @@ class bootstrapCore
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker backlinks %(process_num)s\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
-			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";	
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s-errors.log\n";	
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";											
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
@@ -441,7 +441,7 @@ class bootstrapCore
 			$supervisord.= "command=php /home/ec2-user/scraper/router.php worker alexa %(process_num)s\n";
 			$supervisord.= "stdout_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s.log\n";
 			$supervisord.= "stdout_logfile_maxbytes=5MB\n";						
-			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType-errors.log\n";
+			$supervisord.= "stderr_logfile=/home/ec2-user/scraper/logs/$this->instanceType.%(process_num)s-errors.log\n";
 			$supervisord.= "stderr_logfile_maxbytes=5MB\n";						
 			$supervisord.= "autostart=true\n";
 			$supervisord.= "autorestart=true\n";
