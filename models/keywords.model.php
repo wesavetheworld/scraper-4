@@ -57,20 +57,20 @@ class keywords
                             );
 
  			// Select keyword hash from redis		
-			if($hash = $this->serps->hMGet("k:$keyword", $fields))
-			{  
-				// Create new keyword object from redis hash
-				$this->keywords->$keyword = new keyword($hash, $fields);
+			$hash = $this->serps->hMGet("k:$keyword", $fields);
 
-				// Echo count how many keywords are in the object
+			// Creat the keyword object.
+			$keyword = new keyword($hash, $fields);
+
+			// If keyword object is intact
+			if(!$keyword->fail)
+			{
+				// Create new keyword object from redis hash
+				$this->keywords->$keyword = $keyword;
+
+			 	// Echo count how many keywords are in the object
 				$this->total++;
 			}
-			// Keyword hash not found
-			else
-			{
-				// Send push notification to admin
-				utilities::sendAlert("keyword hash ($keyword_id) not found!");
-			}	
 		}
 	}
 
@@ -185,15 +185,23 @@ class keyword
 	{ 
 		$key = 0;
 
-		// Loop through keyword hash and build keyword object
-		foreach($hash as $value)
+		// If required keyword fields are found
+		if($this->keywordTest($fields))
 		{
-			// Assign field to keyword object
-			$this->$fields[$key++] = $value;
-		}
-		
-		// URL encode the keyword
-		$this->urlSafeKeyword();		
+			// Loop through keyword hash and build keyword object
+			foreach($hash as $value)
+			{
+				// Assign field to keyword object
+				$this->$fields[$key++] = $value;
+			}
+			
+			// URL encode the keyword
+			$this->urlSafeKeyword();
+		}	
+		else
+		{
+			$this->fail = true;
+		}		
    	} 
 
 	// ===========================================================================// 
@@ -204,7 +212,7 @@ class keyword
 	public function keywordTest()
 	{    
   		// The required keys in the keyword array
-		$required = array('user_id','keyword','domain_id','domain','country');
+		$required = array('keyword_id','keyword','domain','country');
 				
 		// Loop through each required key
 		foreach($required as $key)
