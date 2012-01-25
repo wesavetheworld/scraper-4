@@ -167,7 +167,7 @@ class worker
 			// No scraped content returned
 			else
 			{
-				echo "bad scrape!\n";
+				echo "bad scrape! id: $item->keyword_id url: $item->url \n";
 
 				// If this item has it's own proxy
 				if($item->proxy)
