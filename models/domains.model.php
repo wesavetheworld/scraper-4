@@ -39,16 +39,23 @@ class domains
 		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);		
 		
 		// Loop through items		
-		foreach($domains as $domain)
+		foreach($domains as $domain_id)
 		{
  			// Select domain hash from redis		
-			$hash = $this->serps->hGetAll("d:$domain");
+			$hash = $this->serps->hGetAll("d:$domain_id");
 					
 			// Create new domain object from redis hash
-			$this->domains->$domain = new domain($hash);
+			$domain = new domain($hash);
 
-			// Echo count how many keywords are in the object
-			$this->total++;
+			// If domain object is correct
+			if($domain->domain_id)
+			{
+				// Add keyword to keywords list
+				$this->domains->$domain_id = $domain;
+
+				// Echo count how many keywords are in the object
+				$this->total++;
+			}
 		}
 	} 
     
