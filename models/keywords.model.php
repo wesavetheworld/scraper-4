@@ -45,7 +45,7 @@ class keywords
 			$yesterday = $this->sourceKey.":".date("Y-m-d", time()-(86400));
 
 			// The keyword's hash field for the matching url found ranking			
-			$this->matchKey = $k."m:".date("Y-m-d");
+			$this->matchKey = $this->sourceKey."m:".date("Y-m-d");
 
 			// Hash fields to select
 			$fields =  array('keyword', 
