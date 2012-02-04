@@ -30,7 +30,10 @@ class keywords
 		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
 		
 		// Connect to boss db
-		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);		
+		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);	
+		
+		// Connect to serps redis
+		$this->predis = utilities::connect(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);		
 		
 		// Loop through items		
 		foreach($keywords as $keyword_id)
@@ -38,8 +41,10 @@ class keywords
 			// The first letter of the source used for the ranking hash key
 			$this->sourceKey = substr($source, 0, 1);
 
-			// The keyword's hash field for today's ranking
-			$this->rankKey = $this->sourceKey.":".date("Y-m-d");
+			// The 2 keys to update in redis for the keyword
+			$this->keys[$keyword_id] = array( "hash" => "k:$keyword_id",
+						 		              "statsToday" => "k:$keyword_id:".date("Y-m-d"),
+						 		              "statsYesterday" => "k:$keyword_id:".date("Y-m-d", time()-(86400)));
 
 			// The keyword's hash field for yesterday's ranking			
 			$yesterday = $this->sourceKey.":".date("Y-m-d", time()-(86400));
@@ -47,20 +52,24 @@ class keywords
 			// The keyword's hash field for the matching url found ranking			
 			$this->matchKey = $this->sourceKey."m:".date("Y-m-d");
 
-			// Hash fields to select
-			$fields =  array('keyword', 
-						    'keyword_id',
-                            'domain', 
-                            'country',
-                            $this->rankKey,
-                            $yesterday
-                            );
+			$keys = $this->keys[$keyword_id]; 
+			$data['source'] =  $this->sourceKey;
 
- 			// Select keyword hash from redis		
-			$hash = $this->serps->hMGet("k:$keyword_id", $fields);
+			// Create redis pipeline
+			$response = $this->predis->pipeline(function($pipe) use ($keys, $data) 
+			{
+				// Select keyword hash
+				$pipe->hgetall($keys['hash']);
+
+				// Select keyword stats for today
+				$pipe->hmget($keys['statsToday'], array($data['source']));
+
+				// Select keyword stats for today
+				$pipe->hmget($keys['statsYesterday'], array($data['source']));				
+			});	
 
 			// Creat the keyword object.
-			$keyword = new keyword($hash, $fields);
+			$keyword = new keyword($response, $source);
 
 			// If keyword object is intact
 			if($keyword->keyword_id)
@@ -83,16 +92,32 @@ class keywords
 	{
 		// Update mysql serp data
 		$this->updateMySQL($this->keywords->$keyword_id);
+		
+		// The redis keys to be updated
+		$keys = $this->keys[$keyword_id];	
+		
+		// the data array to pass to the redis pipeline function
+		$data['source'] = $this->sourceKey; 
+		$data['rank'] = $this->keywords->$keyword_id->rank;
+		$data['found'] = $this->keywords->$keyword_id->found;
+		$data['time'] = time();
 
-		// why am I doing this?		
-		$this->keywords->$keyword_id->updateCount = intval($this->keywords->$keyword_id->updateCount) + 1;	
+		// The key should expire in 31 days
+		$data['expire'] = 31 * (24 * (60 * 60));
 
-		// Update keyword hash
-		$this->serps->hmset("k:$keyword_id", array( $this->rankKey => $this->keywords->$keyword_id->rank,
-													$this->matchKey => $this->keywords->$keyword_id->found,
-													'u:' => time(),
-													'updateCount' => $this->keywords->$keyword_id->updateCount	
-													));
+		// Create redis pipeline
+		$response = $this->predis->pipeline(function($pipe) use ($keys, $data) 
+		{
+			// Update keyword hash
+			$pipe->hmset($keys['hash'], array("u" => $data['time']));
+
+			// Update keyword stats
+			$pipe->hmset($keys['statsToday'], array($data['source'] => $data['rank'], 
+											   $data['source']."m" => $data['found']));
+											  
+			// Set key to expire in 31 days
+			$pipe->expire($keys['statsToday'], $data['expire']);									  
+		});	
 
 		// Update job list score
 		$this->boss->zAdd($key, time(), $keyword_id);		
@@ -135,7 +160,7 @@ class keywords
 			$query = "	UPDATE 
 							keywords 
 						SET 
-					  		$setNotify 
+					  		$setNotify x
 					  		".$keyword->source."_status = NOW(),  
 							calibrate = '".$keyword->calibrate."',
 							check_out = 0,
@@ -178,22 +203,35 @@ class keywords
 // ! Individual keyword objects                                               //
 // ===========================================================================//
 
-class keyword 
+class keyword extends keywords 
 {     
-	
-	function __construct($hash, $fields)
+	// Build the keyword object
+	function __construct($response, $source)
 	{ 
-		$key = 0;
-
 		// Loop through keyword hash and build keyword object
-		foreach($hash as $value)
+		foreach($response[0] as $field => $value)
 		{
 			// Assign field to keyword object
-			$this->$fields[$key++] = $value;
+			$this->$field = $value;
 		}
 		
 		// URL encode the keyword
 		$this->urlSafeKeyword();
+
+		// Set the data source (google,bing,pr etc)
+		$this->source = $source;
+
+		// Set today's rank
+		$this->today = $response[1][0];
+
+		// Set yesterdays rank
+		$this->yesterday = $response[2][0];		
+
+		// Set the last rank
+		$this->setLastRank();
+
+		// Check the results count to get for the keyword
+		$this->setResultsCount();	
    	} 
 
 	// ===========================================================================// 
@@ -266,41 +304,23 @@ class keyword
 
 	// Set the last rank based on the current source
 	public function setLastRank()
-	{
-		// The first letter of the source used for the ranking hash key
-		$sourceKey = substr($this->source, 0, 1);
-
-		// The keyword's hash field for today's ranking
-		$today = $sourceKey.":".date("Y-m-d");
-
-		// The keyword's hash field for yesterday's ranking			
-		$yesterday = $sourceKey.":".date("Y-m-d", time()-(86400));		
-
+	{		
 		// If there is a ranking field for today
-		if($this->$today)
+		if($this->today)
 		{
 			// Use today's rank as the last rank
-			$this->lastRank = $this->$today;	
+			$this->lastRank = $this->today;	
 		}	
-		elseif($this->$yesterday)
+		elseif($this->yesterday)
 		{
 			// Use yesterday's rank as the last rank
-			$this->lastRank = $this->$yesterday;				
+			$this->lastRank = $this->yesterday;				
 		}
 	}
 	
 	// Build the search engine results page for the keyword
 	public function setSearchUrl($source)
 	{   
-		// Set the data source (google,bing,pr etc)
-		$this->source = $source;
-
-		// Set the last rank
-		$this->setLastRank();
-
-		// Check the results count to get for the keyword
-		$this->setResultsCount();
-
 		// Get the current search hash 
 		$this->setSearchHash(); 
 		
