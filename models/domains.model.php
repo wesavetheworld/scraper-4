@@ -83,13 +83,15 @@ class domains
 		$value = $this->domains->$domain_id->$stat;
 
 		// Update keyword hash
-		$this->serps->hmset("d:$domain_id", array($statKey => $value,
-												  'updateCount' => $this->domains->$domain_id->updateCount));
+		// $this->serps->hmset("d:$domain_id", array($statKey => $value,
+		// 										  'updateCount' => $this->domains->$domain_id->updateCount));
+
+		$this->serps->hmset("d:$domain_id:".date("Y-m-d"), array(substr($stat, 0, 1) => $value));												  
 
 		// Update job list score
 		$this->boss->zAdd($key, time(), $domain_id);	
 		
-		echo "zAdd $key ".time()." $domain_id \n";	
+		echo "zAdd $key ".time()." id:$domain_id pr:$value \n";	
 	}		
 
 	// ===========================================================================// 
