@@ -6,7 +6,22 @@ class utilities
 	// ===========================================================================// 
 	// ! Functions                                                                //
 	// ===========================================================================//
-    
+
+    // Connect to redis
+     public static function connect($ip = REDIS_SERPS_IP, $port = REDIS_SERPS_PORT, $db = REDIS_SERPS_DB)
+    {
+		// Instantiate new predis object
+		$connection = new Predis\Client(array(
+		    'scheme' => 'tcp',
+		    'host'   => $ip,
+		    'port'   => $port,
+		    'database'   => $db,
+		));	 
+		
+		// Return the established redis connection
+		return $connection;   	
+    }    
+
    	// Connect to database
 	public static function databaseConnect($host, $user, $pass, $db)
 	{	
