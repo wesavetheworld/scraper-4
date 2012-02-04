@@ -62,6 +62,9 @@ require_once('classes/utilities.class.php');
 // require_once redis class
 require_once('classes/redis.class.php'); 
 
+// Include predis auto class loader
+require_once 'classes/predis/autoload.php';
+
 // If this is a worker instance
 if(CORE == "worker")
 {
