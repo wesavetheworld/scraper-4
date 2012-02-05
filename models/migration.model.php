@@ -373,22 +373,26 @@ class keywordsMySQL
 									   "u", time()
 									   );
 
-				// Loop through ranking data
-				foreach($data->rankings as $date => $stats)
+				// If keyword has ranking data
+				if(is_array($data->rankings))
 				{
-					// Set ranking key for this keyword and date
-					$pipe->hmset("k:$id:$date", "g", $stats->g,
-												"b", $stats->b,
-												"gm", $stats->gm,
-												"bm", $stats->bm);
+					// Loop through ranking data
+					foreach($data->rankings as $date => $stats)
+					{
+						// Set ranking key for this keyword and date
+						$pipe->hmset("k:$id:$date", "g", $stats->g,
+													"b", $stats->b,
+													"gm", $stats->gm,
+													"bm", $stats->bm);
 
-					// The key should expire in 31 days
-					$expire = 31 * (24 * (60 * 60));
-					$expire = strtotime($date) + $expire;
+						// The key should expire in 31 days
+						$expire = 31 * (24 * (60 * 60));
+						$expire = strtotime($date) + $expire;
 
-					// Set the ranking key to expire
-					$pipe->expireat("k:$id:$date", $expire);							
-				}
+						// Set the ranking key to expire
+						$pipe->expireat("k:$id:$date", $expire);							
+					}
+				}	
 			}
 		});	
 		
@@ -1111,21 +1115,25 @@ class domainsMySQL
 									   "domain", $data->domain,
 									   "www", $data->www);
 
-				// Loop through ranking data
-				foreach($data->stats as $date => $stats)
+				// If domain has 
+				if($data->stats)
 				{
-					// Set ranking key for this keyword and date
-					$pipe->hmset("d:$id:$date", "p", $stats->p,
-												"b", $stats->b,
-												"a", $stats->a);
+					// Loop through ranking data
+					foreach($data->stats as $date => $stats)
+					{
+						// Set ranking key for this keyword and date
+						$pipe->hmset("d:$id:$date", "p", $stats->p,
+													"b", $stats->b,
+													"a", $stats->a);
 
-					// The key should expire in 3 days
-					$expire = 3 * (24 * (60 * 60));
-					$expire = strtotime($date) + $expire;
+						// The key should expire in 3 days
+						$expire = 3 * (24 * (60 * 60));
+						$expire = strtotime($date) + $expire;
 
-					// Set the ranking key to expire
-					$pipe->expireat("d:$id:$date", $expire);							
-				}
+						// Set the ranking key to expire
+						$pipe->expireat("d:$id:$date", $expire);							
+					}
+				}	
 			}
 		});			
 
