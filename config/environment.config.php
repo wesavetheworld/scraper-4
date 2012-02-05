@@ -160,7 +160,7 @@ else
 if(defined("DEV"))
 {	
 	// Ip of the redis database instance 
-	define("REDIS_CACHE_IP", "50.18.181.89");
+	define("REDIS_CACHE_IP", "184.169.129.116");
 
 	// Redis listening port
 	define("REDIS_CACHE_PORT", 6379);
@@ -172,7 +172,7 @@ if(defined("DEV"))
 else
 {	
 	// Ip of the redis database instance 
-	define("REDIS_CACHE_IP", "184.169.129.116");
+	define("REDIS_CACHE_IP", "50.18.181.89");
 
 	// Redis listening port
 	define("REDIS_CACHE_PORT", 6379);
