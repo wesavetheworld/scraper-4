@@ -350,27 +350,59 @@ class keywordsMySQL
 	
 	public function migrateToRedis()
 	{
-		// Instantiate new redis object
-		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
-		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);	
+		// Connect to serps redis
+		$this->serps = utilities::connect(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);
 		
-		// Loop through keywords
-		foreach($this->keywords as $keyword)
+		// Connect to job queue redis
+		$this->queue = utilities::connect(BOSS_IP, BOSS_PORT, BOSS_DB);
+
+		// Set keywords to pass to predis pipeline
+		$keywords = $this->keywords;
+
+		// Add keyword hash and ranking keys to redis serps
+		$response = $this->serps->pipeline(function($pipe) use ($keywords) 
 		{
-			$member = $keyword->keyword_id;				
+			// Loop through keywords	
+			foreach($keywords as $id => $data)
+			{	
+				// Set keyword hash for current keyword in loop
+				$pipe->hmset("k:$id",  "keyword", $data->keyword,
+									   "keyword_id", $id,
+									   "domain", $data->domain,
+									   "country", $data->country,
+									   "u", time()
+									   );
 
-			$this->boss->zadd('google:'.$keyword->schedule, 0, $member);	
-			$this->boss->zadd('bing:daily', 0, $member);	
+				// Loop through ranking data
+				foreach($data->rankings as $date => $stats)
+				{
+					// Set ranking key for this keyword and date
+					$pipe->hmset("k:$id:$date", "g", $stats->g,
+												"b", $stats->b,
+												"gm", $stats->gm,
+												"bm", $stats->bm);
 
-			// Remove schedule from keyword object before saving in redis
-		 	unset($keyword->schedule);
-		 	
-		 	// Add update time field to keyword object
-		 	$keyword->{"u:"} = time();
-		 				
-			// Create keyword hash		
-			$this->serps->hmset('k:'.$keyword->keyword_id, $keyword);		
-		}			
+					// The key should expire in 31 days
+					$expire = 31 * (24 * (60 * 60));
+					$expire = strtotime($date) + $expire;
+
+					// Set the ranking key to expire
+					$pipe->expireat("k:$id:$date", $expire);							
+				}
+			}
+		});	
+		
+		// Add keywords to job queue
+		$response = $this->queue->pipeline(function($pipe) use ($keywords) 
+		{
+			// Loop through keywords	
+			foreach($keywords as $id => $data)
+			{	
+				// Get keyword hash for current date in loop
+				$pipe->zadd('google:'.$data->schedule, time(), $id);
+				$pipe->zadd('bing:daily', time(), $id);	
+			}
+		});			
 	
 		echo "\tkeywords imported to redis...\n";
 	}
@@ -423,84 +455,6 @@ class keywordsMySQL
 	// Select the keywords from the database
 	private function selectKeywords()
 	{  
-		// If updating daily keywords
-       	if(SCHEDULE == "daily" || ENGINE == 'bing')
-		{   
-			// Today
-			$time = date("Y-m-d");
-
-			$schedule = "'daily'";
-		} 
-		// Update only hourly keywords
-		else
-		{    
-			// This hour
-			$time = date("Y-m-d H");
-			
-			$schedule = "'hourly'";
-		}
-
-		if(ENGINE == 'bing')
-		{
-			$schedule = "'hourly','daily'";
-		}
-
-		// Build base select statement
-		$select = "SELECT 
-							keywords.keyword_id,
-							keywords.keyword,
-							keywords.g_country as country,
-							domains.domain							
-						FROM 
-							keywords
-						JOIN 
-							domains ON keywords.domain_id = domains.domain_id ";
-           
-		// If single user argument present
-		if(ONLY_USER)
-		{   
-			// Construct query
-			$query =   "$select 
-						WHERE 
-							 keywords.user_id IN ('".ONLY_USER."') 
-						ORDER BY
-							keywords.".ENGINE."_status,
-							keywords.keyword";				  					
-        } 
-		// If selecting only new keywords
-		elseif(TASK == "rankingsNew")
-		{
-		 	$query =   "$select
-						WHERE 
-							keywords.check_out != 1							    				
-						AND
-							keywords.".ENGINE."_status = '0000-00-00 00:00:00'							
-						ORDER BY
-						 	keywords.".ENGINE."_status DESC,
-							keywords.keyword,
-						 	domains.user_id";		
-		}	
-		// Normal select statement
-		else
-        {
-			// Construct query
-			$query =   "$select 
-						WHERE 
-							keywords.status !='suspended'
-						AND
-							keywords.check_out != 1
-						AND	
-							keywords.".ENGINE."_status != '0000-00-00 00:00:00'	    				
-						AND
-	                    	keywords.schedule IN ($schedule)
-						AND
-							keywords.".ENGINE."_status < '{$time}'
-						ORDER BY
-							keywords.".ENGINE."_status DESC,
-							keywords.keyword,
-						 	domains.user_id"; 
-		}  
-		
 		if(defined("MIGRATION") == true)
 		{
 			// If selecting only new keywords
@@ -550,16 +504,7 @@ class keywordsMySQL
 			{   
 				// Test keyword for all required fields
 				if($keyword->keywordTest())
-				{				
-					// Make the keyword save to be used in the url	
-					//$keyword->urlSafeKeyword();				     				
-
-					// Set a unique keyword reference (fix for serializing objects)
-					//$keyword->uniqueId();	
-					
-					// Set the engine to use for scraping this keyword
-					//$keyword->engine = ENGINE;
-														
+				{										
 					// Add keyword object to keyword array
 					$this->keywords->{$keyword->keyword_id} = $keyword;   
 
@@ -567,7 +512,7 @@ class keywordsMySQL
 					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
 				}
 			} 
-   		}	  		
+   		}	 		
    	}
 	
 	// Check in and out keywords  
@@ -597,16 +542,18 @@ class keywordsMySQL
 		// Glue keyword array together
 		$ids = implode(",", array_keys($this->keywordIds));  
 		
-		// Db column containing the ranking
-		$position = ENGINE;
-		
 		// Construct query
-		$query = "	SELECT 
-						* 
+		$query = "	SELECT 	
+						keyword_id as id,
+						google as g,
+						bing as b,
+						google_match as gm,
+						bing_match as bm,
+						date
 					FROM 
 						tracking 
 					WHERE 
-						keyword_id IN($ids) 
+						keyword_id IN ($ids) 
 				    AND 
 						DATEDIFF(NOW(), date) < 31				
 					";
@@ -617,54 +564,11 @@ class keywordsMySQL
 	    		
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
-		{   
-			$g = "g:".$row->date;
-			$gm = "gm:".$row->date;
-			$b = "b:".$row->date;
-			$bm = "bm:".$row->date;
-
-			$this->keywords->{$row->keyword_id}->$g = $row->google;			
-			$this->keywords->{$row->keyword_id}->$gm = $row->google_match;			
-			$this->keywords->{$row->keyword_id}->$b = $row->bing;			
-			$this->keywords->{$row->keyword_id}->$bm = $row->bing_match;			
-			// if(defined('MIGRATION'))
-			// {
-			// 	// If there is a row for today
-			// 	if($row->date == date("Y-m-d"))
-			// 	{ 
-			// 		// Add ranking object to rankings array
-			// 		$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
-			// 		$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
-			// 	} 
-			// 	// If there was no rank for today and there is one for yesterday
-			// 	elseif(!$lastRankGoogle)
-			// 	{
-			// 	 	// Add ranking object to rankings array
-			// 		$this->keywords->{$row->keyword_id}->lastRankGoogle = $row->google;
-			// 	} 
-			// 	elseif(!$lastRankBing)
-			// 	{
-			// 	 	// Add ranking object to rankings array
-			// 		$this->keywords->{$row->keyword_id}->lastRankBing = $row->bing;
-			// 	} 								
-				
-			// }
-			// else
-			// {
-			// 	// If there is a row for today
-			// 	if($row->date == date("Y-m-d"))
-			// 	{ 
-			// 		// Add ranking object to rankings array
-			// 		$this->keywords->{$row->keyword_id}->lastRank = $row->$position;
-			// 	} 
-			// 	// If there was no rank for today and there is one for yesterday
-			// 	elseif(!$lastRank)
-			// 	{
-			// 	 	// Add ranking object to rankings array
-			// 		$this->keywords->{$row->keyword_id}->lastRank = $row->$position;   
-			// 	} 
-			// }	
+		{   	
+			$this->keywords->{$row->id}->rankings->{$row->date} = $row;				
 		}
+
+		//print_r($this->keywords);die();
 	}                                          
 	
 	// ===========================================================================// 
@@ -1187,21 +1091,56 @@ class domainsMySQL
 	
 	public function migrateToRedis()
 	{
-		// Instantiate new redis object
-		$this->serps = new redis(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);	
-		$this->boss = new redis(BOSS_IP, BOSS_PORT, BOSS_DB);	
+		// Connect to serps redis
+		$this->serps = utilities::connect(REDIS_SERPS_IP, REDIS_SERPS_PORT, REDIS_SERPS_DB);
 		
-		// Loop through keywords
-		foreach($this->domains as $domain)
-		{	
-			// Create domain hash	
-			$this->serps->hmset('d:'.$domain->domain_id, $domain);	
+		// Connect to job queue redis
+		$this->queue = utilities::connect(BOSS_IP, BOSS_PORT, BOSS_DB);
 			
-			// Insert domain into job queue
-			$this->boss->zadd('pr:daily', 0, $domain->domain_id);	
-			$this->boss->zadd('backlinks:daily', 0, $domain->domain_id);	
-			$this->boss->zadd('alexa:daily', 0, $domain->domain_id);					
-		}	
+		// Set domains to pass to predis pipeline
+		$domains = $this->domains;;
+
+		// Add keyword hash and ranking keys to redis serps
+		$response = $this->serps->pipeline(function($pipe) use ($domains) 
+		{
+			// Loop through keywords	
+			foreach($domains as $id => $data)
+			{	
+				// Set keyword hash for current keyword in loop
+				$pipe->hmset("d:$id",  "domain_id", $id,
+									   "domain", $data->domain,
+									   "www", $data->www);
+
+				// Loop through ranking data
+				foreach($data->stats as $date => $stats)
+				{
+					// Set ranking key for this keyword and date
+					$pipe->hmset("d:$id:$date", "p", $stats->p,
+												"b", $stats->b,
+												"a", $stats->a);
+
+					// The key should expire in 3 days
+					$expire = 3 * (24 * (60 * 60));
+					$expire = strtotime($date) + $expire;
+
+					// Set the ranking key to expire
+					$pipe->expireat("d:$id:$date", $expire);							
+				}
+			}
+		});			
+
+		// Add domains to job queue
+		$response = $this->queue->pipeline(function($pipe) use ($domains) 
+		{
+			// Loop through keywords	
+			foreach($domains as $id => $domain)
+			{	
+				// Insert domain into job queue
+				$pipe->zadd('pr:daily', time(), $domain->domain_id);	
+				$pipe->zadd('backlinks:daily', time(), $domain->domain_id);	
+				$pipe->zadd('alexa:daily', time(), $domain->domain_id);
+			}
+		});			
 		
 		echo "\tdomains imported to redis...\n";
 	}	
@@ -1317,13 +1256,17 @@ class domainsMySQL
 		
 		// Construct query
 		$query = "	SELECT 
-						* 
+						domain_id as id,
+						pr as p,
+						backlinks as b,
+						alexa as a,
+						date
 					FROM 
 						domain_stats 
 					WHERE 
 						domain_id IN($ids) 
 				    AND 
-						DATEDIFF(NOW(), date) < 31				
+						DATEDIFF(NOW(), date) < 3				
 					";
 				////date IN ('".date("Y-m-d")."','".date("Y-m-d", time()-86400)."')
 	
@@ -1333,13 +1276,7 @@ class domainsMySQL
 		// Add keyword tracking info to data array
 		while($row = mysql_fetch_object($result))
 		{   
-			$p = "p:".$row->date;
-			$b = "b:".$row->date;
-			$a = "a:".$row->date;
-
-			$this->domains->{$row->domain_id}->$p = $row->pr;			
-			$this->domains->{$row->domain_id}->$b = $row->backlinks;			
-			$this->domains->{$row->domain_id}->$a = $row->alexa;			
+			$this->domains->{$row->id}->stats->{$row->date} = $row;			
 		}
 	}  
 
