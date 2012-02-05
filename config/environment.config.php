@@ -156,14 +156,30 @@ else
 // ! Front end cache Database credentials (just for boot management)          //
 // ===========================================================================// 	
 
-// Ip of the redis database instance 
-define("REDIS_CACHE_IP", "50.18.181.89");
+// If development environment
+if(defined("DEV"))
+{	
+	// Ip of the redis database instance 
+	define("REDIS_CACHE_IP", "50.18.181.89");
 
-// Redis listening port
-define("REDIS_CACHE_PORT", 6379);
+	// Redis listening port
+	define("REDIS_CACHE_PORT", 6379);
 
-// Redis Proxy database number
-define("REDIS_CACHE_DB", 0);
+	// Redis Proxy database number
+	define("REDIS_CACHE_DB", 0);
+}
+// Production environment
+else
+{	
+	// Ip of the redis database instance 
+	define("REDIS_CACHE_IP", "184.169.129.116");
+
+	// Redis listening port
+	define("REDIS_CACHE_PORT", 6379);
+
+	// Redis Proxy database number
+	define("REDIS_CACHE_DB", 0);
+}	
 
 // ===========================================================================// 
 // ! Proxy Database credentials                                               //
