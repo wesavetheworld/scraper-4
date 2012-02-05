@@ -103,7 +103,7 @@ class bootstrapCore
 				// Assign the redis searches elastic ip to this instance
 				$this->assignIp(REDIS_SEARCHES_IP);					
 			}	
-			elseif($this->instanceName == 'frontCache')
+			elseif($this->instanceName == 'frontCache' || $this->instanceName == 'frontCacheDev')
 			{
 				// Assign the redis searches elastic ip to this instance
 				$this->assignIp(REDIS_CACHE_IP);					
