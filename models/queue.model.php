@@ -268,7 +268,7 @@ class queue
 			$this->bossDB->zAdd("workers:$source", 1, "$worker") ."\n";
 			
 			// Update the scores of the items in the job sent
-			//$this->checkOutItems($job);	
+			$this->checkOutItems($job);	
 
 			echo "sent job to $worker\n";
 		}
