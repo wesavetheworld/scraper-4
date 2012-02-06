@@ -423,6 +423,12 @@ class keywordsMySQL
 				
 		echo "\tkeywords selected\n";
 
+		// If some keywords were removed because of missing data
+		if($this->badKeywords)
+		{
+			echo "\tbad keywords: $this->badKeywords\n";
+		}	
+
 		// If keywords are selected
 		if($this->keywords)
 		{
@@ -513,6 +519,10 @@ class keywordsMySQL
 
 					// Add keywords id to checkout list
 					$this->keywordIds[$keyword->keyword_id] = $keyword->keyword_id;										
+				}
+				else
+				{
+					$this->badKeywords++;
 				}
 			} 
    		}	 		
