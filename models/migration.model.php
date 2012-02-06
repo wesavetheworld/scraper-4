@@ -64,7 +64,7 @@ class migration
 	}	
 
 	// Migrate all serps from MySQL to redis
-	public function serps($new = false, $type)
+	public function serps($new = false, $type, $limit)
 	{		
 		if(!$type)
 		{
@@ -93,7 +93,6 @@ class migration
 	 	
 	 	// Initial query offset
 	 	$offset = 0;
-	 	$limit = 500;	
 	 	$count = 0;	
 		
 		// If migrating keywords

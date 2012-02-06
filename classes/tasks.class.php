@@ -244,8 +244,21 @@ class tasks
 		// Only new keywords should be provided if command found
 		$new = $_SERVER['argv'][5];
 
+		// If import limit is provided
+		if($_SERVER['argv'][6])
+		{
+			// Limit import to batches of this amount to keep from running into long import time troubles
+			$limit = $_SERVER['argv'][6];
+		}
+		// No import limit specified
+		else
+		{
+			// Set a default import limit
+			$limit = 500;
+		}	
+
 		// Copy serps from MySQL to redis
-		$this->migration->serps($new, $type);		
+		$this->migration->serps($new, $type, $limit);		
 
 		// Log current state
 		utilities::notate("$type migrated to redis successfully", "tasks.log"); 		
