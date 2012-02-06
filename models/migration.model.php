@@ -373,7 +373,7 @@ class keywordsMySQL
 									   );
 
 				// If keyword has ranking data
-				if(is_array($data->rankings))
+				if($data->rankings)
 				{
 					// Loop through ranking data
 					foreach($data->rankings as $date => $stats)
