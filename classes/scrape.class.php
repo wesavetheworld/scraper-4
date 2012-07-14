@@ -170,7 +170,7 @@ class scraper
 	// *****************************************************************************
 	private function curlAgentRandom()
 	{
-		return "";
+		//return "";
 		
 		$arrayIndex = rand(0, count($this->agent) - 1);
 		return $this->agent[$arrayIndex];
