@@ -330,7 +330,7 @@ class keyword extends keywords
 		if($this->source == "google")
 		{
 			// Build the google search results page url
-			$this->url  = "http://www.google".$this->country;
+			$this->url  = "https://www.google".$this->country;
 			$this->url .= "/search?q=".$this->urlSafe;
 			$this->url .= "&num=".$this->resultCount;  		
 
