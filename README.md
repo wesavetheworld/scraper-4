@@ -65,6 +65,7 @@ This database manages all of the workers and jobs and is run on the Boss instanc
 This database contains hashes of each domain and keyword's data. It's a duplicate of whats stored in MySQL for faster access for job creation. It runs on it's own instance or db 1 locally.
 
 *Keyword objects*
+````
 	name: k:$id (i.e. k:3957)
 	type: hash
 	fields:
@@ -73,23 +74,30 @@ This database contains hashes of each domain and keyword's data. It's a duplicat
 		domain_id
 		g_country
 		schedule
-
+````
 *Keyword Stats objects. One for each of last 30 days*
+````
 	name: k:$id:$date (i.e. k:59911:2012-06-07)
-	type: hash		
+	type: hash	
+````		
 
 *Domain objects*
+````
 	name: d:$id (i.e. d:1924)
 	type: hash	
+````	
 
 *Domain Stats objects. One for each of last 30 days*
+````
 	name: d:$id:$date (i.e. d:59911:2012-06-07)
 	type: hash		
+````	
 
 ####Proxies
 This database manages all of the proxies used for data collecting. It runs on it's own instance or db 2 locally.
 
 *Proxy objects*
+````
 	name: p:$ip (i.e. p:64.87.58.10)
 	type: hash
 	fields:
@@ -99,13 +107,16 @@ This database manages all of the proxies used for data collecting. It runs on it
 		password
 		source
 		tunnel
+````		
 
 ####Dashboard cache
 This database saves a user's dashboard array of domains and keywords on the first load from MySQL	
 
 *Dashboard key*	
+````
 	name: $user_id:$group_id (i.e. 3:45)
 	type: string
+````
 
 ###Sever monitoring messaging system
  Boostratp will launch a server monitoring daemon.  The monitoring daemon subscribes to redis channels for all servers, it's type of server, and it's specific channel. All servers can be sent commands in real time via the redis prompt. Available commands are:
@@ -144,16 +155,21 @@ The application was designed to run across multiple AWS instances, but can be se
 redis
 MySQL
 
-###Step 1: Redis
-Redis needs to be running in order to manage the job queus
+###Step 1: Start redis
+Redis needs to be running in order to manage the job queue.
+
 *From the command line, navigate into the redis folder and run*
 
     src/redis-server
 
 ###Step 2: Instance config
-*config/instance.config.php determines the script name. Modify to match the boss*
-	define("INSTANCE_TYPE", "boss");
-	define("INSTANCE_NAME", "theBoss");    
+config/instance.config.php determines the script name. Modify to match the boss.
+
+*Modify following lines to mock AWS instance*
+````
+    define("INSTANCE_TYPE", "boss");
+    define("INSTANCE_NAME", "theBoss"); 
+````       
 
 ###Step 3: The Boss
 *Navigate to the scraper directory, and start the boss*
@@ -162,8 +178,12 @@ Redis needs to be running in order to manage the job queus
 
 ###Step 4: Instance config(again)
 *config/instance.config.php determines the script name. Modify to match the worker*
+
+*Modify following lines to mock AWS instance*
+````
 	define("INSTANCE_TYPE", "google");
 	define("INSTANCE_NAME", "google");  	
+````
 
 ###Step 5: The worker
 *Navigate to the scraper directory, and start the worker (last integer is process number. Increment for multiple simultaneous workers)*
