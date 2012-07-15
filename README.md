@@ -110,7 +110,7 @@ This database manages all of the proxies used for data collecting. It runs on it
 ````		
 
 ####Dashboard cache
-This database saves a user's dashboard array of domains and keywords on the first load from MySQL	
+This database caches a user's dashboard array of domains and keywords on the first load from MySQL	
 
 *Dashboard key*	
 ````

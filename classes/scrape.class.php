@@ -218,7 +218,7 @@ class scraper
 			curl_setopt($this->ch[$i], CURLINFO_HEADER_OUT, TRUE);
 			
 			// Turn on curl error code debugging
-			curl_setopt($this->ch[$i], CURLOPT_VERBOSE, TRUE);
+			//curl_setopt($this->ch[$i], CURLOPT_VERBOSE, TRUE);
 			
 			// Write errors to log file
 			//curl_setopt($this->ch[$i], CURLOPT_STDERR, $this->fp);
@@ -246,12 +246,15 @@ class scraper
 				{
 					curl_setopt($this->ch[$i], CURLOPT_HTTPPROXYTUNNEL, TRUE);
 				}
+
+				// print_r($this->proxies);
+				// echo "i: $i";
 		
-				curl_setopt($this->ch[$i], CURLOPT_PROXY, $this->proxies[$i]['proxy']);
+				curl_setopt($this->ch[$i], CURLOPT_PROXY, $this->proxies[$i]['ip']);
 				curl_setopt($this->ch[$i], CURLOPT_PROXYPORT, $this->proxies[$i]['port']);
 				curl_setopt($this->ch[$i], CURLOPT_PROXYUSERPWD, $this->proxies[$i]['username'].":".$this->proxies[$i]['password']);
 
-				//echo "proxy used: ".$this->proxies[$i]['proxy']."\n";
+				echo "proxy used: ".$this->proxies[$i]['ip']."\n";
 			}
 			
 			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
