@@ -224,7 +224,7 @@ class proxies
 	public function add($proxy)
 	{
 		// Create proxy hash		
-		$this->redis->hmset('p:'.$proxy['proxy'], $proxy);	
+		$this->redis->hmset('p:'.$proxy['ip'], $proxy);	
 
 		// Loop through sources
 		foreach($this->sources as $source)
@@ -232,7 +232,7 @@ class proxies
 			$this->key = 'proxies:'.$source;
 
 			// Add proxy to the proxy queue
-			$this->update($proxy['proxy'], false, true);			
+			$this->update($proxy['ip'], false, true);			
 		}	
 	}
 

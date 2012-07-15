@@ -167,13 +167,13 @@ class worker
 			// No scraped content returned
 			else
 			{
-				echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} id: $item->keyword_id url: $item->url \n";
+				echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} proxy: {$item->proxy['ip']} id: $item->keyword_id url: $item->url \n";
 
 				// If this item has it's own proxy
 				if($item->proxy)
 				{		
 					// Check proxy back in. Set status to block if scraper code says
-					$this->proxies->update($item->proxy['proxy'], $this->scrape->results[$item->searchHash]['blocked']);
+					$this->proxies->update($item->proxy['ip'], $this->scrape->results[$item->searchHash]['blocked']);
 
 					// For domains (for now)
 					$item->bad++;
@@ -211,7 +211,7 @@ class worker
 		if($item->proxy)
 		{
 			// Check proxy back in.
-			$this->proxies->update($item->proxy['proxy']);
+			$this->proxies->update($item->proxy['ip']);
 		}	
 
 		// Update and checkin keyword to redis

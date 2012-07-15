@@ -254,7 +254,7 @@ class scraper
 				curl_setopt($this->ch[$i], CURLOPT_PROXYPORT, $this->proxies[$i]['port']);
 				curl_setopt($this->ch[$i], CURLOPT_PROXYUSERPWD, $this->proxies[$i]['username'].":".$this->proxies[$i]['password']);
 
-				echo "proxy used: ".$this->proxies[$i]['ip']."\n";
+				//echo "proxy used: ".$this->proxies[$i]['ip']."\n";
 			}
 			
 			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
@@ -343,15 +343,15 @@ class scraper
 					$this->results[$i]['blocked'] = true;
 
 					// Add proxy to blocked list
-					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
+					$this->proxiesBlocked[] = $this->proxies[$i]['ip'];
 
-					//echo "blocked proxy: ".$this->proxies[$i]['proxy']."\n";
+					//echo "blocked proxy: ".$this->proxies[$i]['ip']."\n";
 				}	
 			}  
 			else
 			{
 				// Add proxy to timeout list
-				$this->proxiesTimeout[] = $this->proxies[$i]['proxy'];				
+				$this->proxiesTimeout[] = $this->proxies[$i]['ip'];				
 			}
 
 			//echo "\nThere was an error: ".$this->results[$i]['curlError']."\n";
@@ -372,7 +372,7 @@ class scraper
 			$this->results[$i]['status'] = 'success';
 			
 			// Add proxy used to good proxy array
-			$this->proxiesGood[] = $this->proxies[$i]['proxy'];			
+			$this->proxiesGood[] = $this->proxies[$i]['ip'];			
 			
 			// Increment the amount of successful scrapes
 			$this->scrapesGood++;						
@@ -390,14 +390,14 @@ class scraper
 					if($this->proxy_use)
 					{			
 						// Add proxy to timeout list
-						$this->proxiesTimeout[] = $this->proxies[$i]['proxy'];
+						$this->proxiesTimeout[] = $this->proxies[$i]['ip'];
 					}	
 				}
 				// Not a timeout response
 				else
 				{
 					// Nothing returned  from proxy, just dead
-					$this->proxiesDead[] = $this->proxies[$i]['proxy'];
+					$this->proxiesDead[] = $this->proxies[$i]['ip'];
 				}
 			}			
 			// If error code 302 block encountered
@@ -413,7 +413,7 @@ class scraper
 					$this->results[$i]['blocked'] = true;
 										
 					// Add proxy to blocked list
-					$this->proxiesBlocked[] = $this->proxies[$i]['proxy'];
+					$this->proxiesBlocked[] = $this->proxies[$i]['ip'];
 				}	
 			}  
 			// If error code 407 auth encountered
@@ -423,7 +423,7 @@ class scraper
 				if($this->proxy_use)
 				{
 					// Add proxy to denied list
-					$this->proxiesDenied[] = $this->proxies[$i]['proxy'];
+					$this->proxiesDenied[] = $this->proxies[$i]['ip'];
 				}	
    			}
 			// Not a timeout response
@@ -431,7 +431,7 @@ class scraper
 			{
 				echo "OTHER ERROR!!!!\n";
 				// Add proxy to other problem list
-				$this->proxiesOther[] = $this->proxies[$i]['proxy'];
+				$this->proxiesOther[] = $this->proxies[$i]['ip'];
 
 				// Nothing returned  from proxy, just dead
 				//utilities::notate("\tsome other error", "scrape.log");					
