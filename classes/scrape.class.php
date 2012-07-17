@@ -260,8 +260,8 @@ class scraper
 			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
 			//curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 30);
 
-			curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, 5);
-			curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 5);			
+			curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, 30);
+			curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 30);			
 			
 			// Set random referer if array is supplied
 			if(!empty($this->referer))
