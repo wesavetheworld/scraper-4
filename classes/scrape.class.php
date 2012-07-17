@@ -256,12 +256,10 @@ class scraper
 
 				//echo "proxy used: ".$this->proxies[$i]['ip']."\n";
 			}
-			
-			//curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_TIMEOUT);
-			//curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 30);
 
-			curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, 30);
-			curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, 30);			
+			// Timeout settings in config/scraping.config.php
+			curl_setopt($this->ch[$i], CURLOPT_CONNECTTIMEOUT, CURL_CONNECT_TIMEOUT);
+			curl_setopt($this->ch[$i], CURLOPT_TIMEOUT, CURL_TIMEOUT);			
 			
 			// Set random referer if array is supplied
 			if(!empty($this->referer))

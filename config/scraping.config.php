@@ -37,8 +37,11 @@ define("MAX_CALIBRATIONS", 2);
 // ! Scraping settings                                                        //
 // ===========================================================================//	
 
-// cURL connection timout limit
-define('CURL_TIMEOUT', 5);  
+// The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
+define('CURL_CONNECT_TIMEOUT', 5);  
+
+// The maximum number of seconds to allow cURL functions to execute.	
+define('CURL_TIMEOUT', 30);  
 
 // ===========================================================================// 
 // ! Proxy settings - These get overruled if settings updated in redis        //
