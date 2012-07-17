@@ -198,18 +198,21 @@ Here are some ways to help troubleshoot any problems you may encounter.
 The boss instance can report on the system's current update status. It will show amount of keywords/domains updated/unupdated for the hour/day.
 
 *From the scraper directory*
+
     php router.php boss checkQueueSchedules manual
 
 ###Proxy stats
 From the redis command line you can view proxy usage stats for each hour. The total number of proxy connections as well as good and bad/blocked scrapes. This will give you a quick overview of the health of the proxies.
 
 *Works for all data sources google/bing/alexa etc*
+
     hgetall usage:google
 
 ###Worker logs
 Each worker process logs it's output. This is very useful for getting more specific information about data collection. To view these logs you must access a worker instance.
 
 *Integer in log name represents specific worker process*
+
     tail -f scraper/logs/google.1.log  
 
 
