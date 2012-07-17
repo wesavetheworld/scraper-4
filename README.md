@@ -192,7 +192,7 @@ config/instance.config.php determines the script name. Modify to match the boss.
 
 
 #Troubleshooting
-Here are some ways to help troubleshoot any problems you may encounter.
+Here are some ways to help troubleshoot any problems that may arise.
 
 ###Update stats
 The boss instance can report on the system's current update status. It will show amount of keywords/domains updated/unupdated for the hour/day.
@@ -213,7 +213,7 @@ Each worker process logs it's output. This is very useful for getting more speci
 
 *Integer in log name represents specific worker process*
 
-    tail -f scraper/logs/google.1.log  
+    tail -f logs/google.1.log  
 
 
 
