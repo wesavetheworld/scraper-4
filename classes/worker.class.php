@@ -134,10 +134,16 @@ class worker
 	}
 
 	private function parseContent()
-	{	
+	{					
+		$count = 0;
+
 		// Loop through each keyword
 		foreach($this->items->{$this->model} as $key => &$item)
 		{		
+
+			$file = "{$item->keyword_id}-{$item->searchPage}-$count-{$this->scrape->results[$item->searchHash]['httpInfo']['http_code']}";
+			$count++;
+
 			// Create new parsing object
 			$this->parse = new parse;	
 
@@ -167,7 +173,15 @@ class worker
 			// No scraped content returned
 			else
 			{
+				$file = "$file-bad";
+
 				echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} proxy: {$item->proxy['ip']} id: $item->keyword_id url: $item->url \n";
+				//echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} proxy: {$item->proxy['ip']} id: $item->keyword_id file: $file \n";
+
+				// $save = fopen("/Users/iamjoshua/Desktop/searches/$file.html", "w");
+				// $content = $this->scrape->results[$item->searchHash]['curlError']."<br />".$this->scrape->results[$item->searchHash]['output'];
+				// fwrite($save, $content);
+				// fclose($save);	
 
 				// If this item has it's own proxy
 				if($item->proxy)
@@ -193,7 +207,7 @@ class worker
 				}	
 				
 
-			}
+			}		
 
 			// Item should be updated
 			if($item->updated)
