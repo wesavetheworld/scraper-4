@@ -188,7 +188,7 @@ config/instance.config.php determines the script name. Modify to match the boss.
 ###Step 5: The worker
 *Navigate to the scraper directory, and start the worker (last integer is process number. Increment for multiple simultaneous workers)*
 
-	php router.php worker google 1
+    php router.php worker google 1
 
 
 #Troubleshooting
@@ -210,7 +210,7 @@ From the redis command line you can view proxy usage stats for each hour. The to
 Each worker process logs it's output. This is very useful for getting more specific information about data collection. To view these logs you must access a worker instance.
 
 *Integer in log name represents specific worker process*
-	tail -f scraper/logs/google.1.log  
+    tail -f scraper/logs/google.1.log  
 
 
 
