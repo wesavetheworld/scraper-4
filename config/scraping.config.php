@@ -38,7 +38,7 @@ define("MAX_CALIBRATIONS", 2);
 // ===========================================================================//	
 
 // The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
-define('CURL_CONNECT_TIMEOUT', 5);  
+define('CURL_CONNECT_TIMEOUT', 10);  
 
 // The maximum number of seconds to allow cURL functions to execute.	
 define('CURL_TIMEOUT', 30);  

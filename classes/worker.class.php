@@ -175,7 +175,7 @@ class worker
 			{
 				$file = "$file-bad";
 
-				echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} proxy: {$item->proxy['ip']} id: $item->keyword_id url: $item->url \n";
+				echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} \"{$this->scrape->results[$item->searchHash]['curlError']}\" proxy: {$item->proxy['ip']} id: $item->keyword_id url: $item->url \n";
 				//echo "bad scrape! code: {$this->scrape->results[$item->searchHash]['httpInfo']['http_code']} proxy: {$item->proxy['ip']} id: $item->keyword_id file: $file \n";
 
 				// $save = fopen("/Users/iamjoshua/Desktop/searches/$file.html", "w");
